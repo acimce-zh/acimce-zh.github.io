@@ -3,29 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.22">
+<meta name="acim-version" content="v40.22.1">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="cc05284bea32bf3f63db75a4712706af4910722fbf4988f806a3024de5177c8d">
-<meta name="acim-build" content="2026-11-08">
-<meta name="acim-build-time" content="22:03">
-<link rel="canonical" href="https://ananda-sat-chit.github.io/acim-ce-zh-tw/">
+<meta name="acim-release-id" content="1b9a71699d501e81ad1504107d9a581d8c4a481ffc274ba9490db61783055b98">
+<meta name="acim-build" content="2026-11-09">
+<meta name="acim-build-time" content="00:17">
+<link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
 <meta property="og:description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
-<meta property="og:image" content="https://ananda-sat-chit.github.io/acim-ce-zh-tw/screenshot-og.png">
-<meta property="og:image:secure_url" content="https://ananda-sat-chit.github.io/acim-ce-zh-tw/screenshot-og.png">
+<meta property="og:image" content="https://acimce-zh.github.io/screenshot-og.png">
+<meta property="og:image:secure_url" content="https://acimce-zh.github.io/screenshot-og.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta property="og:site_name" content="完整加註版奇蹟課程">
 <meta property="og:type" content="book">
-<meta property="og:url" content="https://ananda-sat-chit.github.io/acim-ce-zh-tw/">
+<meta property="og:url" content="https://acimce-zh.github.io/">
 <meta property="og:locale" content="zh_TW">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="完整加註版奇蹟課程">
 <meta name="twitter:description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
-<meta name="twitter:image" content="https://ananda-sat-chit.github.io/acim-ce-zh-tw/screenshot-og.png">
+<meta name="twitter:image" content="https://acimce-zh.github.io/screenshot-og.png">
 <meta name="twitter:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
@@ -161,7 +161,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.22';
+var ACIM_VERSION = 'v40.22.1';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -1944,13 +1944,13 @@ ul{margin-bottom:0;}
   "@type": "Book",
   "name": "完整加註版奇蹟課程",
   "inLanguage": "zh-TW",
-  "url": "https://ananda-sat-chit.github.io/acim-ce-zh-tw/",
+  "url": "https://acimce-zh.github.io/",
   "description": "奇蹟課程完整加註版（CE）繁體中文電子書，含逐章詳細加註，支援離線閱讀。",
   "author": { "@type": "Person", "name": "Helen Schucman" },
   "editor": { "@type": "Person", "name": "Robert Perry" },
   "translator": { "@type": "Person", "name": "慧軍" },
   "publisher": { "@type": "Organization", "name": "Circle of Atonement" },
-  "image": "https://ananda-sat-chit.github.io/acim-ce-zh-tw/acimce-pwa-192x192.png"
+  "image": "https://acimce-zh.github.io/acimce-pwa-192x192.png"
 }
 </script>
 <style id="acim-v29-book-layout">
@@ -2362,6 +2362,13 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
 }
 </style>
 <style id="acim-v4022-motion">@media(prefers-reduced-motion:reduce){#reading-progress{transition:none;}}</style>
+<style id="acim-v40221-migration-style">
+#acim-migration-help{margin:10px 0 0;padding-top:6px;border-top:1px solid var(--c-border);font-size:12.5px;line-height:1.65;color:var(--c-muted)}
+#acim-migration-help summary{min-height:40px;display:list-item;align-content:center;cursor:pointer;color:var(--c-accent);font-weight:600}
+#acim-migration-help summary:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px}
+#acim-migration-help p{margin:6px 0 8px;font:inherit}
+#acim-migration-help a{color:var(--c-accent);text-decoration:underline;text-underline-offset:2px}
+</style>
 </head>
 
 <body>
@@ -2400,6 +2407,11 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
         </div>
         <div id="sidebar-offline-slot"></div>
         <div class="acim-backup-row"><span>資料備份</span><button id="acim-bk-export" type="button">匯出</button><button id="acim-bk-import" type="button">匯入</button><input id="acim-bk-file" type="file" accept=".json,application/json" hidden></div>
+        <details id="acim-migration-help">
+          <summary>從舊網址搬移書籤與閱讀進度</summary>
+          <p>舊網址與本站的閱讀資料分開保存。請先<a href="https://ananda-sat-chit.github.io/acim-ce-zh-tw/" target="_blank" rel="noopener noreferrer">開啟舊站</a>，在「資料備份」按「匯出」，再回本站按「匯入」。匯入前，也可先匯出本站資料作備份。</p>
+          <p>新網址的 App 與離線資料需另行安裝、保存。</p>
+        </details>
         <div class="sidebar-info-box">
           <p class="info-appeal">為讓加註版持續開放共享，懇請您的護持支持！</p>
           <div class="info-section"><h4>贊助帳戶</h4>
