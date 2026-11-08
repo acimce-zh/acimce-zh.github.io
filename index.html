@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.18">
+<meta name="acim-version" content="v40.22">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="898862e77faa20b97d82e32868bed1cb29219cb1b54a62d55570bbe7f7dffea6">
+<meta name="acim-release-id" content="cc05284bea32bf3f63db75a4712706af4910722fbf4988f806a3024de5177c8d">
 <meta name="acim-build" content="2026-11-08">
-<meta name="acim-build-time" content="15:01">
+<meta name="acim-build-time" content="22:03">
 <link rel="canonical" href="https://ananda-sat-chit.github.io/acim-ce-zh-tw/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -28,7 +28,7 @@
 <meta name="twitter:image" content="https://ananda-sat-chit.github.io/acim-ce-zh-tw/screenshot-og.png">
 <meta name="twitter:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#4B407A">
+<meta name="theme-color" content="#29224A">
 <title>完整加註版奇蹟課程</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
@@ -161,7 +161,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.18';
+var ACIM_VERSION = 'v40.22';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -178,7 +178,7 @@ var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同
       t.setAttribute('role','status');
       t.style.cssText='position:fixed;left:50%;transform:translateX(-50%);'
         +'bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);'
-        +'background:#4B407A;color:#fff;padding:9px 20px;border-radius:22px;'
+        +'background:#29224A;color:#fff;padding:9px 20px;border-radius:22px;'
         +'font-size:13px;z-index:999999;box-shadow:0 4px 16px rgba(0,0,0,.35);'
         +'opacity:0;transition:opacity .3s;white-space:nowrap;';
       document.body.appendChild(t);
@@ -288,11 +288,11 @@ if ('serviceWorker' in navigator) {
             });
           }
           toast.style.cssText = [
-            'position:fixed;bottom:88px;left:50%;transform:translateX(-50%)',
-            'background:#4B407A;color:#fff;padding:10px 20px;border:none',
+            'position:fixed;bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);left:50%;transform:translateX(-50%)',
+            'background:#29224A;color:#fff;padding:10px 20px;border:none',
             'border-radius:24px;font-size:14px;cursor:pointer',
             'z-index:999999;box-shadow:0 4px 16px rgba(0,0,0,.35)',
-            'white-space:nowrap;user-select:none',
+            'max-width:calc(100vw - 32px);white-space:normal;text-align:center;line-height:1.5;user-select:none',
             'animation:acimFadeIn .3s ease'
           ].join(';');
           toast.onclick = function() {
@@ -306,12 +306,10 @@ if ('serviceWorker' in navigator) {
             document.head.appendChild(style);
           }
           document.body.appendChild(toast);
-          setTimeout(function() {
-            if (!toast.isConnected) return;
-            toast.style.transition = 'opacity .4s';
-            toast.style.opacity = '0';
-            setTimeout(function() { toast.remove(); }, 400);
-          }, 12000);
+          /* V40.21：橫幅不再 12 秒自動消失——實測手機讀者常錯過時限，
+             新版下載完成後遲遲未套用（「手機要等很久才會更新」根因之一）。
+             改為持續顯示直到點按套用；是否套用仍由讀者主動點按決定，
+             維持 V40.16「絕不自動重載」原則。 */
         }
         reg.addEventListener('updatefound', function() {
           var next = reg.installing;
@@ -324,6 +322,29 @@ if ('serviceWorker' in navigator) {
            條路），讀者點按橫幅才套用。舊版（V40.9~V40.15）此處 offerUpdate(true)
            會自動 SKIP_WAITING＋重載——「沒有按就自動更新」的根因，移除。 */
         offerUpdate(false);
+        /* V40.21：更新檢查節奏補強——瀏覽器僅在導航時自動檢查 SW 更新，
+           手機 PWA 常駐記憶體，閱讀中途與「從背景喚回」都不會檢查，
+           新版感知因此遲滯。改為：
+           ① 分頁回到前景（visibilitychange / pageshow persisted）即時檢查；
+           ② 閱讀中途每 30 分鐘定期檢查；
+           ③ 檢查節流 5 分鐘，避免頻繁打網站。
+           偵測到新版仍只顯示橫幅（見上），套用與否維持讀者點按決定。 */
+        var lastUpdateCheck = 0;
+        function checkForUpdate(minGapMs) {
+          var now = Date.now();
+          if (now - lastUpdateCheck < minGapMs) return;
+          lastUpdateCheck = now;
+          try { reg.update().catch(function() {}); } catch (e) {}
+        }
+        document.addEventListener('visibilitychange', function() {
+          if (document.visibilityState === 'visible') checkForUpdate(300000);
+        });
+        window.addEventListener('pageshow', function(ev) {
+          if (ev.persisted) checkForUpdate(300000);
+        });
+        setInterval(function() {
+          if (document.visibilityState === 'visible') checkForUpdate(0);
+        }, 1800000);
       })
       .catch(function(err) { console.warn('[ACIM] SW 登記失敗:', err); });
   });
@@ -500,17 +521,17 @@ if ('serviceWorker' in navigator) {
 <style>
 /* ══ 奇蹟課程 PWA eBook — 版本由 ACIM_VERSION 統一管理 ══ */
 :root {
-  --c-bg:#FAF8F5; --c-sidebar:#F1EDE4; --c-page:#FAF8F5;
-  --c-text:#1F1A2E; --c-muted:#6E6684; --c-accent:#4B407A;
-  --c-accent2:#7A719E; --c-gold:#C17324; --c-border:#DFD9CD;
+  --c-bg:#FAF8F5; --c-sidebar:#F4F2F8; --c-page:#FAF8F5;
+  --c-text:#29224A; --c-muted:#5B509A; --c-accent:#29224A;
+  --c-accent2:#746BB3; --c-gold:#C17324; --c-border:#D2D1E6;
   --sidebar-w:300px; --fs-base:18px; --lh:1.95; --spd:0.25s;
   --content-max:660px; /* V30：正文欄規範 600–680px（每行 30–36 字） */
   color-scheme: light dark;
 }
 html.dark-mode, html.dark-mode {
-  --c-bg:#1E1E21; --c-sidebar:#2A2A2E; --c-page:#242427;
-  --c-text:#ECEAE6; --c-muted:#A9A5B4; --c-accent:#9A93CC;
-  --c-gold:#F3A962; --c-border:#544E74; --c-accent2:#9A93CC;
+  --c-bg:#1D1A28; --c-sidebar:#262233; --c-page:#211E2D;
+  --c-text:#ECEAE6; --c-muted:#B3AFD4; --c-accent:#948EC3;
+  --c-gold:#F3A962; --c-border:#4B407A; --c-accent2:#948EC3;
 }
 
 /* Word 字型替換 — 已由 #content-area 字型規則統一處理 */
@@ -551,16 +572,16 @@ html{scroll-behavior:auto;}
   line-height:1.4; overflow-wrap:anywhere;
 }
 .info-appeal{font-style:italic;color:#6C6590;line-height:1.3;margin:0 0 5px;font-size:10.5px;}
-html.dark-mode .info-appeal{color:#A9A5B4!important;}
+html.dark-mode .info-appeal{color:#B3AFD4!important;}
 .info-section{margin-bottom:3px;}
-.info-section h4{margin:0;color:#3A3260;font-size:10.5px;font-weight:700;display:inline;}
+.info-section h4{margin:0;color:#392F68;font-size:10.5px;font-weight:700;display:inline;}
 #content-area h4{display:block !important;}
 .info-section h4::after{content:" ";}
 html.dark-mode .info-section h4{color:var(--c-accent)!important;}
 .info-section p{margin:0;font-size:11px;display:inline;}
 .info-section a{color:var(--c-accent)!important;text-decoration:underline!important;font-size:11px!important;}
 .info-section a:hover{color:var(--c-gold)!important;}
-.info-note{color:#6E6684;font-size:10px;}
+.info-note{color:#5B509A;font-size:10px;}
 
 /* 側邊欄標題 */
 #sidebar-header {
@@ -607,8 +628,8 @@ html.dark-mode #theme-mode{color-scheme:dark;}
   border:1.5px solid var(--c-border);border-radius:8px;padding:6px 10px;gap:6px;
   min-width:0;transition:border-color var(--spd),box-shadow var(--spd);
 }
-#toc-search-frame:focus-within{border-color:var(--c-accent);box-shadow:0 0 0 2.5px rgba(75,64,122,0.15);}
-#toc-search-input{border:none;background:transparent;outline:none;font-size:13px;width:100%;min-width:0;color:#3A3260;font-family:inherit;}
+#toc-search-frame:focus-within{border-color:var(--c-accent);box-shadow:0 0 0 2.5px rgba(41,34,74,0.15);}
+#toc-search-input{border:none;background:transparent;outline:none;font-size:13px;width:100%;min-width:0;color:#392F68;font-family:inherit;}
 #toc-search-clear{border:none;background:transparent;cursor:pointer;font-size:12px;color:#767676;padding:0;display:none;}
 #toc-search-clear:hover{color:var(--c-accent);}
 #toc-search-results{
@@ -621,7 +642,7 @@ html.dark-mode #theme-mode{color-scheme:dark;}
 #toc-search-results[hidden],#search-count-badge[hidden]{display:none!important;}
 .sr-item{padding:8px 12px;cursor:pointer;border-bottom:1px solid #F4F1EA;font-size:13px;line-height:1.5;color:#333;}
 .sr-item:hover{background:#F4F1EA;}
-.sr-more-btn:hover{background:rgba(75,64,122,0.07)!important;}
+.sr-more-btn:hover{background:rgba(41,34,74,0.07)!important;}
 html.dark-mode .sr-more-btn{color:var(--c-gold)!important;}
 .sr-hint{color:#666;font-size:11px;display:block;margin-top:2px;}
 .sr-no-result{color:#666;text-align:center;padding:14px;font-size:13px;}
@@ -640,7 +661,7 @@ html.dark-mode mark.search-hl{
   100%{background:#b18a22;box-shadow:none;}
 }
 /* 原生 Highlight API：大量搜尋結果不再新增 <mark>、拆散書籍文字節點。 */
-::highlight(acim-search){ background-color:#ffe066; color:#1F1A2E; }
+::highlight(acim-search){ background-color:#ffe066; color:#29224A; }
 html.dark-mode ::highlight(acim-search){ background-color:#b18a22; color:#ffffff; }
 @keyframes hl-pulse{
   0%{background:#FFB300;box-shadow:0 0 0 3px rgba(255,179,0,0.4);}
@@ -657,19 +678,19 @@ html.dark-mode ::highlight(acim-search){ background-color:#b18a22; color:#ffffff
 }
 #content-area h2{
   font-size:1.25em;font-weight:700;
-  color:#3A3260;
+  color:#392F68;
   text-align:center;
   margin-top:1.5em;margin-bottom:0.3em;
   padding-bottom:0.2em;
 }
 #content-area h3{
   font-size:1.1em;font-weight:700;
-  color:#6E6684;
+  color:#5B509A;
   margin-top:1.2em;margin-bottom:0.2em;
 }
-html.dark-mode #content-area h1{color:#9A93CC;}
-html.dark-mode #content-area h2{color:#B4AED6;}
-html.dark-mode #content-area h3{color:#9A93CC;}
+html.dark-mode #content-area h1{color:#948EC3;}
+html.dark-mode #content-area h2{color:#B3AFD4;}
+html.dark-mode #content-area h3{color:#948EC3;}
 
 /* TOC 滾動區 */
 #toc-wrapper {
@@ -677,7 +698,7 @@ html.dark-mode #content-area h3{color:#9A93CC;}
   padding:6px 12px 24px; overscroll-behavior:contain;
 }
 #toc-wrapper::-webkit-scrollbar{width:4px;}
-#toc-wrapper::-webkit-scrollbar-thumb{background:rgba(75,64,122,0.22);border-radius:2px;}
+#toc-wrapper::-webkit-scrollbar-thumb{background:rgba(41,34,74,0.22);border-radius:2px;}
 
 /* TOC 連結 */
 #toc-wrapper a {
@@ -686,10 +707,10 @@ html.dark-mode #content-area h3{color:#9A93CC;}
   line-height:1.45; 
 }
 /* V28：一般章節、附錄三與詞彙子目錄使用相同金色互動狀態。 */
-#toc-wrapper a:hover,#toc-wrapper a:focus-visible{color:var(--c-gold)!important;background:rgba(75,64,122,0.08);}
+#toc-wrapper a:hover,#toc-wrapper a:focus-visible{color:var(--c-gold)!important;background:rgba(41,34,74,0.08);}
 #toc-wrapper a:focus-visible{outline:2px solid var(--c-gold);outline-offset:-2px;}
 #toc-wrapper a.toc-link.toc-active{
-  color:var(--c-gold)!important; background:rgba(75,64,122,0.1)!important;
+  color:var(--c-gold)!important; background:rgba(41,34,74,0.1)!important;
   font-weight:600;
   box-shadow:inset 3px 0 0 var(--c-gold);
 }
@@ -721,12 +742,12 @@ html.dark-mode #toc-wrapper a:hover,html.dark-mode #toc-wrapper a:focus-visible{
 .toc-children.open{display:block;}
 /* ── 各層縮排 / 字級 / 顏色：以 h1 基線為準，逐層收縮 ── */
 /* h1：不縮排，是基準層 */
-.toc-h1{font-weight:700;margin-top:10px;color:#3A3260;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
+.toc-h1{font-weight:700;margin-top:10px;color:#392F68;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
 /* h2：在 h1 的 toc-children 內，加左縮排 + 導引線 */
 .toc-h2{
-  font-size:13px;color:#6E6684;font-weight:600;
+  font-size:13px;color:#5B509A;font-weight:600;
   padding-left:5px;
-  border-left:2px solid rgba(75,64,122,0.25);
+  border-left:2px solid rgba(41,34,74,0.25);
   margin-left:4px;
 }
 /* h3+ 在 h2 的 toc-children 內，再加縮排 */
@@ -832,7 +853,7 @@ html.dark-mode #content-area table td,
 html.dark-mode #content-area table th,
 html.dark-mode #content-area thead td,
 html.dark-mode #content-area thead th {
-  border-color: rgba(154,147,204,0.7) !important;
+  border-color: rgba(148,140,195,0.7) !important;
 }
 html.dark-mode #sidebar-toc,html.dark-mode #sidebar-header,
 html.dark-mode .sidebar-info-box,html.dark-mode #toc-wrapper {
@@ -840,16 +861,17 @@ html.dark-mode .sidebar-info-box,html.dark-mode #toc-wrapper {
   border-color:var(--c-border)!important;
 }
 html.dark-mode img{opacity:0.85;}
-html.dark-mode #toc-search-frame{background:#1F1A2E!important;border-color:var(--c-border)!important;}
+html.dark-mode #toc-search-frame{background:#29224A!important;border-color:var(--c-border)!important;}
 html.dark-mode #toc-search-input{color:var(--c-text)!important;}
 html.dark-mode #toc-search-results{background:var(--c-sidebar)!important;}
 html.dark-mode .sr-item{color:var(--c-muted)!important;border-color:#454060!important;}
 
 /* ── 進度條 ── */
 #reading-progress{
-  position:fixed;top:0;left:0;height:3px;width:0%;
+  position:fixed;top:0;left:0;height:3px;width:100%;
   background:linear-gradient(90deg,var(--c-accent),var(--c-gold));
-  z-index:999997;transition:width 0.1s linear;pointer-events:none;
+  z-index:999997;transform:scaleX(0);transform-origin:left;
+  transition:transform 0.1s linear;pointer-events:none;
 }
 .progress-dot{
   position:absolute;top:0;width:2px;height:3px;
@@ -914,20 +936,20 @@ body.fn-open #pwa-tools{
 }
 #bm-panel-title{font-size:12px;font-weight:600;color:var(--c-gold);letter-spacing:0.04em;}
 #bm-panel-close{
-  background:none;border:none;color:rgba(154,147,204,0.6);
+  background:none;border:none;color:rgba(148,140,195,0.6);
   cursor:pointer;font-size:15px;line-height:1;padding:0 2px;
   transition:color 0.15s;
 }
 #bm-panel-close:hover{color:#F1EDE4;}
 #bm-list{
   flex:1;overflow-y:auto;padding:6px 0;
-  scrollbar-width:thin;scrollbar-color:rgba(122,113,158,0.4) transparent;
+  scrollbar-width:thin;scrollbar-color:rgba(116,107,179,0.4) transparent;
 }
 #bm-list::-webkit-scrollbar{width:4px;}
-#bm-list::-webkit-scrollbar-thumb{background:rgba(122,113,158,0.4);border-radius:2px;}
+#bm-list::-webkit-scrollbar-thumb{background:rgba(116,107,179,0.4);border-radius:2px;}
 .bm-empty{
   padding:20px 14px;text-align:center;
-  font-size:12px;color:rgba(154,147,204,0.45);line-height:1.6;
+  font-size:12px;color:rgba(148,140,195,0.45);line-height:1.6;
 }
 .bm-item{
   display:flex;align-items:flex-start;gap:8px;
@@ -953,7 +975,7 @@ body.fn-open #pwa-tools{
   overflow:hidden;line-height:1.45;
 }
 .bm-item-del{
-  background:none;border:none;color:rgba(154,147,204,0.3);
+  background:none;border:none;color:rgba(148,140,195,0.3);
   cursor:pointer;font-size:13px;padding:0 2px;flex-shrink:0;margin-top:1px;
   transition:color 0.15s;line-height:1;
 }
@@ -963,12 +985,12 @@ body.fn-open #pwa-tools{
   flex-shrink:0;display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap;
 }
 #bm-panel-footer button{
-  background:none;border:1px solid rgba(154,147,204,0.18);
+  background:none;border:1px solid rgba(148,140,195,0.18);
   color:#F1EDE4;font-size:11px;border-radius:6px;
   padding:4px 10px;cursor:pointer;transition:all 0.15s;
 }
 #bm-clear-all:hover{border-color:rgba(224,96,96,0.5);color:#e09090;}
-#bm-storage-status{margin:0;padding:4px 14px;color:#9A93CC;font-size:11px;line-height:1.5;}
+#bm-storage-status{margin:0;padding:4px 14px;color:#948EC3;font-size:11px;line-height:1.5;}
 #bm-panel-footer button:focus-visible,.bm-item:focus-visible,.bm-item-del:focus-visible{outline:2px solid #F3A962;outline-offset:-2px;}
 /* btn-bm 已加入書籤時的高亮狀態 */
 #btn-bm.bm-marked{background:#746BB3 !important;box-shadow:0 0 0 2px rgba(193,115,36,0.55),0 3px 10px rgba(60,0,100,0.35);}
@@ -985,7 +1007,7 @@ body.fn-open #pwa-tools{
   padding:14px 20px 20px;max-height:42vh;overflow-y:auto;
   box-shadow:0 -6px 32px rgba(58,50,96,0.45);
   transition:bottom 0.3s cubic-bezier(0.4,0,0.2,1);
-  border-top:1px solid rgba(154,147,204,0.2);
+  border-top:1px solid rgba(148,140,195,0.2);
   border-radius:16px 16px 0 0;
   font-family: "Noto Serif TC", "PMingLiU", "MingLiU", serif;
 }
@@ -1021,7 +1043,7 @@ sup.fn-badge {
   font-style: normal !important;
   line-height: 1 !important;
   vertical-align: super !important;
-  background: rgba(75,64,122,0.18) !important;
+  background: rgba(41,34,74,0.18) !important;
   color: #5A5188 !important;
   border-radius: 3px !important;
   padding: 1px 2.5px !important;
@@ -1035,19 +1057,19 @@ sup.fn-badge {
   font-family: -apple-system, sans-serif !important;
 }
 sup.fn-badge:hover {
-  background: rgba(75,64,122,0.32) !important;
-  color: #3A3260 !important;
+  background: rgba(41,34,74,0.32) !important;
+  color: #392F68 !important;
 }
 html.dark-mode sup.fn-badge {
-  background: rgba(154,147,204,0.28) !important;
+  background: rgba(148,140,195,0.28) !important;
   color: #E4E1EE !important;
-  border: 1px solid rgba(154,147,204,0.4) !important;
+  border: 1px solid rgba(148,140,195,0.4) !important;
 }
 html.dark-mode sup.fn-badge:hover {
-  background: rgba(154,147,204,0.46) !important;
+  background: rgba(148,140,195,0.46) !important;
   color: #FFFFFF !important;
 }
-html.dark-mode #footnote-bar{background:#423A66;border-top:2px solid #B4AED6;}
+html.dark-mode #footnote-bar{background:#392F68;border-top:2px solid #B3AFD4;}
 #fn-context{font-size:12px;line-height:1.4;font-weight:600;color:#E4E1EE;margin:0 0 6px;}
 #fn-inner{display:flex;align-items:flex-start;gap:10px;}
 #fn-num{flex-shrink:0;font-size:13px;font-weight:bold;color:#fff;min-width:28px;padding-top:2px;}
@@ -1057,7 +1079,7 @@ html.dark-mode #footnote-bar{background:#423A66;border-top:2px solid #B4AED6;}
    （!important）自 V30.1 起一直蓋掉 mark.search-hl，命中字串在彈窗內
    完全隱形（電腦版與手機皆然，讀者回報「註文框內找到的字串不會Highlight」）。
    以更高專一性（ID+class）+ !important 奪回，亮／暗雙配色與脈衝動畫對齊。 */
-#fn-text mark.search-hl{color:#1F1A2E!important;background:#ffe066!important;animation:hl-pulse 1.2s ease-out;}
+#fn-text mark.search-hl{color:#29224A!important;background:#ffe066!important;animation:hl-pulse 1.2s ease-out;}
 html.dark-mode #fn-text mark.search-hl{color:#fff!important;background:#b18a22!important;animation-name:hl-pulse-dark;}
 /* 保留標楷體等明確設定的 font-family，不強制覆蓋 */
 #fn-text [style*="標楷體"],
@@ -1065,7 +1087,7 @@ html.dark-mode #fn-text mark.search-hl{color:#fff!important;background:#b18a22!i
 #fn-text [style*="BiauKai"] {
   font-family:"LXGW WenKai TC","Kaiti TC","STKaiti","DFKai-SB","標楷體",serif!important;
 }
-#fn-text a{color:#B4AED6!important;text-decoration:underline!important;}
+#fn-text a{color:#B3AFD4!important;text-decoration:underline!important;}
 /* 腳注內底線樣式：與正文一致（淡色、細線、與文字有間距）*/
 #fn-text u,
 #fn-text [style*="underline"]{
@@ -1084,7 +1106,7 @@ html.dark-mode #fn-text mark.search-hl{color:#fff!important;background:#b18a22!i
 .fn-action-btn:hover,#fn-close:hover{background:rgba(255,255,255,0.3);}
 /* 喇叭圖示由 ::before 提供，不放 textContent */
 #fn-tts-btn::before{content:'🔊';speak:never;}
-#fn-tts-btn.fn-tts-active{background:rgba(154,147,204,0.35);color:#fff;}
+#fn-tts-btn.fn-tts-active{background:rgba(148,140,195,0.35);color:#fff;}
 #content-area a[href*="#_ftn"]{cursor:help;}
 
 /* ── 手機麵包屑 ── */
@@ -1172,19 +1194,19 @@ html.dark-mode #chapter-crumb{background:var(--c-sidebar);border-color:var(--c-b
   line-height: 1.6 !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  border-top:    2px solid rgba(75,64,122,0.5) !important;
-  border-bottom: 2px solid rgba(75,64,122,0.5) !important;
+  border-top:    2px solid rgba(41,34,74,0.5) !important;
+  border-bottom: 2px solid rgba(41,34,74,0.5) !important;
   border-left:   none !important;
   border-right:  none !important;
 }
 html.dark-mode .lesson-title-box h4 {
-  border-top-color:    rgba(154,147,204,0.8) !important;
-  border-bottom-color: rgba(154,147,204,0.8) !important;
+  border-top-color:    rgba(148,140,195,0.8) !important;
+  border-bottom-color: rgba(148,140,195,0.8) !important;
 }
 
 /* 舊的 inline style 選擇器保留作 fallback（對未被 JS 處理到的邊緣情況） */
 html.dark-mode #content-area [style*="windowtext"] {
-  border-color: rgba(154,147,204,0.5) !important;
+  border-color: rgba(148,140,195,0.5) !important;
 }
 html.dark-mode #content-area [style*="color:black"],
 html.dark-mode #content-area [style*="color:windowtext"],
@@ -1244,13 +1266,13 @@ html.dark-mode #content-area [style*="background:#fff"] {
 html.dark-mode #content-area [style*="border-top"],
 html.dark-mode #content-area [style*="border-bottom"],
 html.dark-mode #content-area [style*="windowtext"] {
-  border-color: rgba(154,147,204,0.7) !important;
+  border-color: rgba(148,140,195,0.7) !important;
 }
 /* Word 表格 inline border shorthand「border: solid black」（thead 表頭列也適用）
    統一改成亮紫色，與 border-top/border-bottom 規則一致 */
 html.dark-mode #content-area [style*="border: solid black"],
 html.dark-mode #content-area [style*="border:solid black"] {
-  border-color: rgba(154,147,204,0.7) !important;
+  border-color: rgba(148,140,195,0.7) !important;
 }
 
 /* Word black / windowtext 文字色 → 正文色 */
@@ -1312,15 +1334,15 @@ span.sent-num{
   background-position:center;
   speak:never;
 }
-.tts-btn:hover{opacity:0.85;background:rgba(75,64,122,0.08);}
+.tts-btn:hover{opacity:0.85;background:rgba(41,34,74,0.08);}
 .tts-btn.tts-active{
-  opacity:1;background:rgba(75,64,122,0.18);
+  opacity:1;background:rgba(41,34,74,0.18);
   border-color:var(--c-accent);color:var(--c-accent);
 }
 .tts-btn.tts-active::before{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzZCMkZBMCI+PHBhdGggZD0iTTExIDMuNWEuNS41IDAgMCAwLS44MzItLjM3NEw2LjMyNyA2LjVIMy41QTEuNSAxLjUgMCAwIDAgMiA4djRhMS41IDEuNSAwIDAgMCAxLjUgMS41aDIuODI3bDMuODQxIDMuMzc0QS41LjUgMCAwIDAgMTEgMTYuNVYzLjV6TTEzLjUgN2EuNS41IDAgMCAxIC43MDcgMCA1IDUgMCAwIDEgMCA2IC41LjUgMCAxIDEtLjcwNy0uNzA3IDQgNCAwIDAgMCAwLTQuNTg2QS41LjUgMCAwIDEgMTMuNSA3em0xLjk1Ny0xLjk1N2EuNS41IDAgMCAxIC43MDcgMCA4IDggMCAwIDEgMCA5LjkxNC41LjUgMCAwIDEtLjcwNy0uNzA3IDcgNyAwIDAgMCAwLTguNS41LjUgMCAwIDEgMC0uNzA3eiIvPjwvc3ZnPg==");}
 html.dark-mode .tts-btn{border-color:var(--c-border);color:var(--c-muted);}
 html.dark-mode .tts-btn::before{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iI0MwQTBEQyI+PHBhdGggZD0iTTExIDMuNWEuNS41IDAgMCAwLS44MzItLjM3NEw2LjMyNyA2LjVIMy41QTEuNSAxLjUgMCAwIDAgMiA4djRhMS41IDEuNSAwIDAgMCAxLjUgMS41aDIuODI3bDMuODQxIDMuMzc0QS41LjUgMCAwIDAgMTEgMTYuNVYzLjV6TTEzLjUgN2EuNS41IDAgMCAxIC43MDcgMCA1IDUgMCAwIDEgMCA2IC41LjUgMCAxIDEtLjcwNy0uNzA3IDQgNCAwIDAgMCAwLTQuNTg2QS41LjUgMCAwIDEgMTMuNSA3em0xLjk1Ny0xLjk1N2EuNS41IDAgMCAxIC43MDcgMCA4IDggMCAwIDEgMCA5LjkxNC41LjUgMCAwIDEtLjcwNy0uNzA3IDcgNyAwIDAgMCAwLTguNS41LjUgMCAwIDEgMC0uNzA3eiIvPjwvc3ZnPg==");}
-html.dark-mode .tts-btn.tts-active{background:rgba(154,147,204,0.2);border-color:var(--c-accent);color:var(--c-accent);}
+html.dark-mode .tts-btn.tts-active{background:rgba(148,140,195,0.2);border-color:var(--c-accent);color:var(--c-accent);}
 html.dark-mode .tts-btn.tts-active::before{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzZCMkZBMCI+PHBhdGggZD0iTTExIDMuNWEuNS41IDAgMCAwLS44MzItLjM3NEw2LjMyNyA2LjVIMy41QTEuNSAxLjUgMCAwIDAgMiA4djRhMS41IDEuNSAwIDAgMCAxLjUgMS41aDIuODI3bDMuODQxIDMuMzc0QS41LjUgMCAwIDAgMTEgMTYuNVYzLjV6TTEzLjUgN2EuNS41IDAgMCAxIC43MDcgMCA1IDUgMCAwIDEgMCA2IC41LjUgMCAxIDEtLjcwNy0uNzA3IDQgNCAwIDAgMCAwLTQuNTg2QS41LjUgMCAwIDEgMTMuNSA3em0xLjk1Ny0xLjk1N2EuNS41IDAgMCAxIC43MDcgMCA4IDggMCAwIDEgMCA5LjkxNC41LjUgMCAwIDEtLjcwNy0uNzA3IDcgNyAwIDAgMCAwLTguNS41LjUgMCAwIDEgMC0uNzA3eiIvPjwvc3ZnPg==");}
 
 #tts-bar {
@@ -1332,7 +1354,7 @@ html.dark-mode .tts-btn.tts-active::before{background-image:url("data:image/svg+
   z-index:99997;opacity:0;pointer-events:none;
   transition:opacity 0.25s;white-space:nowrap;max-width:92vw;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  border:1px solid rgba(154,147,204,0.2);
+  border:1px solid rgba(148,140,195,0.2);
 }
 #tts-bar.tts-bar-on{opacity:1;pointer-events:auto;}
 #tts-bar-label{
@@ -1340,7 +1362,7 @@ html.dark-mode .tts-btn.tts-active::before{background-image:url("data:image/svg+
   opacity:0.8;font-size:12px;
 }
 #tts-bar button{
-  background:none;border:1px solid rgba(154,147,204,0.3);
+  background:none;border:1px solid rgba(148,140,195,0.3);
   border-radius:12px;color:#F1EDE4;cursor:pointer;
   padding:2px 10px;font-size:12px;
   transition:background 0.15s;font-family:inherit;
@@ -1351,12 +1373,12 @@ html.dark-mode .tts-btn.tts-active::before{background-image:url("data:image/svg+
 /* 音色（男女聲）區 */
 #tts-gender-wrap{
   display:flex;align-items:center;gap:4px;
-  border-left:1px solid rgba(154,147,204,0.2);
+  border-left:1px solid rgba(148,140,195,0.2);
   padding-left:8px;
 }
 #tts-gender-label{font-size:11px;opacity:0.7;white-space:nowrap;}
 .tts-gender-btn{
-  background:none;border:1px solid rgba(154,147,204,0.3);
+  background:none;border:1px solid rgba(148,140,195,0.3);
   border-radius:12px;color:#F1EDE4;cursor:pointer;
   padding:2px 8px;font-size:13px;line-height:1.3;
   transition:background 0.15s,border-color 0.15s,color 0.15s;
@@ -1364,44 +1386,44 @@ html.dark-mode .tts-btn.tts-active::before{background-image:url("data:image/svg+
 }
 .tts-gender-btn:hover{background:rgba(255,255,255,0.12);}
 .tts-gender-btn.tts-gender-active{
-  background:rgba(154,147,204,0.25);
-  border-color:rgba(154,147,204,0.8);
+  background:rgba(148,140,195,0.25);
+  border-color:rgba(148,140,195,0.8);
   color:#F4F1EA;
 }
 /* 語速區 */
 #tts-rate-wrap{
   display:flex;align-items:center;gap:5px;
-  border-left:1px solid rgba(154,147,204,0.2);
+  border-left:1px solid rgba(148,140,195,0.2);
   padding-left:8px;
 }
 #tts-rate-label{font-size:11px;opacity:0.7;white-space:nowrap;}
 #tts-rate-slider{
   -webkit-appearance:none;appearance:none;
   width:72px;height:3px;border-radius:2px;
-  background:rgba(154,147,204,0.3);outline:none;cursor:pointer;
+  background:rgba(148,140,195,0.3);outline:none;cursor:pointer;
   border:none;padding:0;
 }
 #tts-rate-slider::-webkit-slider-thumb{
   -webkit-appearance:none;appearance:none;
   width:14px;height:14px;border-radius:50%;
-  background:#B4AED6;cursor:pointer;
+  background:#B3AFD4;cursor:pointer;
   box-shadow:0 0 4px rgba(0,0,0,0.4);
 }
 #tts-rate-slider::-moz-range-thumb{
   width:14px;height:14px;border-radius:50%;
-  background:#B4AED6;cursor:pointer;border:none;
+  background:#B3AFD4;cursor:pointer;border:none;
 }
 #tts-rate-val{font-size:11px;opacity:0.85;min-width:2em;text-align:center;}
 
 p.tts-reading{
-  background:linear-gradient(to right,rgba(75,64,122,0.08),transparent 88%);
+  background:linear-gradient(to right,rgba(41,34,74,0.08),transparent 88%);
   /* 左邊條：往左偏移 24px，確保落在懸掛段落編號（最大約 19px）的左側，不遮住編號 */
   box-shadow:-24px 0 0 0 var(--c-accent), inset 3px 0 0 transparent;
   outline: 3px solid transparent;
   transition:background 0.3s,box-shadow 0.3s;
 }
 html.dark-mode p.tts-reading{
-  background:linear-gradient(to right,rgba(154,147,204,0.10),transparent 88%);
+  background:linear-gradient(to right,rgba(148,140,195,0.10),transparent 88%);
   box-shadow:-24px 0 0 0 var(--c-accent), inset 3px 0 0 transparent;
 }
 
@@ -1454,13 +1476,13 @@ html.dark-mode ::highlight(tts-sentence){
 }
 #pwa-install-text{flex:1;line-height:1.4;}
 #pwa-install-btn{
-  background:#4B407A;color:#fff;border:none;
+  background:#29224A;color:#fff;border:none;
   border-radius:14px;padding:5px 16px;font-size:13px;
   cursor:pointer;white-space:nowrap;flex-shrink:0;
 }
-#pwa-install-btn:hover{background:#7A719E;}
+#pwa-install-btn:hover{background:#746BB3;}
 #pwa-install-close{
-  background:none;border:none;color:#B4AED6;
+  background:none;border:none;color:#B3AFD4;
   font-size:16px;cursor:pointer;padding:2px 6px;flex-shrink:0;
 }
 
@@ -1486,7 +1508,7 @@ html.dark-mode ::highlight(tts-sentence){
 #skip-link {
   position:absolute;
   left:-9999px;top:4px;
-  background:#4B407A;color:#fff;
+  background:#29224A;color:#fff;
   padding:7px 16px;border-radius:6px;
   font-size:14px;font-weight:600;
   text-decoration:none;z-index:9999999;
@@ -2339,9 +2361,12 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
   sup.fn-badge.acim-fn-locate{animation:none !important;}
 }
 </style>
+<style id="acim-v4022-motion">@media(prefers-reduced-motion:reduce){#reading-progress{transition:none;}}</style>
 </head>
 
 <body>
+
+
 
 
 <!-- ── Skip-to-content：鍵盤/螢幕閱讀器使用者可直接跳至主要內容 ── -->
@@ -2351,7 +2376,7 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
 <div id="reading-progress"></div>
 
 <div id="chapter-crumb">
-  <span style="font-size:14px;color:#4B407A;flex-shrink:0;">☰</span>
+  <span style="font-size:14px;color:#29224A;flex-shrink:0;">☰</span>
   <span id="crumb-text">目錄</span>
 </div>
 
@@ -2387,8 +2412,8 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
       <div id="sidebar-navigation">
         <div id="toc-search-box" role="search" aria-label="搜尋書籍內文">
         <div id="toc-search-frame">
-          <span style="font-size:14px;color:#7A719E;flex-shrink:0;">🔍</span>
-          <input id="toc-search-input" type="search" placeholder="搜尋內文關鍵字…" autocomplete="off" spellcheck="false">
+          <span style="font-size:14px;color:#746BB3;flex-shrink:0;">🔍</span>
+          <input id="toc-search-input" type="search" aria-label="搜尋書籍內文" aria-controls="toc-search-results" placeholder="搜尋內文關鍵字…" autocomplete="off" spellcheck="false">
           <button id="toc-search-clear" aria-label="清除搜尋">✕</button>
         </div>
         <div id="acim-search-scope" role="group" aria-label="搜尋範圍"><button type="button" data-scope="all" class="acim-scope-on">全部</button><button type="button" data-scope="body">內文</button><button type="button" data-scope="note">註文</button></div>
@@ -2402,9 +2427,9 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
   </div>
 
   <!-- 閱讀內容區 -->
-  <main id="content-area" role="main" aria-label="書籍內容"><div class="WordSection1"><section class="csec" style="contain-intrinsic-size:auto 2961px"><p align="center" class="mns st0"> </p><p align="center" class="mn st1"><span class="st2"><img alt="完整加註版奇蹟課程封面圖" fetchpriority="high" height="784" id="圖片 1" src="index.files/image001.webp" width="554"/></span></p><span class="st2"><br class="st3" clear="all"/>
-</span><p class="mn"><span class="st2"> </span></p><p align="center" class="mn st1"><span class="st2"> </span></p><p align="center" class="mn st1"><span class="b"><span class="st4">完整加註版</span></span></p><p align="center" class="mn st5"><span class="2"><span class="st6">奇蹟<br/>課程</span></span></p><p align="center" class="mn st0"><b><span class="cover-kt st7 kf">根據海倫舒曼原始手寫筆記</span></b></p><p align="center" class="mn st0"> </p><p align="center" class="mn st0"><img alt="海倫舒曼手寫筆記原稿" height="421" id="圖片 13" loading="lazy" data-src="index.files/image002.webp" src="" width="394"/></p><p align="center" class="mn st0"> </p><p align="center" class="mn st0"><b><span class="st8">羅伯佩里主編</span></b><b><span class="st8">  </span></b><b><span class="st8">慧軍中譯</span></b></p><b><span class="st2"><br class="st3" clear="all"/>
-</span></b><p align="center" class="mn st1"><b><span class="st2"><img alt="版權與出版資訊頁" height="917" id="圖片 16" loading="lazy" src="index.files/image003.jpg" width="575"/></span></b><b><span class="st2"><br class="st3" clear="all"/>
+  <main id="content-area" role="main" aria-label="書籍內容"><div class="WordSection1"><section class="csec" style="contain-intrinsic-size:auto 2961px"><p align="center" class="mns st0"> </p><p align="center" class="mn st1"><span class="st2"><img decoding="async" alt="完整加註版奇蹟課程封面圖" fetchpriority="high" height="784" id="圖片 1" src="index.files/image001.webp" width="554"/></span></p><span class="st2"><br class="st3" clear="all"/>
+</span><p class="mn"><span class="st2"> </span></p><p align="center" class="mn st1"><span class="st2"> </span></p><p align="center" class="mn st1"><span class="b"><span class="st4">完整加註版</span></span></p><p align="center" class="mn st5"><span class="2"><span class="st6">奇蹟<br/>課程</span></span></p><p align="center" class="mn st0"><b><span class="cover-kt st7 kf">根據海倫舒曼原始手寫筆記</span></b></p><p align="center" class="mn st0"> </p><p align="center" class="mn st0"><img decoding="async" alt="海倫舒曼手寫筆記原稿" height="421" id="圖片 13" loading="lazy" data-src="index.files/image002.webp" src="" width="394"/></p><p align="center" class="mn st0"> </p><p align="center" class="mn st0"><b><span class="st8">羅伯佩里主編</span></b><b><span class="st8">  </span></b><b><span class="st8">慧軍中譯</span></b></p><b><span class="st2"><br class="st3" clear="all"/>
+</span></b><p align="center" class="mn st1"><b><span class="st2"><img decoding="async" alt="版權與出版資訊頁" height="917" id="圖片 16" loading="lazy" src="index.files/image003.jpg" width="575"/></span></b><b><span class="st2"><br class="st3" clear="all"/>
 </span></b></p></section><section class="csec" style="contain-intrinsic-size:auto 1496px"><h1>
 譯者序</h1><p class="mn st9">
 多年來，在探索修行之路的過程中，培養出一種「藉翻譯以精讀」的學習方式。於是，學習《課程》數年之後，於2017年欣見美國「救贖之圓」出版《完整加註版奇蹟課程》，便開始試著一點一點翻譯起來。這通篇一字一句的咀嚼消化，果然幫助我深入瞭解《課程》的訊息，並帶來無數次心靈的洗滌。</p><p class="mn st9">
@@ -16086,7 +16111,7 @@ holiness...（…你以為在自身內所見的…。…祂的神聖性）</p><p
 在這兩例裡，原文都符合節拍，而海倫更改後的版本則否。後來，海倫開始非常重視抑揚五步格，她會小心檢查任何不符之處，加以更正。
 因此，很難想像她會故意做完全相反的事――把符合格律的句子「訂正」成不符合的樣子。由此，我們可以肯定地推測，當抑揚五步格剛開始出現時，海倫並沒有注意到。肯尼斯•霍布尼克也報導過同樣的事，他說：「海倫起初不知道有這個［抑揚五步格］，但後來她意識到文句是以一種確定的節奏呈現的。<sup class="fn-badge" data-fn="2871">2871</sup>」</p><p class="mn st9">
 然而到了下一章（第25章第4節），海倫顯然已經注意到抑揚五步格，我們可以在她的筆記上看到這一點――她用雙引號標出使用抑揚五步格的文字的分界。以下是T-25.VII中的一個例子：</p><p class="mn st352 acim-cameo29-manuscript">
-<img class="st353 acim-responsive-manuscript" loading="lazy" width="620" height="133" data-src="index.files/ce-manuscript.webp" src="" alt="海倫手稿中的抑揚五步格引號標記"></p><p class="mn st9">
+<img decoding="async" class="st353 acim-responsive-manuscript" loading="lazy" width="620" height="133" data-src="index.files/ce-manuscript.webp" src="" alt="海倫手稿中的抑揚五步格引號標記"></p><p class="mn st9">
 請注意第一行中“comes”之後的雙引號，及第二行
  “sanity”和第三行“hope”之後的雙引號。這是海倫在這個時期標出抑揚五步格文句的方式。</p><p class="mn st9">
 這裡會引起一個與前面類似的問題。就像我們會問抑揚五步格是來自海倫還是耶穌，現在我們也會問：是海倫自己曉得要在哪裡分界，還是耶穌告訴她的？最自然的解釋似乎是前者，因為海倫可以輕易數出五音步，然後插入引號。她只要回頭數一數音節，就可以知道分界處了。</p><p class="mn st9">
@@ -22656,25 +22681,25 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 <!-- 工具按鈕（JS 建立） -->
 <div id="pwa-tools">
   <div class="pwa-btn-wrap" data-tip="朗讀本節">
-    <button id="btn-sec-tts" class="pwa-btn" title="朗讀本節" aria-label="朗讀本節" style="background:#4B407A">🔊</button>
+    <button id="btn-sec-tts" class="pwa-btn" title="朗讀本節" aria-label="朗讀本節" style="background:#29224A">🔊</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="回到頂部" id="wrap-top" style='display: none'>
-    <button id="btn-top" class="pwa-btn" title="回到頂部" aria-label="回到頂部" style="background:rgba(75,64,122,0.75)">↑</button>
+    <button id="btn-top" class="pwa-btn" title="回到頂部" aria-label="回到頂部" style="background:rgba(41,34,74,0.75)">↑</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="放大字體">
-    <button id="btn-fup" class="pwa-btn" title="放大字體" aria-label="放大字體" style="background:#4B407A">A＋</button>
+    <button id="btn-fup" class="pwa-btn" title="放大字體" aria-label="放大字體" style="background:#29224A">A＋</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="縮小字體">
-    <button id="btn-fdn" class="pwa-btn" title="縮小字體" aria-label="縮小字體" style="background:#4B407A">A－</button>
+    <button id="btn-fdn" class="pwa-btn" title="縮小字體" aria-label="縮小字體" style="background:#29224A">A－</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="切換深色">
     <button id="btn-dark" class="pwa-btn" title="切換深色" aria-label="切換深色" style="background:#34343B">🌓</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="目錄">
-    <button id="btn-toc" class="pwa-btn" title="目錄" aria-label="目錄" style="background:#4B407A">☰</button>
+    <button id="btn-toc" class="pwa-btn" title="目錄" aria-label="目錄" style="background:#29224A">☰</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="書籤">
-    <button id="btn-bm" class="pwa-btn" title="加入/移除書籤" aria-label="加入或移除書籤" style="background:#4B407A">🔖</button>
+    <button id="btn-bm" class="pwa-btn" title="加入/移除書籤" aria-label="加入或移除書籤" style="background:#29224A">🔖</button>
   </div>
 </div>
 
@@ -22725,16 +22750,8 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 
   /* 深色模式初始套用已上移至 <head>（V23：防首繪閃白＋跟隨作業系統） */
 
-  /* ══ 註腳徽章無障礙屬性（V22 起執行期合成，HTML 不內嵌，省傳輸）══ */
-  (function badgeA11y(){
-    var badges = document.querySelectorAll('sup.fn-badge[data-fn]');
-    for (var i = 0; i < badges.length; i++) {
-      var b = badges[i];
-      b.setAttribute('role', 'button');
-      b.setAttribute('aria-label', '腳注 ' + b.getAttribute('data-fn'));
-      b.tabIndex = 0;
-    }
-  })();
+  /* V40.22: footnote numbering also initializes keyboard/ARIA metadata,
+     avoiding a second full scan and 2,927 temporary global-number labels. */
 
 /* ACIM: local display numbers; original data-fn and ftnNNNN IDs stay stable.
    Generated from reviewed chapter boundaries by checks/build_footnote_groups.py. */
@@ -22762,11 +22779,14 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     var root=document.getElementById('content-area');
     if(!root) return false;
     var badges=Array.from(root.querySelectorAll('sup.fn-badge[data-fn]'));
-    var seen=Object.create(null), valid=badges.length===expectedCount;
+    var seen=Object.create(null), infos=Object.create(null), valid=badges.length===expectedCount;
     badges.forEach(function(b){
       var id=b.getAttribute('data-fn');
-      if(seen[id] || !metadata(id) || !document.getElementById('ftn'+id)) valid=false;
+      var info=metadata(id);infos[id]=info;
+      if(seen[id] || !info || !document.getElementById('ftn'+id)) valid=false;
       seen[id]=true;
+      if(b.getAttribute('role')!=='button')b.setAttribute('role','button');
+      if(b.tabIndex!==0)b.tabIndex=0;
     });
     if(!valid){
       /* A repeated call may follow a previously valid map. Restore the original
@@ -22785,7 +22805,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
       console.warn('[ACIM] Footnote display map does not match this book; use original labels.');return false;
     }
     badges.forEach(function(b){
-      var m=metadata(b.getAttribute('data-fn'));
+      var m=infos[b.getAttribute('data-fn')];
       b.textContent=String(m.number);
       b.setAttribute('data-fn-display',String(m.number));
       b.setAttribute('data-fn-group',m.groupKey);
@@ -22925,9 +22945,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   /* ── 工具按鈕建立 ── */
   /* ── 回頂按鈕（靜態 HTML，只控制顯隱） ── */
   var topWrap = document.getElementById('wrap-top');
-  window.addEventListener('scroll', function(){
-    topWrap.style.display = window.scrollY > 700 ? '' : 'none';
-  }, {passive:true});
+  var topVisible = false; /* V40.22: updated with the reading bar, once per frame. */
   document.getElementById('btn-top').addEventListener('click', function(){
     window.__acimJump(0);
   });
@@ -23432,6 +23450,34 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 
   /* ── 字型縮放 ── */
   var content = document.getElementById('content-area');
+  /* V40.22: measure section boxes, never offscreen heading descendants.
+     content-visibility can keep the other 798 section subtrees skipped. */
+  var readingSections=null, readingOwnHeads=null, readingPreviousHeads=null;
+  window.__acimCurrentHeading=function(margin){
+    if(document.documentElement.classList.contains('acim-book-veiled')){
+      var id=window.__acimReadingHeading&&window.__acimReadingHeading.get();
+      return id?document.getElementById(id):null;
+    }
+    if(!readingSections){
+      readingSections=Array.from(content.querySelectorAll('section.csec'));
+      readingOwnHeads=[];readingPreviousHeads=[];
+      var previous=null;
+      readingSections.forEach(function(sec){
+        var h=sec.querySelector('h1,h2,h3,h4');
+        readingPreviousHeads.push(previous);readingOwnHeads.push(h);
+        if(h)previous=h;
+      });
+    }
+    var y=typeof margin==='number'?margin:80,lo=0,hi=readingSections.length-1,best=-1;
+    while(lo<=hi){
+      var mid=(lo+hi)>>1;
+      if(readingSections[mid].getBoundingClientRect().top<=y){best=mid;lo=mid+1;}
+      else hi=mid-1;
+    }
+    if(best<0)return null;
+    var own=readingOwnHeads[best];
+    return own&&own.getBoundingClientRect().top<=y?own:readingPreviousHeads[best];
+  };
   var zSteps = [0.78, 0.89, 1.0, 1.12, 1.24, 1.38, 1.54];
   var fi = 2;
   try{
@@ -23595,6 +23641,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
      preserve the last saved reading snapshot instead of measuring the book. */
   var bar = document.getElementById('reading-progress');
   var rafPending=false, readingMetricsJob=null;
+  var metricsDirty=true,maxReadingScroll=1,lastReadingFraction=-1;
   function sidebarOwnsReadingInput(){
     if(sidebar.style.display==='none')return false;
     if(window.innerWidth<=768)return sidebar.classList.contains('mobile-open');
@@ -23619,15 +23666,36 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   }
   function updateReadingBar(){
     if(sidebarOwnsReadingInput()){deferReadingMetrics();return;}
-    var pct=window.scrollY/Math.max(1,document.body.scrollHeight-window.innerHeight);
-    bar.style.width=Math.min(100,pct*100)+'%';
+    if(document.documentElement.classList.contains('acim-book-veiled'))return;
+    if(window.__acimStyleDebtPending&&window.__acimStyleDebtPending()){
+      deferReadingMetrics();return;
+    }
+    /* Read before writing; resize notifications invalidate the cached height. */
+    var y=window.scrollY;
+    if(metricsDirty||!window.ResizeObserver){
+      maxReadingScroll=Math.max(1,document.body.scrollHeight-window.innerHeight);
+      metricsDirty=false;
+    }
+    var fraction=Math.max(0,Math.min(1,y/maxReadingScroll));
+    if(fraction!==lastReadingFraction){
+      bar.style.transform='scaleX('+fraction+')';lastReadingFraction=fraction;
+    }
+    var showTop=y>700;
+    if(showTop!==topVisible){topWrap.style.display=showTop?'':'none';topVisible=showTop;}
   }
-  window.addEventListener('scroll',function(){
+  function queueReadingFrame(){
     if(sidebarOwnsReadingInput()){deferReadingMetrics();return;}
     if(rafPending)return;
     rafPending=true;
     requestAnimationFrame(function(){rafPending=false;updateReadingBar();});
-  },{passive:true});
+  }
+  window.addEventListener('scroll',queueReadingFrame,{passive:true});
+  function invalidateReadingMetrics(){metricsDirty=true;queueReadingFrame();}
+  window.addEventListener('resize',invalidateReadingMetrics,{passive:true});
+  if(window.ResizeObserver){
+    new ResizeObserver(invalidateReadingMetrics).observe(document.body);
+  }
+  queueReadingFrame();
   /* ACIM_V305_READING_METRICS_END */
 
   /* ── 記住位置（scrollY + 章節錨點雙軌）── */
@@ -23637,7 +23705,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   var savedY = Math.max(0,parseInt(window.__acimStorage.get('acim-scroll')||'0',10)||0);
   var savedAnchor = window.__acimStorage.get('acim-anchor');
   var progressRestored = false; /* 旗標：防止 buildTOC 多次呼叫重複跳位 */
-  var progressHeadings = null;
   /* V30.4: cache known reading headings using existing work; never measure here. */
   window.__acimReadingHeading=(function(){
     var known=Object.create(null),aliases=Object.create(null),first=null,current=null;
@@ -23718,14 +23785,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
       if(window.__acimStyleDebtPending&&window.__acimStyleDebtPending())return;
     }catch(e){}
     try{ window.__acimStorage.set('acim-scroll', Math.round(window.scrollY)); }catch(e){} /* V25（I19）*/
-    if(!progressHeadings) progressHeadings=Array.from(content.querySelectorAll('h1,h2,h3,h4'));
-    /* 章節標題按文件順序排列，二分搜尋減少大量重複的版面計算。 */
-    var lo=0, hi=progressHeadings.length-1, best=null;
-    while(lo<=hi){
-      var mid=(lo+hi)>>1, h=progressHeadings[mid];
-      if(h.getBoundingClientRect().top<=80){ best=h.id;lo=mid+1; }
-      else hi=mid-1;
-    }
+    var heading=window.__acimCurrentHeading(80),best=heading?heading.id:null;
     if(best){ try{ window.__acimStorage.set('acim-anchor',best); }catch(e){} } /* V25（I19）*/
     if(window.__acimReadingHeading)window.__acimReadingHeading.saved(best);
   }
@@ -23904,10 +23964,10 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
             +'#toc-wrapper .toc-glossary a{display:block;font-size:12px;padding:3px 8px;'
             +'border-radius:6px;color:var(--c-muted);text-decoration:none;line-height:1.5;cursor:pointer;}'
             +'#toc-wrapper .toc-glossary a:hover,#toc-wrapper .toc-glossary a:focus-visible{'
-            +'color:var(--c-gold)!important;background:rgba(75,64,122,.08);}'
+            +'color:var(--c-gold)!important;background:rgba(41,34,74,.08);}'
             +'#toc-wrapper .toc-glossary a:focus-visible{outline:2px solid var(--c-gold);outline-offset:-2px;}'
             +'#toc-wrapper .toc-glossary a.toc-g-active{color:var(--c-gold)!important;'
-            +'background:rgba(75,64,122,.1);font-weight:600;box-shadow:inset 3px 0 0 var(--c-gold);}'
+            +'background:rgba(41,34,74,.1);font-weight:600;box-shadow:inset 3px 0 0 var(--c-gold);}'
             +'html.dark-mode #toc-wrapper .toc-glossary{color-scheme:dark;}'
             +'html.dark-mode #toc-wrapper .toc-glossary a{color:var(--c-muted)!important;}'
             +'html.dark-mode #toc-wrapper .toc-glossary a:hover,html.dark-mode #toc-wrapper .toc-glossary a:focus-visible{'
@@ -24200,6 +24260,8 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
   }
   function indexStep(job,deadline){
     if(_indexJob!==job||document.hidden||_composing)return;
+    /* CE IDs must win over legacy siN anchors, even during an early query. */
+    if(window.__acimVerseIndexReady===false){scheduleIndex(job);return;}
     if(!job.urgent&&optionalIndexBlocked())return;
     if(deadline&&deadline.timeRemaining()<=1){scheduleIndex(job);return;}
     var started=performance.now(),used=0;
@@ -24468,7 +24530,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
          隨 showFn() 的 cloneNode 進入註文彈窗；mark 會隨 clone 複製，彈窗與
          書末原文都有高亮。 */
       var _useNative=_nativeSearchHighlight&&!(root.closest&&root.closest('#acim-footnotes-container'));
-      if(_useNative&&nativeSet.size>=ACIM_HL_MAX){_hlCapped=true;return;}
+      if((_useNative?nativeSet.size:_hlMarks)>=ACIM_HL_MAX){_hlCapped=true;return;}
       var nodes=[],ends=[],pieces=[],length=0,walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nd;
       while((nd=walker.nextNode())){
         if(nd.parentElement && nd.parentElement.closest('script,style,.tts-btn'))continue;
@@ -24839,7 +24901,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     sr.classList.add('visible');sr.setAttribute('aria-busy','false');
   }
   function doSearch(kw){
-    cancelPending();var token=_searchToken,k=kw.trim();
+    cancelPending();var token=_searchToken,k=kw.replace(/\s+/g,' ').trim();
     sr.innerHTML='';sr.classList.remove('visible');sb.style.display='none';_shownCount=0;
     _lastResults=[];_lastRx=null;stats.query=k;stats.resultCount=0;
     if(k.length<2){
@@ -25720,7 +25782,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
 
 <!-- V30.6: Browser support guidance (lightweight; no TOC or reading-content mutations). -->
 <style id="acim-browser-guide-style">
-#acim-external-guide{position:fixed;z-index:999994;top:calc(env(safe-area-inset-top,0px) + 52px);left:50%;transform:translateX(-50%);width:min(432px,calc(100vw - 28px));box-sizing:border-box;max-height:min(48vh,360px);overflow:auto;background:#fffdf9;color:#342c47;border:1px solid rgba(75,64,122,.28);border-radius:12px;padding:13px 14px;box-shadow:0 6px 24px rgba(28,18,50,.22);font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;font-size:13px;line-height:1.6;contain:layout style}
+#acim-external-guide{position:fixed;z-index:999994;top:calc(env(safe-area-inset-top,0px) + 52px);left:50%;transform:translateX(-50%);width:min(432px,calc(100vw - 28px));box-sizing:border-box;max-height:min(48vh,360px);overflow:auto;background:#fffdf9;color:#342c47;border:1px solid rgba(41,34,74,.28);border-radius:12px;padding:13px 14px;box-shadow:0 6px 24px rgba(28,18,50,.22);font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;font-size:13px;line-height:1.6;contain:layout style}
 #acim-external-guide .acim-eg-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700;font-size:14px}
 #acim-external-guide .acim-eg-close{background:transparent;border:0;color:inherit;font-size:19px;line-height:1;padding:4px 8px;cursor:pointer;min-width:28px}
 #acim-external-guide .acim-eg-desc{margin:7px 0 9px}
@@ -26589,6 +26651,10 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     if(fb2) fb2.classList.remove('pwa-btn-on');
   }
   function _secCurrentSection(){
+    if(window.__acimCurrentHeading){
+      var heading=window.__acimCurrentHeading(90)||document.querySelector('#content-area h1,#content-area h2,#content-area h3,#content-area h4');
+      return heading?heading.closest('section.csec'):null;
+    }
     var heads=Array.prototype.slice.call(
       document.querySelectorAll('#content-area h1,#content-area h2,#content-area h3,#content-area h4'));
     if(!heads.length) return null;
@@ -26740,12 +26806,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     if(note) note.querySelectorAll('p').forEach(wrapSentNums);
   });
   function doInject(){
-    var allParas=Array.from(document.querySelectorAll(SELECTOR)).filter(function(para){
-      return !para.closest('#acim-footnotes-container') &&
-             (para.textContent||'').trim().length>=2;
-    });
     if(!window.IntersectionObserver){
       /* 舊版瀏覽器：維持原有分批注入行為。 */
+      var allParas=Array.from(document.querySelectorAll(SELECTOR)).filter(function(para){
+        return !para.closest('#acim-footnotes-container') && (para.textContent||'').trim().length>=2;
+      });
       var k=0;
       function fallback(){
         var end=Math.min(k+60,allParas.length);
@@ -26755,22 +26820,64 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       fallback();
       return;
     }
+    /* V40.22: observe the 799 section boxes first. Register paragraph
+       descendants only when their section approaches the viewport, keeping
+       unvisited content-visibility subtrees out of paragraph observation. */
+    var pendingParas=new Set(),injectionJob=null;
+    function defer(fn){
+      if(window.__acimBackground)return window.__acimBackground.defer(fn,{quietMs:200});
+      var id=setTimeout(fn,16);return {abort:function(){clearTimeout(id);}};
+    }
+    function drain(){
+      injectionJob=null;
+      var start=performance.now(),count=0;
+      for(var para of pendingParas){
+        pendingParas.delete(para);injectOne(para);count++;
+        if(count>=16||performance.now()-start>=4)break;
+      }
+      if(pendingParas.size)injectionJob=defer(drain);
+    }
     var io=new IntersectionObserver(function(entries){
       entries.forEach(function(e){
         if(!e.isIntersecting) return;
         io.unobserve(e.target);
-        injectOne(e.target);
+        pendingParas.add(e.target);
       });
+      if(pendingParas.size&&!injectionJob)injectionJob=defer(drain);
     },{rootMargin:'1200px 0px',threshold:0});
-    var k=0;
-    function observeBatch(){
-      var started=performance.now(), processed=0;
-      while(k<allParas.length && processed<400 && performance.now()-started<5){
-        io.observe(allParas[k++]); processed++;
+    var sections=document.querySelectorAll('#content-area section.csec');
+    var watchedSections=new WeakSet();
+    var ttsStats=window.__acimTtsLazyStats={sections:sections.length,preparedSections:0,observedParagraphs:0};
+    function prepareSection(sec){
+      if(watchedSections.has(sec))return;
+      watchedSections.add(sec);ttsStats.preparedSections++;
+      var paras=sec.querySelectorAll('p.mn,p.mns,p.mft'),at=0;
+      function observeBatch(){
+        var start=performance.now(),count=0;
+        while(at<paras.length&&count<80&&performance.now()-start<4){
+          var para=paras[at++];count++;
+          if(para.closest('#acim-footnotes-container')||(para.textContent||'').trim().length<2)continue;
+          io.observe(para);ttsStats.observedParagraphs++;
+        }
+        if(at<paras.length)defer(observeBatch);
       }
-      if(k<allParas.length) setTimeout(observeBatch,0);
+      defer(observeBatch);
     }
-    observeBatch();
+    var sectionIO=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting)return;
+        sectionIO.unobserve(e.target);defer(function(){prepareSection(e.target);});
+      });
+    },{rootMargin:'1600px 0px',threshold:0});
+    var sectionAt=0;
+    function watchSections(){
+      var start=performance.now(),count=0;
+      while(sectionAt<sections.length&&count<160&&performance.now()-start<4){
+        sectionIO.observe(sections[sectionAt++]);count++;
+      }
+      if(sectionAt<sections.length)defer(watchSections);
+    }
+    defer(watchSections);
     /* 搜尋清除後，再完成此前為避免破壞高亮而暫緩的字型處理。 */
     document.addEventListener('acim:search-cleared',function(){
       var pending=document.querySelectorAll('[data-acim-pending-sentnums]');
@@ -26894,7 +27001,13 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      狀態機：掃描 content-area，賦予所有段落 ACIM id
      ══════════════════════════════════════════════════ */
   var idsReady = false; /* assignIds 完成後設為 true */
-  function assignIds() {
+  var pendingHash=null, resumeVerseIndex=null;
+  window.__acimVerseIndexReady=false;
+  var verseStats=window.__acimVerseStats={batches:0,candidates:0,maxBatchMs:0};
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden&&resumeVerseIndex){var next=resumeVerseIndex;resumeVerseIndex=null;next();}
+  });
+  function assignIds(onReady) {
     var area = document.getElementById('content-area');
     if (!area) return;
 
@@ -26961,8 +27074,22 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       }}
     );
 
-    var node;
-    while ((node = walker.nextNode())) {
+    var node,pending=null;
+    function recordBatch(start,count){
+      verseStats.batches++;verseStats.candidates+=count;
+      verseStats.maxBatchMs=Math.max(verseStats.maxBatchMs,performance.now()-start);
+    }
+    function step(){
+    if(document.hidden){resumeVerseIndex=step;return;}
+    var start=performance.now(),count=0;
+    while ((node = pending || walker.nextNode())) {
+      pending=null;
+      /* V40.22: preserve the state machine while yielding between batches.
+         Timers allow input/paint; a single paragraph remains the minimum unit. */
+      if(count&&(count>=192||performance.now()-start>=4)){
+        pending=node;recordBatch(start,count);setTimeout(step,0);return;
+      }
+      count++;
       var tag = node.tagName;
       var raw = node.textContent.replace(/\s+/g,' ').replace(/&nbsp;/g,' ').trim();
 
@@ -27183,6 +27310,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       if (id) register(node, id);
     }
     idsReady = true; /* 掃描完成 */
+    window.__acimVerseIndexReady=true;
+    recordBatch(start,count);
+    if(onReady)onReady();
+    }
+    step();
   }
 
   /* ══════════════════════════════════════════════════
@@ -27260,6 +27392,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   }
 
   function scrollToHash(hash) {
+    if(!idsReady){pendingHash=hash;return;}
     clearTimeout(hashScrollTimer); clearTimeout(hashClearTimer);
     clearHL();
     var p = parseHash(hash);
@@ -27368,8 +27501,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       '<div style="font-size:10.5px;color:rgba(201,168,232,.6);margin-bottom:4px">📖 繁體中文版連結</div>',
       '<div id="acim-sp-zh" style="font-size:11px;background:rgba(255,255,255,.06);border-radius:7px;padding:6px 9px;word-break:break-all;cursor:text;user-select:all;border:.5px solid rgba(193,115,36,.2)"></div>',
       '<div style="display:flex;gap:6px;margin-top:6px">',
-      '<button id="acim-sp-copy-zh" style="flex:1;background:rgba(75,64,122,.5);border:1px solid rgba(193,115,36,.4);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">複製</button>',
-      '<button id="acim-sp-native" style="flex:1;background:rgba(75,64,122,.3);border:1px solid rgba(201,168,232,.25);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">分享…</button>',
+      '<button id="acim-sp-copy-zh" style="flex:1;background:rgba(41,34,74,.5);border:1px solid rgba(193,115,36,.4);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">複製</button>',
+      '<button id="acim-sp-native" style="flex:1;background:rgba(41,34,74,.3);border:1px solid rgba(201,168,232,.25);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">分享…</button>',
       '</div>',
       '</div>',
 
@@ -27765,8 +27898,14 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     buildUI();
 
     function run() {
-      assignIds();
-      if(location.hash&&window.__acimNav.canRestore()) scrollToHash(location.hash);
+      assignIds(function(){
+        if(pendingHash!==null){
+          var requested=pendingHash;pendingHash=null;
+          if(requested===location.hash)scrollToHash(requested);
+        }else if(location.hash&&window.__acimNav.canRestore())scrollToHash(location.hash);
+        var selection=window.getSelection&&window.getSelection();
+        if(selection&&!selection.isCollapsed)onSel();
+      });
     }
     /* setTimeout(0)：讓頁面先渲染一幀，立即執行 assignIds
        確保 data-acim-id 在用戶選取文字前已賦予完成 */
@@ -27838,7 +27977,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     +'#acim-offline-save:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px;}'
     +'#acim-offline-save:disabled{opacity:.7;cursor:wait;}'
     +'@media(pointer:coarse){#acim-offline-save{min-height:40px;}}'
-    +'#acim-offline-bar{position:fixed;top:0;left:0;right:0;background:#4B407A;color:#fff;text-align:center;font:13px/1.4 sans-serif;padding:7px 16px;z-index:999998;}'
+    +'#acim-offline-bar{position:fixed;top:0;left:0;right:0;background:#29224A;color:#fff;text-align:center;font:13px/1.4 sans-serif;padding:7px 16px;z-index:999998;}'
     +'@media print{#acim-offline-panel,#acim-offline-bar{display:none!important;}}';
   document.head.appendChild(style);
   var sw=navigator.serviceWorker, latest=null, busy=false, serial=0, epoch=0;
@@ -27877,6 +28016,10 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     });
   }
   function scheduleAutomaticWarm(){
+    /* V40.22: avoid a multi-megabyte automatic font download on a metered or
+       very slow connection. The explicit offline-save button still works. */
+    var connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+    if(connection&&(connection.saveData||/^(slow-2g|2g)$/.test(connection.effectiveType||'')))return;
     if(autoWarmTask)return;
     var controller=sw&&sw.controller, scheduledEpoch=epoch;
     autoWarmTask=deferOffline(function(){
@@ -28290,6 +28433,8 @@ function set(k,v){ try{ return storage.set(k,v); }catch(e){ return false; } }
 var SUPER_RE = /[⁰¹²³⁴⁵⁶⁷⁸⁹]/g;
 function cleanTitle(s){ return String(s||'').replace(SUPER_RE,'').replace(/\s+/g,' ').trim(); }
 function currentHeading(){
+  if(window.__acimCurrentHeading)
+    return window.__acimCurrentHeading(90)||document.querySelector('#content-area h1,#content-area h2,#content-area h3,#content-area h4');
   var heads = Array.prototype.slice.call(
     document.querySelectorAll('#content-area h1,#content-area h2,#content-area h3,#content-area h4'));
   if(!heads.length) return null;
