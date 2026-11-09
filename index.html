@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.24">
+<meta name="acim-version" content="v40.25">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="a997dc4b341915b04ba385cfd0315eadb4f12025eec0e62ec2a272c276a64eaf">
+<meta name="acim-release-id" content="724c649cbe878975f72c735a482648597e64cffee13092549c8c0647609cdae4">
 <meta name="acim-build" content="2026-11-09">
-<meta name="acim-build-time" content="18:31">
+<meta name="acim-build-time" content="19:19">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -161,7 +161,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.24';
+var ACIM_VERSION = 'v40.25';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -26966,6 +26966,29 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
          不支援的瀏覽器與複製出去的連結維持現行通用格式，零退化。
          另修正 W-FL.In.1–6（最後課程導言）英文連結：舊格式會落到
          空白頁，現改用英文站實際錨碼 W-FL.1–6，可正確開啟。
+
+   V40.25 高亮可靠性修復（D8–D10）：
+     實測發現（無頭 Chrome 對照正式 acimce.app）：D7 機制本身有效
+     （暖快取下目標句必定被瀏覽器染上淡紫高亮），但有兩個觸發條件
+     會讓第一次使用時失效，本批全部修復：
+     D8  對照表瘦身＋閒置預載——原本 3.4MB 對照表要等「分享面板
+         開啟」才開始載，開啟後 1–3 秒內點「開啟原典」時幾乎必然
+         還沒載完 → 退回通用連結 → 必然無高亮（首次使用必中）。
+         改為：① 對照表改存「句首前 12 字詞」前綴（產生的連結與
+         全文本版逐字元等價，已全量驗證），gzip 1.03MB → 0.70MB；
+         ② 頁面載入後閒置即預載（requestIdleCallback，逾時 4 秒
+         兜底），不必等到面板開啟；點擊前早就緒，首次點擊即高亮。
+     D9  支援度偵測擴大——document.fragmentDirective 只有 Chromium
+         會回傳物件，Safari／Firefox／iOS 即使支援 Text Fragment
+         也被誤判為不支援而永不升級。改為：Chromium（原有）∨
+         Firefox ≥ 131 ∨ Safari/WebKit ≥ 16.1 ∨ iOS ≥ 16.1
+         （iPhone 全瀏覽器皆 WebKit，偵測 OS 版本即涵蓋
+         Chrome/Firefox/Edge for iOS）。偵測失敗一律退回通用連結，
+         行為與 V40.24 完全相同，零退化。
+     D10 渲染時即升級——分享面板／提示列開啟渲染時，只要對照表
+         已緒就直接把連結升級；對照表若是稍後才載完，載完瞬間
+         自動重升級已開啟的面板／提示列（封閉渲染與載入的時序縫隙）；
+         點擊瞬間升級保留為第三道保險。三道全部幂等。
    */
 (function () {
   'use strict';
@@ -27609,7 +27632,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     citeToast.dataset.paraId = p.paraId;
     citeToast.dataset.sent = sent;
     citeToast.dataset.sentEnd = sentEnd;
-    ensureEnSentences();   /* V40.24（D7）：預載英文句對照表 */
+    /* V40.25（D10）：提示列渲染時，若對照表已緒立即升級連結
+       （tfEnhanceAnchor 內部自會確保對照表載入；點擊升級保留為保險） */
+    tfEnhanceAnchor(enA, p.paraId, sent, sentEnd);
     citeToast.style.display = 'flex';
     citeToastTimer = setTimeout(hideCiteToast, 8000);
   }
@@ -27709,26 +27734,78 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      ④ 直接產出英文站最終格式 /book/<頁碼>#<錨碼>，不經官方 302 轉址
         （短格式 /: 加上 :~:text= 會令轉址失效，已實測）。
      ⑤ W-FL.In.* 使用英文站實際錨碼（W-FL.N），同時修復舊格式空白頁。 */
-  var EN_SENT_VER = 'v=40.24';
+  var EN_SENT_VER = 'v=40.25';
   var enSentTable = null;
   var enSentState = 0;      /* 0=未載 1=載入中 2=可用 3=無資料 */
 
+  /* V40.25（D9）：支援度偵測擴大。
+     document.fragmentDirective 只有 Chromium 實作；Safari 16.1＋
+     （macOS/iOS/iPadOS，2022-10）與 Firefox 131＋（2024-10）都支援
+     Text Fragment 卻不暴露該 API，必須以 UA 版本判別。全部偵測皆以
+     「不確定→false」為原則：誤判只會少一次高亮機會，不會壤事。 */
   function enSentSupported() {
-    try { return typeof document.fragmentDirective === 'object'; }
-    catch (e) { return false; }
+    try {
+      if (typeof document.fragmentDirective === 'object') return true;
+      var ua = navigator.userAgent || '';
+      var m = ua.match(/Firefox\/(\d+)/);            /* Firefox 131+ */
+      if (m && parseInt(m[1], 10) >= 131) return true;
+      m = ua.match(/Version\/(\d+)[._](\d+)/);       /* Safari 桌面/iOS 內建 */
+      if (m && (parseInt(m[1], 10) > 16 ||
+               (parseInt(m[1], 10) === 16 && parseInt(m[2], 10) >= 1))) return true;
+      m = ua.match(/\b(?:iPhone|iPad|iPod)\b.*\bOS (\d+)[._](\d+)/); /* iOS 全瀏覽器 */
+      if (m && (parseInt(m[1], 10) > 16 ||
+               (parseInt(m[1], 10) === 16 && parseInt(m[2], 10) >= 1))) return true;
+      return false;
+    } catch (e) { return false; }
   }
 
   function ensureEnSentences() {
     if (enSentState === 1 || enSentState === 2) return;
+    if (!enSentSupported()) return;   /* V40.25（D9）：不支援就不載表（省流量） */
     enSentState = 1;
     var s = document.createElement('script');
     s.src = 'acim-en-sentences.js?' + EN_SENT_VER;
     s.onload = function() {
       enSentTable = (window.ACIM_EN_SENTENCES && window.ACIM_EN_SENTENCES.p) || null;
       enSentState = enSentTable ? 2 : 3;
+      if (enSentTable) refreshEnLinks();   /* V40.25（D10）：載完立即重升級已開啟的 UI */
     };
     s.onerror = function() { enSentState = 0; };  /* 失敗可重試；點擊一律退回通用連結 */
     (document.head || document.documentElement).appendChild(s);
+  }
+
+  /* V40.25（D8）：閒置預載對照表——原本要等分享面板／提示列開啟才載，
+     首次使用「開面板→立即點擊」必然趕不上。改為頁面載入完成後閒置即載，
+     讀者還在閱讀時就已背後就緒；離線或載入失敗時靜默，點擊照舊退回
+     通用連結（零退化）。 */
+  var enSentIdleStarted = false;
+  function preloadEnSentencesIdle() {
+    if (enSentIdleStarted) return;
+    enSentIdleStarted = true;
+    var go = function() { if (navigator.onLine !== false) ensureEnSentences(); };
+    if (typeof requestIdleCallback === 'function') requestIdleCallback(go, { timeout: 4000 });
+    else setTimeout(go, 2500);
+  }
+  if (document.readyState === 'complete') preloadEnSentencesIdle();
+  else window.addEventListener('load', function() { setTimeout(preloadEnSentencesIdle, 400); });
+
+  /* V40.25（D10）：對照表載入完成的瞬間，若分享面板／提示列已開啟
+     （且渲染當下對照表還沒緒），立即重升級它們的「開啟原典」連結，
+     封閉「渲染早於載入完成」的時序縫隙。各變數可能尚未建立，全部防守。 */
+  function refreshEnLinks() {
+    try {
+      if (citeToast && citeToast.style.display !== 'none' && citeToast.dataset.paraId) {
+        tfEnhanceAnchor(document.getElementById('acim-ct-en'), citeToast.dataset.paraId,
+          parseInt(citeToast.dataset.sent || '0', 10),
+          parseInt(citeToast.dataset.sentEnd || '0', 10));
+      }
+      if (sharePanel && sharePanel.style.display !== 'none' &&
+          shareBar && shareBar.dataset.id) {
+        tfEnhanceAnchor(document.getElementById('acim-sp-open-en'), shareBar.dataset.id,
+          parseInt(shareBar.dataset.sent || '0', 10),
+          parseInt(shareBar.dataset.sentEnd || '0', 10));
+      }
+    } catch (e) { /* 任何異常靜默：退回通用連結 */ }
   }
 
   function buildAcimceTfUrl(acimId, sent, sentEnd) {
@@ -27912,6 +27989,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-sp-zh').textContent  = zhUrl;
     document.getElementById('acim-sp-en').textContent  = enUrl;
     document.getElementById('acim-sp-open-en').href    = enUrl;
+    /* V40.25（D10）：面板渲染時，若對照表已緒立即升級連結；
+       點擊瞬間的 tfEnhanceAnchor 保留為第二道保險（兩者皆幂等） */
+    tfEnhanceAnchor(document.getElementById('acim-sp-open-en'), acimId, sent, sentEnd);
 
     /* V40.23（D3）：含出處引文——引文＋CE 引用＋本站連結 */
     var quote = (shareBar.dataset.quote || '').trim();
