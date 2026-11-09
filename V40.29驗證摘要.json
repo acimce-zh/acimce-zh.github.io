@@ -1,0 +1,509 @@
+{
+  "version": "v40.29",
+  "build": {
+    "date": "2026-11-10",
+    "time": "02:00",
+    "timezone": "Asia/Taipei"
+  },
+  "baseVersion": "v40.27.1",
+  "baseCommit": "fbd414510db6be30a6b5fd3d89c9127757a382d6",
+  "baseBookSha256": "8c39147dcfdace95884b63f2abd039802706e6135d13f4670a802ebbbf1fbe3f",
+  "releaseId": "75f2988c02880da882c4a685ea59ab3cc679be94782c4b13fdaa53f937c1af97",
+  "bookSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
+  "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+  "unchangedBookMain": true,
+  "unchangedRuntimeExceptPublishingFields": true,
+  "unchangedWorkerExceptPublishingFields": true,
+  "verifiedIdenticalAssets": 41,
+  "unchangedFontFiles": 30,
+  "manifestId": "/acim-ce-zh-tw/",
+  "executableScripts": 10,
+  "allowedHtmlChanges": [
+    "acim-version",
+    "ACIM_VERSION",
+    "acim-release-id",
+    "acim-build",
+    "acim-build-time"
+  ],
+  "allowedWorkerChanges": [
+    "version comment",
+    "CACHE_VERSION",
+    "RELEASE_ID",
+    "BOOK_SHA256"
+  ],
+  "passed": 109,
+  "failed": 0,
+  "suites": [
+    {
+      "name": "permanent-links-and-english",
+      "passed": 73
+    },
+    {
+      "name": "quote-and-clipboard",
+      "passed": 25
+    },
+    {
+      "name": "V40.28-to-V40.29-update-and-offline",
+      "passed": 11
+    }
+  ],
+  "independentRollbackAudit": {
+    "ok": true,
+    "audit": "Independent V40.29 strict rollback verification",
+    "version": "v40.29",
+    "baselineHtmlSha256": "8c39147dcfdace95884b63f2abd039802706e6135d13f4670a802ebbbf1fbe3f",
+    "bookSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
+    "mainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+    "normalizedHtmlSha256": "08c5a9329e30c75ad6d12e125861f2a963d2064c0c22f4bd15e9d56346677829",
+    "normalizedWorkerSha256": "2365c0955a2d63a2051ff771f4ac0ca878ca662238830644bb282e4eddda424e",
+    "allowedChanges": [
+      "HTML byte-identical after normalizing only four meta values and ACIM_VERSION",
+      "SW byte-identical after normalizing only four release fields"
+    ],
+    "unchangedAssetCount": 41,
+    "manifestByteIdentical": true,
+    "noJekyllByteIdentical": true,
+    "noV28RuntimeTokens": true,
+    "executableScripts": 10,
+    "workerIdentity": {
+      "scope": "/",
+      "project": "acimce-zh-tw",
+      "fontCache": "acimce-zh-tw-fonts",
+      "cleansV28": true,
+      "keepsV29": true
+    },
+    "unusedV28StorageKeys": [
+      "acim-reading-size",
+      "acim-reading-leading",
+      "acim-import-snapshot-v1",
+      "acim-backup-last-export"
+    ],
+    "limits": "Read-only package/static/VM audit. Existing V28 tabs keep their in-memory document until update/reload. V27.1 original limitations intentionally return unchanged."
+  },
+  "checks": {
+    "permanentLinks": [
+      {
+        "name": "Chinese <main> is byte-for-byte unchanged",
+        "ok": true
+      },
+      {
+        "name": "All 5,361 existing reference IDs survive",
+        "ok": true
+      },
+      {
+        "name": "Every existing canonical paragraph and sentence hash still resolves",
+        "ok": true,
+        "details": {
+          "checked": 37302
+        }
+      },
+      {
+        "name": "single canonical",
+        "ok": true
+      },
+      {
+        "name": "old dotted sentence",
+        "ok": true
+      },
+      {
+        "name": "English cite prefix",
+        "ok": true
+      },
+      {
+        "name": "encoded colon",
+        "ok": true
+      },
+      {
+        "name": "full-width punctuation",
+        "ok": true
+      },
+      {
+        "name": "encoded brackets",
+        "ok": true
+      },
+      {
+        "name": "same-paragraph range",
+        "ok": true
+      },
+      {
+        "name": "same-sentence range",
+        "ok": true
+      },
+      {
+        "name": "English bracket range",
+        "ok": true
+      },
+      {
+        "name": "legacy bracket range",
+        "ok": true
+      },
+      {
+        "name": "English bracket same paragraph",
+        "ok": true
+      },
+      {
+        "name": "legacy bracket single",
+        "ok": true
+      },
+      {
+        "name": "paragraph range",
+        "ok": true
+      },
+      {
+        "name": "In explicit range",
+        "ok": true
+      },
+      {
+        "name": "Chinese final introduction retained",
+        "ok": true
+      },
+      {
+        "name": "English final introduction alias",
+        "ok": true
+      },
+      {
+        "name": "chapter epigraph",
+        "ok": true
+      },
+      {
+        "name": "unusual subsection",
+        "ok": true
+      },
+      {
+        "name": "final combined lesson",
+        "ok": true
+      },
+      {
+        "name": "manual subsection",
+        "ok": true
+      },
+      {
+        "name": "physical paragraph extension",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:0",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:999",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:4-999",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:6-4",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.999:1",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[T-14.VI.5:6]-[T-14.VI.4:4]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[T-14.VI.4:4]-[W-24.5:4]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[T-14.VI.4:4]-[T-14.VII.1:1]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[:T-14.VI.4:4]-[:T-14.VI.5:999]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5%ZZ4",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:1e2",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:-1",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:1.5",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #<script>alert(1)</script>",
+        "ok": true
+      },
+      {
+        "name": "W-FL alias",
+        "ok": true
+      },
+      {
+        "name": "W-FL range",
+        "ok": true
+      },
+      {
+        "name": "W24 merged sentence",
+        "ok": true
+      },
+      {
+        "name": "W24 last sentence",
+        "ok": true
+      },
+      {
+        "name": "W24 mapped interval",
+        "ok": true
+      },
+      {
+        "name": "T2 shifted first prayer",
+        "ok": true
+      },
+      {
+        "name": "T2 shifted final prayer",
+        "ok": true
+      },
+      {
+        "name": "T2 shifted interval",
+        "ok": true
+      },
+      {
+        "name": "In working bracket output",
+        "ok": true
+      },
+      {
+        "name": "cross paragraph output",
+        "ok": true
+      },
+      {
+        "name": "cross paragraph ends in merged Chinese sentence",
+        "ok": true
+      },
+      {
+        "name": "cross paragraph begins in merged Chinese sentence",
+        "ok": true
+      },
+      {
+        "name": "Chinese-only introduction has no misleading English link 1-0",
+        "ok": true
+      },
+      {
+        "name": "Chinese-only introduction has no misleading English link 1-2",
+        "ok": true
+      },
+      {
+        "name": "Chinese-only introduction has no misleading English link 1-6",
+        "ok": true
+      },
+      {
+        "name": "Cross-paragraph range covering unmatched Chinese introduction is not falsely exact",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid Not-a-reference:0-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.999:1-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:999-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:-1-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:4--1",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:6-4",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.4:4-999",
+        "ok": true
+      },
+      {
+        "name": "All paragraph English targets resolve in real English model",
+        "ok": true,
+        "details": {
+          "checked": 5361
+        }
+      },
+      {
+        "name": "All mapped sentence targets resolve with correct coordinates",
+        "ok": true,
+        "details": {
+          "checked": 31941
+        }
+      },
+      {
+        "name": "Recipient English entry stays present without auto-dismiss",
+        "ok": true
+      },
+      {
+        "name": "Recipient Chinese-only sentence gives no clickable wrong source",
+        "ok": true
+      },
+      {
+        "name": "Whole bilingual exception paragraph discloses its unmatched introduction",
+        "ok": true
+      },
+      {
+        "name": "Ordinary chapter and skip-link anchors do not raise citation errors",
+        "ok": true
+      },
+      {
+        "name": "Invalid sentence cannot retain an old English target or rewrite history as success",
+        "ok": true
+      },
+      {
+        "name": "Copy feedback preserves persistent bilingual alignment note",
+        "ok": true
+      },
+      {
+        "name": "System share includes quote, reference and sentence URL",
+        "ok": true
+      },
+      {
+        "name": "System share unsupported behavior",
+        "ok": true
+      },
+      {
+        "name": "System share denied behavior",
+        "ok": true
+      },
+      {
+        "name": "System share cancelled behavior",
+        "ok": true
+      }
+    ],
+    "quoteAndClipboard": [
+      {
+        "name": "Panel primary copy includes the exact selected excerpt, source and link with real newlines",
+        "ok": true
+      },
+      {
+        "name": "Panel URL-only button deliberately copies only its URL",
+        "ok": true
+      },
+      {
+        "name": "Existing copy-quote action still contains the quote and link",
+        "ok": true
+      },
+      {
+        "name": "Native share contains quote and reference, a correct URL, and real newlines",
+        "ok": true
+      },
+      {
+        "name": "Unavailable native share falls back to a complete text message",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: single sentence excludes its neighbors",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: same-paragraph range preserves all selected sentences",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: nested bold and inline text remain in the quote",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: Chinese-only introductory sentence remains Chinese",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: Chinese merged sentence remains the whole Chinese sentence",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: cross-paragraph endpoints preserve start and end sentence boundaries",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote: title epigraph is copied without a footnote",
+        "ok": true
+      },
+      {
+        "name": "Recipient quote excludes footnote badges and TTS controls",
+        "ok": true
+      },
+      {
+        "name": "Long recipient quote is clearly truncated at its display limit",
+        "ok": true
+      },
+      {
+        "name": "Recipient single-sentence quote preserves its closing punctuation",
+        "ok": true
+      },
+      {
+        "name": "Ordinary numeric SUP markers split across inline spans are not copied as text",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: single sentence excludes its neighbors",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: same-paragraph range preserves all selected sentences",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: nested bold and inline text remain in the quote",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: Chinese-only introductory sentence remains Chinese",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: Chinese merged sentence remains the whole Chinese sentence",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: cross-paragraph endpoints preserve start and end sentence boundaries",
+        "ok": true
+      },
+      {
+        "name": "Recipient primary copy: title epigraph is copied without a footnote",
+        "ok": true
+      },
+      {
+        "name": "Recipient URL-only action remains available and copies only the canonical link",
+        "ok": true
+      },
+      {
+        "name": "Invalid citation exposes neither quote-copy nor URL-only copy actions",
+        "ok": true
+      }
+    ],
+    "worker": [
+      "v40.28 baseline installs and activates",
+      "baseline full offline save verifies 30 font slices and 4 book images",
+      "new worker rejects old index mixture and keeps old active shell",
+      "new worker rejects damaged new index before storing candidate",
+      "valid v40.29 candidate installs while old shell remains until activation",
+      "waiting worker reports real v40.29 release identity",
+      "activation removes old shell and keeps verified new shell",
+      "v40.29 full offline save verifies all expected resources",
+      "offline navigation returns verified v40.29 book",
+      "offline status still verifies book, shell, fonts and images",
+      "identical verified release reinstalls with network unavailable"
+    ]
+  },
+  "storagePolicy": "沿用V40.27.1原程式，不清除或移轉localStorage。V40.28新增的閱讀偏好與快照keys由原版忽略。",
+  "limitations": [
+    "僅版本、建置日期及發布識別欄位更新，V40.27.1全部既有行為原樣恢復。",
+    "本次以逐位元組等價、Node VM/DOM及worker升版測試確認；未宣稱重新量測實體手機效能。",
+    "既有V40.28頁面需套用更新並重新載入，才會執行回歸後程式。"
+  ]
+}

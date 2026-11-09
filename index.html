@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.28">
+<meta name="acim-version" content="v40.29">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="f177bd4a8a02e2d4a8dd27ab9daa716fc39230ad1d816759d68ab708c9b663fb">
+<meta name="acim-release-id" content="75f2988c02880da882c4a685ea59ab3cc679be94782c4b13fdaa53f937c1af97">
 <meta name="acim-build" content="2026-11-10">
-<meta name="acim-build-time" content="01:27">
+<meta name="acim-build-time" content="02:00">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -163,7 +163,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.28';
+var ACIM_VERSION = 'v40.29';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -2371,233 +2371,6 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
 #acim-migration-help p{margin:6px 0 8px;font:inherit}
 #acim-migration-help a{color:var(--c-accent);text-decoration:underline;text-underline-offset:2px}
 </style>
-<style id="acim-design28">
-/* V40.28 靜讀書房 — local, theme-aware component tokens. */
-:root{
- --p50:#f4f2f8;--p100:#e7e5f0;--p200:#d2d1e6;--p300:#b3afd4;--p400:#948ec3;--p500:#746bb3;--p600:#5b509a;--p700:#4b407a;--p800:#392f68;--p900:#29224a;
- --ui-surface:#fff;--ui-soft:var(--p50);--ui-raised:#fff;--ui-text:var(--p900);--ui-muted:var(--p600);--ui-link:var(--p700);--ui-line:var(--p200);--ui-control-line:var(--p500);--ui-primary:var(--p900);--ui-on-primary:#fff;--ui-selected:var(--p100);--ui-selected-text:var(--p900);--ui-focus:var(--p600);--ui-gold-text:#7a4917;--ui-toast:var(--p900);--ui-toast-text:#fff;--ui-success:#246044;--ui-error:#a42d42;--ui-shadow:0 12px 40px rgb(41 34 74 / .13);--ui-radius:12px;--ui-panel-radius:18px;
- --c-bg:#faf8f5;--c-page:#faf8f5;--c-sidebar:var(--p50);--c-text:var(--p900);--c-muted:var(--p600);--c-accent:var(--p900);--c-accent2:var(--p600);--c-border:var(--p200);--c-gold:#7a4917;--sidebar-w:304px;--content-max:660px;--acim-nav-h:64px;
- --acim-reader-scale28:1.2272727273;--acim-reader-leading28:1.95;--acim-layout-estimate28:1.546;
-}
-html{color-scheme:light;}
-html.dark-mode{color-scheme:dark;}
-html.dark-mode{
- --ui-surface:#262233;--ui-soft:#302a42;--ui-raised:#2c263b;--ui-text:#eceae6;--ui-muted:var(--p300);--ui-link:var(--p200);--ui-line:var(--p700);--ui-control-line:var(--p400);--ui-primary:var(--p200);--ui-on-primary:var(--p900);--ui-selected:var(--p700);--ui-selected-text:var(--p100);--ui-focus:var(--p300);--ui-gold-text:#f3a962;--ui-toast:var(--p100);--ui-toast-text:var(--p900);--ui-success:#b5dfc8;--ui-error:#ffb6c2;--ui-shadow:0 12px 40px rgb(0 0 0 / .32);
- --c-bg:#1d1a28;--c-page:#1d1a28;--c-sidebar:#262233;--c-text:#eceae6;--c-muted:var(--p300);--c-accent:var(--p200);--c-accent2:var(--p300);--c-border:var(--p700);--c-gold:#f3a962;
-}
-/* Font-family is deliberately left to the original book's authoring classes. */
-#content-area{font-size:18px;padding-top:68px;padding-bottom:108px;box-shadow:none;}
-html[data-acim-reading-size="20"] #content-area{font-size:20px;}
-html[data-acim-reading-size="original"] #content-area{font-size:18px;}
-#content-area .WordSection1>section.csec:not(:first-child) p.mn,
-#content-area .WordSection1>section.csec:not(:first-child) li.mn,
-#content-area .WordSection1>section.csec:not(:first-child) div.mn{font-size:calc(11pt * var(--acim-reader-scale28));}
-#content-area .WordSection1>section.csec:not(:first-child) .mft{font-size:calc(10pt * var(--acim-reader-scale28));}
-#content-area .WordSection1>section.csec:not(:first-child) .MsoFooter,
-#content-area .WordSection1>section.csec:not(:first-child) .MsoHeader{font-size:calc(9pt * var(--acim-reader-scale28));}
-#content-area .WordSection1>section.csec:not(:first-child) span.st2{font-size:calc(14pt * var(--acim-reader-scale28))!important;}
-#content-area .WordSection1>section.csec:not(:first-child) span.st4{font-size:calc(28pt * var(--acim-reader-scale28))!important;}
-#content-area .WordSection1>section.csec:not(:first-child) span.st6{font-size:calc(72pt * var(--acim-reader-scale28))!important;}
-#content-area .WordSection1>section.csec:not(:first-child) span.st7{font-size:calc(32pt * var(--acim-reader-scale28))!important;}
-#content-area .WordSection1>section.csec:not(:first-child) span.st8{font-size:calc(24pt * var(--acim-reader-scale28))!important;}
-#content-area .WordSection1>section.csec:not(:first-child) p,
-#content-area .WordSection1>section.csec:not(:first-child) li,
-#content-area .WordSection1>section.csec:not(:first-child) td{line-height:var(--acim-reader-leading28)!important;}
-/* Original cover pages keep their size, spacing and original title hierarchy. */
-#content-area .WordSection1>section.csec:first-child p{line-height:1.9!important;}
-#content-area .WordSection1>section.csec:first-child p.st5{line-height:1.15!important;}
-#content-area h1{color:var(--ui-text);letter-spacing:.055em;margin-top:2.5em;margin-bottom:.8em;}
-#content-area h2{color:var(--ui-link);margin-top:2em;margin-bottom:.7em;}
-#content-area h3{color:var(--ui-link);margin-top:1.7em;margin-bottom:.55em;}
-html.dark-mode #content-area h1,html.dark-mode #content-area h2,html.dark-mode #content-area h3{color:var(--ui-link);}
-#sidebar-toc,#chapter-crumb,#pwa-tools,#acim-bottomnav,#acim-quick-sheet,#bm-panel,#rtabs-bar,#tts-bar,#footnote-bar,#acim-spanel,#acim-ctoast,#sidebar-settings-panel{font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC",sans-serif;}
-#sidebar-header{padding:20px 18px 16px;line-height:1.4;}
-.sidebar-topline{gap:10px;align-items:center;}
-#sidebar-header h3{font-size:22px;letter-spacing:.09em;line-height:1.4;flex:1 1 auto;color:var(--ui-text)!important;}
-.acim-brand-caption28{font-size:11px;line-height:1.6;letter-spacing:.14em;color:var(--ui-muted);margin:0 0 6px;}
-#sidebar-settings-toggle{font-size:13px;min-height:36px;border-radius:10px;color:var(--ui-link);padding:7px 10px;}
-#sidebar-stage{padding-top:4px;}
-#sidebar-navigation{min-height:0;}
-#toc-search-box{margin:10px 16px 0;}
-#toc-search-frame{min-height:44px;padding:9px 10px;gap:8px;border:1px solid var(--ui-control-line);border-radius:12px;background:var(--ui-surface)!important;box-shadow:none;}
-#toc-search-input{font-size:14px;color:var(--ui-text)!important;}
-html.dark-mode #toc-search-frame{background:var(--ui-surface)!important;border-color:var(--ui-control-line)!important;}
-#toc-search-clear{font-size:16px;min-width:28px;min-height:28px;color:var(--ui-muted);}
-#acim-search-scope{margin-top:9px;gap:6px;}
-#acim-search-scope button{font-size:12px;min-height:32px;border-radius:999px;padding:5px 12px;color:var(--ui-link);border:1px solid var(--ui-line);background:transparent;}
-#acim-search-scope button.acim-scope-on{background:var(--ui-primary)!important;color:var(--ui-on-primary)!important;border-color:var(--ui-primary)!important;}
-#toc-search-results{background:var(--ui-surface)!important;border-color:var(--ui-line);border-radius:12px;box-shadow:none;}
-.sr-item{font-size:14px;padding:11px 12px;color:var(--ui-text)!important;border-color:var(--ui-line);}
-html.dark-mode .sr-item{color:var(--ui-text)!important;border-color:var(--ui-line)!important;}
-.sr-item:hover,.sr-item:focus-visible{background:var(--ui-soft);}
-.sr-hint,.sr-no-result{color:var(--ui-muted);font-size:12px;}
-#toc-locate-btn{display:flex;gap:7px;align-items:center;justify-content:center;margin:12px 16px 8px;width:calc(100% - 32px);padding:9px 12px;min-height:40px;font-size:13px;border-radius:10px;color:var(--ui-link);background:var(--ui-surface);border:1px solid var(--ui-line);}
-.acim-nav-label28{font-size:11px;letter-spacing:.13em;color:var(--ui-muted);margin:12px 20px 6px;}
-#toc-wrapper{padding:4px 14px 28px;}
-#toc-wrapper a{font-size:14px;line-height:1.6;padding:7px 9px;color:var(--ui-link);border-radius:8px;}
-html.dark-mode #toc-wrapper a{color:var(--ui-link)!important;}
-#toc-wrapper a:hover,#toc-wrapper a:focus-visible,
-html.dark-mode #toc-wrapper a:hover,html.dark-mode #toc-wrapper a:focus-visible{background:var(--ui-selected)!important;color:var(--ui-selected-text)!important;}
-#toc-wrapper a.toc-link.toc-active,html.dark-mode #toc-wrapper a.toc-link.toc-active{background:var(--ui-selected)!important;color:var(--ui-selected-text)!important;box-shadow:inset 3px 0 0 var(--ui-link);font-weight:700;}
-.toc-h1{font-size:15px;font-weight:700;}
-.toc-h2,.toc-h3,.toc-h4,.toc-h5{font-size:14px;}
-#toc-wrapper .toc-glossary a{font-size:14px;line-height:1.6;}
-.toc-h1-row .toc-arrow,.toc-h2-row .toc-arrow{width:28px;min-width:28px;min-height:32px;display:flex;align-items:center;justify-content:center;font-size:10px;padding:4px;color:var(--ui-muted);}
-.toc-h1-row .toc-arrow-placeholder,.toc-h2-row .toc-arrow-placeholder{width:28px;min-width:28px;}
-#sidebar-settings-panel{margin:8px 12px 12px;padding:4px 12px 14px;border:1px solid var(--ui-line);border-radius:14px;background:var(--ui-surface);max-height:55vh;max-height:55dvh;font-size:13px;line-height:1.6;color:var(--ui-text);}
-.acim-settings-section28{padding:16px 0;border-bottom:1px solid var(--ui-line);}
-.acim-settings-section28:last-child{border-bottom:0;padding-bottom:0;}
-.acim-settings-section28>h4{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--ui-text);margin:0 0 12px;}
-.acim-setting-field28,.theme-setting{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0;font-size:13px;color:var(--ui-text);}
-.acim-setting-field28 label,.theme-setting label{flex:1 1 auto;}
-.acim-setting-field28 select,#theme-mode{width:126px;min-height:38px;font:inherit;font-size:13px;padding:7px 24px 7px 9px;background:var(--ui-surface);color:var(--ui-text);border:1px solid var(--ui-control-line);border-radius:9px;}
-.acim-setting-help28{font-size:12px;line-height:1.7;color:var(--ui-muted);margin:6px 0 0;}
-.acim-zoom-controls28{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.acim-zoom-controls28 button,.acim-setting-action28{min-height:38px;border:1px solid var(--ui-control-line);border-radius:9px;background:var(--ui-surface);color:var(--ui-link);font:inherit;font-size:13px;padding:7px 11px;cursor:pointer;}
-.acim-zoom-controls28 button:first-child,.acim-zoom-controls28 button:nth-child(3){font-size:17px;min-width:40px;}
-.acim-zoom-controls28 button:disabled{background:var(--ui-soft);color:var(--ui-muted);opacity:.55;}
-#acim-scale-value28{font-size:13px;min-width:47px;text-align:center;font-variant-numeric:tabular-nums;}
-.acim-setting-action28{display:flex;width:100%;align-items:center;justify-content:center;gap:8px;margin-top:12px;}
-.sidebar-book-title{font-size:14px;color:var(--ui-text);}
-#app-version-info,#app-version-tag,.info-appeal,.info-section p,.info-note,.info-section a{font-size:12px!important;color:var(--ui-muted)!important;line-height:1.75;}
-#app-version-tag{display:block;margin:3px 0;}
-.info-section h4{font-size:12px;color:var(--ui-text)!important;}
-.sidebar-info-box{border-top:0;margin-top:12px;padding:0;line-height:1.75;}
-.info-appeal{font-style:normal;margin-bottom:10px;}
-.info-section{margin:8px 0;}
-.acim-backup-row{font-size:13px;gap:8px;flex-wrap:wrap;padding:8px 0;}
-.acim-backup-row button,#acim-offline-panel button,#acim-migration-help button{font:inherit;font-size:13px;min-height:36px;padding:6px 10px;border:1px solid var(--ui-control-line);border-radius:9px;background:var(--ui-surface);color:var(--ui-link);}
-#acim-offline-panel{font-size:12px!important;line-height:1.6!important;padding:8px 0!important;border-top:0!important;}
-#acim-migration-help{font-size:12px;line-height:1.7;color:var(--ui-muted);}
-#acim-migration-help summary{color:var(--ui-link);padding:8px 0;}
-#acim-migration-help a{text-underline-offset:3px;}
-#chapter-crumb{min-height:46px;padding:9px 16px;gap:10px;border-color:var(--ui-line);}
-#crumb-text{font-size:13px;color:var(--ui-text);}
-.acim-icon28{width:20px;height:20px;display:inline-block;flex:0 0 auto;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;}
-#pwa-tools .pwa-btn{color:var(--ui-link)!important;background:var(--ui-surface)!important;border:1px solid var(--ui-line);box-shadow:0 3px 12px rgb(41 34 74 / .08);width:42px;height:42px;}
-#pwa-tools #btn-bm.bm-marked{color:var(--ui-on-primary)!important;background:var(--ui-primary)!important;box-shadow:0 0 0 2px var(--ui-selected);}
-#pwa-tools button{display:inline-flex;align-items:center;justify-content:center;}
-#acim-bottomnav{background:var(--ui-surface);box-shadow:none;border-color:var(--ui-line);}
-#acim-bottomnav button{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;color:var(--ui-muted);gap:5px;padding:8px 0;position:relative;}
-#acim-bottomnav button .bn-ico{display:flex;justify-content:center;align-items:center;min-height:23px;}
-#acim-bottomnav button .bn-tx{font-size:11px;line-height:1.25;letter-spacing:.03em;}
-#acim-bottomnav button.acim-bn-on{color:var(--ui-link);font-weight:700;}
-#acim-bottomnav button.acim-bn-on::before{content:'';position:absolute;top:4px;left:calc(50% - 17px);width:34px;height:3px;border-radius:3px;background:var(--ui-link);}
-#acim-quick-sheet,#bm-panel,#footnote-bar,#acim-spanel,#tts-bar,#acim-external-guide{background:var(--ui-raised)!important;background-image:none!important;color:var(--ui-text)!important;border:1px solid var(--ui-line)!important;border-radius:var(--ui-panel-radius);box-shadow:var(--ui-shadow)!important;}
-#acim-quick-sheet{min-width:248px;padding:10px;}
-#acim-quick-sheet button{min-height:44px;font-size:14px;color:var(--ui-text);}
-#acim-quick-sheet button:hover{background:var(--ui-selected);}
-#acim-quick-sheet>div:first-child{font-size:11px!important;letter-spacing:.06em!important;padding:3px 0 9px!important;}
-#bm-panel{font-size:14px;}
-#bm-panel h3,#bm-panel button,#bm-panel a{color:var(--ui-link);}
-#bm-panel-header,#bm-panel-footer{border-color:var(--ui-line);padding:12px 16px;}
-#bm-panel-title{font-size:14px;color:var(--ui-text);}
-#bm-panel-close{color:var(--ui-muted);min-width:36px;min-height:36px;}
-.bm-empty{font-size:13px;color:var(--ui-muted);padding:24px 16px;}
-.bm-item{padding:12px 16px;border-color:var(--ui-line);}
-.bm-item:hover{background:var(--ui-soft);}
-.bm-item-title{font-size:14px;color:var(--ui-text);line-height:1.6;}
-.bm-item-time{font-size:11px;color:var(--ui-muted);}
-.bm-item-excerpt{font-size:13px;color:var(--ui-muted);line-height:1.7;}
-.bm-item-del{min-width:32px;min-height:32px;color:var(--ui-muted);}
-#bm-panel-footer button{font-size:12px;min-height:36px;color:var(--ui-link);border-color:var(--ui-control-line);border-radius:9px;}
-#bm-storage-status{font-size:12px;color:var(--ui-muted);}
-#footnote-bar{border-bottom-left-radius:0;border-bottom-right-radius:0;border-top:2px solid var(--ui-control-line)!important;}
-#fn-text{font-family:"Noto Serif TC","PMingLiU","MingLiU",serif;font-size:16px;line-height:1.85;color:var(--ui-text);}
-#fn-text .mft{font-size:16px;line-height:1.85!important;}
-#fn-context{font-size:13px;line-height:1.65;color:var(--ui-muted);}
-sup.fn-badge{font-size:9px!important;}
-#fn-text *,html.dark-mode #fn-text *{color:var(--ui-text)!important;}
-#fn-text a,html.dark-mode #fn-text a{color:var(--ui-link)!important;}
-#fn-text u,#fn-text [style*="underline"]{text-decoration-color:currentColor!important;text-underline-offset:3px;}
-#fn-close,#fn-prev,#fn-next{color:var(--ui-link)!important;border-color:var(--ui-line)!important;min-width:36px;min-height:36px;}
-#fn-num{color:var(--ui-link)!important;font-size:14px;}
-#acim-spanel{font-size:14px!important;line-height:1.7!important;padding:20px!important;}
-#acim-sbar{background:var(--ui-primary)!important;border:1px solid var(--ui-primary)!important;box-shadow:var(--ui-shadow)!important;border-radius:12px!important;padding:5px 10px!important;}
-#acim-sbar-btn{display:inline-flex;align-items:center;gap:7px;font:inherit!important;font-size:13px!important;min-height:34px;color:var(--ui-on-primary)!important;background:transparent!important;}
-#acim-spanel span,#acim-sp-ref,#acim-sp-toast{color:var(--ui-link)!important;font-size:13px!important;}
-#acim-spanel div[style*="font-size:10.5px"]{font-size:12px!important;color:var(--ui-muted)!important;margin-bottom:7px!important;}
-#acim-sp-close{color:var(--ui-muted)!important;min-width:36px;min-height:36px;display:inline-flex;align-items:center;justify-content:center;}
-#acim-sp-zh,#acim-sp-en,#acim-sp-quote{font-size:13px!important;line-height:1.8!important;padding:10px 12px!important;background:var(--ui-soft)!important;border:1px solid var(--ui-line)!important;border-radius:10px!important;}
-#acim-sp-en-note{font-size:13px!important;color:var(--ui-muted)!important;line-height:1.8!important;}
-#acim-spanel button:not([id="acim-sp-close"]),#acim-sp-open-en{font:inherit!important;font-size:13px!important;line-height:1.5!important;min-height:40px!important;padding:9px 10px!important;border-radius:10px!important;background:var(--ui-surface)!important;color:var(--ui-link)!important;border:1px solid var(--ui-control-line)!important;}
-#acim-spanel #acim-sp-copy-zh{background:var(--ui-primary)!important;color:var(--ui-on-primary)!important;border-color:var(--ui-primary)!important;}
-#acim-ctoast{background:var(--ui-surface)!important;color:var(--ui-text)!important;border:1px solid var(--ui-control-line)!important;border-radius:14px!important;box-shadow:var(--ui-shadow)!important;font-size:13px!important;line-height:1.6!important;padding:12px 14px!important;}
-#acim-ct-ref,#acim-ct-feedback{color:var(--ui-link)!important;font-size:13px!important;}
-#acim-ct-note{color:var(--ui-muted)!important;font-size:12px!important;line-height:1.6!important;}
-#acim-ctoast button,#acim-ctoast a{min-height:38px!important;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ui-control-line)!important;color:var(--ui-link)!important;background:var(--ui-surface)!important;border-radius:9px!important;padding:7px 10px!important;font:inherit!important;font-size:12px!important;text-decoration:none;}
-#acim-ctoast #acim-ct-copy{background:var(--ui-primary)!important;color:var(--ui-on-primary)!important;}
-#acim-ctoast.acim-cite-docked{box-shadow:none!important;margin:10px 0!important;max-width:100%!important;width:100%!important;box-sizing:border-box!important;}
-#acim-ctoast.acim-cite-compact #acim-ct-en{color:var(--ui-link)!important;font-weight:600;}
-#rtabs-bar{background:var(--ui-surface);border-color:var(--ui-line);box-shadow:0 2px 12px rgb(41 34 74 / .07);padding:4px 6px;gap:5px;}
-#rtabs-bar .rtab-group{display:flex;align-items:center;border-radius:999px;background:var(--ui-soft);}
-#rtabs-bar .rtab{min-height:34px;font-size:12px;color:var(--ui-link);padding:6px 11px;}
-#rtabs-bar .rtab.rtab-on{background:var(--ui-primary);color:var(--ui-on-primary);}
-#rtabs-bar .rtab-delete{display:inline-flex;align-items:center;justify-content:center;width:30px;min-width:30px;height:32px;border:0;border-radius:999px;color:var(--ui-muted);background:transparent;cursor:pointer;}
-#rtabs-bar .rtab-delete .acim-icon28{width:16px;height:16px;}
-#rtab-undo{color:inherit;border:1px solid currentColor;border-radius:7px;background:transparent;padding:6px 10px;min-height:32px;font:inherit;}
-#tts-bar{border-radius:16px;padding:10px 12px;gap:8px;}
-#tts-bar button{color:var(--ui-link);background:var(--ui-surface);border-color:var(--ui-control-line);min-height:32px;font-size:12px;}
-#tts-bar-label,#tts-gender-label,#tts-rate-label,#tts-rate-val{font-size:12px;opacity:1;color:var(--ui-muted);}
-#tts-gender-wrap,#tts-rate-wrap{border-color:var(--ui-line);}
-#tts-bar .tts-gender-active{background:var(--ui-selected);color:var(--ui-selected-text);border-color:var(--ui-control-line);}
-.tts-btn{width:30px;height:30px;font-size:14px;opacity:1;border-color:var(--ui-line);color:var(--ui-link);background:var(--ui-surface);margin-left:6px;}
-.tts-btn:hover{opacity:1;background:var(--ui-selected);}
-.tts-btn.tts-active,html.dark-mode .tts-btn.tts-active{background:var(--ui-selected);color:var(--ui-selected-text);border-color:var(--ui-control-line);}
-.tts-btn::before,html.dark-mode .tts-btn::before,.tts-btn.tts-active::before,html.dark-mode .tts-btn.tts-active::before{width:15px;height:15px;background-image:none!important;background-color:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M3 9v6h4l5 4V5L7 9H3zm12-1v2a3 3 0 010 4v2a5 5 0 000-8zm3-3v2a7 7 0 010 10v2a9 9 0 000-14z'/%3E%3C/svg%3E") center/contain no-repeat;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M3 9v6h4l5 4V5L7 9H3zm12-1v2a3 3 0 010 4v2a5 5 0 000-8zm3-3v2a7 7 0 010 10v2a9 9 0 000-14z'/%3E%3C/svg%3E") center/contain no-repeat;}
-html.dark-mode .tts-btn{color:var(--ui-link);}
-mark.search-hl,html.dark-mode mark.search-hl,#fn-text mark.search-hl,html.dark-mode #fn-text mark.search-hl{background:#ffe066!important;color:var(--p900)!important;animation:none!important;}
-::highlight(acim-search),html.dark-mode ::highlight(acim-search){background-color:#ffe066;color:#29224a;}
-#pwa-install-bar{background:var(--ui-surface);background-image:none;color:var(--ui-text);border-top:1px solid var(--ui-line);box-shadow:var(--ui-shadow);font-size:13px;}
-#pwa-install-btn{background:var(--ui-primary);color:var(--ui-on-primary);min-height:38px;border-radius:10px;}
-#pwa-install-close{color:var(--ui-muted);min-width:36px;min-height:36px;}
-#acim-update-toast,#acim-v30-toast{background:var(--ui-toast)!important;color:var(--ui-toast-text)!important;border-radius:12px!important;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif!important;font-size:13px!important;line-height:1.6!important;box-shadow:var(--ui-shadow)!important;}
-#acim-external-guide{font-size:13px;line-height:1.7;}
-#acim-external-guide .acim-eg-button{background:var(--ui-primary);color:var(--ui-on-primary);border-color:var(--ui-primary);font-size:13px;min-height:38px;}
-#acim-external-guide .acim-eg-note{color:var(--ui-muted);font-size:12px;}
-#sidebar-close-28{display:none;}
-button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,[role="button"]:focus-visible{outline:2px solid var(--ui-focus);outline-offset:3px;}
-#toc-wrapper a:focus-visible{outline:2px solid var(--ui-focus);outline-offset:-2px;}
-#bm-panel button:focus-visible,#bm-panel .bm-item:focus-visible,#acim-quick-sheet button:focus-visible{outline:2px solid var(--ui-focus);outline-offset:-2px;}
-button:disabled,[aria-disabled="true"]{cursor:default;}
-@media(min-width:769px){#content-area{padding-left:6%;padding-right:6%;}#sidebar-header{padding-top:24px;}#sidebar-settings-panel{max-height:58vh;}}
-@media(max-width:768px){
- #sidebar-header{padding:16px 16px 12px;}#sidebar-header h3{font-size:21px;}
- /* Width and closed offset share one value; retain the existing left/veil transition. */
- #sidebar-toc{--acim-mobile-drawer-width28:min(92vw,360px);width:var(--acim-mobile-drawer-width28);min-width:0;left:calc(0px - var(--acim-mobile-drawer-width28));box-shadow:none;}
- #sidebar-toc.mobile-open{left:0;box-shadow:4px 0 24px rgb(0 0 0 / .24);}
- #sidebar-close-28{display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;border:0;border-radius:9px;background:transparent;color:var(--ui-link);}
- #sidebar-settings-toggle{margin-left:0;}#content-area{padding:104px 6% calc(150px + env(safe-area-inset-bottom,0px));}
- #sidebar-settings-panel{max-height:61vh;max-height:61dvh;}#acim-spanel{max-width:calc(100vw - 24px)!important;padding:16px!important;border-radius:18px!important;}
- #fn-text{font-size:16px;}#acim-quick-sheet{width:min(320px,calc(100vw - 28px));}
- #tts-bar{padding:9px;max-width:calc(100vw - 20px);flex-wrap:wrap;white-space:normal;}#tts-bar-label{max-width:110px;}
- /* Saved positions occupy their own opaque row beneath the 46px chapter bar.
-    Matching mobile navigation inset is provided by the interaction transform. */
- #rtabs-bar{position:fixed;top:46px;left:0;right:0;transform:none;width:auto;max-width:none;height:42px;box-sizing:border-box;padding:3px 12px;border:0;border-bottom:1px solid var(--ui-line);border-radius:0;background:var(--ui-surface);box-shadow:none;overflow-x:auto;overflow-y:hidden;gap:6px;}
- #rtabs-bar .rtab-group,#rtabs-bar .rtab-add{flex:0 0 auto;}
- #rtabs-bar .rtab-add{font-size:12px;min-height:34px;padding-inline:10px;color:var(--ui-link);}
- #acim-ctoast{font-size:12px!important;}
-}
-@media(prefers-reduced-motion:reduce){#acim-bottomnav,#acim-quick-sheet,#sidebar-toc,.tts-btn,mark.search-hl{animation:none!important;transition:none!important;}}
-@media(forced-colors:active){.acim-icon28{forced-color-adjust:auto;}button,a,select,input{border-color:ButtonText!important;}.tts-btn{border:1px solid ButtonText;color:ButtonText;}.tts-btn::before{background-color:ButtonText;}#toc-wrapper a.toc-active{outline:2px solid Highlight;}.acim-bn-on::before{background:Highlight!important;}}
-
-</style>
-<script id="acim-design28-early">
-(function(){
-  'use strict';
-  var root=document.documentElement;
-  function read(key){try{return window.__acimStorage?window.__acimStorage.get(key):localStorage.getItem(key);}catch(e){return null;}}
-  var size=read('acim-reading-size');if(['original','18','20'].indexOf(size)<0)size='18';
-  var leading=read('acim-reading-leading');if(['original','1.8','1.95','2.1'].indexOf(leading)<0)leading='1.95';
-  root.setAttribute('data-acim-reading-size',size);
-  root.setAttribute('data-acim-reading-leading',leading);
-  var factor=size==='original'?1:Number(size)/(44/3),line=leading==='original'?1.9:Number(leading);
-  root.style.setProperty('--acim-reader-scale28',String(factor));
-  root.style.setProperty('--acim-reader-leading28',String(line));
-  root.style.setProperty('--acim-layout-estimate28',String(factor*factor*line/1.9));
-})();
-
-</script>
 </head>
 
 <body>
@@ -23161,8 +22934,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 
   /* ── V22: content-visibility 逐節渲染的精準跳轉 ──
      先瞬跳到烘焙高度推算的位置，待目標節渲染完成後校正殘餘誤差。  */
-  /* The mobile chapter crumb and saved-position row occupy the top 88px. */
-  window.__acimTopInset28=function(desktopInset){return window.innerWidth<=768?100:desktopInset;};
   window.__acimJump = function(y,token){
     var nav=window.__acimNav;
     if(token===undefined||token===null) token=nav.begin('jump');
@@ -23209,7 +22980,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     if(results.hidden!==open)results.hidden=open;
     if(badge.hidden!==open)badge.hidden=open;
     if(!open&&restoreFocus&&document.activeElement!==settingsToggle)settingsToggle.focus({preventScroll:true});
-    if(window.__acimPanels28){if(open)window.__acimPanels28.open('settings',settingsPanel,{modal:false,focus:false,trigger:settingsToggle,close:function(){setSidebarSettings(false,true);}});else window.__acimPanels28.close('settings',{restore:!!restoreFocus});}
   }
   if(settingsToggle&&settingsPanel){
     settingsToggle.addEventListener('click',function(event){
@@ -23645,7 +23415,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     if(sidebar.classList.contains('mobile-open')&&overlay.style.display==='block')return;
     sidebar.classList.add('mobile-open');
     overlay.style.display='block';
-    if(window.__acimPanels28&&window.innerWidth<=768)window.__acimPanels28.open('sidebar',sidebar,{modal:true,initial:'#sidebar-close-28',close:closeSidebar});
     if(window.innerWidth<=768)veilScheduleForDrawer();
     sidebarOpenFrame=requestAnimationFrame(function(){
       sidebarOpenFrame=null;
@@ -23661,7 +23430,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     retireSearchHighlights();
     sidebar.classList.remove('mobile-open');
     overlay.style.opacity='0';
-    if(window.__acimPanels28)window.__acimPanels28.close('sidebar');
     if(sidebarHideTimer!==null)clearTimeout(sidebarHideTimer);
     sidebarHideTimer=setTimeout(function(){
       sidebarHideTimer=null;
@@ -23733,7 +23501,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   }catch(e){}
   var hasZoom = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('zoom','1');
 
-  function applyZoom(keepFrame, beforeStyleChange) {
+  function applyZoom(keepFrame) {
     var z = zSteps[fi];
     /* V40.15：桌面位置保全（僅使用者主動變更字級時，keepFrame===true）——
        桌面無面紗管線（面紗僅 ≤768 掛），zoom 直接套用＝全書重排，瀏覽器
@@ -23762,7 +23530,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
         }
       }catch(e){}
     }
-    if(typeof beforeStyleChange==='function')beforeStyleChange();
     if (hasZoom) {
       content.style.zoom = z;
       content.style.transform = '';
@@ -23791,11 +23558,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
         var _pin=function(){
           if(_stopped||!_anchor.el||!_anchor.el.isConnected)return;
           var t=window.scrollY+_anchor.el.getBoundingClientRect().top-_anchor.top;
-          if(Math.abs(t-window.scrollY)>2){
-            /* Pure typography correction keeps the currently received citation. */
-            var layoutToken28=window.__acimNav?window.__acimNav.begin('layout'):null;
-            window.__acimJump(t,layoutToken28);
-          }
+          if(Math.abs(t-window.scrollY)>2)window.__acimJump(t);
         };
         requestAnimationFrame(function(){
           _pin();
@@ -23812,16 +23575,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     btn.classList.remove('at-limit'); void btn.offsetWidth; btn.classList.add('at-limit');
     setTimeout(function(){ btn.classList.remove('at-limit'); }, 350);
   }
-  /* V40.28: preserve the existing pre-change desktop anchor and mobile veil/debt pipeline. */
-  window.__acimApplyReading28=function(mutator,options){
-    options=options||{};
-    if(window.innerWidth<=768&&window.__acimVeilApplyNow)window.__acimVeilApplyNow();
-    if(options.resetZoom===true)fi=2;
-    applyZoom(true,mutator);
-    document.dispatchEvent(new CustomEvent("acim:reading-scale28",{detail:{index:fi,zoom:zSteps[fi]}}));
-    if(window.innerWidth<=768&&window.__acimSheetVeilClose)window.__acimSheetVeilClose();
-  };
-  window.__acimReadingState28=function(){return {index:fi,zoom:zSteps[fi]};};
   document.getElementById('btn-fup').addEventListener('click', function(){
     if (fi < 6){ fi++; applyZoom(true); } else shake(this);
   });
@@ -24014,7 +23767,6 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     };
   })();
   function saveProgress(){
-    if(window.__acimBackup28Committed)return; /* imported progress must survive pagehide/reload */
     /* V30.5: keep the last saved offset/anchor pair during sidebar input.
        The live IO cache may reflect a keyboard-induced scroll, so neither
        member of that persisted pair is replaced here. */
@@ -24105,9 +23857,9 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
            與跳轉互搶。 */
         var go=function(){
           var rect = el.getBoundingClientRect();
-          var offset = window.scrollY + rect.top - window.__acimTopInset28(56);
+          var offset = window.scrollY + rect.top - 56;
           window.__acimJump(offset);
-          window.__acimCorrectScroll(el, window.__acimTopInset28(56));
+          window.__acimCorrectScroll(el, 56);
         };
         unveilBookBehindDrawer(false, go); /* V30.11：量測前先讓書本回到版面樹（V40.15：量測入回調） */
         /* 展開此連結的所有直接父層（確保在已收合群組內的連結也能被看到）*/
@@ -24269,8 +24021,8 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
             e.preventDefault();
             var t=document.getElementById(this.dataset.gid); if(!t) return;
             unveilBookBehindDrawer(); /* V30.11：量測前先讓書本回到版面樹 */
-            window.__acimJump(window.scrollY + t.getBoundingClientRect().top - window.__acimTopInset28(72));
-            window.__acimCorrectScroll(t, window.__acimTopInset28(72));
+            window.__acimJump(window.scrollY + t.getBoundingClientRect().top - 72);
+            window.__acimCorrectScroll(t, 72);
             t.classList.remove('glossary-flash'); void t.offsetWidth; t.classList.add('glossary-flash');
             var self=this;
             childWrap.querySelectorAll('a').forEach(function(x){ x.classList.remove('toc-g-active'); });
@@ -24361,9 +24113,9 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
           var el = document.getElementById(savedAnchor);
           if (el) {
             /* 錨點優先：計算至目標 heading 的精確偏移，扣除麵包屑列高度 */
-            var offset = window.scrollY + el.getBoundingClientRect().top - window.__acimTopInset28(60);
+            var offset = window.scrollY + el.getBoundingClientRect().top - 60;
             window.__acimJump(offset);
-            window.__acimCorrectScroll(el, window.__acimTopInset28(60));
+            window.__acimCorrectScroll(el, 60);
             return;
           }
         }
@@ -25311,7 +25063,6 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
         ts:typeof b.ts==='number'&&isFinite(b.ts)&&b.ts>=0&&b.ts<=8640000000000000?b.ts:0
       };
     }
-    window.__acimBookmarkData28={normalize:normalizeBookmark,key:bookmarkKey};
     function bmLoad(){
       try{
         var raw=window.__acimStorage.get(BM_KEY);
@@ -25721,13 +25472,11 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
 
     /* ── 面板開關 ── */
     function openBmPanel(){
-      var trigger28=document.activeElement;
       renderBmList();
       bmPanel.inert=false; bmPanel.removeAttribute('inert'); bmPanel.setAttribute('aria-hidden','false');
       bmPanel.classList.add('bm-open');
       bmOpen=true;
-      if(window.__acimPanels28)window.__acimPanels28.open('bookmarks',bmPanel,{modal:true,initial:'#bm-panel-close',trigger:trigger28,close:closeBmPanel});
-      else document.getElementById('bm-panel-close').focus();
+      document.getElementById('bm-panel-close').focus();
     }
     /* V30：供底部導覽列「書籤」頁籤直接開清單 */
     window.__acimOpenBookmarks=openBmPanel;
@@ -25739,8 +25488,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
       bmPanel.classList.remove('bm-open');
       bmPanel.inert=true; bmPanel.setAttribute('inert',''); bmPanel.setAttribute('aria-hidden','true');
       bmOpen=false;
-      if(window.__acimPanels28)window.__acimPanels28.close('bookmarks',{restore:returnFocus});
-      else if(returnFocus)btnBm.focus({preventScroll:true});
+      if(returnFocus) btnBm.focus({preventScroll:true});
     }
 
     /* ── btn-bm 點擊：加入 / 移除書籤（同一快照；I20 失敗如實回報）── */
@@ -25925,7 +25673,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     return h;
   }
 
-  function showFn(ref,options){
+  function showFn(ref){
     var h=getFnHref(ref)||'';
     var m=h.match(/#_(?:ftn|edn)(\d+)$/);
     if(!m) return;
@@ -25954,15 +25702,11 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     document.dispatchEvent(new Event('acim:footnote-rendered'));
     fnBar.classList.add('open'); document.body.classList.add('fn-open'); activeRef=ref; lastFnTrigger=ref;
     /* 無障礙：將 focus 移入腳注列，讓鍵盤/螢幕閱讀器使用者可直接閱讀 */
-    fnBar.setAttribute('tabindex','-1');
-    var preview28=!!(options&&options.preview);
-    if(window.__acimPanels28)window.__acimPanels28.open('footnote',fnBar,{modal:false,focus:false,trigger:ref,close:function(){hideFn(true);}});
-    if(!preview28)fnBar.focus({preventScroll:true});
+    fnBar.setAttribute('tabindex','-1'); fnBar.focus({preventScroll:true});
   }
   var lastFnTrigger=null; /* V25（I04）：記錄觸發來源，關閉時可回復焦點 */
   function hideFn(restoreFocus){
     fnBar.classList.remove('open'); document.body.classList.remove('fn-open');
-    if(window.__acimPanels28)window.__acimPanels28.close('footnote',{restore:false});
     var src=lastFnTrigger;
     activeRef=null; hoverOpened=null; lastFnTrigger=null;
     window.__fnClickOpen=false; window.__fnSkip=false;
@@ -25998,7 +25742,6 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     /* V24 修復：hover 已開啟同一註腳時，首擊＝固定（保持開啟），不再誤關 */
     if(hoverOpened===ref){
       hoverOpened=null;
-      fnBar.focus({preventScroll:true});
       window.__fnSkip=true; window.__fnClickOpen=true;
       if(typeof cancelFnHide==='function') cancelFnHide();
       return;
@@ -26013,7 +25756,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
 
     content.addEventListener('mouseover',function(e){
       var r=e.target.closest('sup.fn-badge[data-fn]')||e.target.closest('a[href*="#_ftn"],a[href*="#_edn"]');
-      if(r){ cancelFnHide(); showFn(r,{preview:true}); hoverOpened=r; } /* V24：登記 hover 開啟來源 */
+      if(r){ cancelFnHide(); showFn(r); hoverOpened=r; } /* V24：登記 hover 開啟來源 */
     });
     content.addEventListener('mouseout',function(e){
       var r=e.target.closest('sup.fn-badge[data-fn]')||e.target.closest('a[href*="#_ftn"],a[href*="#_edn"]');
@@ -26893,7 +26636,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     para.classList.add('tts-reading');
     barLabel.textContent = labelOverride || ('▶ ' + text.slice(0, 16) + '…');
     ttsBar.classList.add('tts-bar-on');
-    var rect=para.getBoundingClientRect(), margin=Math.max(window.__acimTopInset28(56),(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
+    var rect=para.getBoundingClientRect(), margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
     window.__acimJump(window.scrollY+rect.top-margin);
     window.__acimCorrectScroll(para,margin);
 
@@ -27818,7 +27561,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      讓收到連結的人不必重新選取文字，也能跨語言回溯英文原典。 */
   /* V40.27: 引用入口持續顯示至關閉或下一次導航；不把無效句碼當成功。 */
   var citeToast=null,citeToastTimer=null;
-  /* V40.28: 相同的引文／出處／網址訊息供複製與系統分享使用。 */
+  /* V40.27.1: 相同的引文／出處／網址訊息供複製與系統分享使用。 */
   function quoteShareText(quote,ref,url) {
     var lines=[];
     if(quote)lines.push('「'+quote+'」');
@@ -27885,7 +27628,6 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-ct-copy-url').hidden=false;
     document.getElementById('acim-ct-copy').hidden=false;
     citeToast.style.display='flex';
-    if(window.__acimPanels28)window.__acimPanels28.syncCitation();
   }
   function showCiteError(message) {
     ensureCiteToast();
@@ -27897,47 +27639,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-ct-note').textContent=message;
     document.getElementById('acim-ct-feedback').textContent='';
     citeToast.style.display='flex';
-    if(window.__acimPanels28)window.__acimPanels28.syncCitation();
   }
-  /* ACIM_V4028_LEGACY_HEADING_BEGIN */
-  var legacyHeadingTicket28=0,legacyHeadingTimer28=null,legacyHeadingPending28=null;
-  function cancelLegacyHeading28(){legacyHeadingTicket28++;if(legacyHeadingTimer28!==null)clearTimeout(legacyHeadingTimer28);legacyHeadingTimer28=null;}
-  function scrollLegacyHeading28(hash){
-    var nav=window.__acimNav,pending=legacyHeadingPending28;legacyHeadingPending28=null;
-    /* The permanent-link module also runs independently; native anchors remain a safe fallback. */
-    if(!nav||typeof nav.begin!=='function'||typeof nav.valid!=='function'||typeof window.__acimJump!=='function'||typeof window.__acimCorrectScroll!=='function')return;
-    var token=pending&&pending.hash===hash?pending.token:nav.begin('legacy-heading');
-    var ticket=legacyHeadingTicket28,attempts=0;
-    function valid(){return ticket===legacyHeadingTicket28&&location.hash===hash&&nav.valid(token);}
-    function seek(){
-      legacyHeadingTimer28=null;if(!valid())return;
-      var el=document.getElementById(hash.slice(1)),root=document.getElementById('content-area');
-      if(el&&root&&root.contains(el)&&/^H[1-6]$/.test(el.tagName)){
-        var revealed=window.__acimRevealSection?window.__acimRevealSection(el):null;
-        function restoreReveal(){if(revealed&&revealed.sec&&revealed.sec.isConnected&&revealed.sec.style.contentVisibility==='visible')revealed.sec.style.contentVisibility=revealed.prev;}
-        function go(){
-          if(!valid()||!el.isConnected){restoreReveal();return;}
-          var margin=window.__acimTopInset28?window.__acimTopInset28(56):(window.innerWidth<=768?100:56);
-          window.__acimJump(window.scrollY+el.getBoundingClientRect().top-margin,token);
-          window.__acimCorrectScroll(el,margin,token);
-          /* The heading is now in view; release the temporary reveal after painting. */
-          requestAnimationFrame(function(){requestAnimationFrame(restoreReveal);});
-        }
-        if(window.__acimVeilUnveil)window.__acimVeilUnveil(false,go);else go();
-        return;
-      }
-      if(++attempts<40)legacyHeadingTimer28=setTimeout(seek,150);
-    }
-    seek();
-  }
-  /* ACIM_V4028_LEGACY_HEADING_END */
   function scrollToHash(hash) {
-    if(!idsReady){pendingHash=hash;if(/^#h\d+$/.test(hash)&&window.__acimNav&&typeof window.__acimNav.begin==='function'&&typeof window.__acimNav.valid==='function')legacyHeadingPending28={hash:hash,token:window.__acimNav.begin('legacy-heading')};return;}
+    if(!idsReady){pendingHash=hash;return;}
     clearTimeout(hashScrollTimer);clearTimeout(hashClearTimer);clearHL();hideCiteToast();
-    cancelLegacyHeading28();
-    if(/^#h\d+$/.test(hash)){scrollLegacyHeading28(hash);return;}
-    legacyHeadingPending28=null;
-    if(!hash||/^#(?:content-area|acim-[\w-]+)$/.test(hash))return;
+    if(!hash||/^#(?:h\d+|content-area|acim-[\w-]+)$/.test(hash))return;
     var p=parseHash(hash);
     if(!p){showCiteError(lastParseError);return;}
     var ids=rangeIds(p), first=null,last=null;
@@ -27974,7 +27680,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     }
     hashScrollTimer=setTimeout(function(){
       if(!window.__acimNav.valid(token)||!target.isConnected)return;
-      var rect=rectOfTarget(), margin=Math.max(window.__acimTopInset28(56),(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
+      var rect=rectOfTarget(), margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
       window.__acimJump(window.scrollY+rect.top-margin,token);
       window.__acimCorrectScroll(target,margin,token,rectOfTarget);
     },150);
@@ -28034,8 +27740,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   }
 
   /* ── UI 建立 ── */
-  var shareBar, sharePanel, barTimer, shareReturnFocus28;
-  function closeSharePanel28(restore){sharePanel.style.display='none';if(window.__acimPanels28)window.__acimPanels28.close('share',{restore:restore!==false});}
+  var shareBar, sharePanel, barTimer;
 
   function buildUI() {
     /* 選取工具列 */
@@ -28052,7 +27757,6 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     /* 分享面板 */
     sharePanel = document.createElement('div');
     sharePanel.id = 'acim-spanel';
-    sharePanel.setAttribute('role','dialog');sharePanel.setAttribute('aria-modal','true');sharePanel.setAttribute('aria-label','分享引文與英文原典');sharePanel.setAttribute('tabindex','-1');sharePanel.inert=true;
     sharePanel.style.cssText = 'position:fixed;z-index:999997;display:none;'
       + 'background:linear-gradient(145deg,#34343B,#26262B);'
       + 'border:1px solid rgba(193,115,36,.35);border-radius:14px;'
@@ -28105,7 +27809,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-sbar-btn').onclick = function(e) {
       e.stopPropagation(); openPanel();
     };
-    document.getElementById('acim-sp-close').onclick = function() {closeSharePanel28(true);};
+    document.getElementById('acim-sp-close').onclick = function() {
+      sharePanel.style.display='none';
+    };
     document.getElementById('acim-sp-copy-zh').onclick = function() {
       return clip(quoteShareText((shareBar.dataset.quote||'').trim(),document.getElementById('acim-sp-ref').textContent,document.getElementById('acim-sp-zh').textContent));
     };
@@ -28132,13 +27838,12 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.addEventListener('pointerdown', function(e) {
       if (sharePanel.style.display !== 'none' &&
           !sharePanel.contains(e.target) && !shareBar.contains(e.target)) {
-        closeSharePanel28(true);
+        sharePanel.style.display = 'none';
       }
     });
   }
 
   function openPanel() {
-    shareReturnFocus28=document.activeElement;
     var acimId  = shareBar.dataset.id;
     var sent    = parseInt(shareBar.dataset.sent   ||'0', 10);
     var sentEnd = parseInt(shareBar.dataset.sentEnd||'0', 10);
@@ -28195,18 +27900,14 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     sharePanel.style.bottom     = 'auto';
     sharePanel.style.transform  = 'translate(-50%,-50%)';
     sharePanel.style.visibility = 'visible';
-    sharePanel.inert=false;
-    if(window.__acimPanels28)window.__acimPanels28.open('share',sharePanel,{modal:true,initial:'#acim-sp-close',trigger:shareReturnFocus28,close:function(){closeSharePanel28(true);}});
-    else document.getElementById('acim-sp-close').focus({preventScroll:true});
   }
 
   function clip(text) {
     function notice(message){var t=document.getElementById('acim-sp-toast');if(t){t.textContent=message;t.style.display='block';setTimeout(function(){t.style.display='none';},3500);}if(citeToast&&citeToast.style.display!=='none'){var feedback=document.getElementById('acim-ct-feedback');feedback.textContent=message;clearTimeout(citeToastTimer);citeToastTimer=setTimeout(function(){feedback.textContent='';},3500);}}
     function done(){notice('✓ 已複製到剪貼簿');return true;}
     function fallback(){
-      var returnFocus28=document.activeElement;var ta=document.createElement('textarea'),ok=false;ta.value=text;ta.setAttribute('aria-label','待複製的引文');ta.setAttribute('data-acim-focus-exempt','clipboard');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();
+      var ta=document.createElement('textarea'),ok=false;ta.value=text;ta.setAttribute('aria-label','待複製的引文');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();
       try{ok=document.execCommand('copy');}catch(e){}ta.remove();
-      if(window.__acimPanels28)window.__acimPanels28.restoreFocus(returnFocus28);else if(returnFocus28&&returnFocus28.focus)returnFocus28.focus({preventScroll:true});
       if(ok)return done();notice('無法自動複製，請從網址列或分享面板手動複製。');return false;
     }
     try{if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(text).then(done,fallback);}catch(e){}
@@ -28429,8 +28130,6 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   }
 
   function onSel() {
-    /* A late selectionchange must not retire an open modal. Its controls are the active task. */
-    if(sharePanel&&sharePanel.style.display!=='none')return;
     /* 若 assignIds 尚未完成，延遲 200ms 重試（最多重試 5 次） */
     if (!idsReady) {
       clearTimeout(barTimer);
@@ -28447,14 +28146,12 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     if (sharePanel.contains(selectionRoot) || shareBar.contains(selectionRoot)) return;
     var citation = getSelectionCitation(sel);
     /* 新的書稿選取使舊面板失效；避免鍵盤改選後仍複製上一個引用。 */
-    closeSharePanel28(false);
+    sharePanel.style.display = 'none';
     if (!citation) { shareBar.style.display = 'none'; return; }
 
     var button = document.getElementById('acim-sbar-btn');
     button.disabled = !!citation.hint;
-    if(citation.hint)button.textContent=citation.hint;
-    else if(window.__acimDesign28)button.innerHTML=window.__acimDesign28.svg('share')+'<span>分享</span>';
-    else button.textContent='🔗 分享';
+    button.textContent = citation.hint || '🔗 分享';
     shareBar.setAttribute('role', citation.hint ? 'status' : 'group');
     shareBar.dataset.id = citation.id || '';
     shareBar.dataset.sent = String(citation.sent || 0);
@@ -28462,7 +28159,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     /* V40.23（D3）：攜帶引文文字（面板「含出處引文」用）*/
     shareBar.dataset.quote = citation.text ? prepareQuote(citation.text) : '';
     if (citation.hint) {
-      closeSharePanel28(false);
+      sharePanel.style.display = 'none';
       ['acim-sp-ref','acim-sp-zh','acim-sp-en'].forEach(function(key) {
         document.getElementById(key).textContent = '';
       });
@@ -28543,7 +28240,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     addCSS();
     buildUI();
     /* 一般捲動保留分享來源；目錄、搜尋、書籤等新導航清除上一個引用。 */
-    document.addEventListener('acim-navigation',function(e){if(e.detail!=='hash'&&e.detail!=='layout')hideCiteToast();});
+    document.addEventListener('acim-navigation',function(e){if(e.detail!=='hash')hideCiteToast();});
 
     function run() {
       assignIds(function(){
@@ -29112,19 +28809,13 @@ function jumpToHeading(h,margin){
   else go();
 }
 var _toastT=null;
-function v30toast(msg,ms,onUndo){
+function v30toast(msg,ms){
   var t=document.getElementById('acim-v30-toast');
-  if(!t){t=document.createElement('div');t.id='acim-v30-toast';t.setAttribute('role','status');document.body.appendChild(t);}
-  t.textContent=msg;t.style.display='block';
-  if(_toastT)clearTimeout(_toastT);
-  if(typeof onUndo==='function'){
-    var undo=document.createElement('button');undo.type='button';undo.id='rtab-undo';undo.textContent='復原';
-    undo.addEventListener('click',function(){onUndo();});t.appendChild(undo);
-    /* A focused undo remains available until focus leaves. */
-    t.onfocusin=function(){if(_toastT)clearTimeout(_toastT);};
-    t.onfocusout=function(){_toastT=setTimeout(function(){t.style.display='none';},7000);};
-  }else{t.onfocusin=null;t.onfocusout=null;}
-  _toastT=setTimeout(function(){if(!t.contains(document.activeElement))t.style.display='none';},ms||2600);
+  if(!t){ t=document.createElement('div'); t.id='acim-v30-toast'; t.setAttribute('role','status');
+    document.body.appendChild(t); }
+  t.textContent=msg; t.style.display='block';
+  if(_toastT) clearTimeout(_toastT);
+  _toastT=setTimeout(function(){ t.style.display='none'; }, ms||2600);
 }
 
 /* ACIM_V305_NAV_BEGIN
@@ -29162,7 +28853,7 @@ function initLazyBookNav(){
     b.setAttribute('aria-label',prefix+'：'+(isTerm?label:full));
     b.title=prefix+'：'+(isTerm?label:full);
     var arrow=document.createElement('span');arrow.className='acim-sec-arrow';arrow.textContent=dir<0?'← ':'→ ';
-    var lab=document.createElement('span');lab.className='acim-sec-label';lab.textContent=prefix+'：'+label;
+    var lab=document.createElement('span');lab.className='acim-sec-label';lab.textContent=label;
     b.appendChild(arrow);b.appendChild(lab);
     b.__acimV305NavTarget=item.h;
     return b;
@@ -29173,7 +28864,7 @@ function initLazyBookNav(){
     var nav=document.createElement('nav');
     nav.className='acim-sec-nav'+(isTerm?' acim-glos-nav':'');
     nav.setAttribute('aria-label',isTerm?'詞彙導覽':'章節導覽');
-    var prev=list[i-1], next=list[i+1], skip=false; /* V40.28: adjacent means one step. */
+    var prev=list[i-1], next=list[i+2]||list[i+1], skip=!!list[i+2];
     if(prev)nav.appendChild(makePill(prev,-1,false,isTerm));
     else{var left=document.createElement('span');left.className='acim-sec-spacer';nav.appendChild(left);}
     var cur=document.createElement('span');cur.className='acim-sec-cur';
@@ -29350,11 +29041,9 @@ function buildBottomNav(){
          V40.13：開面板即啟動書首預熱（回頂的唯一定向跳轉由此面板發起，
          面板開啟到點按回頂之間有數秒——預熱正好在這段時間完成）。 */
       sheet.classList.add('open');
-      if(window.__acimPanels28)window.__acimPanels28.open('quick',sheet,{modal:false,initial:'button',trigger:sheetBtn,close:function(){setSheet(false);}});
       if(window.__acimWarmTopDestination)window.__acimWarmTopDestination();
     }else{
       sheet.classList.remove('open');
-      if(window.__acimPanels28)window.__acimPanels28.close('quick');
       if(opts&&typeof opts.onVeilDropped==='function'&&window.__acimUnveilNow){
         /* V40.11→V40.14：帶 onVeilDropped 的關閉＝主動跳轉（回頂）——直通
            唯一一次解紗管線。V40.14：skipRestore 由呼叫端傳遞（回頂＝true，
@@ -29663,7 +29352,7 @@ function rtabsInit(){
   if(document.getElementById('rtabs-bar')) return;
   var bar=document.createElement('div');
   bar.id='rtabs-bar';
-  bar.setAttribute('role','navigation');
+  bar.setAttribute('role','tablist');
   bar.setAttribute('aria-label','閱讀分頁');
   var add=document.createElement('button');
   add.type='button'; add.className='rtab-add';
@@ -29678,50 +29367,41 @@ function rtabsInit(){
   });
   render();
 }
-/* ACIM_V4028_RT_ACTIONS_BEGIN */
-function rtRestore28(snapshot,active){
-  if(window.__acimBackup28Committed)return;
-  var rowsSaved=rtSave(snapshot),activeSaved=set(RT_ACTIVE,active||''),saved=rowsSaved&&activeSaved;render();
-  v30toast(saved?'已復原閱讀分頁':'已復原；目前僅暫存，請匯出備份');
-  var bar=document.getElementById('rtabs-bar'),target=bar&&bar.querySelector('.rtab[aria-current="location"]');
-  if(target)target.focus({preventScroll:true});
-}
 function rtPin(){
-  if(window.__acimBackup28Committed)return;
-  var arr=rtLoad(),snapshot=arr.map(function(t){return Object.assign({},t);}),previous=get(RT_ACTIVE),replaced=null;
-  var curY=Math.round(window.scrollY),h=curY<150?null:currentHeading(),anchor=h?h.id:'';
+  var arr=rtLoad();
+  var curY=Math.round(window.scrollY);
+  /* 頁頂（scrollY<150）存「頁頂」分頁：anchor 留空 → 切換時精確回到頂部，
+     不會誤跳到第一個標題（書名頁） */
+  var h=(curY<150)?null:currentHeading();
+  var anchor=h?h.id:'';
   var title=cleanTitle(h?h.textContent:'')||document.getElementById('crumb-text').textContent.split('›').pop().trim()||'分頁';
-  if(title.length>14)title=title.slice(0,13)+'…';
-  for(var i=0;i<arr.length;i++)if(arr[i].anchor===anchor&&Math.abs((arr[i].scrollY||0)-curY)<600){
-    var activeSaved=set(RT_ACTIVE,arr[i].id);render();v30toast('此位置已在分頁：'+arr[i].title+(activeSaved?'':'（目前分頁狀態僅暫存，請匯出備份）'));return;
+  if(title.length>14) title=title.slice(0,13)+'…';
+  for(var i=0;i<arr.length;i++){
+    if(arr[i].anchor===anchor && Math.abs((arr[i].scrollY||0)-curY)<600){
+      set(RT_ACTIVE,arr[i].id); render(); v30toast('此位置已在分頁：'+arr[i].title); return;
+    }
   }
   if(arr.length>=RT_MAX){
-    var oldest=0;for(var j=1;j<arr.length;j++)if((arr[j].ts||0)<(arr[oldest].ts||0))oldest=j;
-    replaced=arr.splice(oldest,1)[0];
+    var oldest=null,oti=-1;
+    for(var j=0;j<arr.length;j++){ if(!oldest||arr[j].ts<oldest.ts){ oldest=arr[j]; oti=j; } }
+    if(oldest && get(RT_ACTIVE)!==oldest.id){ arr.splice(oti,1); }
+    else arr.splice(oti,1); /* 滿了就淘汰最舊 */
   }
-  var t=rtNormalize({id:'rt'+Date.now().toString(36),anchor:anchor,title:title,scrollY:curY,
-    atop:h?Math.round(h.getBoundingClientRect().top):0,ts:Date.now()});
-  arr.push(t);var rowsSaved=rtSave(arr),activeSaved=set(RT_ACTIVE,t.id),saved=rowsSaved&&activeSaved;render();
-  var msg=replaced?'分頁已滿：已將「'+replaced.title+'」替換為「'+t.title+'」':'已加入閱讀分頁：'+t.title;
-  if(!saved)msg+='（僅暫存，請匯出備份）';
-  v30toast(msg,replaced?9000:2600,replaced?function(){rtRestore28(snapshot,previous);}:null);
+  var t=rtNormalize({id:'rt'+Date.now().toString(36), anchor:anchor, title:title, scrollY:curY,
+    atop:h?Math.round(h.getBoundingClientRect().top):0, ts:Date.now()});
+  arr.push(t);
+  rtSave(arr);
+  set(RT_ACTIVE,t.id);
+  render();
+  v30toast('已加入閱讀分頁：'+t.title);
 }
 function rtRemove(id){
-  if(window.__acimBackup28Committed)return;
-  var snapshot=rtLoad(),active=get(RT_ACTIVE),removed=snapshot.find(function(t){return t.id===id;});
-  if(!removed)return;
-  var arr=snapshot.filter(function(t){return t.id!==id;}),rowsSaved=rtSave(arr),activeSaved=true;
-  if(active===id)activeSaved=set(RT_ACTIVE,arr.length?arr[arr.length-1].id:'');
-  var saved=rowsSaved&&activeSaved;
+  var arr=rtLoad().filter(function(t){ return t.id!==id; });
+  rtSave(arr);
+  if(get(RT_ACTIVE)===id){ if(arr.length) set(RT_ACTIVE,arr[arr.length-1].id); else set(RT_ACTIVE,''); }
   render();
-  v30toast('已移除分頁「'+removed.title+'」'+(saved?'':'（僅暫存，請匯出備份）'),9000,function(){rtRestore28(snapshot,active);});
-  var bar=document.getElementById('rtabs-bar'),next=bar&&(bar.querySelector('.rtab[aria-current="location"]')||bar.querySelector('.rtab-add'));
-  if(next)next.focus({preventScroll:true});
 }
-/* ACIM_V4028_RT_ACTIONS_END */
-
 function rtSwitch(id){
-  if(window.__acimBackup28Committed)return;
   var arr=rtLoad();
   var cur=get(RT_ACTIVE);
   var self=(id===cur); /* V40.15：點的即為目前分頁——不覆寫 pin 位置 */
@@ -29742,7 +29422,8 @@ function rtSwitch(id){
   var target=null;
   for(var k=0;k<arr.length;k++){ if(arr[k].id===id) target=arr[k]; }
   if(!target) { render(); return; }
-  var rtRowsSaved28=rtSave(arr),rtActiveSaved28=set(RT_ACTIVE,id);
+  rtSave(arr);
+  set(RT_ACTIVE,id);
   render();
   var el=target.anchor?document.getElementById(target.anchor):null;
   if(el){
@@ -29768,39 +29449,31 @@ function rtSwitch(id){
     else go();
   }
   else if(window.__acimJump) window.__acimJump(target.scrollY||0);
-  if(!rtRowsSaved28||!rtActiveSaved28)v30toast('已切換分頁：'+target.title+'（目前位置僅暫存，請匯出備份）');
-  else if(!self)v30toast('已切換分頁：'+target.title);
+  if(!self) v30toast('已切換分頁：'+target.title);
 }
 function render(){
-  var bar=document.getElementById('rtabs-bar');if(!bar)return;
-  var arr=rtLoad(),active=get(RT_ACTIVE);
-  var focused=document.activeElement,focusedId=focused&&focused.getAttribute&&focused.getAttribute('data-rtab-id');
-  bar.querySelectorAll('.rtab-group').forEach(function(n){n.remove();});
-  bar.querySelectorAll('.rtab').forEach(function(n){n.remove();});
+  var bar=document.getElementById('rtabs-bar');
+  if(!bar) return;
+  var arr=rtLoad(), active=get(RT_ACTIVE);
+  bar.querySelectorAll('.rtab').forEach(function(n){ n.remove(); });
   arr.forEach(function(t){
-    var group=document.createElement('div');group.className='rtab-group';group.setAttribute('role','presentation');
-    var b=document.createElement('button');b.type='button';b.className='rtab'+(t.id===active?' rtab-on':'');
-    if(t.id===active)b.setAttribute('aria-current','location');
-    b.setAttribute('data-rtab-id',t.id);
-    b.tabIndex=0;
-    var tx=document.createElement('span');tx.className='rtab-t';tx.textContent=t.title||'分頁';b.appendChild(tx);
-    b.title='切換到：'+t.title;b.setAttribute('aria-label',b.title);
-    b.addEventListener('click',function(){rtSwitch(t.id);});
-    b.addEventListener('keydown',function(e){
-      var tabs=Array.prototype.slice.call(bar.querySelectorAll('.rtab')),at=tabs.indexOf(b),to=null;
-      if(e.key==='ArrowRight')to=(at+1)%tabs.length;else if(e.key==='ArrowLeft')to=(at+tabs.length-1)%tabs.length;
-      else if(e.key==='Home')to=0;else if(e.key==='End')to=tabs.length-1;
-      else if(e.key==='Delete'){e.preventDefault();rtRemove(t.id);return;}
-      if(to!==null){e.preventDefault();tabs[to].focus({preventScroll:true});}
-    });
-    var close=document.createElement('button');close.type='button';close.className='rtab-delete';
-    close.textContent='×';close.setAttribute('data-acim-icon','close');close.setAttribute('aria-label','移除閱讀分頁：'+(t.title||'分頁'));
-    close.title=close.getAttribute('aria-label');close.addEventListener('click',function(e){e.stopPropagation();rtRemove(t.id);});
-    group.appendChild(b);group.appendChild(close);bar.appendChild(group);
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='rtab'+(t.id===active?' rtab-on':'');
+    b.setAttribute('role','tab');
+    b.setAttribute('aria-selected',t.id===active?'true':'false');
+    var tx=document.createElement('span'); tx.className='rtab-t'; tx.textContent=t.title||'分頁';
+    b.appendChild(tx);
+    if(t.id===active){
+      var x=document.createElement('span'); x.className='rtab-x'; x.textContent='✕';
+      x.title='移除此分頁'; x.setAttribute('data-id',t.id);
+      b.appendChild(x);
+    }
+    b.title=t.id===active?(t.title+'（點 ✕ 移除）'):('切換到：'+t.title);
+    b.addEventListener('click',function(){ rtSwitch(t.id); });
+    bar.appendChild(b);
   });
   bar.classList.toggle('has-tabs',arr.length>0);
-  var add=bar.querySelector('.rtab-add');if(add)add.textContent=arr.length?'＋':'＋ 閱讀分頁';
-  if(focusedId){var replacement=Array.prototype.find.call(bar.querySelectorAll('.rtab'),function(n){return n.getAttribute('data-rtab-id')===focusedId;});if(replacement)replacement.focus({preventScroll:true});}
 }
 
 /* ═══ 4) 目錄「目前位置」定位鈕 ═══ */
@@ -29864,181 +29537,57 @@ function locateInit(){
 }
 
 /* ═══ 5) 資料備份（設定＋書籤＋閱讀分頁）═══ */
-function createBackup28Engine(deps){
-  var S=deps.storage, read=deps.durableRead, MAX=256*1024;
-  var keys=['acim-dark','acim-fs','acim-tts-rate','acim-tts-gender','acim-scroll','acim-anchor','acim-reading-size','acim-reading-leading'];
-  var owned=keys.concat(['acim-bookmarks','acim-rtabs','acim-rtab-active']);
-  var snapKey='acim-import-snapshot-v1',lastKey='acim-backup-last-export';
-  function formatTaipeiDate(value){
-    var date=value===undefined?new Date():new Date(value);
-    if(!isFinite(date.getTime()))return typeof value==='string'?value.slice(0,10):'';
-    try{
-      var parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date),fields={};
-      parts.forEach(function(p){fields[p.type]=p.value;});
-      if(fields.year&&fields.month&&fields.day)return fields.year+'-'+fields.month+'-'+fields.day;
-    }catch(e){}
-    /* Legacy engines without Intl timezone support: modern Taipei is UTC+8. */
-    return new Date(date.getTime()+8*60*60*1000).toISOString().slice(0,10);
-  }
-  function own(o,k){return Object.prototype.hasOwnProperty.call(o,k);}
-  function record(v){return !!v&&typeof v==='object'&&!Array.isArray(v);}
-  function fail(m){throw new Error(m);}
-  function number(v,min,max){return typeof v==='number'&&isFinite(v)&&v>=min&&v<=max;}
-  function text(v,max,name){if(typeof v!=='string'||v.length>max)fail(name+'格式無效');try{encodeURIComponent(v);}catch(e){fail(name+'含無效字元');}return v;}
-  function setting(k,v){
-    if(v===null)return null;
-    if(typeof v!=='string'&&typeof v!=='number')fail('設定 '+k+' 型別無效');
-    var s=String(v);
-    if(k==='acim-dark'&&!/^[01]$/.test(s))fail('顯示模式無效');
-    if(k==='acim-fs'&&!/^[0-6]$/.test(s))fail('舊版字級無效');
-    if(k==='acim-tts-rate'&&!/^[1-6]$/.test(s))fail('語速無效');
-    if(k==='acim-tts-gender'&&!/^[fm]$/.test(s))fail('音色偏好無效');
-    if(k==='acim-scroll'&&(!/^\d+$/.test(s)||Number(s)>1e9))fail('閱讀位置無效');
-    if(k==='acim-anchor'&&(typeof v!=='string'||s.length>160||!/^$|^[A-Za-z0-9_.:-]+$/.test(s)))fail('閱讀錨點無效');
-    if(k==='acim-reading-size'&&!/^(?:original|18|20)$/.test(s))fail('閱讀字級無效');
-    if(k==='acim-reading-leading'&&!/^(?:original|1\.8|1\.95|2\.1)$/.test(s))fail('閱讀行距無效');
-    return s;
-  }
-  function bookmark(b){
-    if(!record(b))fail('書籤不是有效物件');
-    text(b.id,120,'書籤識別碼');if(!b.id)fail('書籤識別碼不可空白');
-    var lens={anchor:160,ceId:160,release:24,sectionKey:600,anchorText:160,title:80,excerpt:120};
-    Object.keys(lens).forEach(function(k){if(own(b,k)&&b[k]!==null&&b[k]!==undefined)text(b[k],lens[k],'書籤 '+k);});
-    if(b.anchor&&!/^[A-Za-z0-9_.:-]+$/.test(b.anchor))fail('書籤錨點無效');
-    if(b.ceId&&!/^(?:In\.|[TWMCP]-)[A-Za-z0-9.:-]+$/.test(b.ceId))fail('書籤句碼格式無效');
-    if(own(b,'scrollY')&&!number(b.scrollY,0,1e9))fail('書籤閱讀位置超出範圍');
-    if(b.atop!==null&&b.atop!==undefined&&!number(b.atop,-600,2000))fail('書籤框景超出範圍');
-    if(own(b,'ts')&&!number(b.ts,0,8640000000000000))fail('書籤時間無效');
-    if(b.path!==null&&b.path!==undefined&&(!Array.isArray(b.path)||b.path.length!==2||!b.path.every(function(n){return Number.isInteger(n)&&n>=0&&n<100000;})))fail('書籤路徑無效');
-    var n=deps.normalizeBookmark(b);if(!n)fail('書籤無法正規化');return n;
-  }
-  function tab(t){
-    if(!record(t))fail('閱讀分頁不是有效物件');
-    text(t.id,40,'分頁識別碼');if(!t.id)fail('分頁識別碼不可空白');
-    text(t.anchor,160,'分頁錨點');if(t.anchor&&!/^[A-Za-z0-9_.:-]+$/.test(t.anchor))fail('分頁錨點無效');
-    if(own(t,'title'))text(t.title,24,'分頁標題');
-    if(own(t,'scrollY')&&!number(t.scrollY,0,1e9))fail('分頁閱讀位置超出範圍');
-    if(t.atop!==null&&t.atop!==undefined&&!number(t.atop,-20000,2000))fail('分頁框景超出範圍');
-    if(own(t,'ts')&&!number(t.ts,0,8640000000000000))fail('分頁時間無效');
-    var n=deps.normalizeTab(t);if(t.atop===null)delete n.atop;return n;
-  }
-  function rows(a,max,fn,label){
-    if(!Array.isArray(a)||a.length>max)fail(label+'清單無效或超過上限 '+max);
-    var ids=Object.create(null);return a.map(function(v){var n=fn(v);if(ids[n.id])fail(label+'識別碼重複');ids[n.id]=true;return n;});
-  }
-  function parse(input){
-    if(typeof input!=='string'||new TextEncoder().encode(input).byteLength>MAX)fail('檔案上限為 256 KiB');
-    var d;try{d=JSON.parse(input);}catch(e){fail('檔案不是有效的 JSON');}
-    if(Array.isArray(d))return {kind:'bookmarks',bookmarks:rows(d,50,bookmark,'書籤'),settings:{},rtabs:[]};
-    if(!record(d))fail('不支援的備份格式');
-    if(d.format==='acim-ce-zh-tw-bookmarks'){
-      if(d.schemaVersion!==1)fail('不支援的書籤備份版本');
-      return {kind:'bookmarks',bookmarks:rows(d.bookmarks,50,bookmark,'書籤'),settings:{},rtabs:[]};
-    }
-    if(d.app!=='acim-ce-zh-tw'||(d.schema!==1&&d.schema!==2)||
-      (d.kind!==undefined&&d.kind!=='full-backup')||(d.schema===2&&d.kind!=='full-backup'))fail('不支援的完整備份格式或版本');
-    if(!record(d.settings))fail('備份設定格式無效');
-    var settings={};Object.keys(d.settings).forEach(function(k){if(keys.indexOf(k)<0)fail('備份含不支援的設定 '+k);settings[k]=setting(k,d.settings[k]);});
-    var b=rows(d.bookmarks,50,bookmark,'書籤'),r=rows(d.rtabs,5,tab,'分頁');
-    var active=own(d,'activeTab')?text(d.activeTab,40,'目前分頁'):(r.length?r[0].id:'');
-    if(active&&!r.some(function(t){return t.id===active;}))fail('目前分頁不存在於備份清單');
-    return {kind:'full',schema:d.schema,settings:settings,bookmarks:b,rtabs:r,activeTab:active};
-  }
-  function saved(){var o={};owned.forEach(function(k){o[k]=S.get(k);});return o;}
-  function decode(s,fn,max,label){if(s===null)return [];var d;try{d=JSON.parse(s);}catch(e){fail('目前'+label+'資料無法讀取，請先匯出原始快照');}return rows(d,max,fn,label);}
-  function merge(existing,incoming,max,keyFn){
-    var out=existing.slice(),seen=Object.create(null),ids=Object.create(null),duplicate=0,overflow=0;
-    out.forEach(function(x){seen[keyFn(x)]=true;ids[x.id]=true;});
-    incoming.forEach(function(x,i){var key=keyFn(x);if(seen[key]){duplicate++;return;}if(out.length>=max){overflow++;return;}
-      var n=Object.assign({},x);if(ids[n.id]){var base=n.id.slice(0,24)+'-i'+i;var j=0;n.id=base;while(ids[n.id])n.id=base+'-'+(++j);}
-      ids[n.id]=true;seen[key]=true;out.push(n);
-    });return {items:out,duplicate:duplicate,overflow:overflow};
-  }
-  function tabKey(t){return t.anchor+'|'+Math.round(t.scrollY||0);}
-  function plan(data,mode){
-    if(mode!=='merge'&&mode!=='replace')fail('請選擇合併或取代');
-    var before=saved(),writes={},bm,rt,dup=0,overflow=0;
-    var oldBm=mode==='merge'?decode(before['acim-bookmarks'],bookmark,50,'書籤'):[];
-    var b=mode==='merge'?merge(oldBm,data.bookmarks,50,deps.bookmarkKey):{items:data.bookmarks,duplicate:0,overflow:0};
-    bm=b.items;dup+=b.duplicate;overflow+=b.overflow;writes['acim-bookmarks']=JSON.stringify(bm);
-    if(data.kind==='full'){
-      keys.forEach(function(k){if(own(data.settings,k))writes[k]=data.settings[k];else if(mode==='replace')writes[k]=null;});
-      var oldRt=mode==='merge'?decode(before['acim-rtabs'],tab,5,'分頁'):[];
-      var r=mode==='merge'?merge(oldRt,data.rtabs,5,tabKey):{items:data.rtabs,duplicate:0,overflow:0};
-      rt=r.items;dup+=r.duplicate;overflow+=r.overflow;writes['acim-rtabs']=JSON.stringify(rt);
-      var active=mode==='merge'&&before['acim-rtab-active']?before['acim-rtab-active']:data.activeTab;
-      if(!rt.some(function(t){return t.id===active;}))active=rt.length?rt[0].id:'';
-      writes['acim-rtab-active']=active||null;
-    }
-    return {mode:mode,kind:data.kind,before:before,writes:writes,bookmarks:bm.length,rtabs:rt?rt.length:null,duplicates:dup,overflow:overflow};
-  }
-  function verified(k,v){var ok=v===null?S.remove(k):S.set(k,v);if(ok!==true||S.persistent(k)===false||read(k)!==v)fail('瀏覽器未能持久保存 '+k);}
-  function commit(p){
-    var now=saved(),names=Object.keys(p.writes),changed=[];
-    if(JSON.stringify(now)!==JSON.stringify(p.before))return {ok:false,stale:true,message:'資料已變動，請重新預覽後再匯入。'};
-    try{
-      owned.forEach(function(k){if(S.persistent(k)===false||read(k)!==now[k])fail('目前有未持久保存的資料；請先匯出備份，並確認儲存權限。');});
-      var snapshot=JSON.stringify({schema:1,app:'acim-ce-zh-tw',kind:'before-import',createdAt:new Date().toISOString(),values:now});
-      verified(snapKey,snapshot);
-      names.forEach(function(k){changed.push(k);verified(k,p.writes[k]);});
-      return {ok:true,message:'已確認持久保存；匯入完成。',snapshot:true};
-    }catch(error){
-      var restored=true;changed.reverse().forEach(function(k){try{verified(k,now[k]);}catch(e){restored=false;}});
-      return {ok:false,rolledBack:restored,message:changed.length?(restored?'匯入未完成，已還原匯入前資料。':'匯入未完成，部分還原亦受儲存權限限制；請立即下載匯入前快照。'):'未更動閱讀資料：'+error.message};
-    }
-  }
-  function payload(readValue){
-    var settings={};keys.forEach(function(k){settings[k]=setting(k,readValue(k));});
-    var b=decode(readValue('acim-bookmarks'),bookmark,50,'書籤'),r=decode(readValue('acim-rtabs'),tab,5,'分頁');
-    var active=readValue('acim-rtab-active')||'';if(!r.some(function(t){return t.id===active;}))active=r.length?r[0].id:'';
-    return {schema:2,app:'acim-ce-zh-tw',kind:'full-backup',version:String(deps.version||''),exportedAt:new Date().toISOString(),settings:settings,bookmarks:b,rtabs:r,activeTab:active};
-  }
-  function previous(){var d;try{d=JSON.parse(S.get(snapKey)||'null');}catch(e){}if(!d||d.kind!=='before-import'||!record(d.values))fail('尚無匯入前快照');try{return payload(function(k){return own(d.values,k)?d.values[k]:null;});}catch(e){return {schema:1,app:'acim-ce-zh-tw',kind:'raw-recovery-snapshot',createdAt:d.createdAt,description:'匯入前的原始資料含異常欄位；保留原始內容供人工復原，請勿當作一般備份匯入。',values:d.values};}}
-  function status(){var temporary=[];owned.concat([lastKey]).forEach(function(k){S.get(k);if(S.persistent(k)===false)temporary.push(k);});return {temporary:temporary.length>0,lastExport:S.get(lastKey),hasSnapshot:!!S.get(snapKey)};}
-  return {parse:parse,plan:plan,commit:commit,exportCurrent:function(){return payload(function(k){return S.get(k);});},previous:previous,status:status,formatTaipeiDate:formatTaipeiDate,markExport:function(){var date=new Date().toISOString();try{verified(lastKey,date);return true;}catch(e){return false;}},keys:owned.slice(),snapshotKey:snapKey};
-}
+var BK_KEYS=['acim-dark','acim-fs','acim-tts-rate','acim-tts-gender','acim-scroll','acim-anchor'];
 function backupInit(){
-  var ex=document.getElementById('acim-bk-export'),im=document.getElementById('acim-bk-import'),file=document.getElementById('acim-bk-file');
-  if(!ex||!im||!file||document.getElementById('acim-backup28-status'))return;
-  var bridge=window.__acimBookmarkData28;
-  if(!bridge)return;
-  var engine=createBackup28Engine({storage:window.__acimStorage,durableRead:function(k){return localStorage.getItem(k);},normalizeBookmark:bridge.normalize,bookmarkKey:bridge.key,normalizeTab:rtNormalize,version:ACIM_VERSION});
-  window.__acimBackup28=engine;
-  var host=ex.parentNode.parentNode,status=document.createElement('p'),previous=document.createElement('button'),panel=document.createElement('section');
-  status.id='acim-backup28-status';status.className='acim-backup28-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
-  previous.type='button';previous.className='acim-backup28-previous';previous.textContent='下載匯入前快照';
-  panel.id='acim-backup28-preview';panel.className='acim-backup28-preview';panel.hidden=true;panel.setAttribute('role','region');panel.setAttribute('aria-label','匯入備份預覽');
-  host.append(status,previous,panel);
-  var incoming=null,previewPlan=null;
-  function paint(message){var s=engine.status();status.textContent=(message?message+' ':'')+(s.temporary?'部分資料僅於本分頁暫存，關閉前請匯出。':'閱讀資料儲存在此瀏覽器；清除網站資料會一併移除。')+(s.lastExport?' 上次產生備份：'+engine.formatTaipeiDate(s.lastExport)+'。':' 尚未產生完整備份。');previous.hidden=!s.hasSnapshot;}
-  function download(data,name){var url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'}));var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1200);}
-  function exportNow(){try{var d=engine.exportCurrent();download(d,'acim-backup-'+engine.formatTaipeiDate()+'.json');var saved=engine.markExport();paint('已準備完整備份下載，請確認檔案已保存。'+(saved?'':' 備份日期無法持久記錄。'));return true;}catch(e){paint('無法產生備份：'+e.message);return false;}}
-  ex.addEventListener('click',exportNow);
-  previous.addEventListener('click',function(){try{download(engine.previous(),'acim-before-import-'+engine.formatTaipeiDate()+'.json');paint('已準備匯入前快照下載，請確認檔案已保存。');}catch(e){paint(e.message);}});
-  im.addEventListener('click',function(){file.value='';file.click();});
-  function showPreview(data){
-    incoming=data;panel.replaceChildren();panel.hidden=false;
-    var title=document.createElement('h3');title.textContent='匯入前確認';title.tabIndex=-1;
-    var desc=document.createElement('p');desc.textContent=data.kind==='bookmarks'?'這是書籤備份；不會更動設定與閱讀分頁。':'這是完整備份；包含閱讀設定、書籤、閱讀分頁及目前分頁。';
-    var label=document.createElement('label');label.textContent='匯入方式 ';
-    var mode=document.createElement('select');mode.setAttribute('aria-label','匯入方式');
-    [['merge','合併：保留現有收藏，套用備份中提供的設定'],['replace','取代：以備份完整還原（空清單也會還原）']].forEach(function(row){var o=document.createElement('option');o.value=row[0];o.textContent=row[1];mode.appendChild(o);});label.appendChild(mode);
-    var summary=document.createElement('p');summary.className='acim-backup28-summary';summary.setAttribute('aria-live','polite');
-    var actions=document.createElement('div');actions.className='acim-backup28-actions';
-    var save=document.createElement('button');save.type='button';save.textContent='先下載目前備份';save.addEventListener('click',exportNow);
-    var confirm=document.createElement('button');confirm.type='button';confirm.className='acim-backup28-confirm';
-    var cancel=document.createElement('button');cancel.type='button';cancel.textContent='取消';cancel.addEventListener('click',function(){panel.hidden=true;incoming=null;im.focus();});
-    function update(){try{previewPlan=engine.plan(incoming,mode.value);summary.textContent='完成後：書籤 '+previewPlan.bookmarks+' 筆'+(previewPlan.rtabs!==null?'、分頁 '+previewPlan.rtabs+' 個':'')+'；略過重複 '+previewPlan.duplicates+' 筆'+(previewPlan.overflow?'；'+previewPlan.overflow+' 筆超過上限，不會加入':'')+'。'+(mode.value==='replace'&&data.kind==='full'?'缺少的設定還原預設，跟隨系統模式會正確還原。':'');confirm.textContent=mode.value==='replace'?'確認取代並匯入':'確認合併並匯入';confirm.disabled=false;}catch(e){previewPlan=null;summary.textContent=e.message;confirm.disabled=true;}}
-    mode.addEventListener('change',update);
-    confirm.addEventListener('click',function(){if(!previewPlan)return;var result=engine.commit(previewPlan);if(result.stale){update();paint(result.message);return;}paint(result.message);if(!result.ok){confirm.disabled=true;return;}window.__acimBackup28Committed=true;var restoreReading=incoming.kind==='full';panel.hidden=true;incoming=null;status.textContent+=' 即將重新開啟以套用設定。';setTimeout(function(){if(restoreReading&&location.hash){try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}}location.reload();},1400);});
-    actions.append(save,confirm,cancel);panel.append(title,desc,label,summary,actions);update();title.focus({preventScroll:true});
-  }
-  file.addEventListener('change',function(){var f=file.files&&file.files[0];file.value='';if(!f)return;if(f.size>256*1024){paint('匯入失敗：檔案上限為 256 KiB。');return;}
-    var readFile=f.text?f.text():new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(String(r.result));};r.onerror=function(){reject(new Error('無法讀取檔案'));};r.readAsText(f,'UTF-8');});
-    readFile.then(function(t){showPreview(engine.parse(t));}).catch(function(e){paint('匯入失敗：'+e.message+'；未更動閱讀資料。');});
+  var ex=document.getElementById('acim-bk-export');
+  var im=document.getElementById('acim-bk-import');
+  var file=document.getElementById('acim-bk-file');
+  if(ex) ex.addEventListener('click',function(){
+    var data={schema:1,app:'acim-ce-zh-tw',exportedAt:new Date().toISOString(),
+      version:(typeof ACIM_VERSION==='string'?ACIM_VERSION:''),kind:'full-backup',settings:{},bookmarks:[],rtabs:[]};
+    BK_KEYS.forEach(function(k){ var v=get(k); if(v!==null) data.settings[k]=v; });
+    try{ data.bookmarks=JSON.parse(get('acim-bookmarks')||'[]'); if(!Array.isArray(data.bookmarks)) data.bookmarks=[]; }catch(e){}
+    try{ data.rtabs=JSON.parse(get(RT_KEY)||'[]'); if(!Array.isArray(data.rtabs)) data.rtabs=[]; }catch(e){}
+    var blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='acim-backup-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'.json';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },800);
+    v30toast('已匯出備份（設定＋書籤 '+data.bookmarks.length+' 筆＋分頁 '+data.rtabs.length+' 個）');
   });
-  var css=document.createElement('style');css.id='acim-backup28-style';css.textContent='#acim-backup28-status{font-size:12px;line-height:1.7;overflow-wrap:anywhere;margin:8px 0}.acim-backup28-preview{border:1px solid var(--c-border);border-radius:8px;padding:12px;margin:10px 0;background:var(--c-bg);color:var(--c-text);font-size:13px;line-height:1.7}.acim-backup28-preview h3{margin:0 0 8px;font-size:15px}.acim-backup28-preview select{display:block;max-width:100%;width:100%;white-space:normal;font:inherit;color:var(--c-text);background:var(--c-bg);padding:6px}.acim-backup28-actions{display:flex;gap:8px;flex-wrap:wrap}.acim-backup28-actions button,.acim-backup28-previous{font:inherit;min-height:40px;padding:6px 9px;border:1px solid var(--c-border);border-radius:6px;background:var(--c-sidebar);color:var(--c-accent);cursor:pointer}.acim-backup28-preview [hidden],.acim-backup28-previous[hidden]{display:none!important}.acim-backup28-actions button:focus-visible,.acim-backup28-previous:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px}';document.head.appendChild(css);
-  paint();
+  if(im) im.addEventListener('click',function(){ if(file) file.click(); });
+  if(file) file.addEventListener('change',function(){
+    var f=file.files&&file.files[0]; file.value='';
+    if(!f) return;
+    if(f.size>256*1024){ v30toast('匯入失敗：檔案上限 256 KiB'); return; }
+    var r=new FileReader();
+    r.onload=function(){
+      var ok=false,data=null;
+      try{
+        data=JSON.parse(String(r.result));
+        ok=data&&typeof data==='object'&&!Array.isArray(data)&&data.app==='acim-ce-zh-tw';
+      }catch(e){}
+      if(!ok){ v30toast('匯入失敗：不是本站的備份檔'); return; }
+      var nSet=0,nBm=0,nRt=0;
+      try{
+        if(data.settings&&typeof data.settings==='object'){
+          BK_KEYS.forEach(function(k){ var v=data.settings[k]; if(v!==null&&v!==undefined){ set(k,String(v)); nSet++; } });
+        }
+        if(Array.isArray(data.bookmarks)&&data.bookmarks.length){
+          var bm=data.bookmarks.filter(function(b){ return b&&typeof b==='object'; }).slice(0,50);
+          set('acim-bookmarks',JSON.stringify(bm)); nBm=bm.length;
+        }
+        if(Array.isArray(data.rtabs)&&data.rtabs.length){
+          var rt=data.rtabs.filter(rtNormalize).slice(0,RT_MAX);
+          set(RT_KEY,JSON.stringify(rt)); nRt=rt.length;
+        }
+      }catch(e){ v30toast('匯入失敗：備份內容無效'); return; }
+      v30toast('已匯入：設定 '+nSet+' 項、書籤 '+nBm+' 筆、分頁 '+nRt+' 個。畫面即將重新載入…');
+      setTimeout(function(){ location.reload(); },1400);
+    };
+    r.readAsText(f);
+  });
 }
 
 /* ═══ 6) iOS「加入主畫面」圖文指引（一次性輕提示）═══ */
@@ -30120,244 +29669,6 @@ function init(){
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setTimeout(init,400); });
 else setTimeout(init,400);
-})();
-
-</script>
-
-<style id="acim-interaction28-style">
-#sidebar-close-28{display:none} @media(max-width:768px){#sidebar-close-28{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin-left:auto}}
-#rtabs-bar{display:flex}#rtabs-bar .rtab-add{width:auto;min-width:32px;padding-inline:7px;white-space:nowrap}
-.rtab-group{display:inline-flex;align-items:center;flex-shrink:0;border:1px solid var(--c-border);border-radius:999px}
-.rtab-delete{display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:36px;border:0;border-radius:999px;background:transparent;color:var(--c-muted);font:inherit;cursor:pointer}
-.rtab-delete:focus-visible,#rtab-undo:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px}
-#rtab-undo{font:inherit;margin-left:12px;padding:4px 10px;border:1px solid currentColor;border-radius:6px;color:inherit;background:transparent;cursor:pointer;min-height:36px}
-#acim-ctoast.acim-cite-docked{position:static!important;left:auto!important;bottom:auto!important;transform:none!important;box-shadow:none!important;width:100%!important;max-width:100%!important;flex:1 1 100%;margin:6px 0;padding:7px;white-space:normal}
-#acim-ctoast.acim-cite-compact #acim-ct-copy,#acim-ctoast.acim-cite-compact #acim-ct-copy-url,#acim-ctoast.acim-cite-compact #acim-ct-note,#acim-ctoast.acim-cite-compact #acim-ct-feedback{display:none!important}
-#acim-ctoast.acim-cite-compact #acim-ct-ref{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:1 1 100px;max-width:180px}
-#acim-ctoast #acim-cite-context-toggle{display:none}
-#acim-ctoast.acim-cite-docked #acim-cite-context-toggle{display:inline-flex}
-#tts-bar.acim-has-cite-context{flex-wrap:wrap;white-space:normal}
-@media print{#rtab-undo,#sidebar-close-28,#acim-ctoast{display:none!important}}
-</style>
-<script id="acim-interaction28">
-/* ACIM_V4028_PANEL_COORDINATOR_BEGIN */
-(function(){
-'use strict';
-var stack=[],owned=[],scheduled=false;
-function usable(el){
-  if(!(el&&el!==document.body&&el.isConnected&&el.focus&&!el.disabled&&!el.closest('[inert]')&&!el.closest('[hidden]')&&el.getClientRects().length))return false;
-  var style=window.getComputedStyle?window.getComputedStyle(el):null;
-  return !style||(style.visibility!=='hidden'&&style.visibility!=='collapse'&&style.display!=='none');
-}
-function restoreFocus(el){
-  if(!usable(el))el=document.getElementById(window.innerWidth<=768?'acim-bn-toc':'btn-toc');
-  if(usable(el))try{el.focus({preventScroll:true});}catch(e){}
-}
-function focusables(node){return Array.prototype.slice.call(node.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(usable);}
-function top(){return stack[stack.length-1]||null;}
-function modal(){for(var i=stack.length-1;i>=0;i--)if(stack[i].options.modal)return stack[i];return null;}
-function undoInert(){owned.forEach(function(pair){pair[0].inert=pair[1];});owned=[];}
-function markInert(el){if(/^(SCRIPT|STYLE|LINK|META)$/.test(el.tagName)||el.id==='sidebar-overlay')return;owned.push([el,!!el.inert]);el.inert=true;}
-function sidebarState(){
-  var side=document.getElementById('sidebar-toc');if(!side)return;
-  var closed=window.innerWidth<=768&&!side.classList.contains('mobile-open');
-  side.inert=closed;if(closed)side.setAttribute('aria-hidden','true');else side.removeAttribute('aria-hidden');
-  [['acim-spanel',function(n){return n.style.display==='none';}],['bm-panel',function(n){return !n.classList.contains('bm-open');}],['footnote-bar',function(n){return !n.classList.contains('open');}],['tts-bar',function(n){return !n.classList.contains('tts-bar-on');}],['acim-quick-sheet',function(n){return !n.classList.contains('open');}]].forEach(function(pair){var node=document.getElementById(pair[0]);if(node)node.inert=pair[1](node);});
-}
-function syncCitation(){
-  var cite=document.getElementById('acim-ctoast');if(!cite)return;
-  var sidebar=document.getElementById('sidebar-toc'),settings=document.getElementById('sidebar-settings-panel');
-  var fn=document.getElementById('footnote-bar'),tts=document.getElementById('tts-bar'),bm=document.getElementById('bm-panel'),share=document.getElementById('acim-spanel'),host=null;
-  if(share&&share.style.display!=='none')host=share;
-  else if(bm&&bm.classList.contains('bm-open'))host=bm;
-  else if(sidebar&&((window.innerWidth<=768&&sidebar.classList.contains('mobile-open'))||(window.innerWidth>768&&settings&&!settings.hidden)))host=document.getElementById('sidebar-header');
-  else if(fn&&fn.classList.contains('open'))host=fn;
-  else if(tts&&tts.classList.contains('tts-bar-on'))host=tts;
-  var target=host||document.body;
-  if(cite.parentNode!==target)target.appendChild(cite);
-  if(cite.classList.contains('acim-cite-docked')!==!!host){cite.classList.toggle('acim-cite-docked',!!host);cite.classList.toggle('acim-cite-compact',!!host);}
-  if(tts)tts.classList.toggle('acim-has-cite-context',host===tts);
-  var toggle=document.getElementById('acim-cite-context-toggle');
-  if(!toggle){toggle=document.createElement('button');toggle.type='button';toggle.id='acim-cite-context-toggle';toggle.setAttribute('data-acim-icon','more');toggle.setAttribute('aria-controls','acim-ct-note acim-ct-copy acim-ct-copy-url');toggle.addEventListener('click',function(){cite.classList.toggle('acim-cite-compact');paintToggle();});cite.appendChild(toggle);}
-  function paintToggle(){var expanded=!cite.classList.contains('acim-cite-compact');toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'收合引用詳情':'引用詳情';}
-  paintToggle();
-}
-function update(){
-  undoInert();sidebarState();syncCitation();
-  stack.forEach(function(p){p.node.inert=false;});
-  var m=modal(),p=top();
-  if(m){var branch=m.node;while(branch&&branch!==document.body){var parent=branch.parentElement;if(!parent)break;Array.prototype.forEach.call(parent.children,function(sibling){if(sibling!==branch)markInert(sibling);});branch=parent;}}
-  if(p)document.documentElement.setAttribute('data-acim-active-panel',p.id);else document.documentElement.removeAttribute('data-acim-active-panel');
-}
-function close(id,options){
-  var at=stack.findIndex(function(p){return p.id===id;});if(at<0)return;
-  var p=stack.splice(at,1)[0],wasTop=at===stack.length;
-  if(p.options.modal){if(p.role===null)p.node.removeAttribute('role');else p.node.setAttribute('role',p.role);if(p.ariaModal===null)p.node.removeAttribute('aria-modal');else p.node.setAttribute('aria-modal',p.ariaModal);}
-  if(id==='share')p.node.inert=true;
-  update();if(wasTop&&(!options||options.restore!==false))restoreFocus(p.trigger);
-}
-function open(id,node,options){
-  options=options||{};var previous=stack.find(function(p){return p.id===id;});
-  if(previous){previous.options=options;update();return;}
-  var p={id:id,node:node,options:options,trigger:options.trigger||document.activeElement,role:node.getAttribute('role'),ariaModal:node.getAttribute('aria-modal')};
-  node.inert=false;if(options.modal){node.setAttribute('role','dialog');node.setAttribute('aria-modal','true');if(!node.hasAttribute('aria-label'))node.setAttribute('aria-label',id==='sidebar'?'目錄與設定':'閱讀工具');}
-  stack.push(p);update();
-  if(options.focus!==false){var initial=options.initial&&node.querySelector(options.initial);if(!usable(initial))initial=focusables(node)[0];if(usable(initial))initial.focus({preventScroll:true});else{node.tabIndex=-1;node.focus({preventScroll:true});}}
-}
-document.addEventListener('keydown',function(e){
-  var p=top();if(e.key==='Escape'&&p){e.preventDefault();e.stopImmediatePropagation();if(p.options.close)p.options.close();else close(p.id);return;}
-  var m=modal();if(e.key!=='Tab'||!m)return;
-  var items=focusables(m.node),first=items[0],last=items[items.length-1],active=document.activeElement;
-  if(!first){e.preventDefault();m.node.focus({preventScroll:true});return;}
-  if(e.shiftKey&&(active===first||!m.node.contains(active))){e.preventDefault();last.focus({preventScroll:true});}
-  else if(!e.shiftKey&&(active===last||!m.node.contains(active))){e.preventDefault();first.focus({preventScroll:true});}
-},true);
-document.addEventListener('focusin',function(e){if(e.target.hasAttribute&&e.target.hasAttribute('data-acim-focus-exempt'))return;var m=modal();if(m&&!m.node.contains(e.target)){var first=focusables(m.node)[0];if(first)first.focus({preventScroll:true});}},true);
-function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(function(){scheduled=false;update();});}
-function init(){
-  var header=document.querySelector('#sidebar-header .sidebar-topline');
-  if(header&&!document.getElementById('sidebar-close-28')){var b=document.createElement('button');b.type='button';b.id='sidebar-close-28';b.textContent='關閉';b.setAttribute('data-acim-icon','close');b.setAttribute('aria-label','關閉目錄與設定');b.addEventListener('click',function(){if(window.__acimCloseSidebar)window.__acimCloseSidebar();});header.appendChild(b);}
-  ['sidebar-toc','sidebar-settings-panel','footnote-bar','tts-bar','bm-panel','acim-spanel'].forEach(function(id){var node=document.getElementById(id);if(node&&window.MutationObserver)new MutationObserver(schedule).observe(node,{attributes:true,attributeFilter:['class','style','hidden']});});
-  update();
-}
-window.__acimPanels28={open:open,close:close,top:top,restoreFocus:restoreFocus,syncCitation:syncCitation,refresh:schedule};
-window.addEventListener('resize',function(){if(window.innerWidth>768){var p=stack.find(function(p){return p.id==='sidebar';});if(p&&p.options.close)p.options.close();else if(p)close('sidebar',{restore:false});}schedule();},{passive:true});
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
-/* ACIM_V4028_PANEL_COORDINATOR_END */
-</script>
-<script id="acim-design28-runtime">
-(function(){
-  'use strict';
-  var root=document.documentElement;
-  var ui={};
-  var steps=[.78,.89,1,1.12,1.24,1.38,1.54];
-  var icons={
-    menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
-    search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/>',
-    bookmark:'<path d="M6.5 4h11v17L12 17l-5.5 4z"/>',
-    list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
-    type:'<path d="m3 19 6-14 6 14M5 14h8M15 10h7M18.5 10v9"/>',
-    more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
-    close:'<path d="m6 6 12 12M18 6 6 18"/>',
-    locate:'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
-    sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/>',
-    moon:'<path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/>',
-    up:'<path d="m6 12 6-6 6 6M12 6v15M5 3h14"/>',
-    share:'<path d="M12 15V3m-4 4 4-4 4 4M5 11v9h14v-9"/>',
-    book:'<path d="M12 5v15M3 4c4-1 6 0 9 2 3-2 5-3 9-2v14c-4-1-6 0-9 2-3-2-5-3-9-2z"/>',
-    globe:'<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
-    quote:'<path d="M5 8h5v6H5c0 3 1 4 3 4M14 8h5v6h-5c0 3 1 4 3 4"/>',
-    refresh:'<path d="M20 7v5h-5M4 17v-5h5M5.5 7a7.5 7.5 0 0 1 12-2L20 8M4 16l2.5 3a7.5 7.5 0 0 0 12-2"/>'
-    ,volume:'<path d="M3 9v6h4l5 4V5L7 9zM16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"/>'
-  };
-  function svg(name){return '<svg class="acim-icon28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'+(icons[name]||icons.more)+'</svg>';}
-  function read(key){try{return window.__acimStorage?window.__acimStorage.get(key):localStorage.getItem(key);}catch(e){return null;}}
-  function write(key,value){try{if(window.__acimStorage)window.__acimStorage.set(key,value);else localStorage.setItem(key,value);}catch(e){}}
-  function getPrefs(){var size=read('acim-reading-size'),leading=read('acim-reading-leading');return {size:['original','18','20'].indexOf(size)>=0?size:'18',leading:['original','1.8','1.95','2.1'].indexOf(leading)>=0?leading:'1.95'};}
-  function setAttrs(prefs){
-    var factor=prefs.size==='original'?1:Number(prefs.size)/(44/3),line=prefs.leading==='original'?1.9:Number(prefs.leading);
-    root.setAttribute('data-acim-reading-size',prefs.size);root.setAttribute('data-acim-reading-leading',prefs.leading);
-    root.style.setProperty('--acim-reader-scale28',String(factor));root.style.setProperty('--acim-reader-leading28',String(line));
-    root.style.setProperty('--acim-layout-estimate28',String(factor*factor*line/1.9));
-  }
-  /* Replace only fallback estimates. The `auto` prefix keeps browser-measured sizes.
-     No full-book geometry reads, layout measurement, or text mutation is performed. */
-  function prepareEstimates(){
-    var sections=document.querySelectorAll('#content-area section.csec');
-    for(var i=0;i<sections.length;i++){
-      var section=sections[i],value=section.style.containIntrinsicSize||'',match=value.match(/^auto\s+([\d.]+)px$/);
-      if(!match||section.hasAttribute('data-acim-estimate28'))continue;
-      section.setAttribute('data-acim-estimate28','');
-      section.style.setProperty('--acim-book-estimate28',match[1]+'px');
-      section.style.containIntrinsicSize=i===0?'auto '+match[1]+'px':'auto calc(var(--acim-book-estimate28) * var(--acim-layout-estimate28))';
-    }
-  }
-  function state(){
-    if(window.__acimReadingState28)return window.__acimReadingState28();
-    var index=parseInt(read('acim-fs')||'2',10);if(index<0||index>6||!Number.isFinite(index))index=2;
-    return {index:index,zoom:steps[index]};
-  }
-  function sync(){
-    var prefs=getPrefs(),scale=state();
-    if(ui.size)ui.size.value=prefs.size;if(ui.leading)ui.leading.value=prefs.leading;
-    if(ui.scale)ui.scale.textContent=Math.round(scale.zoom*100)+'%';
-    if(ui.minus)ui.minus.disabled=scale.index===0;if(ui.plus)ui.plus.disabled=scale.index===6;
-    if(ui.reset)ui.reset.disabled=scale.index===2;
-  }
-  function apply(prefs,reset){
-    function mutate(){setAttrs(prefs);write('acim-reading-size',prefs.size);write('acim-reading-leading',prefs.leading);}
-    if(window.__acimApplyReading28)window.__acimApplyReading28(mutate,{resetZoom:reset===true});else mutate();
-    sync();document.dispatchEvent(new CustomEvent('acim:reading-prefs-changed',{detail:prefs}));
-  }
-  function section(title,id){var node=document.createElement('section');node.className='acim-settings-section28';node.id=id;var heading=document.createElement('h4');heading.textContent=title;node.appendChild(heading);return node;}
-  function move(parent,selector,within){var node=(within||document).querySelector(selector);if(node)parent.appendChild(node);return node;}
-  function field(group,label,id,options){
-    var row=document.createElement('div');row.className='acim-setting-field28';var text=document.createElement('label');text.htmlFor=id;text.textContent=label;
-    var select=document.createElement('select');select.id=id;options.forEach(function(option){var item=document.createElement('option');item.value=option[0];item.textContent=option[1];select.appendChild(item);});
-    row.appendChild(text);row.appendChild(select);group.appendChild(row);return select;
-  }
-  function makeSettings(){
-    var panel=document.getElementById('sidebar-settings-panel');if(!panel||document.getElementById('acim-reading-settings28'))return;
-    var appearance=section('閱讀外觀','acim-reading-settings28'),data=section('資料與離線','acim-data-settings28'),about=section('關於本書','acim-about-settings28');
-    move(appearance,'.theme-setting',panel);
-    ui.size=field(appearance,'正文字級','acim-reading-size28',[['18','舒適 · 18px'],['20','大字 · 20px'],['original','原書字級']]);
-    ui.leading=field(appearance,'閱讀行距','acim-reading-leading28',[['1.8','緊實 · 1.8'],['1.95','標準 · 1.95'],['2.1','寬鬆 · 2.1'],['original','原書行距']]);
-    var help=document.createElement('p');help.className='acim-setting-help28';help.textContent='保留原書明體、楷體與強調格式；封面維持原版排印。';appearance.appendChild(help);
-    var scaleLabel=document.createElement('p');scaleLabel.className='acim-setting-help28';scaleLabel.textContent='整體字級微調';appearance.appendChild(scaleLabel);
-    var controls=document.createElement('div');controls.className='acim-zoom-controls28';
-    function zoomButton(label,title,action){var button=document.createElement('button');button.type='button';button.textContent=label;button.setAttribute('aria-label',title);button.title=title;button.addEventListener('click',action);controls.appendChild(button);return button;}
-    function proxy(id){var button=document.getElementById(id);if(window.innerWidth<=768&&window.__acimVeilApplyNow)window.__acimVeilApplyNow();if(button)button.click();setTimeout(sync,0);}
-    ui.minus=zoomButton('A−','縮小整體字級',function(){proxy('btn-fdn');});
-    ui.scale=document.createElement('output');ui.scale.id='acim-scale-value28';ui.scale.setAttribute('aria-label','字級倍率');ui.scale.setAttribute('aria-live','polite');controls.appendChild(ui.scale);
-    ui.plus=zoomButton('A＋','放大整體字級',function(){proxy('btn-fup');});
-    ui.reset=zoomButton('重設','重設字級倍率為100%',function(){apply(getPrefs(),true);});appearance.appendChild(controls);
-    ui.size.addEventListener('change',function(){var prefs=getPrefs();prefs.size=ui.size.value;apply(prefs);});
-    ui.leading.addEventListener('change',function(){var prefs=getPrefs();prefs.leading=ui.leading.value;apply(prefs);});
-    move(data,'#sidebar-offline-slot',panel);move(data,'.acim-backup-row',panel);move(data,'#acim-migration-help',panel);
-    var bookmarks=document.createElement('button');bookmarks.type='button';bookmarks.id='bookmarks-list-28';bookmarks.className='acim-setting-action28';bookmarks.innerHTML=svg('list')+'<span>開啟書籤清單</span>';
-    bookmarks.addEventListener('click',function(){if(window.__acimOpenBookmarks)window.__acimOpenBookmarks();});data.insertBefore(bookmarks,data.children[1]||null);
-    move(about,'.sidebar-book-title',panel);move(about,'#app-version-tag');move(about,'#app-version-info',panel);move(about,'.sidebar-info-box',panel);
-    panel.appendChild(appearance);panel.appendChild(data);panel.appendChild(about);
-    var toggle=document.getElementById('sidebar-settings-toggle');if(toggle)toggle.textContent='設定';
-    var brand=document.querySelector('#sidebar-header h3');if(brand){brand.textContent='奇蹟課程';var caption=document.createElement('p');caption.className='acim-brand-caption28';caption.textContent='完整加註版 · 繁體中文';brand.parentElement.parentElement.insertBefore(caption,brand.parentElement);}
-    var wrapper=document.getElementById('toc-wrapper');if(wrapper){var navLabel=document.createElement('p');navLabel.className='acim-nav-label28';navLabel.textContent='全 書 目 錄';wrapper.parentElement.insertBefore(navLabel,wrapper);}
-    var theme=document.getElementById('theme-mode');if(theme){theme.setAttribute('aria-label','閱讀顯示模式');Array.prototype.forEach.call(theme.options,function(option){if(option.value==='auto')option.textContent='跟隨系統';if(option.value==='light')option.textContent='亮色 · 暖紙';if(option.value==='dark')option.textContent='暗色 · 靜夜';});theme.addEventListener('change',function(){if(window.innerWidth<=768&&window.__acimVeilApplyNow)window.__acimVeilApplyNow();},{capture:true});}
-    sync();
-  }
-  function iconOnly(node,name){if(!node||(node.getAttribute('data-acim-icon-name28')===name&&node.querySelector('.acim-icon28')))return;node.setAttribute('data-acim-icon-name28',name);node.innerHTML=svg(name);}
-  function decorate(){
-    var nav=document.getElementById('acim-bottomnav');
-    if(nav){var names=['menu','search','bookmark','type','more'];Array.prototype.forEach.call(nav.querySelectorAll('button'),function(button,index){iconOnly(button.querySelector('.bn-ico'),names[index]);});}
-    [['btn-toc','menu'],['btn-bm','bookmark'],['btn-top','up'],['btn-sec-tts','volume'],['bm-panel-close','close'],['pwa-install-close','close'],['toc-search-clear','close']].forEach(function(item){iconOnly(document.getElementById(item[0]),item[1]);});
-    iconOnly(document.getElementById('btn-dark'),root.classList.contains('dark-mode')?'sun':'moon');
-    var locate=document.getElementById('toc-locate-btn');if(locate&&!locate.querySelector('.acim-icon28'))locate.innerHTML=svg('locate')+'<span>目前位置</span>';
-    iconOnly(document.querySelector('#toc-search-frame>span'),'search');iconOnly(document.querySelector('#chapter-crumb>span:first-child'),'menu');
-    var bmTitle=document.getElementById('bm-panel-title');if(bmTitle&&!bmTitle.querySelector('.acim-icon28'))bmTitle.innerHTML=svg('bookmark')+' <span>我的書籤</span>';
-    var shareButton=document.getElementById('acim-sbar-btn');if(shareButton&&!shareButton.disabled&&!shareButton.querySelector('.acim-icon28')&&/^\s*(?:🔗\s*)?分享\s*$/u.test(shareButton.textContent||''))shareButton.innerHTML=svg('share')+'<span>分享</span>';
-    var installText=document.getElementById('pwa-install-text');if(installText&&/^📖/.test(installText.textContent))installText.textContent=installText.textContent.replace(/^📖\s*/, '');
-    document.querySelectorAll('[data-acim-icon]').forEach(function(node){iconOnly(node,node.getAttribute('data-acim-icon'));});
-    var quick=document.getElementById('acim-quick-sheet');if(quick){Array.prototype.forEach.call(quick.querySelectorAll('button'),function(button){var label=button.textContent||'',first=button.firstElementChild;if(/切換深色/.test(label))iconOnly(first,root.classList.contains('dark-mode')?'sun':'moon');else if(/回到頂部/.test(label))iconOnly(first,'up');});}
-    var share=document.getElementById('acim-spanel');if(share){
-      [['#acim-sp-close','close']].forEach(function(item){iconOnly(share.querySelector(item[0]),item[1]);});
-      Array.prototype.forEach.call(share.querySelectorAll('div[style*="font-size:10.5px"],span[style*="letter-spacing:.04em"]'),function(node){var text=node.textContent||'',name=/繁體中文/.test(text)?'book':/含出處/.test(text)?'quote':/英文原典/.test(text)?'globe':'share';if(!node.querySelector('.acim-icon28'))node.innerHTML=svg(name)+' <span>'+text.replace(/^[\s🔗📖📝🌐]+/u,'')+'</span>';});
-    }
-    sync();
-  }
-  var queued=false;
-  function queueDecorate(){if(queued)return;queued=true;requestAnimationFrame(function(){queued=false;decorate();});}
-  function init(){
-    prepareEstimates();setAttrs(getPrefs());makeSettings();decorate();
-    /* Observe only the small UI containers; never observe book text or walk the whole book per event. */
-    ['pwa-tools','acim-bottomnav','acim-quick-sheet','rtabs-bar'].forEach(function(id){var node=document.getElementById(id);if(node)new MutationObserver(queueDecorate).observe(node,{childList:true,subtree:true});});
-    var bodyObserver=new MutationObserver(function(records){for(var i=0;i<records.length;i++)if(records[i].addedNodes.length){queueDecorate();break;}});bodyObserver.observe(document.body,{childList:true});
-    new MutationObserver(queueDecorate).observe(root,{attributes:true,attributeFilter:['class']});
-    document.addEventListener('acim:reading-scale28',sync);
-    ['btn-fup','btn-fdn'].forEach(function(id){var button=document.getElementById(id);if(button)button.addEventListener('click',function(){setTimeout(sync,0);});});
-    window.addEventListener('storage',function(event){if(event.key==='acim-reading-size'||event.key==='acim-reading-leading'){if(window.__acimApplyReading28)window.__acimApplyReading28(function(){setAttrs(getPrefs());});else setAttrs(getPrefs());sync();}});
-    window.__acimDesign28={icons:icons,svg:svg,sync:sync,applyReading:apply,refresh:function(){apply(getPrefs());}};
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 
 </script>

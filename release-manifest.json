@@ -1,25 +1,40 @@
 {
-  "version": "v40.28",
+  "version": "v40.29",
   "build": {
     "date": "2026-11-10",
-    "time": "01:27",
+    "time": "02:00",
     "timezone": "Asia/Taipei"
   },
   "baseVersion": "v40.27.1",
   "baseCommit": "fbd414510db6be30a6b5fd3d89c9127757a382d6",
   "baseBookSha256": "8c39147dcfdace95884b63f2abd039802706e6135d13f4670a802ebbbf1fbe3f",
-  "releaseId": "f177bd4a8a02e2d4a8dd27ab9daa716fc39230ad1d816759d68ab708c9b663fb",
-  "bookSha256": "3b5f192d4640bee99a96f064735ab2a7d0eac1019d646c17a02c38f66671cb44",
+  "releaseId": "75f2988c02880da882c4a685ea59ab3cc679be94782c4b13fdaa53f937c1af97",
+  "bookSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
   "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
   "unchangedBookMain": true,
+  "unchangedRuntimeExceptPublishingFields": true,
+  "unchangedWorkerExceptPublishingFields": true,
+  "verifiedIdenticalAssets": 41,
   "unchangedFontFiles": 30,
   "manifestId": "/acim-ce-zh-tw/",
-  "verifiedAssets": 41,
-  "executableScripts": 13,
+  "executableScripts": 10,
+  "allowedHtmlChanges": [
+    "acim-version",
+    "ACIM_VERSION",
+    "acim-release-id",
+    "acim-build",
+    "acim-build-time"
+  ],
+  "allowedWorkerChanges": [
+    "version comment",
+    "CACHE_VERSION",
+    "RELEASE_ID",
+    "BOOK_SHA256"
+  ],
   "files": {
     ".nojekyll": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-    "V40.28更新說明.md": "95a76b5c33b1f0471a4d755136af2adce35aafc5252ed8b2e19960b997f3b468",
-    "V40.28驗證摘要.json": "caadd8a0d4215d54c30299d53081d9d9bd16f3d40bd1ba5dafa61927a14a164f",
+    "V40.29回歸與上傳說明.md": "6ca54e2073b4b2da357c38cadd1d6a82563fda17cc95c49ce6cba99bcbc1b844",
+    "V40.29驗證摘要.json": "cddea00029591ae625b76766d07fc5c01745b3dbe8251752e80bd17389eeac05",
     "acimce-icon-512.png": "0d1f12e14131861ceef02c6d5b24aa04b3e00d22213f29afde8c85f61558261a",
     "acimce-pwa-192x192.png": "95c27ae9b91a9a96065c9760139889ac56f9a15ed4967d0dddcf65a00a4249bc",
     "favicon.ico": "0c3efbc9e430c0acef49275c9f6e4a5dbd8bc4ae9baf3432212cf59c87351fa4",
@@ -58,11 +73,11 @@
     "index.files/image002.webp": "c4bfe8793c7811d8a0d6f9cc7ed152c8a38da36f69ffb410aa944c9554928395",
     "index.files/image003.jpg": "c3189d69a3c2df5250db3575e15374c72e5c8e957d8d272eab0765a50e228675",
     "index.htm": "9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033",
-    "index.html": "3b5f192d4640bee99a96f064735ab2a7d0eac1019d646c17a02c38f66671cb44",
+    "index.html": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
     "manifest.json": "7f3a0dd10cf57ba93c98d9e3b3616c6de170d84f93d528e6fe14aeef7bd8833f",
-    "offline.html": "9f6a2be2df5a56e0f7a9fa291addd52f530547f659d3b62fa06dae06ee3632c0",
+    "offline.html": "35195fc2a055e65a75ebbfc91676db1716cd239d3f75d3a3c996848a29959f74",
     "screenshot-og.png": "ae268a06eef2abd19f4631a4131e0f90c845292f68e9763fd14524f19078d804",
-    "sw.js": "98f1a304edb281da553cc5eedba95f97aa76c6420e6812c452f542f10e28e788",
-    "v40.28-test.html": "48b9bf7fba7c36b797d228b20b728a5656372b70640080a263c131015674f5d9"
+    "sw.js": "811493773fe6f3580a0425d2f7e66ac79b196ca98e7686093d54c03c9c9ce09b",
+    "v40.29-test.html": "57389e9d4c596a70fcd92841569058433d628e6db754532fcbc58d6300ef2ea6"
   }
 }
