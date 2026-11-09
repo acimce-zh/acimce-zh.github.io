@@ -1,0 +1,374 @@
+{
+  "version": "v40.27",
+  "bookSha256": "c636dbbf140f69fb62d55614d25f9720ad0c79def2862fc1fc83069af8dfb558",
+  "parserIntegration": {
+    "input": "outputs/V40.27-GitHub-upload/index.html",
+    "baseline": "work/v40.27-base/index.html",
+    "inputSha256": "c636dbbf140f69fb62d55614d25f9720ad0c79def2862fc1fc83069af8dfb558",
+    "baselineSha256": "a4c206486caa85c0c80b4075839e3ba8495f0bcb67c5b8f8c4a3c45d0129932d",
+    "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+    "version": "v40.27",
+    "passed": 73,
+    "failed": 0,
+    "checks": [
+      {
+        "name": "Chinese <main> is byte-for-byte unchanged",
+        "ok": true
+      },
+      {
+        "name": "All 5,361 existing reference IDs survive",
+        "ok": true
+      },
+      {
+        "name": "Every existing canonical paragraph and sentence hash still resolves",
+        "ok": true,
+        "details": {
+          "checked": 37302
+        }
+      },
+      {
+        "name": "single canonical",
+        "ok": true
+      },
+      {
+        "name": "old dotted sentence",
+        "ok": true
+      },
+      {
+        "name": "English cite prefix",
+        "ok": true
+      },
+      {
+        "name": "encoded colon",
+        "ok": true
+      },
+      {
+        "name": "full-width punctuation",
+        "ok": true
+      },
+      {
+        "name": "encoded brackets",
+        "ok": true
+      },
+      {
+        "name": "same-paragraph range",
+        "ok": true
+      },
+      {
+        "name": "same-sentence range",
+        "ok": true
+      },
+      {
+        "name": "English bracket range",
+        "ok": true
+      },
+      {
+        "name": "legacy bracket range",
+        "ok": true
+      },
+      {
+        "name": "English bracket same paragraph",
+        "ok": true
+      },
+      {
+        "name": "legacy bracket single",
+        "ok": true
+      },
+      {
+        "name": "paragraph range",
+        "ok": true
+      },
+      {
+        "name": "In explicit range",
+        "ok": true
+      },
+      {
+        "name": "Chinese final introduction retained",
+        "ok": true
+      },
+      {
+        "name": "English final introduction alias",
+        "ok": true
+      },
+      {
+        "name": "chapter epigraph",
+        "ok": true
+      },
+      {
+        "name": "unusual subsection",
+        "ok": true
+      },
+      {
+        "name": "final combined lesson",
+        "ok": true
+      },
+      {
+        "name": "manual subsection",
+        "ok": true
+      },
+      {
+        "name": "physical paragraph extension",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:0",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:999",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:4-999",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:6-4",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.999:1",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[T-14.VI.5:6]-[T-14.VI.4:4]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[T-14.VI.4:4]-[W-24.5:4]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[T-14.VI.4:4]-[T-14.VII.1:1]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #[:T-14.VI.4:4]-[:T-14.VI.5:999]",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5%ZZ4",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:1e2",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:-1",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #T-14.VI.5:1.5",
+        "ok": true
+      },
+      {
+        "name": "reject invalid #<script>alert(1)</script>",
+        "ok": true
+      },
+      {
+        "name": "W-FL alias",
+        "ok": true
+      },
+      {
+        "name": "W-FL range",
+        "ok": true
+      },
+      {
+        "name": "W24 merged sentence",
+        "ok": true
+      },
+      {
+        "name": "W24 last sentence",
+        "ok": true
+      },
+      {
+        "name": "W24 mapped interval",
+        "ok": true
+      },
+      {
+        "name": "T2 shifted first prayer",
+        "ok": true
+      },
+      {
+        "name": "T2 shifted final prayer",
+        "ok": true
+      },
+      {
+        "name": "T2 shifted interval",
+        "ok": true
+      },
+      {
+        "name": "In working bracket output",
+        "ok": true
+      },
+      {
+        "name": "cross paragraph output",
+        "ok": true
+      },
+      {
+        "name": "cross paragraph ends in merged Chinese sentence",
+        "ok": true
+      },
+      {
+        "name": "cross paragraph begins in merged Chinese sentence",
+        "ok": true
+      },
+      {
+        "name": "Chinese-only introduction has no misleading English link 1-0",
+        "ok": true
+      },
+      {
+        "name": "Chinese-only introduction has no misleading English link 1-2",
+        "ok": true
+      },
+      {
+        "name": "Chinese-only introduction has no misleading English link 1-6",
+        "ok": true
+      },
+      {
+        "name": "Cross-paragraph range covering unmatched Chinese introduction is not falsely exact",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid Not-a-reference:0-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.999:1-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:999-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:-1-0",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:4--1",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.5:6-4",
+        "ok": true
+      },
+      {
+        "name": "English URL output also rejects invalid T-14.VI.4:4-999",
+        "ok": true
+      },
+      {
+        "name": "All paragraph English targets resolve in real English model",
+        "ok": true,
+        "details": {
+          "checked": 5361
+        }
+      },
+      {
+        "name": "All mapped sentence targets resolve with correct coordinates",
+        "ok": true,
+        "details": {
+          "checked": 31941
+        }
+      },
+      {
+        "name": "Recipient English entry stays present without auto-dismiss",
+        "ok": true
+      },
+      {
+        "name": "Recipient Chinese-only sentence gives no clickable wrong source",
+        "ok": true
+      },
+      {
+        "name": "Whole bilingual exception paragraph discloses its unmatched introduction",
+        "ok": true
+      },
+      {
+        "name": "Ordinary chapter and skip-link anchors do not raise citation errors",
+        "ok": true
+      },
+      {
+        "name": "Invalid sentence cannot retain an old English target or rewrite history as success",
+        "ok": true
+      },
+      {
+        "name": "Copy feedback preserves persistent bilingual alignment note",
+        "ok": true
+      },
+      {
+        "name": "System share includes quote, reference and sentence URL",
+        "ok": true
+      },
+      {
+        "name": "System share unsupported behavior",
+        "ok": true
+      },
+      {
+        "name": "System share denied behavior",
+        "ok": true
+      },
+      {
+        "name": "System share cancelled behavior",
+        "ok": true
+      }
+    ]
+  },
+  "serviceWorker": {
+    "version": "v40.27",
+    "releaseId": "1d67e2daa70c7f3d45c8fc97a1438dfcb0a1e8c6803ee0cf11734c36da1ce01c",
+    "bookSha256": "c636dbbf140f69fb62d55614d25f9720ad0c79def2862fc1fc83069af8dfb558",
+    "testEnvironment": "Node VM executing unmodified packaged Service Worker with in-memory Cache API and local file responses; not a physical device test",
+    "passed": 11,
+    "checks": [
+      "v40.26.1 baseline installs and activates",
+      "baseline full offline save verifies 30 font slices and 4 book images",
+      "new worker rejects old index mixture and keeps old active shell",
+      "new worker rejects damaged new index before storing candidate",
+      "valid v40.27 candidate installs while old shell remains until activation",
+      "waiting worker reports real v40.27 release identity",
+      "activation removes old shell and keeps verified new shell",
+      "v40.27 full offline save verifies all expected resources",
+      "offline navigation returns verified v40.27 book",
+      "offline status still verifies book, shell, fonts and images",
+      "identical verified release reinstalls with network unavailable"
+    ],
+    "status": {
+      "type": "ACIM_OFFLINE_STATUS",
+      "version": "v40.27",
+      "releaseId": "1d67e2daa70c7f3d45c8fc97a1438dfcb0a1e8c6803ee0cf11734c36da1ce01c",
+      "bookReady": true,
+      "shellReady": true,
+      "shellCached": 5,
+      "shellTotal": 5,
+      "fontsCached": 30,
+      "fontsTotal": 30,
+      "imagesCached": 4,
+      "imagesTotal": 4,
+      "complete": true,
+      "warming": false,
+      "lastWarmError": "",
+      "storageError": ""
+    }
+  },
+  "browserValidation": {
+    "version": "v40.27",
+    "releaseId": "1d67e2daa70c7f3d45c8fc97a1438dfcb0a1e8c6803ee0cf11734c36da1ce01c",
+    "environment": "ChatGPT in-app Chromium browser, localhost HTTP; desktop and 390x844 viewport",
+    "passed": [
+      "Long paragraph tail sentence T-14.VI.5:12 remains visible after delayed scroll correction",
+      "Cross-paragraph endpoints [T-14.VI.4:4]-[T-14.VI.5:6] preserve both endpoints and correct English href",
+      "Persistent receiver entry survives more than eight seconds",
+      "Mobile long citation wraps within viewport; no horizontal page overflow",
+      "W-24.5:4 points to English W-24.5:5 with mapping explanation",
+      "Copy link succeeds and does not overwrite mapping explanation",
+      "Invalid :999 reports failure, removes old English href and retains original hash",
+      "Native text selection opens share panel with quote, citation and correct English one-to-many range",
+      "Mobile share panel fits viewport and all controls are reachable",
+      "TOC navigation clears prior receiver entry",
+      "Actual local service-worker update activates the rebuilt v40.27 release"
+    ],
+    "notPerformed": "Physical iPhone/Android/LINE sharing and installation; remote GitHub deployment"
+  },
+  "physicalDeviceValidation": "Pending user acceptance on iPhone, Android and LINE"
+}

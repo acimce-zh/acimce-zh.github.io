@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.26.1">
+<meta name="acim-version" content="v40.27">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="5c81207880b7833fd4129e0f7eb4a3195a40833e7c4672e53e3d4864afaca932">
+<meta name="acim-release-id" content="1d67e2daa70c7f3d45c8fc97a1438dfcb0a1e8c6803ee0cf11734c36da1ce01c">
 <meta name="acim-build" content="2026-11-09">
-<meta name="acim-build-time" content="12:08">
+<meta name="acim-build-time" content="22:54">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -75,6 +75,7 @@
     generation++;
     job={token:generation,kind:kind||'navigation',target:null,margin:0};
     expectedY=null;
+    document.dispatchEvent(new CustomEvent('acim-navigation',{detail:kind||'navigation'}));
     return generation;
   }
   function jump(y,token){
@@ -100,13 +101,14 @@
     }
     return true;
   }
-  function remember(token,el,margin){
+  function remember(token,el,margin,rectOfTarget){
     if(!valid(token)) return;
-    job.target=el; job.margin=margin;
+    job.target=el; job.margin=margin; job.rectOfTarget=rectOfTarget;
   }
   function correctCurrent(){
     if(!job || !valid(job.token) || !job.target || !job.target.isConnected) return false;
-    return jump(window.scrollY+job.target.getBoundingClientRect().top-job.margin,job.token);
+    var rect=job.rectOfTarget?job.rectOfTarget():job.target.getBoundingClientRect();
+    return jump(window.scrollY+rect.top-job.margin,job.token);
   }
   window.__acimNav={begin:begin,cancel:cancel,valid:valid,jump:jump,remember:remember,
     current:function(){return job?job.token:null;},canRestore:function(){return generation===0;},
@@ -161,7 +163,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.26.1';
+var ACIM_VERSION = 'v40.27';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -22939,16 +22941,17 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     if(moved&&Number(y)<=0&&window.__acimReadingHeading)window.__acimReadingHeading.start();
     return token;
   };
-  window.__acimCorrectScroll = function(el,margin,token){
+  window.__acimCorrectScroll = function(el,margin,token,rectOfTarget){
     var nav=window.__acimNav;
     if(token===undefined||token===null) token=nav.current();
     if(!nav.valid(token)) return;
-    nav.remember(token,el,margin);
+    nav.remember(token,el,margin,rectOfTarget);
     if(window.__acimReadingHeading)window.__acimReadingHeading.remember(el);
     [90,260,700].forEach(function(ms){
       setTimeout(function(){
         if(!nav.valid(token)||!el||!el.isConnected) return;
-        var t=window.scrollY+el.getBoundingClientRect().top-margin;
+        var rect=rectOfTarget?rectOfTarget():el.getBoundingClientRect();
+        var t=window.scrollY+rect.top-margin;
         if(Math.abs(t-window.scrollY)>40) nav.jump(t,token);
       },ms);
     });
@@ -27373,77 +27376,102 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      ① EN cite-path 前綴：  #/:T-2.I.1:3  →  T-2.I.1:3
      ② EN 括號範圍：        #[:T-2.I.1:3]-[:T-2.I.1:5] → T-2.I.1:3-5
      ③ 全形：＃：Ｔ－１：２／．／０-９ → 半形；連字號 –—―−－ → - */
+  /* V40.27: hash 永遠保留中文句碼；英文網站的例外只在輸出 href 時轉換。 */
+  var lastParseError = '', paraChains = null, sentenceSets = Object.create(null);
   function normalizeCiteRaw(raw) {
-    return raw.replace(/^#/, '')
-      .replace(/^\/:/, '')   /* EN cite-path：/:T-2.I.1:3 */
-      .replace(/^:/, '')     /* EN 變體：:T-2.I.1:3 */
-      .replace(/^\//, '')
-      .trim()
-      .replace(/：/g, ':').replace(/．/g, '.')
-      .replace(/[０-９]/g, function(ch) {
-        return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0);
-      })
-      .replace(/[–—―−－]/g, '-');
+    raw = String(raw || '').trim();
+    try { raw = decodeURIComponent(raw); } catch(e) { return ''; }
+    return raw.replace(/[！-～]/g, function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0);})
+      .replace(/[–—―−]/g, '-').replace(/^#/, '').replace(/^\/:/, '').replace(/^:/, '').replace(/^\//, '').trim();
   }
-
+  function paragraphChain(id) {
+    if (!paraChains) {
+      paraChains = Object.create(null);
+      var nodes = document.querySelectorAll('#content-area p[data-acim-id],#content-area p[data-acim-parent]');
+      for (var i=0;i<nodes.length;i++) {
+        var key=nodes[i].getAttribute('data-acim-id')||nodes[i].getAttribute('data-acim-parent');
+        (paraChains[key]||(paraChains[key]=[])).push(nodes[i]);
+      }
+    }
+    return paraChains[id] || [];
+  }
+  function sentenceSet(id) {
+    if(sentenceSets[id]) return sentenceSets[id];
+    var set=Object.create(null), parts=paragraphChain(id), inherited=1;
+    for(var i=0;i<parts.length;i++) {
+      var model=buildSharePart(parts[i],inherited); inherited=model.lastSent;
+      for(var j=0;j<model.units.length;j++) set[model.units[j].sent]=true;
+    }
+    return sentenceSets[id]=set;
+  }
+  function resolvePara(id) {
+    id=id.replace(/^W-FL\.(?!In\.)/, 'W-FL.In.').replace(/^W-36[1-5]\./,'W-361-365.');
+    return idIndex[id] ? id : fuzzyFindId(id);
+  }
+  function parseEndpoint(raw) {
+    raw=raw.replace(/^:/,'');
+    var id=resolvePara(raw);
+    if(id) return {paraId:id,sent:0};
+    var m=raw.match(/^(.+):(\d+)$/) || raw.match(/^(.+)\.(\d+)$/);
+    if(!m) return null;
+    id=resolvePara(m[1]); var sent=Number(m[2]);
+    if(!id || !Number.isSafeInteger(sent) || sent<1 || !sentenceSet(id)[sent]) return null;
+    return {paraId:id,sent:sent};
+  }
+  function rangeIds(p) {
+    if(!p.endParaId || p.endParaId===p.paraId) return [p.paraId];
+    var a=p.paraId.match(/^(.*\.)(\d+)$/), b=p.endParaId.match(/^(.*\.)(\d+)$/);
+    if(!a||!b||a[1]!==b[1]||Number(a[2])>=Number(b[2])||Number(b[2])-Number(a[2])>1000) return null;
+    var ids=[];
+    for(var n=Number(a[2]);n<=Number(b[2]);n++) {
+      var id=a[1]+n; if(!idIndex[id]) return null; ids.push(id);
+    }
+    return ids;
+  }
+  function validateCitation(p) {
+    if(!Number.isSafeInteger(p.sent)||p.sent<0||!Number.isSafeInteger(p.sentEnd)||p.sentEnd<0)return null;
+    var ids=rangeIds(p); if(!ids) return null;
+    for(var i=0;i<ids.length;i++) {
+      if(!idIndex[ids[i]])return null;
+      var start=i===0?p.sent:0, end=i===ids.length-1?p.sentEnd:0;
+      var set=sentenceSet(ids[i]);
+      if(start && !set[start] || end && !set[end]) return null;
+      if(ids.length===1 && end && (!start||end<start)) return null;
+      if(start&&end) for(var n=start;n<=end;n++) if(!set[n]) return null;
+    }
+    return p;
+  }
+  function makeRange(a,b) {
+    if(!a||!b||!!a.sent!==!!b.sent) return null;
+    var p={paraId:a.paraId,sent:a.sent,sentEnd:b.sent};
+    if(a.paraId!==b.paraId) p.endParaId=b.paraId;
+    else if(b.sent===a.sent) p.sentEnd=0;
+    return validateCitation(p);
+  }
   function parseHash(hash) {
-    var raw = normalizeCiteRaw(hash);
-    if (!raw) return null;
-
-    /* 先嘗試直接匹配 */
-    if (idIndex[raw]) return { paraId: raw, sent: 0, sentEnd: 0 };
-
-    /* EN 括號範圍 [:id:a]-[:id:b]（兩端同段才視為範圍） */
-    var mb = raw.match(/^\[:([^:\]]+):(\d+)\]-\[:([^:\]]+):(\d+)\]$/);
-    if (mb) {
-      var bp = idIndex[mb[1]] ? mb[1] : fuzzyFindId(mb[1]);
-      var bs = parseInt(mb[2], 10), be = parseInt(mb[4], 10);
-      if (bp) return { paraId: bp, sent: bs, sentEnd: be > bs ? be : 0 };
+    lastParseError='找不到有效的引用位置，請檢查段號與句碼。';
+    var raw=normalizeCiteRaw(hash); if(!raw) return null;
+    var m=raw.match(/^\[([^\]]+)\]-\[([^\]]+)\]$/);
+    if(m) {
+      var range=makeRange(parseEndpoint(m[1]),parseEndpoint(m[2]));
+      if(!range) lastParseError='引用範圍無效；請使用同一節／課內、由前到後且存在的段句碼。';
+      return range;
     }
-    /* EN 括號單句 [:id:a] */
-    var mb1 = raw.match(/^\[:([^:\]]+):(\d+)\]$/);
-    if (mb1) {
-      var bp1 = idIndex[mb1[1]] ? mb1[1] : fuzzyFindId(mb1[1]);
-      if (bp1) return { paraId: bp1, sent: parseInt(mb1[2], 10), sentEnd: 0 };
-    }
-
-    /* 支援句子格式：:N 或 :N-M（範圍，跳轉到起始句 N）*/
-    var mcRange = raw.match(/^(.+):(\d+)-(\d+)$/);
-    if (mcRange) {
-      var pid = mcRange[1], sn = parseInt(mcRange[2], 10), se = parseInt(mcRange[3], 10);
-      var fid = idIndex[pid] ? pid : fuzzyFindId(pid);
-      if (fid) return { paraId: fid, sent: sn, sentEnd: se > sn ? se : 0 };
-    }
-    var mc = raw.match(/^(.+):(\d+)$/);
-    if (mc) {
-      var pid = mc[1], sn = parseInt(mc[2], 10);
-      var fid = idIndex[pid] ? pid : fuzzyFindId(pid);
-      if (fid) return { paraId: fid, sent: sn, sentEnd: 0 };
-      /* 題記等 id 內含 :N 的段（T-1:2）：以完整 id 直接匹配 */
-      if (idIndex[raw]) return { paraId: raw, sent: 0, sentEnd: 0 };
-    }
-
-    /* 再嘗試 .N 結尾（向下相容）*/
-    var m = raw.match(/^(.+)\.(\d+)$/);
-    if (m) {
-      /* 先試完整 paraId + sent */
-      var pid = m[1], sn = parseInt(m[2], 10);
-      if (idIndex[pid]) return { paraId: pid, sent: sn, sentEnd: 0 };
-      /* 模糊：把節號轉羅馬再試 */
-      var fid = fuzzyFindId(pid);
-      if (fid) return { paraId: fid, sent: sn, sentEnd: 0 };
-      /* 最後 fallback：整串當 paraId，sent=0 */
-      var fid2 = fuzzyFindId(raw);
-      if (fid2) return { paraId: fid2, sent: 0, sentEnd: 0 };
-      return { paraId: pid, sent: sn, sentEnd: 0 };
-    }
-
-    /* 模糊匹配 */
-    var fid3 = fuzzyFindId(raw);
-    if (fid3) return { paraId: fid3, sent: 0, sentEnd: 0 };
-
-    return { paraId: raw, sent: 0, sentEnd: 0 };
+    m=raw.match(/^\[([^\]]+)\]$/); if(m)raw=m[1].replace(/^:/,'');
+    var exact=resolvePara(raw);
+    if(exact) return {paraId:exact,sent:0,sentEnd:0};
+    m=raw.match(/^(.+):(\d+)-(\d+)$/);
+    if(m) return makeRange(parseEndpoint(m[1]+':'+m[2]),parseEndpoint(m[1]+':'+m[3]));
+    m=raw.match(/^(.+\.)(\d+)-(\d+)$/);
+    if(m) return makeRange(parseEndpoint(m[1]+m[2]),parseEndpoint(m[1]+m[3]));
+    var ep=parseEndpoint(raw);
+    return ep ? {paraId:ep.paraId,sent:ep.sent,sentEnd:0} : null;
   }
+  function citationRef(p) {
+    if(p.endParaId) return '['+p.paraId+(p.sent?':'+p.sent:'')+']-['+p.endParaId+(p.sentEnd?':'+p.sentEnd:'')+']';
+    return p.paraId+(p.sent?':'+p.sent+(p.sentEnd>p.sent?'-'+p.sentEnd:''):'');
+  }
+
 
   var hlEls = [];
   var hashScrollTimer=null, hashClearTimer=null;
@@ -27520,156 +27548,143 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      位址列即刻是可複製分享的標準連結。replaceState：不產生瀏覽紀錄、
      不觸發 hashchange、不捲動。僅在 idIndex 已解析出段落時才改寫；
      解析失敗或題記等特殊 id 保持原樣，絕不破壞原始連結。 */
-  function canonicalizeHash(p, resolved) {
-    if (!resolved || !idIndex[p.paraId]) return;
-    var canon = p.paraId;
-    if (p.sent > 0) {
-      canon += ':' + p.sent;
-      if (p.sentEnd > p.sent) canon += '-' + p.sentEnd;
-    }
-    /* V40.23：以原始 hash 比較——EN 前綴、全形、舊 .N 格式一律改寫成
-       標準格式；已是標準格式時不重複 replaceState。 */
-    if (location.hash === '#' + canon) return;
-    try {
-      history.replaceState(null, '',
-        location.pathname + location.search + '#' + canon);
-    } catch (e) {}
+  function canonicalizeHash(p,resolved) {
+    if(!resolved)return;
+    var canon=citationRef(p);
+    if(location.hash==='#'+canon)return;
+    try{history.replaceState(null,'',location.pathname+location.search+'#'+canon);}catch(e){}
   }
 
   /* ── V40.23（D1）：接收端回溯原典提示列 ──
      分享連結的「接收者」開啟頁面並定位成功後，顯示一次性提示列：
      引用編號＋「英文原典 ↗」（toAcimceUrl 同源轉換）＋「複製連結」。
      讓收到連結的人不必重新選取文字，也能跨語言回溯英文原典。 */
-  var citeToast = null, citeToastTimer = null;
-
+  /* V40.27: 引用入口持續顯示至關閉或下一次導航；不把無效句碼當成功。 */
+  var citeToast=null,citeToastTimer=null;
   function hideCiteToast() {
     clearTimeout(citeToastTimer);
-    if (citeToast) citeToast.style.display = 'none';
+    if(citeToast)citeToast.style.display='none';
   }
-
   function ensureCiteToast() {
-    if (citeToast) return;
-    citeToast = document.createElement('div');
-    citeToast.id = 'acim-ctoast';
-    citeToast.setAttribute('role', 'status');
-    citeToast.style.cssText = 'position:fixed;z-index:999995;display:none;'
-      + 'left:50%;transform:translateX(-50%);'
-      + 'bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);'
-      + 'background:linear-gradient(135deg,#34343B,#26262B);'
-      + 'border:1px solid rgba(193,115,36,.5);border-radius:20px;'
-      + 'padding:7px 12px;max-width:calc(100vw - 16px);box-sizing:border-box;'
-      + 'box-shadow:0 4px 18px rgba(40,0,80,.5);'
-      + 'font-family:-apple-system,system-ui,sans-serif;font-size:12.5px;'
-      + 'color:#F1EDE4;align-items:center;gap:8px;white-space:nowrap;';
-    citeToast.innerHTML = [
-      '<span id="acim-ct-ref" style="color:#C17324;font-weight:600;letter-spacing:.03em"></span>',
-      '<a id="acim-ct-en" href="#" target="_blank" rel="noopener" '
-        + 'style="color:#B5CCF5;text-decoration:none;border:1px solid rgba(181,204,245,.25);'
-        + 'border-radius:12px;padding:2px 8px;cursor:pointer">英文原典 ↗</a>',
-      '<button id="acim-ct-copy" style="background:rgba(41,34,74,.5);border:1px solid rgba(193,115,36,.4);'
-        + 'color:#F1EDE4;border-radius:12px;padding:2px 8px;cursor:pointer;font-size:12px;font-family:inherit">複製連結</button>',
-      '<button id="acim-ct-x" aria-label="關閉" style="background:none;border:none;'
-        + 'color:rgba(201,168,232,.55);cursor:pointer;font-size:14px;padding:0;line-height:1">✕</button>'
-    ].join('');
+    if(citeToast)return;
+    citeToast=document.createElement('div'); citeToast.id='acim-ctoast';
+    citeToast.setAttribute('role','region'); citeToast.setAttribute('aria-label','分享引用與英文原典');
+    citeToast.innerHTML='<span id="acim-ct-ref" aria-live="polite"></span><a id="acim-ct-en" target="_blank" rel="noopener">英文原典 ↗</a><button id="acim-ct-copy">複製連結</button><button id="acim-ct-x" aria-label="關閉引用提示">✕</button><span id="acim-ct-note"></span><span id="acim-ct-feedback" role="status"></span>';
     document.body.appendChild(citeToast);
-    document.getElementById('acim-ct-x').onclick = hideCiteToast;
-    document.getElementById('acim-ct-copy').onclick = function() {
-      clip(citeToast.dataset.url || (location.origin + location.pathname + location.hash));
-    };
+    document.getElementById('acim-ct-x').onclick=hideCiteToast;
+    document.getElementById('acim-ct-copy').onclick=function(){clip(citeToast.dataset.url);};
   }
-
-  function showCiteToast(p, sent, sentEnd) {
+  function showCiteToast(p) {
     ensureCiteToast();
-    clearTimeout(citeToastTimer);
-    var ref = p.paraId + (sent > 0 ? ':' + sent + (sentEnd > sent ? '-' + sentEnd : '') : '');
-    document.getElementById('acim-ct-ref').textContent = ref;
-    var en = toAcimceUrl(p.paraId, sent, sentEnd);
-    var enA = document.getElementById('acim-ct-en');
-    enA.href = en;
-    enA.title = en;
-    citeToast.dataset.url = location.origin + location.pathname + '#' + ref;
-    citeToast.style.display = 'flex';
-    citeToastTimer = setTimeout(hideCiteToast, 8000);
+    var ref=citationRef(p), en=englishTarget(p), link=document.getElementById('acim-ct-en');
+    document.getElementById('acim-ct-ref').textContent=ref;
+    link.textContent=en.exact?'英文原典 ↗':'英文整段（供對照） ↗';
+    if(en.url){link.href=en.url;link.hidden=false;}else{link.removeAttribute('href');link.hidden=true;}
+    document.getElementById('acim-ct-note').textContent=en.note;
+    document.getElementById('acim-ct-feedback').textContent='';
+    citeToast.dataset.url=location.origin+location.pathname+'#'+ref;
+    document.getElementById('acim-ct-copy').hidden=false;
+    citeToast.style.display='flex';
   }
-
+  function showCiteError(message) {
+    ensureCiteToast();
+    document.getElementById('acim-ct-ref').textContent='無法開啟此引用';
+    var link=document.getElementById('acim-ct-en');link.hidden=true;link.removeAttribute('href');
+    document.getElementById('acim-ct-copy').hidden=true;
+    document.getElementById('acim-ct-note').textContent=message;
+    document.getElementById('acim-ct-feedback').textContent='';
+    citeToast.style.display='flex';
+  }
   function scrollToHash(hash) {
     if(!idsReady){pendingHash=hash;return;}
-    clearTimeout(hashScrollTimer); clearTimeout(hashClearTimer);
-    clearHL();
-    var p = parseHash(hash);
-    if (!p) return;
-    var el = idIndex[p.paraId]
-          || document.getElementById('acim-' + p.paraId.replace(/[^a-zA-Z0-9\-]/g,'-'));
-    if (!el) return;
-    var resolved = !!idIndex[p.paraId];
-    var extEls = document.querySelectorAll('[data-acim-parent="' + p.paraId + '"]');
-    var target = el;
-    if (p.sent > 0) {
-      /* 以英文句號決定條列位置。例：T-3.VIII.3:6 對應第 4 項。 */
-      var bestStart = 0;
-      for (var ei = 0; ei < extEls.length; ei++) {
-        var firstSent = parseInt(extEls[ei].getAttribute('data-acim-list-start') || '0', 10);
-        if (firstSent > 0 && firstSent <= p.sent && firstSent > bestStart) {
-          target = extEls[ei]; bestStart = firstSent;
+    clearTimeout(hashScrollTimer);clearTimeout(hashClearTimer);clearHL();hideCiteToast();
+    if(!hash||/^#(?:h\d+|content-area|acim-[\w-]+)$/.test(hash))return;
+    var p=parseHash(hash);
+    if(!p){showCiteError(lastParseError);return;}
+    var ids=rangeIds(p), first=null,last=null;
+    for(var i=0;i<ids.length;i++) {
+      var parts=paragraphChain(ids[i]), inherited=1;
+      var lo=i===0?p.sent:0, hi=i===ids.length-1?p.sentEnd:0;
+      if(ids.length===1 && !hi)hi=lo;
+      for(var j=0;j<parts.length;j++) {
+        var model=buildSharePart(parts[j],inherited);inherited=model.lastSent;
+        for(var k=0;k<model.units.length;k++) {
+          var u=model.units[k];
+          if((!lo||u.sent>=lo)&&(!hi||u.sent<=hi)){if(!first)first=u;last=u;}
         }
       }
     }
-    /* V40.23（D4）：句級高亮與滾動矩形；失敗時回退段落級（target 不變）*/
-    var sentHit = null;
-    if (p.sent > 0 && resolved) {
-      sentHit = highlightSentences(el, p.paraId, p.sent, p.sentEnd);
-    }
-    if (sentHit) {
-      /* 句級：只高亮目標句本身（Custom Highlight），不再整段蓋色 */
-    } else if (target !== el) {
-      target.classList.add('acim-hl'); hlEls.push(target);
-    } else {
-      el.classList.add('acim-hl'); hlEls.push(el);
-      /* 無句號指定時，連同所有延伸段落標示。 */
-      for (var ei = 0; ei < extEls.length; ei++) {
-        extEls[ei].classList.add('acim-hl');
-        hlEls.push(extEls[ei]);
-      }
-    }
-    /* V24：標記深連結目標元素——供字型置換後補校正（見 lazyFontFaces）*/
-    var _prevHT = document.querySelectorAll('[data-acim-hash-target]');
-    for (var _hi = 0; _hi < _prevHT.length; _hi++) _prevHT[_hi].removeAttribute('data-acim-hash-target');
+    var range=null;
+    if(first&&last)try{range=document.createRange();range.setStart(first.node,first.offset);range.setEnd(last.node,last.offset+1);}catch(e){}
+    var target=first?getParaOfNode(first.node):idIndex[p.paraId];
+    if(!target)target=idIndex[p.paraId];
+    var highlighted=false;
+    if(range && window.CSS && CSS.highlights && typeof window.Highlight==='function')try{
+      CSS.highlights.set(SENT_HL_NAME,new window.Highlight(range));highlighted=true;
+    }catch(e){}
+    if(!highlighted)for(var i=0;i<ids.length;i++)paragraphChain(ids[i]).forEach(function(el){el.classList.add('acim-hl');hlEls.push(el);});
+    document.querySelectorAll('[data-acim-hash-target]').forEach(function(el){el.removeAttribute('data-acim-hash-target');});
     target.setAttribute('data-acim-hash-target','1');
-    var navToken=window.__acimNav.begin('hash');
+    var token=window.__acimNav.begin('hash');
+    /* 長範圍以首句定位，後續字型校正也使用同一首句 Range，避免回拉段首。 */
+    var focusRange=null;
+    if(first)try{focusRange=document.createRange();focusRange.setStart(first.node,first.offset);focusRange.setEnd(first.node,first.offset+1);}catch(e){}
+    function rectOfTarget(){
+      if(focusRange&&focusRange.startContainer.isConnected){var r=focusRange.getBoundingClientRect();if(r.width||r.height)return r;}
+      return target.getBoundingClientRect();
+    }
     hashScrollTimer=setTimeout(function(){
-      if(!window.__acimNav.valid(navToken)||!target.isConnected) return;
-      /* V40.23（D4）：有句級 Range 時以當下重量的句子矩形為跳轉基準
-         （字型載入會改變版面，須在跳轉前即時量測）*/
-      var rect = (sentHit && sentHit.range && sentHit.range.startContainer.isConnected)
-        ? sentHit.range.getBoundingClientRect()
-        : target.getBoundingClientRect();
-      var margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
-      window.__acimJump(window.scrollY+rect.top-margin,navToken);
-      window.__acimCorrectScroll(target,margin,navToken);
+      if(!window.__acimNav.valid(token)||!target.isConnected)return;
+      var rect=rectOfTarget(), margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
+      window.__acimJump(window.scrollY+rect.top-margin,token);
+      window.__acimCorrectScroll(target,margin,token,rectOfTarget);
     },150);
-    hashClearTimer=setTimeout(clearHL, 4500);
-    /* V40.23（D6）：位址列規範化；（D1）接收端回溯原典提示列 */
-    canonicalizeHash(p, resolved);
-    showCiteToast(p, p.sent, p.sentEnd);
+    hashClearTimer=setTimeout(clearHL,4500);
+    canonicalizeHash(p,true);showCiteToast(p);
   }
+
 
   /* ══════════════════════════════════════════════════
      英文 acimce.app URL 轉換
      ══════════════════════════════════════════════════ */
-  function toAcimceUrl(acimId, sent, sentEnd) {
-    /* 英文站的短範圍解析要求段碼本身帶連字號；In.* 必須用兩端完整
-       引用的括號格式。只改外站 URL，顯示 CE 與繁中 hash 保持 :N-M。 */
-    if (/^In\.\d+$/.test(acimId) && sent > 0 && sentEnd > sent) {
-      return 'https://acimce.app/:[' + acimId + ':' + sent + ']-[' + acimId + ':' + sentEnd + ']';
-    }
-    var url = 'https://acimce.app/:' + acimId;
-    if (sent && sent > 0) {
-      url += ':' + sent;
-      /* acimce.app 支援範圍格式 :N-M */
-      if (sentEnd && sentEnd > sent) url += '-' + sentEnd;
-    }
-    return url;
+  /* V40.27: 與目前英文 CE App 的定位對照，不更動中文原文、段號或句碼。 */
+  function englishPoint(id,n,end) {
+    var enId=id.replace(/^W-FL\.In\./,'W-FL.');
+    if(id==='T-2.IX.14' && n) { if(n===1)return null; n--; }
+    if(id==='W-24.5' && n) { if(n===3&&end)n=4; else if(n===4)n=5; }
+    return enId+(n?':'+n:'');
   }
+  function toAcimceUrl(acimId,sent,sentEnd,endParaId) {
+    var p={paraId:acimId,sent:sent||0,sentEnd:sentEnd||0};
+    if(endParaId)p.endParaId=endParaId;
+    if(!validateCitation(p))return null;
+    var ids=rangeIds(p);
+    if(p.sent && ids.indexOf('T-2.IX.14')!==-1 && (p.paraId!=='T-2.IX.14'||p.sent===1))return null;
+    var a=englishPoint(p.paraId,p.sent,false);
+    var last=p.endParaId||p.paraId;
+    var end=p.sentEnd||p.sent;
+    var b=englishPoint(last,end,true);
+    if(!a||!b)return null;
+    if(!p.sent && !p.endParaId)return 'https://acimce.app/:'+a;
+    if(a===b)return 'https://acimce.app/:'+a;
+    if(!p.endParaId && p.sent && !/^In\./.test(p.paraId)) {
+      var am=a.match(/^(.*):(\d+)$/),bm=b.match(/^(.*):(\d+)$/);
+      if(am&&bm&&am[1]===bm[1])return 'https://acimce.app/:'+am[1]+':'+am[2]+'-'+bm[2];
+    }
+    /* 完整端點也避開英文 In.* 短範圍解析缺口。 */
+    return 'https://acimce.app/:['+a+']-['+b+']';
+  }
+  function englishNote(p) {
+    var ids=rangeIds(p)||[];
+    if(ids.indexOf('T-2.IX.14')!==-1) return '中英句碼不同：中文第1句為引導句，英文此段無直接對應；中文第2–6句對應英文第1–5句。';
+    if(ids.indexOf('W-24.5')!==-1) return '中英句碼不同：中文第3句對應英文第3–4句；中文第4句對應英文第5句。';
+    return '';
+  }
+  function englishTarget(p) {
+    var exact=toAcimceUrl(p.paraId,p.sent,p.sentEnd,p.endParaId);
+    return {url:exact||toAcimceUrl(p.paraId,0,0),exact:!!exact,note:englishNote(p)};
+  }
+
 
   /* ══════════════════════════════════════════════════
      選取文字 → 分享工具列
@@ -27762,10 +27777,15 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       clip(document.getElementById('acim-sp-quote').textContent);
     };
     document.getElementById('acim-sp-native').onclick = function() {
-      var url = document.getElementById('acim-sp-zh').textContent;
-      var ref = document.getElementById('acim-sp-ref').textContent;
-      if (navigator.share) navigator.share({title:'完整加註版奇蹟課程 '+ref, url:url});
-      else clip(url);
+      var url=document.getElementById('acim-sp-zh').textContent;
+      var ref=document.getElementById('acim-sp-ref').textContent;
+      var quote=(shareBar.dataset.quote||'').trim();
+      var text=(quote?'「'+quote+'」\n':'')+'──《完整加註版奇蹟課程》 '+ref;
+      var payload={title:'完整加註版奇蹟課程 '+ref,text:text,url:url};
+      if(!navigator.share){clip(text+'\n'+url);return;}
+      try{Promise.resolve(navigator.share(payload)).catch(function(error){
+        if(!error||error.name!=='AbortError')clip(text+'\n'+url);
+      });}catch(error){if(error.name!=='AbortError')clip(text+'\n'+url);}
     };
     document.addEventListener('pointerdown', function(e) {
       if (sharePanel.style.display !== 'none' &&
@@ -27793,7 +27813,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     var zhUrl = location.origin + location.pathname +
       '#' + acimId + sentSuffix;
     /* 英文 acimce.app URL：支援範圍格式 :N-M */
-    var enUrl = toAcimceUrl(acimId, sent, sentEnd);
+    var enInfo=englishTarget({paraId:acimId,sent:sent,sentEnd:sentEnd});
+    var enUrl=enInfo.url;
 
     document.getElementById('acim-sp-ref').textContent = acimId + sentSuffix;
     document.getElementById('acim-sp-zh').textContent  = zhUrl;
@@ -27815,6 +27836,10 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       qbEl.style.display = 'none';
     }
 
+    var note=document.getElementById('acim-sp-en-note');
+    if(!note){note=document.createElement('div');note.id='acim-sp-en-note';note.style.cssText='font-size:12px;line-height:1.7;margin:8px 0;color:#F1D4A9';document.getElementById('acim-sp-en').after(note);}
+    note.textContent=enInfo.note;
+    document.getElementById('acim-sp-open-en').textContent=enInfo.exact?'開啟原典 ↗':'英文整段（供對照） ↗';
     /* V40.26：面板固定在視窗正中央（上下左右置中），不再錨定分享按鈕——
        舊邏輯只避讓上方、從不檢查下方空間，面板內容較多（含出處引文）
        或選取位置偏下時，底部按鈕常被螢幕下緣截掉而無法點選。
@@ -27830,19 +27855,17 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   }
 
   function clip(text) {
-    var done = function() {
-      var t = document.getElementById('acim-sp-toast');
-      t.style.display='block';
-      setTimeout(function(){ t.style.display='none'; }, 1600);
-    };
-    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done);
-    else {
-      var ta=document.createElement('textarea');
-      ta.value=text; document.body.appendChild(ta);
-      ta.select(); document.execCommand('copy');
-      document.body.removeChild(ta); done();
+    function notice(message){var t=document.getElementById('acim-sp-toast');if(t){t.textContent=message;t.style.display='block';setTimeout(function(){t.style.display='none';},3500);}if(citeToast&&citeToast.style.display!=='none'){var feedback=document.getElementById('acim-ct-feedback');feedback.textContent=message;clearTimeout(citeToastTimer);citeToastTimer=setTimeout(function(){feedback.textContent='';},3500);}}
+    function done(){notice('✓ 已複製到剪貼簿');return true;}
+    function fallback(){
+      var ta=document.createElement('textarea'),ok=false;ta.value=text;ta.setAttribute('aria-label','待複製的引文');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();
+      try{ok=document.execCommand('copy');}catch(e){}ta.remove();
+      if(ok)return done();notice('無法自動複製，請從網址列或分享面板手動複製。');return false;
     }
+    try{if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(text).then(done,fallback);}catch(e){}
+    return Promise.resolve(fallback());
   }
+
 
   /* V28：以實際 Range 覆蓋的本文判定引用，不以「1 到最大句碼」推定整段。
      一個 CE 段可包含主 <p> 和多個 data-acim-parent 延伸段（例如 In.2）。
@@ -28132,6 +28155,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   function addCSS() {
     var s=document.createElement('style');
     s.textContent=[
+      '#acim-ctoast{position:fixed;z-index:999995;display:none;left:50%;transform:translateX(-50%);bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);background:#29224A;color:#F1EDE4;border:1px solid #C17324;border-radius:14px;padding:6px 10px;width:max-content;max-width:calc(100vw - 20px);box-sizing:border-box;box-shadow:0 4px 18px #0004;font:12.5px/1.5 system-ui;align-items:center;justify-content:center;gap:4px 8px;flex-wrap:wrap;}',
+      '#acim-ct-ref{overflow-wrap:anywhere;min-width:0;max-width:100%;color:#FFD09F;font-weight:600;}',
+      '#acim-ctoast button,#acim-ctoast a{font:inherit;color:inherit;min-height:36px;display:inline-flex;align-items:center;padding:2px 8px;border:1px solid #B5CCF555;border-radius:8px;background:transparent;cursor:pointer;text-decoration:none;box-sizing:border-box;}',
+      '#acim-ct-note{flex-basis:100%;max-width:540px;white-space:normal;overflow-wrap:anywhere;color:#F1D4A9;}',
+      '#acim-ct-feedback{flex-basis:100%;color:#FFD09F;}#acim-ct-note:empty,#acim-ct-feedback:empty{display:none;}#acim-ctoast [hidden]{display:none!important;}',
       '#acim-sbar button{background:none;border:none;color:#F1EDE4;cursor:pointer;',
       '  font-size:12.5px;padding:1px 2px;font-family:inherit;letter-spacing:.02em}',
       '#acim-sbar button:hover{color:#C17324}',
@@ -28163,6 +28191,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   function init() {
     addCSS();
     buildUI();
+    /* 一般捲動保留分享來源；目錄、搜尋、書籤等新導航清除上一個引用。 */
+    document.addEventListener('acim-navigation',function(e){if(e.detail!=='hash')hideCiteToast();});
 
     function run() {
       assignIds(function(){
