@@ -1,0 +1,1428 @@
+{
+  "version": "v40.29.2",
+  "build": {
+    "date": "2026-11-10",
+    "time": "03:24",
+    "timezone": "Asia/Taipei"
+  },
+  "baseVersion": "v40.29.1",
+  "baseBookSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+  "releaseId": "0e9ccd4d7ac370de8e87bd8935eda8731bac9cadcb8c145430eda9aa19550102",
+  "bookSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+  "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+  "unchangedBookMain": true,
+  "verifiedIdenticalAssets": 41,
+  "unchangedFontFiles": 30,
+  "manifestId": "/acim-ce-zh-tw/",
+  "executableScripts": 10,
+  "sourceHashes": {
+    "text": "d1639b1eb858fa4581acb187a617d30898fb9c3aa6b427861478fd0f49f491df",
+    "playback": "f680b16b1d71514ae68e046952edac9de0f265b236e7c33cd08f9359c9fcce76"
+  },
+  "changes": [
+    "TTS text extraction, punctuation and course-reference reading",
+    "TTS queue and control lifecycle",
+    "Publishing metadata"
+  ],
+  "passed": 190,
+  "failed": 0,
+  "counts": {
+    "regression": 154,
+    "text": 14,
+    "playback": 22
+  },
+  "regression": {
+    "sourceSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "suites": [
+      {
+        "name": "permanent-links-and-english",
+        "script": "work/test-v4027.mjs",
+        "scriptSha256": "735d999ad94401e47b8319331082fb4b5ea6695ed5daa4cf1825d2bbc3cbf0f1",
+        "input": "outputs/V40.29.2-GitHub-upload/index.html",
+        "baseline": "outputs/V40.29.1-GitHub-upload/index.html",
+        "inputSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+        "baselineSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+        "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+        "version": "v40.29.2",
+        "passed": 73,
+        "failed": 0,
+        "checks": [
+          {
+            "name": "Chinese <main> is byte-for-byte unchanged",
+            "ok": true
+          },
+          {
+            "name": "All 5,361 existing reference IDs survive",
+            "ok": true
+          },
+          {
+            "name": "Every existing canonical paragraph and sentence hash still resolves",
+            "ok": true,
+            "details": {
+              "checked": 37302
+            }
+          },
+          {
+            "name": "single canonical",
+            "ok": true
+          },
+          {
+            "name": "old dotted sentence",
+            "ok": true
+          },
+          {
+            "name": "English cite prefix",
+            "ok": true
+          },
+          {
+            "name": "encoded colon",
+            "ok": true
+          },
+          {
+            "name": "full-width punctuation",
+            "ok": true
+          },
+          {
+            "name": "encoded brackets",
+            "ok": true
+          },
+          {
+            "name": "same-paragraph range",
+            "ok": true
+          },
+          {
+            "name": "same-sentence range",
+            "ok": true
+          },
+          {
+            "name": "English bracket range",
+            "ok": true
+          },
+          {
+            "name": "legacy bracket range",
+            "ok": true
+          },
+          {
+            "name": "English bracket same paragraph",
+            "ok": true
+          },
+          {
+            "name": "legacy bracket single",
+            "ok": true
+          },
+          {
+            "name": "paragraph range",
+            "ok": true
+          },
+          {
+            "name": "In explicit range",
+            "ok": true
+          },
+          {
+            "name": "Chinese final introduction retained",
+            "ok": true
+          },
+          {
+            "name": "English final introduction alias",
+            "ok": true
+          },
+          {
+            "name": "chapter epigraph",
+            "ok": true
+          },
+          {
+            "name": "unusual subsection",
+            "ok": true
+          },
+          {
+            "name": "final combined lesson",
+            "ok": true
+          },
+          {
+            "name": "manual subsection",
+            "ok": true
+          },
+          {
+            "name": "physical paragraph extension",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:0",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:999",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:4-999",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:6-4",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.999:1",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #[T-14.VI.5:6]-[T-14.VI.4:4]",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #[T-14.VI.4:4]-[W-24.5:4]",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #[T-14.VI.4:4]-[T-14.VII.1:1]",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #[:T-14.VI.4:4]-[:T-14.VI.5:999]",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5%ZZ4",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:1e2",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:-1",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #T-14.VI.5:1.5",
+            "ok": true
+          },
+          {
+            "name": "reject invalid #<script>alert(1)</script>",
+            "ok": true
+          },
+          {
+            "name": "W-FL alias",
+            "ok": true
+          },
+          {
+            "name": "W-FL range",
+            "ok": true
+          },
+          {
+            "name": "W24 merged sentence",
+            "ok": true
+          },
+          {
+            "name": "W24 last sentence",
+            "ok": true
+          },
+          {
+            "name": "W24 mapped interval",
+            "ok": true
+          },
+          {
+            "name": "T2 shifted first prayer",
+            "ok": true
+          },
+          {
+            "name": "T2 shifted final prayer",
+            "ok": true
+          },
+          {
+            "name": "T2 shifted interval",
+            "ok": true
+          },
+          {
+            "name": "In working bracket output",
+            "ok": true
+          },
+          {
+            "name": "cross paragraph output",
+            "ok": true
+          },
+          {
+            "name": "cross paragraph ends in merged Chinese sentence",
+            "ok": true
+          },
+          {
+            "name": "cross paragraph begins in merged Chinese sentence",
+            "ok": true
+          },
+          {
+            "name": "Chinese-only introduction has no misleading English link 1-0",
+            "ok": true
+          },
+          {
+            "name": "Chinese-only introduction has no misleading English link 1-2",
+            "ok": true
+          },
+          {
+            "name": "Chinese-only introduction has no misleading English link 1-6",
+            "ok": true
+          },
+          {
+            "name": "Cross-paragraph range covering unmatched Chinese introduction is not falsely exact",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid Not-a-reference:0-0",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid T-14.VI.999:1-0",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid T-14.VI.5:999-0",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid T-14.VI.5:-1-0",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid T-14.VI.5:4--1",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid T-14.VI.5:6-4",
+            "ok": true
+          },
+          {
+            "name": "English URL output also rejects invalid T-14.VI.4:4-999",
+            "ok": true
+          },
+          {
+            "name": "All paragraph English targets resolve in real English model",
+            "ok": true,
+            "details": {
+              "checked": 5361
+            }
+          },
+          {
+            "name": "All mapped sentence targets resolve with correct coordinates",
+            "ok": true,
+            "details": {
+              "checked": 31941
+            }
+          },
+          {
+            "name": "Recipient English entry stays present without auto-dismiss",
+            "ok": true
+          },
+          {
+            "name": "Recipient Chinese-only sentence gives no clickable wrong source",
+            "ok": true
+          },
+          {
+            "name": "Whole bilingual exception paragraph discloses its unmatched introduction",
+            "ok": true
+          },
+          {
+            "name": "Ordinary chapter and skip-link anchors do not raise citation errors",
+            "ok": true
+          },
+          {
+            "name": "Invalid sentence cannot retain an old English target or rewrite history as success",
+            "ok": true
+          },
+          {
+            "name": "Copy feedback preserves persistent bilingual alignment note",
+            "ok": true
+          },
+          {
+            "name": "System share includes quote, reference and sentence URL",
+            "ok": true
+          },
+          {
+            "name": "System share unsupported behavior",
+            "ok": true
+          },
+          {
+            "name": "System share denied behavior",
+            "ok": true
+          },
+          {
+            "name": "System share cancelled behavior",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "name": "quote-and-clipboard",
+        "script": "work/test-v40271-copy.mjs",
+        "scriptSha256": "7410d143d316e1d9453c93487370d4b2af8c2840fe8df6ca64a40e4a8b558771",
+        "input": "outputs/V40.29.2-GitHub-upload/index.html",
+        "inputSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+        "version": "v40.29.2",
+        "passed": 25,
+        "failed": 0,
+        "checks": [
+          {
+            "name": "Panel primary copy includes the exact selected excerpt, source and link with real newlines",
+            "ok": true
+          },
+          {
+            "name": "Panel URL-only button deliberately copies only its URL",
+            "ok": true
+          },
+          {
+            "name": "Existing copy-quote action still contains the quote and link",
+            "ok": true
+          },
+          {
+            "name": "Native share contains quote and reference, a correct URL, and real newlines",
+            "ok": true
+          },
+          {
+            "name": "Unavailable native share falls back to a complete text message",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: single sentence excludes its neighbors",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: same-paragraph range preserves all selected sentences",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: nested bold and inline text remain in the quote",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: Chinese-only introductory sentence remains Chinese",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: Chinese merged sentence remains the whole Chinese sentence",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: cross-paragraph endpoints preserve start and end sentence boundaries",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote: title epigraph is copied without a footnote",
+            "ok": true
+          },
+          {
+            "name": "Recipient quote excludes footnote badges and TTS controls",
+            "ok": true
+          },
+          {
+            "name": "Long recipient quote is clearly truncated at its display limit",
+            "ok": true
+          },
+          {
+            "name": "Recipient single-sentence quote preserves its closing punctuation",
+            "ok": true
+          },
+          {
+            "name": "Ordinary numeric SUP markers split across inline spans are not copied as text",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: single sentence excludes its neighbors",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: same-paragraph range preserves all selected sentences",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: nested bold and inline text remain in the quote",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: Chinese-only introductory sentence remains Chinese",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: Chinese merged sentence remains the whole Chinese sentence",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: cross-paragraph endpoints preserve start and end sentence boundaries",
+            "ok": true
+          },
+          {
+            "name": "Recipient primary copy: title epigraph is copied without a footnote",
+            "ok": true
+          },
+          {
+            "name": "Recipient URL-only action remains available and copies only the canonical link",
+            "ok": true
+          },
+          {
+            "name": "Invalid citation exposes neither quote-copy nor URL-only copy actions",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "name": "backup-engine",
+        "script": "work/v40291/test-backup.mjs",
+        "scriptSha256": "913cae903513719278c28eeb74fbce0fed88907e57b7667967c1ed9b65f3ba7b",
+        "passed": 19,
+        "failed": 0,
+        "checks": [
+          "PASS transform is deterministic, compilable, and leaves main bytes identical",
+          "PASS only backup block, its scoped style, shared bookmark adapter and saveProgress guard change",
+          "PASS whole batch rejects null tab without any writes",
+          "PASS unknown schemas/kinds and array/object settings are rejected",
+          "PASS limits validate bytes, types, ids and ranges",
+          "PASS schema1 legacy complete backup, structured bookmarks and legacy array are supported",
+          "PASS V28 appearance keys are validated, explicitly ignored and never read or written by this engine",
+          "PASS successful full export/import roundtrip uses normalized objects and active tab",
+          "PASS replace honors empty arrays, auto theme, missing preferences and empty active tab",
+          "PASS merge retains existing lists, previews duplicates/overflow, applies only supplied settings",
+          "PASS bookmark-only replacement does not touch settings or tabs",
+          "PASS failed persistent write rolls back earlier writes and ephemeral failed write",
+          "PASS snapshot storage denial prevents all reading writes",
+          "PASS rollback failure is honest and retains downloadable preimport snapshot",
+          "PASS stale preview is rejected without writes and blocked storage cannot fake success",
+          "PASS last backup time reports persistent failures",
+          "PASS Taipei display date crosses UTC midnight without changing machine timestamps",
+          "PASS real bookmark click/snapshot/save and rtPin output passes full validator at layout boundaries",
+          "PASS empty/duplicate ids are rejected and same-position merge is deduplicated"
+        ]
+      },
+      {
+        "name": "backup-ui",
+        "script": "work/v40291/test-backup-ui.mjs",
+        "scriptSha256": "e8c6d1c0451a853ab079359bfcbb45ad0682e40fd5e3802bc6ad80a9c29172fb",
+        "passed": 6,
+        "failed": 0,
+        "checks": [
+          "PASS invalid file performs no commit and schedules no reload",
+          "PASS valid preview clears previous failure and cancel reports no changes",
+          "PASS invalid replacement file retires the prior valid preview",
+          "PASS an older asynchronous file read cannot replace the newest preview",
+          "PASS preview requires confirmation; persisted success reloads with imported progress guard",
+          "PASS persistent storage failure remains on page with honest status"
+        ]
+      },
+      {
+        "name": "selection",
+        "script": "work/v40291/test-selection.mjs",
+        "scriptSha256": "375e69a63924be058f0d5b9dc251c244611ffe8c5ae6e8ba7f8038c1b265c033",
+        "ok": true,
+        "passed": 20,
+        "failed": 0,
+        "inputSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
+        "testedHtmlSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+        "sourceModuleSha256": "48857b238ce092637c3cd98f332109d36eec8e430bce9130adda84e511c80cb0",
+        "checks": [
+          {
+            "name": "正文/原CE parser/英文mapping/buildSharePart逐字不變",
+            "ok": true
+          },
+          {
+            "name": "5361 CE chain與延伸段順序全相同，量測段內DOM規模",
+            "ok": true,
+            "chains": 5361,
+            "maxNodesPerChain": 144
+          },
+          {
+            "name": "同段/延伸/列點引用一致 T-14.VI.5:4-4",
+            "ok": true
+          },
+          {
+            "name": "同段/延伸/列點引用一致 T-14.VI.5:2-5",
+            "ok": true
+          },
+          {
+            "name": "同段/延伸/列點引用一致 T-2.IX.14:1-6",
+            "ok": true
+          },
+          {
+            "name": "同段/延伸/列點引用一致 In.2:0-0",
+            "ok": true
+          },
+          {
+            "name": "同段/延伸/列點引用一致 T-3.VIII.3:0-0",
+            "ok": true
+          },
+          {
+            "name": "同段/延伸/列點引用一致 W-24.5:3-4",
+            "ok": true
+          },
+          {
+            "name": "跨第二CE僅一本文字仍拒絕",
+            "ok": true
+          },
+          {
+            "name": "end下一CE文字offset0不誤算跨段",
+            "ok": true
+          },
+          {
+            "name": "element child-offset及外祖先只包單CE不誤拒絕",
+            "ok": true
+          },
+          {
+            "name": "cache命中後節點換身與同節點文字改變都重建，不沿用失效Range",
+            "ok": true
+          },
+          {
+            "name": "手機publish不讀任何geometry、不字串化Selection、不全書query",
+            "ok": true
+          },
+          {
+            "name": "Android連續selectionchange/pointermove不延後40ms deadline且發布最新範圍",
+            "ok": true,
+            "firstPublishMs": 40,
+            "continuousEvents": 30
+          },
+          {
+            "name": "pointerdown/取消選取讓舊timer失效；單點不建立任何選取",
+            "ok": true
+          },
+          {
+            "name": "Android pointercancel原生接管仍保留有效選取的publisher",
+            "ok": true
+          },
+          {
+            "name": "索引未ready不輪詢；ready callback強制排最新仍有效選取",
+            "ok": true
+          },
+          {
+            "name": "panel同範圍/面板內late event不關，真正鍵盤新書稿範圍關舊並更新",
+            "ok": true
+          },
+          {
+            "name": "多Range即使首Range一字仍顯示拒絕提示，不製造引用",
+            "ok": true
+          },
+          {
+            "name": "字數門檻保留標點/句碼，不以清理後引文長度替代",
+            "ok": true
+          }
+        ],
+        "benchmark": [
+          {
+            "name": "before",
+            "iterations": 20,
+            "cpuMs": 330.92,
+            "queries": 20,
+            "walkerNodes": 0,
+            "geometry": 0,
+            "toString": 0,
+            "models": 20
+          },
+          {
+            "name": "after",
+            "iterations": 20,
+            "cpuMs": 1.06,
+            "queries": 0,
+            "walkerNodes": 0,
+            "geometry": 0,
+            "toString": 0,
+            "models": 0
+          }
+        ],
+        "firstSelection": [
+          {
+            "name": "before",
+            "cpuMs": 15.13,
+            "queries": 1,
+            "walkerNodes": 0,
+            "geometry": 0,
+            "toString": 0,
+            "models": 1
+          },
+          {
+            "name": "after",
+            "cpuMs": 0.1,
+            "queries": 0,
+            "walkerNodes": 0,
+            "geometry": 0,
+            "toString": 0,
+            "models": 1
+          }
+        ],
+        "publicationCounters": [
+          {
+            "name": "before",
+            "queries": 1,
+            "walkerNodes": 0,
+            "geometry": 2,
+            "toString": 1,
+            "models": 1
+          },
+          {
+            "name": "after",
+            "queries": 0,
+            "walkerNodes": 0,
+            "geometry": 0,
+            "toString": 0,
+            "models": 0
+          }
+        ],
+        "limits": "Real full-book DOM and deterministic Android-style event streams in Node; no claim of Android Chrome/PWA device latency, native handles or compositor timing."
+      },
+      {
+        "name": "update-and-offline",
+        "script": "work/v40292/test-worker.mjs",
+        "scriptSha256": "0317488fabca0f5daf30eb70beb211d53e6a8330da98780db8573830a8a9d80e",
+        "version": "v40.29.2",
+        "releaseId": "0e9ccd4d7ac370de8e87bd8935eda8731bac9cadcb8c145430eda9aa19550102",
+        "bookSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+        "testEnvironment": "Node VM executing unmodified packaged Service Worker with in-memory Cache API and local file responses; not a physical device test",
+        "passed": 11,
+        "checks": [
+          "v40.29.1 baseline installs and activates",
+          "baseline full offline save verifies 30 font slices and 4 book images",
+          "new worker rejects old index mixture and keeps old active shell",
+          "new worker rejects damaged new index before storing candidate",
+          "valid v40.29.2 candidate installs while old shell remains until activation",
+          "waiting worker reports real v40.29.2 release identity",
+          "activation removes old shell and keeps verified new shell",
+          "v40.29.2 full offline save verifies all expected resources",
+          "offline navigation returns verified v40.29.2 book",
+          "offline status still verifies book, shell, fonts and images",
+          "identical verified release reinstalls with network unavailable"
+        ],
+        "status": {
+          "type": "ACIM_OFFLINE_STATUS",
+          "version": "v40.29.2",
+          "releaseId": "0e9ccd4d7ac370de8e87bd8935eda8731bac9cadcb8c145430eda9aa19550102",
+          "bookReady": true,
+          "shellReady": true,
+          "shellCached": 5,
+          "shellTotal": 5,
+          "fontsCached": 30,
+          "fontsTotal": 30,
+          "imagesCached": 4,
+          "imagesTotal": 4,
+          "complete": true,
+          "warming": false,
+          "lastWarmError": "",
+          "storageError": ""
+        }
+      }
+    ],
+    "passed": 154,
+    "failed": 0
+  },
+  "text": {
+    "ok": true,
+    "passed": 14,
+    "failed": 0,
+    "sourceModuleSha256": "d1639b1eb858fa4581acb187a617d30898fb9c3aa6b427861478fd0f49f491df",
+    "testedHtmlSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "input": "outputs/V40.29.2-GitHub-upload/index.html",
+    "checks": [
+      {
+        "name": "transform changes no visible book DOM and executable scripts compile",
+        "ok": true
+      },
+      {
+        "name": "all Chinese number magnitudes used by CE and Bible are correct",
+        "ok": true
+      },
+      {
+        "name": "all book families, introduction/review/final lessons/Roman/subsections/dotted legacy codes are spoken",
+        "ok": true
+      },
+      {
+        "name": "complete endpoint and compact paragraph/sentence ranges survive punctuation",
+        "ok": true
+      },
+      {
+        "name": "real isolated numbers, list numbers, years, percentage, decimals and time are retained",
+        "ok": true
+      },
+      {
+        "name": "Bible whitelist covers genuine short names and original spelling variants without clock false positives",
+        "ok": true
+      },
+      {
+        "name": "all known DOM footnote reference forms and superscript sentence markers are excluded, ordinary digits kept",
+        "ok": true
+      },
+      {
+        "name": "active note prefix is retained while note-body references are expanded",
+        "ok": true
+      },
+      {
+        "name": "English contractions, abbreviations, decimal semantics and Latin diacritics remain meaningful",
+        "ok": true
+      },
+      {
+        "name": "unlabelled English prose is English; Chinese with English term remains mixed, CE speech remains Mandarin",
+        "ok": true
+      },
+      {
+        "name": "utterance punctuation is removed, pauses are bounded and short meaningful units survive",
+        "ok": true
+      },
+      {
+        "name": "source-map ranges point to original source text, including expanded cross-inline CE reference",
+        "ok": true
+      },
+      {
+        "name": "HTML source folding stays whitespace, Latin names stay whole, explicit DOM breaks pause and format controls never speak",
+        "ok": true
+      },
+      {
+        "name": "full real book corpus retains all CE tokens and filters every baked badge without DOM mutation",
+        "ok": true,
+        "corpus": {
+          "caseNormalizedReferences": [
+            "C-in.2:4"
+          ],
+          "reviewedSpeechOnlyAliases": [
+            {
+              "original": "W-pII.5.4:3-4",
+              "sourceNote": "ftn1439",
+              "equivalent": "W-WI.5.4:3-4"
+            }
+          ],
+          "realCeReferences": 925,
+          "referenceOccurrences": 1054,
+          "bakedFootnoteBadges": 2927,
+          "paragraphs": 11511,
+          "spokenParagraphs": 10846,
+          "emptyOrPunctuationParagraphs": 665,
+          "withEnglishSegments": 2230
+        }
+      }
+    ],
+    "corpus": {
+      "caseNormalizedReferences": [
+        "C-in.2:4"
+      ],
+      "reviewedSpeechOnlyAliases": [
+        {
+          "original": "W-pII.5.4:3-4",
+          "sourceNote": "ftn1439",
+          "equivalent": "W-WI.5.4:3-4"
+        }
+      ],
+      "realCeReferences": 925,
+      "referenceOccurrences": 1054,
+      "bakedFootnoteBadges": 2927,
+      "paragraphs": 11511,
+      "spokenParagraphs": 10846,
+      "emptyOrPunctuationParagraphs": 665,
+      "withEnglishSegments": 2230
+    },
+    "limits": "DOM/source and deterministic queue tests; actual speech engine pronunciation requires browser/voice validation."
+  },
+  "playback": {
+    "passed": 22,
+    "failed": 0,
+    "ok": true,
+    "actualTextPipeline": true,
+    "inputSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+    "testedHtmlSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "sourceModuleSha256": "f680b16b1d71514ae68e046952edac9de0f265b236e7c33cd08f9359c9fcce76",
+    "reproductions": [
+      {
+        "name": "baseline short paragraph strands a section",
+        "reproduced": true
+      },
+      {
+        "name": "baseline pause in 140ms gap is overridden",
+        "reproduced": true
+      },
+      {
+        "name": "baseline same-paragraph section start toggles to a dead job",
+        "reproduced": true
+      },
+      {
+        "name": "baseline gender preference overrides Mandarin locale",
+        "reproduced": true
+      }
+    ],
+    "checks": [
+      {
+        "name": "identified baseline defects reproduced in actual engine event harness",
+        "ok": true
+      },
+      {
+        "name": "section reads short valid paragraphs and skips empty/punctuation candidates without stranding",
+        "ok": true
+      },
+      {
+        "name": "one-character body paragraphs play in a section and continue to the next paragraph",
+        "ok": true
+      },
+      {
+        "name": "one-character paragraph receives controls in both fallback and lazy-observer injection paths",
+        "ok": true
+      },
+      {
+        "name": "pause during section gap never starts next paragraph until Continue",
+        "ok": true
+      },
+      {
+        "name": "fast pause/Continue in the 140ms gap retires the old section timer",
+        "ok": true
+      },
+      {
+        "name": "starting whole-section playback from its current playing first paragraph restarts correctly",
+        "ok": true
+      },
+      {
+        "name": "pause-before-first-speak retains a pending action; Stop never normalizes/resumes",
+        "ok": true
+      },
+      {
+        "name": "paragraph switches retire synchronous cancel errors and late old end/error callbacks",
+        "ok": true
+      },
+      {
+        "name": "background paragraph requires explicit Continue, foreground never self-resumes",
+        "ok": true
+      },
+      {
+        "name": "interrupted active engine job stops once and never silently skips/retries",
+        "ok": true
+      },
+      {
+        "name": "Mandarin locale outranks gender; Cantonese/other non-Mandarin aliases are not forced; English stays English",
+        "ok": true
+      },
+      {
+        "name": "empty voice metadata can populate later with no polling or automatic playback",
+        "ok": true
+      },
+      {
+        "name": "footnote source change/close stops only the footnote job; same-note render stays playing",
+        "ok": true
+      },
+      {
+        "name": "background footnote remains terminal and its toggle clears",
+        "ok": true
+      },
+      {
+        "name": "prepared mixed-language units preserve lang and exact per-unit ranges",
+        "ok": true
+      },
+      {
+        "name": "long footnotes advance through bounded utterances and complete once, rather than one unbounded engine job",
+        "ok": true
+      },
+      {
+        "name": "lazy injection cannot replace live/paused paragraph Text nodes; Stop clears highlight then completes deferred wrapping",
+        "ok": true
+      },
+      {
+        "name": "deferred wrapping still waits for search highlighting; only recorded local nodes flush",
+        "ok": true
+      },
+      {
+        "name": "same-id footnote DOM replacement retires old mapped ranges, but opening/closing notes never stops body",
+        "ok": true
+      },
+      {
+        "name": "gender state and speed control expose nonvisual names",
+        "ok": true
+      },
+      {
+        "name": "published content and core app-owned pause/generation functions remain unchanged",
+        "ok": true
+      }
+    ],
+    "limits": "Deterministic SpeechSynthesis engine event VM and DOM fixtures; Android voices, native audio, lockscreen and vendor-specific engine behavior require real-device verification."
+  },
+  "browser": {
+    "bookSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "failed": 0,
+    "environment": "Windows 桌面 ChatGPT in-app browser；正式成品及不列入上傳包的本機原生SpeechSynthesis觀測頁；390×844與320×740尺寸。未使用實體Android，沒有逐段聆聽全部語音。",
+    "checks": [
+      "原生SpeechSynthesis實際start/end事件已記錄；正文T-14.V.2發聲為「你是屬於那 第一因 的」，畫面仍保留原「第一因」及註10/11；腳註數字與上標不混入。",
+      "觀測到Microsoft Hanhan - Chinese (Traditional, Taiwan)、lang zh-TW；不是以測試fake engine冒充原生發聲。",
+      "暫停取消目前發聲，控制文字變為繼續；再次繼續確實重讀保留的分句，對應原Text Range。實際重複文字另記於nativeExamples.replayed。",
+      "專門註文ftn629保留「正文第5章註10」標籤；T-4.VIII.9:4-5真正送入引擎時是「正文第四章第八節第九段第四至第五句」，高亮對應原碼。",
+      "腳註重新啟動後立即關閉，原生觀測紀錄為speak/start→cancel/interrupted，按鈕回到非active；沒有接播下一單位。",
+      "未加入測試觀測程式的正式index.html可播放、暫停與停止；實測畫面已保存。",
+      "320寬手機的朗讀列clientWidth288、scrollWidth288，沒有橫向溢出；暫停／繼續按鈕的非視覺名稱正確。",
+      "正式成品console error清單為空；完成後已停止語音、重設viewport。",
+      "上傳說明HTML能開啟，顯示13類修正；完整驗收頁連結正確，包含5個實文TTS案例及舊分享功能驗收。"
+    ],
+    "nativeExamples": {
+      "body": [
+        {
+          "event": "speak",
+          "text": "你是屬於那 第一因 的",
+          "lang": "zh-TW",
+          "voice": "Microsoft Hanhan - Chinese (Traditional, Taiwan)",
+          "highlight": [
+            "你是屬於那「第一因」的"
+          ]
+        },
+        {
+          "event": "speak",
+          "text": "你是屬於那 第一因 的",
+          "lang": "zh-TW",
+          "voice": "Microsoft Hanhan - Chinese (Traditional, Taiwan)",
+          "highlight": [
+            "你是屬於那「第一因」的"
+          ]
+        }
+      ],
+      "replayed": {
+        "event": "speak",
+        "text": "你是屬於那 第一因 的",
+        "lang": "zh-TW",
+        "voice": "Microsoft Hanhan - Chinese (Traditional, Taiwan)",
+        "highlight": [
+          "你是屬於那「第一因」的"
+        ]
+      },
+      "reference": {
+        "event": "speak",
+        "text": "正文第四章第八節第九段第四至第五句",
+        "lang": "zh-TW",
+        "voice": "Microsoft Hanhan - Chinese (Traditional, Taiwan)",
+        "highlight": [
+          " T-4.VIII.9:4-5"
+        ]
+      }
+    },
+    "screenshots": [
+      "V40.29.2朗讀實測.jpg"
+    ],
+    "limits": [
+      "原生start/end與參數記錄能驗證送入引擎的內容，不等同所有裝置上的聽覺品質保證。",
+      "Android音色、實際停頓與鎖屏仍請在使用者原Chrome／主畫面App驗收。",
+      "本機觀測hook僅在work測試路徑，沒有加入上傳包或正式程式。"
+    ]
+  },
+  "canonicalCeCoverage": {
+    "input": "outputs/V40.29.2-GitHub-upload/index.html",
+    "inputSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "moduleSha256": "d1639b1eb858fa4581acb187a617d30898fb9c3aa6b427861478fd0f49f491df",
+    "canonicalParagraphs": 5361,
+    "indexBatches": 318,
+    "pass": true,
+    "failures": [],
+    "examples": [
+      {
+        "id": "T-1:2",
+        "exists": true,
+        "input": "T-1:2",
+        "spoken": "正文第一章題記",
+        "prepared": "正文第一章題記"
+      },
+      {
+        "id": "In.1",
+        "exists": true,
+        "input": "In.1:1-2",
+        "spoken": "正文導言第一段第一至第二句",
+        "prepared": "正文導言第一段第一至第二句"
+      },
+      {
+        "id": "T-1.35.2",
+        "exists": true,
+        "input": "T-1.35.2:1-2",
+        "spoken": "正文第一章第三十五則奇蹟原則第二段第一至第二句",
+        "prepared": "正文第一章第三十五則奇蹟原則第二段第一至第二句"
+      },
+      {
+        "id": "T-14.VI.5",
+        "exists": true,
+        "input": "T-14.VI.5:1-2",
+        "spoken": "正文第十四章第六節第五段第一至第二句",
+        "prepared": "正文第十四章第六節第五段第一至第二句"
+      },
+      {
+        "id": "T-19.IV.A.1",
+        "exists": true,
+        "input": "T-19.IV.A.1:1-2",
+        "spoken": "正文第十九章第四節第一小節第一段第一至第二句",
+        "prepared": "正文第十九章第四節第一小節第一段第一至第二句"
+      },
+      {
+        "id": "W-In.1",
+        "exists": true,
+        "input": "W-In.1:1-2",
+        "spoken": "練習手冊導言第一段第一至第二句",
+        "prepared": "練習手冊導言第一段第一至第二句"
+      },
+      {
+        "id": "W-Re.1.In.1",
+        "exists": true,
+        "input": "W-Re.1.In.1:1-2",
+        "spoken": "練習手冊第一次複習導言第一段第一至第二句",
+        "prepared": "練習手冊第一次複習導言第一段第一至第二句"
+      },
+      {
+        "id": "W-PtII.In.1",
+        "exists": true,
+        "input": "W-PtII.In.1:1-2",
+        "spoken": "練習手冊下篇導言第一段第一至第二句",
+        "prepared": "練習手冊下篇導言第一段第一至第二句"
+      },
+      {
+        "id": "W-WI.1.1",
+        "exists": true,
+        "input": "W-WI.1.1:1-2",
+        "spoken": "練習手冊何謂系列第一篇第一段第一至第二句",
+        "prepared": "練習手冊何謂系列第一篇第一段第一至第二句"
+      },
+      {
+        "id": "W-FL.In.1",
+        "exists": true,
+        "input": "W-FL.In.1:1-2",
+        "spoken": "練習手冊最後幾課導言第一段第一至第二句",
+        "prepared": "練習手冊最後幾課導言第一段第一至第二句"
+      },
+      {
+        "id": "W-Ep.1",
+        "exists": true,
+        "input": "W-Ep.1:1-2",
+        "spoken": "練習手冊結語第一段第一至第二句",
+        "prepared": "練習手冊結語第一段第一至第二句"
+      },
+      {
+        "id": "M-In.1",
+        "exists": true,
+        "input": "M-In.1:1-2",
+        "spoken": "教師指南導言第一段第一至第二句",
+        "prepared": "教師指南導言第一段第一至第二句"
+      },
+      {
+        "id": "M-1.1",
+        "exists": true,
+        "input": "M-1.1:1-2",
+        "spoken": "教師指南第一節第一段第一至第二句",
+        "prepared": "教師指南第一節第一段第一至第二句"
+      },
+      {
+        "id": "C-In.1",
+        "exists": true,
+        "input": "C-In.1:1-2",
+        "spoken": "術語解說導言第一段第一至第二句",
+        "prepared": "術語解說導言第一段第一至第二句"
+      },
+      {
+        "id": "C-1.1",
+        "exists": true,
+        "input": "C-1.1:1-2",
+        "spoken": "術語解說第一節第一段第一至第二句",
+        "prepared": "術語解說第一節第一段第一至第二句"
+      },
+      {
+        "id": "C-Ep.1",
+        "exists": true,
+        "input": "C-Ep.1:1-2",
+        "spoken": "術語解說結語第一段第一至第二句",
+        "prepared": "術語解說結語第一段第一至第二句"
+      },
+      {
+        "id": "W-181-200.In.1",
+        "exists": true,
+        "input": "W-181-200.In.1:1-2",
+        "spoken": "練習手冊第一百八十一至第二百課導言第一段第一至第二句",
+        "prepared": "練習手冊第一百八十一至第二百課導言第一段第一至第二句"
+      },
+      {
+        "id": "W-181-200.In.2",
+        "exists": true,
+        "input": "W-181-200.In.2:1-2",
+        "spoken": "練習手冊第一百八十一至第二百課導言第二段第一至第二句",
+        "prepared": "練習手冊第一百八十一至第二百課導言第二段第一至第二句"
+      },
+      {
+        "id": "W-181-200.In.3",
+        "exists": true,
+        "input": "W-181-200.In.3:1-2",
+        "spoken": "練習手冊第一百八十一至第二百課導言第三段第一至第二句",
+        "prepared": "練習手冊第一百八十一至第二百課導言第三段第一至第二句"
+      },
+      {
+        "id": "W-361-365.1",
+        "exists": true,
+        "input": "W-361-365.1:1-2",
+        "spoken": "練習手冊第三百六十一至第三百六十五課第一段第一至第二句",
+        "prepared": "練習手冊第三百六十一至第三百六十五課第一段第一至第二句"
+      }
+    ],
+    "limit": "All canonical paragraph names are real runtime assignIds output. Representative :1-2 suffixes exercise formatting grammar, not a claim that every listed paragraph contains both sentences."
+  },
+  "independentRangeReview": {
+    "passed": 6,
+    "failed": 0,
+    "sourceModuleSha256": "d1639b1eb858fa4581acb187a617d30898fb9c3aa6b427861478fd0f49f491df",
+    "checks": [
+      {
+        "name": "DOM paragraph label and note tools excluded while actual numbers survive",
+        "ok": true
+      },
+      {
+        "name": "CE code becomes oral reference instead of disappearing, including W181-200 introduction",
+        "ok": true
+      },
+      {
+        "name": "per-unit queue ranges match the exact non-pause sequence and remain in the original DOM",
+        "ok": true
+      },
+      {
+        "name": "note prefix has null source span; all remaining source ranges stay aligned",
+        "ok": true
+      },
+      {
+        "name": "punctuation-only and full-width symbols do not become utterances",
+        "ok": true
+      },
+      {
+        "name": "long Mandarin and Latin/accented strings retain every tail character across finite chunks",
+        "ok": true
+      }
+    ],
+    "limits": "Small DOM/source-map fixtures only; complete real-book identifier and corpus coverage is independently owned by the other reviewer."
+  },
+  "independentFullCorpus": {
+    "input": "outputs/V40.29.2-GitHub-upload/index.html",
+    "inputSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "textModuleSha256": "d1639b1eb858fa4581acb187a617d30898fb9c3aa6b427861478fd0f49f491df",
+    "pass": true,
+    "paragraphs": 11511,
+    "spokenUnits": 112948,
+    "pauseUnits": 97996,
+    "maxZh": 67,
+    "maxEn": 178,
+    "checks": [
+      {
+        "name": "Every original baked footnote badge accounted for",
+        "pass": true,
+        "detail": {
+          "badges": 2927,
+          "supElements": 3217
+        }
+      },
+      {
+        "name": "All raw maps exclude badges/sentence wrappers/TTS controls",
+        "pass": true,
+        "detail": {
+          "rawMarkerLeaks": 0
+        }
+      },
+      {
+        "name": "All emitted DOM ranges stay within source paragraph and valid offsets",
+        "pass": true,
+        "detail": {
+          "badMap": 0
+        }
+      },
+      {
+        "name": "Long source is bounded into existing language unit budgets",
+        "pass": true,
+        "detail": {
+          "maxZh": 67,
+          "maxEn": 178
+        }
+      },
+      {
+        "name": "Gregorian year ranges preserved",
+        "pass": true,
+        "detail": "海倫 舒曼 1909至1981"
+      },
+      {
+        "name": "Real percentages preserved",
+        "pass": true
+      },
+      {
+        "name": "8:30 is time, not Bible chapter",
+        "pass": true
+      },
+      {
+        "name": "Multi-colon history citation is not a time",
+        "pass": true,
+        "detail": "猶太戰爭 卷二8 12 159"
+      },
+      {
+        "name": "Short scripture book names recognized before clock",
+        "pass": true
+      },
+      {
+        "name": "Standalone real footnote CE remains fully spoken",
+        "pass": true
+      },
+      {
+        "name": "Dedicated footnote keeps its supplied note label",
+        "pass": true,
+        "detail": "本章註十 正文第四章第八節第九段第四至第五句 隨著你了解自己對整個聖子奧體 其中包括我 是多麼感激時 你便在知見所及的程度內最接近真知了 你和真知的間隙變得如此之細小 真知可以輕易流過它 並將它永遠消"
+      },
+      {
+        "name": "Paragraph number is silent, body badge 1166 silent, body text remains",
+        "pass": true
+      },
+      {
+        "name": "Short prayer ending remains speakable",
+        "pass": true
+      },
+      {
+        "name": "Unmarked English quotation and Chinese translation retain their respective languages",
+        "pass": true,
+        "detail": [
+          {
+            "text": "The miracle that you receive you give",
+            "lang": "en-US"
+          },
+          {
+            "text": "Each one becomes an illustration of the law on which salvation rests",
+            "lang": "en-US"
+          }
+        ]
+      },
+      {
+        "name": "Real accented Latin name is not split into Mandarin letter",
+        "pass": true,
+        "detail": [
+          {
+            "text": "笛卡爾",
+            "lang": "zh-TW"
+          },
+          {
+            "text": "René Descartes",
+            "lang": "en-US"
+          },
+          {
+            "text": "曾進行一個 系統性懷疑一切自己所信事物 的探索",
+            "lang": "zh-TW"
+          },
+          {
+            "text": "以達到一項確實而不容懷疑的知識",
+            "lang": "zh-TW"
+          },
+          {
+            "text": "他得到一個著名的結論",
+            "lang": "zh-TW"
+          },
+          {
+            "text": "我思故我在",
+            "lang": "zh-TW"
+          }
+        ]
+      },
+      {
+        "name": "Original Word footnote markup is silent without deleting body",
+        "pass": true,
+        "detail": "正文仍在"
+      },
+      {
+        "name": "Actual leading value is retained rather than treated as a paragraph label",
+        "pass": true,
+        "detail": "2026年與三點一四及百分之21仍在"
+      },
+      {
+        "name": "Text module remained frozen throughout the test",
+        "pass": true
+      }
+    ],
+    "failures": [],
+    "limits": [
+      "DOM range objects in this test validate source coordinates but are not native geometric Range objects.",
+      "No speech engine pronunciation, accent, timing, or native pause behavior is claimed."
+    ]
+  },
+  "independentVoicePolicy": {
+    "pass": true,
+    "checks": [
+      {
+        "name": "Mandarin locale precedes gender",
+        "expected": "zh-TW",
+        "actual": "zh-TW",
+        "pass": true
+      },
+      {
+        "name": "Taiwan precedes mainland same-gender voice",
+        "expected": "zh-TW",
+        "actual": "zh-TW",
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-HK",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-Hans-HK",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-Hant-MO",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-yue",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-yue-HK",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-hakka",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-min-nan",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Non-Mandarin only is not forced: zh-wuu",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Explicit English stays English",
+        "expected": "en-GB",
+        "actual": "en-GB",
+        "pass": true
+      },
+      {
+        "name": "Chinese does not force an English-only voice",
+        "expected": null,
+        "actual": null,
+        "pass": true
+      },
+      {
+        "name": "Explicit Mandarin language tag works",
+        "expected": "cmn-TW",
+        "actual": "cmn-TW",
+        "pass": true
+      }
+    ],
+    "playbackModuleSha256": "f680b16b1d71514ae68e046952edac9de0f265b236e7c33cd08f9359c9fcce76",
+    "sourceForTagMeaning": "https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry",
+    "limit": "Synthetic voice metadata exercises deterministic selection policy only; it makes no claim about any device inventory, accent or acoustic quality."
+  },
+  "limits": [
+    "文字與送入引擎的語言／片段／Range可測；未以實體Android手機逐段聆聽，實際音色、停頓與鎖屏行為請在原裝置驗收。",
+    "正文腳註號、Unicode上標句碼及結構可確認的段號略過；專門註文保留章／註標籤，課程引用口語化，不改畫面原文。",
+    "原書非canonical參照若無足夠語意依據，保留可辨識的代碼資訊，不偷偷修改原文或分享對照。",
+    "TTS沿用瀏覽器提供的Web Speech API；離線發聲需裝置提供可離線使用的語音。"
+  ],
+  "primaryReferences": [
+    {
+      "title": "Web Speech API",
+      "url": "https://webaudio.github.io/web-speech-api/"
+    },
+    {
+      "title": "SpeechSynthesisUtterance language",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance/lang"
+    }
+  ]
+}

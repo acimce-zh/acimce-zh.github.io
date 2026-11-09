@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.29.1">
+<meta name="acim-version" content="v40.29.2">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="991b77437f124345fbfa61bd8be3107896336cfbe27e87d6994be18c72a4257e">
+<meta name="acim-release-id" content="0e9ccd4d7ac370de8e87bd8935eda8731bac9cadcb8c145430eda9aa19550102">
 <meta name="acim-build" content="2026-11-10">
-<meta name="acim-build-time" content="02:36">
+<meta name="acim-build-time" content="03:24">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -163,7 +163,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.29.1';
+var ACIM_VERSION = 'v40.29.2';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -25709,7 +25709,9 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
   }
   var lastFnTrigger=null; /* V25（I04）：記錄觸發來源，關閉時可回復焦點 */
   function hideFn(restoreFocus){
+    var wasFnOpen292=fnBar.classList.contains('open');
     fnBar.classList.remove('open'); document.body.classList.remove('fn-open');
+    if(wasFnOpen292)document.dispatchEvent(new Event('acim:footnote-closed'));
     var src=lastFnTrigger;
     activeRef=null; hoverOpened=null; lastFnTrigger=null;
     window.__fnClickOpen=false; window.__fnSkip=false;
@@ -25989,6 +25991,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   /* ── 音色偏好（'f'=女聲, 'm'=男聲，預設女聲）── */
   var ttsGenderPref = window.__acimStorage.get('acim-tts-gender') === 'm' ? 'm' : 'f';
   function applyGenderUI(pref){
+    genderBtnF.setAttribute('aria-pressed',pref==='f'?'true':'false');
+    genderBtnM.setAttribute('aria-pressed',pref==='m'?'true':'false');
     if(pref === 'm'){
       genderBtnM.classList.add('tts-gender-active');
       genderBtnF.classList.remove('tts-gender-active');
@@ -25998,6 +26002,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     }
   }
   applyGenderUI(ttsGenderPref);
+  rateSlider.setAttribute('aria-label','朗讀速度');
+  genderBtnF.setAttribute('aria-label','女聲偏好（依裝置可用國語聲音）');
+  genderBtnM.setAttribute('aria-label','男聲偏好（依裝置可用國語聲音）');
 
   /* 切換音色：純粹儲存偏好 + 更新 UI，不干擾播放狀態
      （Android Chrome 的 synth.speaking 有已知 bug，避免依賴它來判斷播放中）*/
@@ -26030,78 +26037,152 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   });
 
   /* ── 文字過濾器 ── */
-  function cleanText(raw, language){
-    var t = raw;
-    /* V27.1：英文定義保留數字、引文和英文標點，不套用中文朗讀改寫。 */
-    if(/^en(?:[-_]|$)/i.test(language || '')){
-      return t.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, '')
-        .replace(/\[\s*\d*\s*\]/g, '').replace(/\s+/g, ' ').trim();
-    }
-    /* 移除上標句子編號（Unicode 上標數字）*/
-    t = t.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, '');
-    /* 腳注殘留 [N] */
-    t = t.replace(/\[\s*\d*\s*\]/g, '');
-    /* 聖經引用格式：章節號碼讀法自然化
-       申命記33:27 → 申命記三十三章二十七節
-       T-4.VIII.9:4-5 → （略去課程段落碼，不影響正文）
-       KJV / RSV / NRSV 等版本標記 → 讀出版本名稱省略  */
-    t = t.replace(/\(([A-Z]+)\)/g, '，$1版，');          /* (KJV) → ，KJV版， */
-    t = t.replace(/([A-Za-z]+)\s+(\d+):(\d+)(?:-(\d+))?/g, function(m,book,ch,vs,ve){
-      /* 英文書名 + 章:節 → "書名 章節" (讓TTS用英語讀書名，再以中文節碼輔助) */
-      return book + '第' + ch + '章' + vs + (ve?'到'+ve:'') + '節';
-    });
-    /* 中文書名+章節 如「申命記33:27」→「申命記第三十三章第二十七節」*/
-    t = t.replace(/([\u4e00-\u9fff]{2,6})(\d{1,3}):(\d{1,3})(?:-(\d{1,3}))?/g, function(m,bk,ch,vs,ve){
-      return bk + '第' + toChNum(ch) + '章第' + toChNum(vs) + (ve?'到第'+toChNum(ve):'') + '節';
-    });
-    /* 課程段落碼如 T-4.VIII.9:4-5 → 省略（純符號，不影響正文理解）*/
-    t = t.replace(/[A-Z]-\d+[\.\w]+:\d+(?:-\d+)?/g, '');
-    /* 課文段落編號（獨立數字在行首）*/
-    t = t.replace(/^\s*\d+\s+/, '');
-    /* 孤立阿拉伯數字（腳注序號）— 保留在中文詞內的數字（年份等）*/
-    t = t.replace(/(?<![0-9\u4e00-\u9fff])\d+(?![0-9\u4e00-\u9fff年月日章節])/g, '');
-    /* 停頓改善：破折號 → 逗號 */
-    t = t.replace(/[——–\-]{2,}/g, '，');
-    /* 省略號 → 逗號 */
-    t = t.replace(/[…\.]{3,}/g, '，');
-    /* 括號前後加停頓感 */
-    t = t.replace(/（/g, '，（').replace(/）/g, '），');
-    t = t.replace(/\(/g, '，(').replace(/\)/g, ')，');
-    /* 英文單字前後確保有空白（讓TTS切換語音模式）*/
-    t = t.replace(/([^\s\u4e00-\u9fff，。、：；！？])([，。：；！？])/g, '$1$2');
-    /* 清除連續逗號 */
-    t = t.replace(/[，]{2,}/g, '，');
-    /* 清除行首孤立標點 */
-    t = t.replace(/^\s*[，。、：；！？\s]+/, '');
-    t = t.replace(/\s{2,}/g, ' ').trim();
-    return t;
+function createTtsText292(env){
+  var doc=env.document;
+  var DIGITS=['零','一','二','三','四','五','六','七','八','九'];
+  function toChNum(value){
+    var s=String(value),n=Number(s);if(!/^\d+$/.test(s)||!isFinite(n)||n>99999)return s;
+    if(n<10)return DIGITS[n];if(n<20)return '十'+(n%10?DIGITS[n%10]:'');
+    if(n<100)return DIGITS[Math.floor(n/10)]+'十'+(n%10?DIGITS[n%10]:'');
+    if(n<1000){var r=n%100;return DIGITS[Math.floor(n/100)]+'百'+(r?(r<10?'零':r<20?'一':'')+toChNum(r):'');}
+    if(n<10000){var r2=n%1000;return DIGITS[Math.floor(n/1000)]+'千'+(r2?(r2<100?'零':'')+toChNum(r2):'');}
+    var r3=n%10000;return toChNum(Math.floor(n/10000))+'萬'+(r3?(r3<1000?'零':'')+toChNum(r3):'');
   }
-
-  /* ── 數字轉中文（供章節號碼）── */
-  function toChNum(n){
-    n = parseInt(n, 10);
-    if(isNaN(n)) return n;
-    if(n <= 10) return ['零','一','二','三','四','五','六','七','八','九','十'][n];
-    if(n < 20) return '十' + (['','一','二','三','四','五','六','七','八','九'][n-10]||'');
-    if(n < 100){
-      var tens = Math.floor(n/10), ones = n%10;
-      return (['','一','二','三','四','五','六','七','八','九'][tens]||'') + '十' +
-             (ones ? ['','一','二','三','四','五','六','七','八','九'][ones] : '');
+  function roman(s){var n=0,last=0,values={I:1,V:5,X:10,L:50,C:100};if(!/^[IVXLC]+$/.test(s))return null;for(var i=s.length-1;i>=0;i--){var v=values[s[i]];n+=v<last?-v:v;last=Math.max(last,v);}if(n<1||n>99)return null;var r='',x=n;[[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']].forEach(function(p){while(x>=p[0]){r+=p[1];x-=p[0];}});return r===s?n:null;}
+  function numberRange(s,unit){if(!/^\d+(?:-\d+)?$/.test(s))return null;return s.split('-').map(function(n){return '第'+toChNum(n);}).join('至')+unit;}
+  function cePoint(raw){
+    raw=raw.replace(/^[\s\[(:#]+|[\s\])]+$/g,'').replace(/^\/:/,'');
+    raw=raw.replace(/-in(?=\.|$)/i,'-In').replace(/-ep(?=\.|$)/i,'-Ep');
+    /* Reviewed speech-only alias in ftn1439, quoted from W-WI.5.4:3-4. No URL alias is changed. */
+    var oldPart=raw.match(/^W-pII\.(\d+)\.(\d+):(\d+)(?:-(\d+))?$/);
+    if(oldPart)return '練習手冊下篇第'+toChNum(oldPart[1])+'主題第'+toChNum(oldPart[2])+'段'+numberRange(oldPart[3]+(oldPart[4]?'-'+oldPart[4]:''),'句');
+    if(raw==='T-1:2')return '正文第一章題記';
+    var colon=raw.indexOf(':'),verse='';if(colon>=0){verse=raw.slice(colon+1);raw=raw.slice(0,colon);if(!/^\d+(?:-\d+)?$/.test(verse))return null;}
+    var book='',a;if(/^In(?:\.|$)/.test(raw)){book='T';a=['In'].concat(raw.split('.').slice(1));}else{var m=raw.match(/^([TWMCPS])-(.+)$/);if(!m)return null;book=m[1];a=m[2].split('.');}
+    var names={T:'正文',W:'練習手冊',M:'教師指南',C:'術語解說',P:'心理治療',S:'禱告之歌'},out=names[book],rest=[];
+    function takeNumber(unit){if(!rest.length)return true;var n=rest.shift(),label=numberRange(n,unit);if(!label)return false;out+=label;return true;}
+    function trailing(){if(rest.length&&!takeNumber('段'))return false;if(rest.length&&!verse&&/^\d+(?:-\d+)?$/.test(rest[0]))verse=rest.shift();return rest.length===0;}
+    if(book==='W'){
+      var zone=a.shift();rest=a;
+      if(/^\d+(?:-\d+)?$/.test(zone)){out+=numberRange(zone,'課');if(rest[0]==='In'){out+='導言';rest.shift();}}
+      else if(zone==='In')out+='導言';
+      else if(zone==='PtI'||zone==='PtII'){out+=zone==='PtI'?'上篇':'下篇';if(rest[0]==='In'){out+='導言';rest.shift();}}
+      else if(zone==='Re'){if(rest.length&&/^\d+$/.test(rest[0]))out+='第'+toChNum(rest.shift())+'次';out+='複習';if(rest[0]==='In'){out+='導言';rest.shift();}}
+      else if(zone==='WI'){out+='何謂系列';if(rest.length){if(!takeNumber('篇'))return null;}}
+      else if(zone==='FL'){out+='最後幾課導言';if(rest[0]==='In')rest.shift();}
+      else if(zone==='Ep')out+='結語';else return null;
+      if(!trailing())return null;
+    }else if(a[0]==='In'||a[0]==='Ep'){
+      out+=a.shift()==='In'?'導言':'結語';rest=a;if(!trailing())return null;
+    }else{
+      var ch=a.shift();if(!/^\d+$/.test(ch))return null;
+      out+='第'+toChNum(ch)+(book==='M'||book==='C'?'節':'章');rest=a;
+      if(book==='T'&&ch==='1'&&rest.length){if(!takeNumber('則奇蹟原則'))return null;}
+      else if(rest.length&&roman(rest[0])!==null){var sec=rest.shift();out+='第'+toChNum(roman(sec))+(book==='M'||book==='C'?'小節':'節');}
+      if(rest.length&&/^[A-D]$/.test(rest[0]))out+='第'+({A:'一',B:'二',C:'三',D:'四'}[rest.shift()])+'小節';
+      if(rest[0]==='In'||rest[0]==='Ep')out+=rest.shift()==='In'?'導言':'結語';
+      if(!trailing())return null;
     }
-    /* V24 修復：百位支援（100–999）。原實作僅處理 1–99，百位章節
-       （詩篇 118、119，W-365 等）十位查表越界，朗讀成「十八」「十五」。 */
-    if(n < 1000){
-      var hun = Math.floor(n/100), rest = n%100;
-      /* V25（I12）：110–119 正規化為「一百一十」…「一百一十九」
-         （原「一百十」「一百十八」；10–19 獨立值不受影響） */
-      if(rest === 10) return (['','一','二','三','四','五','六','七','八','九'][hun]||'') + '百一十';
-      if(rest > 10 && rest < 20) return (['','一','二','三','四','五','六','七','八','九'][hun]||'') + '百一十' +
-             ['','一','二','三','四','五','六','七','八','九'][rest-10];
-      return (['','一','二','三','四','五','六','七','八','九'][hun]||'') + '百' +
-             (rest === 0 ? '' : (rest < 10 ? '零' + ['','一','二','三','四','五','六','七','八','九'][rest] : toChNum(rest)));
-    }
-    return String(n);
+    if(verse)out+=numberRange(verse,'句');return out;
   }
+  var CE_ATOM='(?:(?:[TMCPS]-(?:[0-9]+|In|Ep)|W-(?:[0-9]+(?:-[0-9]+)?|In|PtII|PtI|Re|WI|FL|Ep))(?:(?:\\.)[A-Za-z0-9]+)*(?::[0-9]+(?:-[0-9]+)?)?(?:-[0-9]+)?|In\\.[0-9]+(?::[0-9]+(?:-[0-9]+)?)?)';
+  var CE_FULL_RANGE=new RegExp('(\\[?:?'+CE_ATOM+'\\]?)\\s*[-–—]\\s*(\\[?:?'+CE_ATOM+'\\]?)','g');
+  var CE_TOKEN=new RegExp('(^|[^A-Za-z0-9_])('+CE_ATOM+')(?=$|[^A-Za-z0-9_])','gi');
+  function fallbackCe(raw){var names={T:'正文',W:'練習手冊',M:'教師指南',C:'術語解說',P:'心理治療',S:'禱告之歌'};return (names[raw[0]]||'正文')+'原書非標準代碼 '+raw.replace(/^[TWMCPS]-/,'').replace(/[:]/g,' 句 ').replace(/[.]/g,' 點 ').replace(/-/g,' 至 ');}
+  function blankMap(text){return {text:String(text==null?'':text),map:Array(String(text==null?'':text).length).fill(null)};}
+  function replace(data,re,fn){
+    var regex=new RegExp(re.source,re.flags.indexOf('g')<0?re.flags+'g':re.flags),out='',maps=[],at=0,m;
+    while((m=regex.exec(data.text))){out+=data.text.slice(at,m.index);maps.push.apply(maps,data.map.slice(at,m.index));var value=fn.apply(null,m.concat(m.index,data.text)),anchors=data.map.slice(m.index,m.index+m[0].length).filter(Boolean),span=anchors.length?{start:anchors[0].start,end:anchors[anchors.length-1].end}:null;value=String(value);out+=value;for(var j=0;j<value.length;j++)maps.push(span);at=m.index+m[0].length;if(!m[0].length)regex.lastIndex++;}
+    out+=data.text.slice(at);maps.push.apply(maps,data.map.slice(at));return {text:out,map:maps};
+  }
+  function ignored(el){
+    if(!el||el.nodeType!==1)return false;var cls=el.classList,href=el.getAttribute('href')||'',name=(el.getAttribute('name')||'')+' '+(el.id||'');
+    if(/^(BUTTON|INPUT|SELECT|TEXTAREA|SCRIPT|STYLE)$/.test(el.tagName)||el.hidden||el.getAttribute('aria-hidden')==='true')return true;
+    if(cls&&(cls.contains('fn-badge')||cls.contains('tts-btn')||cls.contains('sent-num')||cls.contains('MsoFootnoteReference')||cls.contains('MsoEndnoteReference')))return true;
+    if(el.hasAttribute('data-fn')||/#_?(?:ftn|edn)(?:ref)?\d+/i.test(href)||/\b_?(?:ftn|edn)ref\d+/i.test(name))return true;
+    return el.tagName==='SUP'&&/^[\s\d⁰¹²³⁴⁵⁶⁷⁸⁹]+$/.test(el.textContent||'');
+  }
+  function getTextNodes(root){var nodes=[];function walk(n){if(n.nodeType===3){nodes.push(n);return;}if(n.nodeType!==1||ignored(n))return;for(var c=n.firstChild;c;c=c.nextSibling)walk(c);}if(root)walk(root);return nodes;}
+  function buildRawText(root){
+    if(!root||!root.nodeType)return blankMap(root||'');var text='',map=[];
+    var label=null;
+    if(root.tagName==='P'&&!root.hasAttribute('data-acim-list-start')&&!root.closest('li,ol,ul')){
+      var bold=root.querySelector('b'),prefix='';
+      if(bold&&/^\s*\d{1,3}\s*$/.test(bold.textContent||'')&&(root.hasAttribute('data-acim-id')||((root.classList.contains('mn')||root.classList.contains('mns'))&&/[⁰¹²³⁴⁵⁶⁷⁸⁹]/.test(root.textContent||'')))){
+        var found=false;function before(n){if(n===bold){found=true;return;}if(found)return;if(n.nodeType===3)prefix+=n.data;else for(var c=n.firstChild;c;c=c.nextSibling)before(c);}before(root);if(!prefix.trim())label=bold;
+      }
+    }
+    /* HTML source folding is whitespace, not an authored spoken pause. U+2028 marks only DOM line/block breaks. */
+    function append(s,node){for(var i=0;i<s.length;i++){text+=node&&/[\r\n]/.test(s[i])?' ':s[i];map.push(node?{start:{node:node,offset:i},end:{node:node,offset:i+1}}:null);}}
+    function walk(n){if(n===label)return;if(n.nodeType===3){append(n.data,n);return;}if(n.nodeType!==1||ignored(n))return;if(n.tagName==='BR'){append('\u2028',null);return;}var block=n!==root&&/^(P|DIV|LI)$/.test(n.tagName);if(block&&text&&!/\u2028$/.test(text))append('\u2028',null);for(var c=n.firstChild;c;c=c.nextSibling)walk(c);if(block&&text&&!/\u2028$/.test(text))append('\u2028',null);}
+    walk(root);return {text:text,map:map};
+  }
+  var BIBLE_ZH=['創世記','創世紀','出埃及記','利未記','民數記','申命記','約書亞記','士師記','路得記','撒母耳記上','撒母耳記下','撒母耳前書','撒母耳後書','列王紀上','列王紀下','列王記上','列王記下','歷代志上','歷代志下','以斯拉記','尼希米記','以斯帖記','約伯記','詩篇','箴言','傳道書','雅歌','以賽亞書','耶利米書','耶利米哀歌','以西結書','但以理書','何西阿書','約珥書','阿摩司書','俄巴底亞書','約拿書','彌迦書','那鴻書','哈巴谷書','西番雅書','哈該書','撒迦利亞書','瑪拉基書','馬太福音','馬可福音','路加福音','約翰福音','使徒行傳','羅馬書','哥林多前書','哥林多後書','歌林多前書','歌林多後書','哥林多','加拉太書','以弗所書','腓立比書','腓立比','腓力比書','腓力比','歌羅西書','歌羅西','帖撒羅尼迦前書','帖撒羅尼迦後書','提摩太前書','提摩太後書','提多書','腓利門書','希伯來書','希伯來','雅各書','彼得前書','彼得後書','約翰一書','約翰二書','約翰三書','猶大書','啟示錄','啟示','所羅門的智慧'];
+  BIBLE_ZH=BIBLE_ZH.concat(['馬太','約翰','路加','馬可','以賽亞','耶利米','以西結','加拉太','以弗所','雅各','何西阿','羅馬','使徒行傳','彼得前','彼得後','猶大','但以理','哈巴谷','約伯']);
+  var BIBLE_EN=['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Zechariah','Haggai','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
+  var BIBLE_RE=new RegExp('('+BIBLE_ZH.concat(BIBLE_EN).sort(function(a,b){return b.length-a.length;}).join('|')+')\\s*(\\d{1,3}):(\\d{1,3})(?:[-–—](\\d{1,3}))?','g');
+  function transform(data,language){
+    var en=/^en(?:[-_]|$)/i.test(language||'');
+    data=replace(data,/[！-～]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0);});
+    data=replace(data,/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g,function(){return '';});
+    data=replace(data,CE_FULL_RANGE,function(m,a,b){var left=cePoint(a),right=cePoint(b);return left&&right?left+'至'+right:m;});
+    data=replace(data,CE_TOKEN,function(m,before,code){return before+(cePoint(code)||fallbackCe(code));});
+    data=replace(data,/(^|[^A-Za-z0-9_])([TWMCPS]-(?:[A-Za-z]*[A-Z][A-Za-z]*|in|ep)(?:\.[A-Za-z0-9]+)*(?::\d+(?:-\d+)?)?)/g,function(m,before,code){return before+(cePoint(code)||fallbackCe(code));});
+    data=replace(data,BIBLE_RE,function(m,book,ch,vs,ve){return book+'第'+toChNum(ch)+'章第'+toChNum(vs)+(ve?'至第'+toChNum(ve):'')+'節';});
+    data=replace(data,/(\d+(?:\.\d+)?)\s*%/g,function(m,n){return en?n+' percent':'百分之'+n;});
+    data=replace(data,/(^|[\s（(=])-(\d+)/g,function(m,before,n){return before+(en?'negative ':'負')+n;});
+    data=replace(data,/(\d{1,2}):(\d{2})(?!\d)/g,function(m,h,min,at,whole){var before=whole.slice(Math.max(0,at-10),at);if(/\d$/.test(before)||whole[at+m.length]===':'||/(?:本節|本課|上面|導言|卷[一二三四])\s*$/.test(before))return m;return Number(h)<24&&Number(min)<60?(en?h+' hours '+min+' minutes':toChNum(h)+'點'+(Number(min)?toChNum(min)+'分':'整')):m;});
+    data=replace(data,/(\d+)\.(\d+)/g,function(m,a,b){return en?a+' point '+b.split('').join(' '):toChNum(a)+'點'+b.split('').map(function(n){return DIGITS[Number(n)];}).join('');});
+    data=replace(data,/(\d+)\s*[-–—]\s*(\d+)/g,function(m,a,b){return a+(en?' to ':'至')+b;});
+    data=replace(data,/\b(e\.g\.|i\.e\.|etc\.)/gi,function(m){return /^e\.g/i.test(m)?'for example':/^i\.e/i.test(m)?'that is':'et cetera';});
+    data=replace(data,/\b(Mr|Mrs|Ms|Dr|St|Rev)\./g,function(m,a){return {Mr:'Mister',Mrs:'Missus',Ms:'Miss',Dr:'Doctor',St:'Saint',Rev:'Reverend'}[a];});
+    data=replace(data,/\b(?:[A-Za-z]\.){2,}/g,function(m){return m.replace(/\./g,' ').trim();});
+    data=replace(data,/[’‘]/g,function(){return "'";});
+    return data;
+  }
+  function segmentMixedLanguage(text,language){
+    var result=[],at=0,re=/\p{Script=Latin}[\p{Script=Latin}\p{M}]*(?:'\p{Script=Latin}[\p{Script=Latin}\p{M}]*)*(?:[ -]+\p{Script=Latin}[\p{Script=Latin}\p{M}]*(?:'\p{Script=Latin}[\p{Script=Latin}\p{M}]*)*)*/gu,m,base=/^en(?:[-_]|$)/i.test(language||'')?'en-US':'zh-TW';
+    function other(a,b){var part=text.slice(a,b);if(part)result.push({text:part,lang:/[\u3400-\u9fff]/.test(part)?'zh-TW':base,start:a,end:b});}
+    while((m=re.exec(text))){if(m.index>at)other(at,m.index);result.push({text:m[0],lang:'en-US',start:m.index,end:m.index+m[0].length});at=m.index+m[0].length;}
+    if(at<text.length)other(at,text.length);return result;
+  }
+  function makeRange(maps){var a=null,b=null;for(var i=0;i<maps.length;i++)if(maps[i]){if(!a)a=maps[i].start;b=maps[i].end;}if(!a||!b||!doc||!doc.createRange)return null;try{var r=doc.createRange();r.setStart(a.node,a.offset);r.setEnd(b.node,b.offset);return r;}catch(e){return null;}}
+  function queueFrom(data,language){
+    var out=[],chars='',maps=[];
+    function flush(){var trim=chars.match(/^\s*/),start=trim?trim[0].length:0,end=chars.replace(/\s+$/,'').length;if(end>start){var text=chars.slice(start,end),source=maps.slice(start,end);segmentMixedLanguage(text,language).forEach(function(seg){var clean=seg.text.trim();if(!clean)return;var lead=seg.text.indexOf(clean),pos=seg.start+lead,max=seg.lang==='en-US'?240:160;while(clean){var cut=Math.min(max,clean.length);if(cut<clean.length&&seg.lang==='en-US'){var space=clean.lastIndexOf(' ',cut);if(space>40)cut=space;}var part=clean.slice(0,cut).trim();if(/[\p{L}\p{N}]/u.test(part)){var count=part.length,range=makeRange(source.slice(pos,pos+count));out.push({text:part,lang:seg.lang,pause:0,range:range});}pos+=cut;clean=clean.slice(cut);var leading=clean.match(/^\s+/);if(leading){pos+=leading[0].length;clean=clean.slice(leading[0].length);}}});}chars='';maps=[];}
+    function pause(level){flush();if(!out.length)return;var last=out[out.length-1];if(last.pause)last.pause=Math.max(last.pause,level);else out.push({text:'',pause:level,lang:language||'zh-TW',range:null});}
+    for(var i=0;i<data.text.length;i++){
+      var c=data.text[i],prev=data.text[i-1]||'',next=data.text[i+1]||'';
+      if(/\p{Cf}/u.test(c))continue;
+      if(c==="'"&&/\p{Script=Latin}/u.test(prev)&&/\p{Script=Latin}/u.test(next)){chars+=c;maps.push(data.map[i]);continue;}
+      if(/[。！？!?；;]/.test(c)){pause(2);continue;}
+      if(/[，,、：:…—–―\n\r\u2028]/.test(c)){pause(1);continue;}
+      if(c==='.'||c==='．'){pause(2);continue;}
+      if(/[\s]/.test(c)){if(chars&&!/\s$/.test(chars)){chars+=' ';maps.push(data.map[i]);}continue;}
+      if(/[\p{P}\p{S}]/u.test(c)){if(chars&&!/\s$/.test(chars)){chars+=' ';maps.push(data.map[i]);}continue;}
+      chars+=c;maps.push(data.map[i]);
+    }
+    flush();while(out.length&&out[out.length-1].pause)out.pop();return out;
+  }
+  function prepareTtsQueue(source,language,options){
+    var data=source&&source.nodeType?buildRawText(source):blankMap(source),prefix=options&&options.prefix;
+    if(!/^en(?:[-_]|$)/i.test(language||'')&&!/[\u3400-\u9fff]/.test(data.text)){
+      var withoutCodes=data.text.replace(CE_TOKEN,' '),words=withoutCodes.match(/[A-Za-z]{2,}/g)||[];if(words.length>=3)language='en-US';
+    }
+    if(prefix){var pre=blankMap(prefix);data={text:pre.text+data.text,map:pre.map.concat(data.map)};}
+    data=transform(data,language);var queue=queueFrom(data,language),ranges=queue.filter(function(x){return !x.pause;}).map(function(x){return x.range;});
+    return {text:queue.filter(function(x){return !x.pause;}).map(function(x){return x.text;}).join(' '),queue:queue,ranges:ranges};
+  }
+  return {toChNum:toChNum,cePoint:cePoint,getTextNodes:getTextNodes,buildRawText:buildRawText,segmentMixedLanguage:segmentMixedLanguage,prepareTtsQueue:prepareTtsQueue,
+    cleanText:function(raw,language){return prepareTtsQueue(raw,language).text;},splitSentences:function(text,language){return prepareTtsQueue(text,language).queue;}};
+}
+var ttsText292=createTtsText292({document:document,window:window});
+function cleanText(raw,language){return ttsText292.cleanText(raw,language);}
+function toChNum(n){return ttsText292.toChNum(n);}
+function getTextNodes(root){return ttsText292.getTextNodes(root);}
+function buildRawText(root){return ttsText292.buildRawText(root);}
+function segmentMixedLanguage(text,language){return ttsText292.segmentMixedLanguage(text,language);}
+function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQueue(source,language,options);}
 
   /* ── 語音選擇（依音色偏好 + 優先順序）── */
   /*
@@ -26168,6 +26249,13 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     return 'u'; /* unknown — 交由語言代碼排序決定 */
   }
 
+  function mandarinVoices292(voices){
+    function locale(voice){return String(voice.lang||'').replace(/_/g,'-').toLowerCase();}
+    var candidates=voices.filter(function(v){return !/(?:^|-)(?:yue|hak|hakka|nan|wuu|gan|hsn|cjy|cpx|czo|cdo|czh|mnp|lzh)(?:-|$)/i.test(locale(v))&&!/^zh-(?:(?:hans|hant)-)?(?:hk|mo)(?:-|$)/i.test(locale(v))&&!/Cantonese|粵語|粤语|廣東話|广东话/i.test(String(v.name||''));});
+    function rank(v){var l=locale(v);if(/^(?:zh|cmn)-(?:hant-)?tw(?:-|$)/.test(l))return 0;if(/^(?:zh|cmn)-(?:hans-)?(?:cn|sg)(?:-|$)/.test(l))return 1;return 2;}
+    var best=Infinity;candidates.forEach(function(v){best=Math.min(best,rank(v));});
+    return candidates.filter(function(v){return rank(v)===best;});
+  }
   function pickZhVoice(language){
     var voices = synth.getVoices();
     if(!voices.length) return null;
@@ -26181,10 +26269,12 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
 
     /* 過濾出中文語音（優先 zh-TW，接受所有 zh-* 及含 Chinese 的名稱）*/
     var zhVoices = voices.filter(function(v){
-      return v.lang.indexOf('zh') === 0 || /Chinese/i.test(v.name);
+      var l=String(v.lang||'').trim();return /^(?:zh|cmn)(?:[-_]|$)/i.test(l) || ((!l||/^und$/i.test(l))&&/Chinese|Mandarin|國語|普通話|普通话/i.test(v.name||''));
     });
     /* V27.1：缺少中文聲音時，不將英文聲音強制套用到中文。 */
     if(!zhVoices.length) return null;
+    zhVoices=mandarinVoices292(zhVoices);
+    if(!zhVoices.length)return null;
 
     var pref = ttsGenderPref; /* 'f' 或 'm' */
 
@@ -26258,6 +26348,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   var _ttsCurrentUnit = null;
   var _ttsPendingStart = null;
   var _ttsSilenceTimer = null;
+  var _ttsFootnoteSource292=null,_ttsFootnoteContent292=null,_ttsDeferredWrap292=new Set();
 
   function updatePauseControl(){
     var paused = _ttsAppPaused;
@@ -26301,6 +26392,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
        or much later. The unit/range and unstarted action stay available. */
     _ttsAppPaused=true; _ttsAttempt++;
     clearTtsTimers(false);
+    if(_secTimer!==null){clearTimeout(_secTimer);_secTimer=null;} /* Retain pending next action, retire its competing gap timer. */
     synth.cancel();
     updatePauseControl();
   }
@@ -26380,24 +26472,24 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     var fb = document.getElementById('fn-tts-btn');
     if(fb) fb.classList.remove('fn-tts-active');
     window.__fnTtsSpeaking = false; /* V24 修復：朗讀來源旗標同步 */
+    _ttsFootnoteSource292=null;_ttsFootnoteContent292=null;flushTtsWrap292();
   }
 
   /* ── 朗讀純文字（供腳注使用）── */
-  function speakText(text, onEndCb, opts){
+  function speakText(text,onEndCb,opts){
     stopTTS();
-    if(!text || text.length < 2) return;
-    _ttsStopped=false;
+    var prepared=text&&typeof text==='object'&&Array.isArray(text.queue)?text:prepareTtsQueue(String(text||''),'zh-TW');
+    if(!prepared.queue.some(function(item){return !item.pause&&String(item.text||'').trim();}))return false;
+    _queue=prepared.queue.slice();_hlQueue=(prepared.ranges||[]).slice();_ttsStopped=false;
     var job=_ttsGeneration;
-    var unit={item:{text:text,lang:'zh-TW',pause:0},range:null,onDone:function(){
-      if(_ttsStopped || job!==_ttsGeneration) return;
-      _ttsStopped=true;
-      var fb = document.getElementById('fn-tts-btn');
-      if(fb) fb.classList.remove('fn-tts-active');
-      window.__fnTtsSpeaking = false; /* V24 */
-      if(onEndCb) onEndCb();
-    }};
-    scheduleTtsStart(function(){ speakTtsUnit(unit,job); },job);
-    if(opts && opts.fnTts && !_ttsStopped) window.__fnTtsSpeaking = true; /* Do not relatch a synchronously background-stopped note. */
+    if(opts&&opts.fnTts){var bar=document.getElementById('footnote-bar'),content=document.getElementById('fn-text');_ttsFootnoteSource292=bar?bar.getAttribute('data-fn-id')||'':'';_ttsFootnoteContent292=content?content.firstChild:null;window.__fnTtsSpeaking=true;}
+    scheduleTtsStart(function(){runQueue(function(){
+      if(_ttsStopped||job!==_ttsGeneration)return;
+      _ttsStopped=true;_ttsFootnoteSource292=null;_ttsFootnoteContent292=null;
+      var fb=document.getElementById('fn-tts-btn');if(fb)fb.classList.remove('fn-tts-active');
+      window.__fnTtsSpeaking=false;flushTtsWrap292();if(onEndCb)onEndCb();
+    },job);},job);
+    return !_ttsStopped;
   }
 
   /* ── 分句佇列播放（讓句號、逗號停頓更明顯）── */
@@ -26405,207 +26497,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   var _queueRunning = false;
   var _hlQueue = [];   /* 與 _queue 中「真正朗讀」的項目一一對應的 Range（供 highlight）*/
 
-  function splitSentences(text, language){
-    /* 英文以句末或分號分段；長句在空白處分塊，保留原文與數字。 */
-    if(/^en(?:[-_]|$)/i.test(language || '')){
-      var englishParts=[];
-      text.split(/(?<=[.!?;])\s+/u).forEach(function(sentence){
-        sentence=sentence.trim();
-        while(sentence.length>280){
-          var cut=sentence.lastIndexOf(' ',280);
-          if(cut<80) cut=280;
-          englishParts.push({text:sentence.slice(0,cut).trim(),pause:0});
-          sentence=sentence.slice(cut).trim();
-        }
-        if(sentence) englishParts.push({text:sentence,pause:0});
-        englishParts.push({text:'　　',pause:2});
-      });
-      return englishParts;
-    }
-    /* 以句號、問號、驚嘆號為主要分句點（完整停頓）
-       逗號、分號為次要分句點（短停頓，用空白字元模擬）*/
-    var parts = [];
-    /* 先以句末標點切主句 */
-    var chunks = text.split(/(?<=[。！？])/u);
-    chunks.forEach(function(chunk){
-      chunk = chunk.trim();
-      if(!chunk) return;
-      /* 主句內再以逗號切次句，在每個次句後面附加一個短暫停（空 utterance）*/
-      var sub = chunk.split(/(?<=[，；、])/u);
-      sub.forEach(function(s, i){
-        s = s.trim();
-        if(!s) return;
-        parts.push({text: s, pause: 0});
-        /* 逗號後插入 120ms 靜音（空文字 utterance）*/
-        if(i < sub.length - 1) parts.push({text: '　', pause: 1});
-      });
-      /* 句號後插入更長的 250ms 靜音 */
-      parts.push({text: '　　', pause: 2});
-    });
-    return parts.filter(function(p){ return p.text.trim().length > 0 || p.pause > 0; });
-  }
-
-  /* ── 依「原始 DOM 文字」建立與朗讀分句一一對應的 Range 陣列 ──
-     不修改 DOM，只走訪文字節點並計算字元偏移，交給 Range + CSS Custom
-     Highlight API 上色。與 splitSentences() 使用相同的標點切分邏輯，
-     確保切出的「真正朗讀」分句數量盡量一致；若數量不符（cleanText 造成
-     文字差異過大），則回傳空陣列，highlight 功能自動停用，但 TTS 仍正常。 */
-  function buildHighlightRanges(para, speakCount, language){
-    if (!ttsHighlight || !window.Range) return [];
-
-    /* 走訪段落內所有文字節點，跳過朗讀按鈕、句子編號徽章等非正文節點 */
-    var walker = document.createTreeWalker(para, NodeFilter.SHOW_TEXT, {
-      acceptNode: function(tn){
-        var p = tn.parentNode;
-        while(p && p !== para){
-          if(p.classList && (p.classList.contains('tts-btn') || p.classList.contains('fn-badge'))){
-            return NodeFilter.FILTER_REJECT;
-          }
-          p = p.parentNode;
-        }
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    }, false);
-
-    var textNodes = [];
-    var fullText = '';
-    var node;
-    while((node = walker.nextNode())){
-      textNodes.push({ node: node, start: fullText.length, text: node.nodeValue });
-      fullText += node.nodeValue;
-    }
-    if(!fullText) return [];
-
-    /* V27.1：英文分塊與原 DOM 字元映射採同一份文字清理和分句規則。 */
-    if(/^en(?:[-_]|$)/i.test(language || '')){
-      var englishChars=[], englishMap=[];
-      for(var ei=0;ei<fullText.length;ei++){
-        var character=fullText[ei];
-        if(/[⁰¹²³⁴⁵⁶⁷⁸⁹]/.test(character)) continue;
-        var note=character==='[' ? fullText.slice(ei).match(/^\[\s*\d*\s*\]/) : null;
-        if(note){ ei+=note[0].length-1; continue; }
-        if(/\s/.test(character)){
-          if(!englishChars.length || englishChars[englishChars.length-1]===' ') continue;
-          character=' ';
-        }
-        englishChars.push(character); englishMap.push(ei);
-      }
-      while(englishChars.length && englishChars[englishChars.length-1]===' '){ englishChars.pop(); englishMap.pop(); }
-      var englishText=englishChars.join('');
-      var spoken=splitSentences(englishText,language).filter(function(item){ return !item.pause; });
-      if(spoken.length!==speakCount) return [];
-      var englishCursor=0, englishRanges=[];
-      for(var es=0;es<spoken.length;es++){
-        var startAt=englishText.indexOf(spoken[es].text,englishCursor);
-        if(startAt<0) return [];
-        var endAt=startAt+spoken[es].text.length;
-        try{
-          var englishRange=document.createRange();
-          var englishStart=offsetToNodePos(englishMap[startAt]);
-          var englishEnd=offsetToNodePos(englishMap[endAt-1]+1);
-          englishRange.setStart(englishStart.node,englishStart.offset);
-          englishRange.setEnd(englishEnd.node,englishEnd.offset);
-          englishRanges.push(englishRange);
-        }catch(error){ return []; }
-        englishCursor=endAt;
-      }
-      return englishRanges;
-    }
-
-    /* 移除上標句子編號，避免影響切分對齊（與 cleanText 行為一致）*/
-    var SUPER_RE = /[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g;
-    fullText = fullText.replace(SUPER_RE, function(m){ return ' '.repeat(m.length); });
-
-    /* ── 建立「影子文字」(shadow)，模擬 cleanText 對括號的處理 ──
-       cleanText 會在（）()前後插入逗號以產生停頓：
-         （ → ，（    ） → ），    ( → ，(    ) → )，
-       並將連續逗號收斂成一個。我們在 shadow 字串上做相同處理，
-       但每個 shadow 字元都記錄其對應的「原始 DOM 文字」字元索引
-       （插入的逗號沒有對應索引，標記為 null），
-       之後即可把 shadow 上的分句切點映射回原始 Range 偏移，
-       使切出的分句數量與朗讀佇列（基於 cleanText 結果）一致。 */
-    var shadowChars = [];
-    for(var ci = 0; ci < fullText.length; ci++){
-      var ch = fullText[ci];
-      if(ch === '（' || ch === '('){
-        shadowChars.push({ch:'，', orig:null});
-        shadowChars.push({ch:ch, orig:ci});
-      } else if(ch === '）' || ch === ')'){
-        shadowChars.push({ch:ch, orig:ci});
-        shadowChars.push({ch:'，', orig:null});
-      } else {
-        shadowChars.push({ch:ch, orig:ci});
-      }
-    }
-    /* 收斂連續逗號（與 cleanText 的 [，]{2,} → ， 規則一致）*/
-    var collapsed = [];
-    for(var ki = 0; ki < shadowChars.length; ki++){
-      if(shadowChars[ki].ch === '，' && collapsed.length && collapsed[collapsed.length-1].ch === '，') continue;
-      collapsed.push(shadowChars[ki]);
-    }
-    shadowChars = collapsed;
-    var shadowText = shadowChars.map(function(c){ return c.ch; }).join('');
-
-    /* shadow 範圍 [s, e) → 原始字元範圍 {start, end} */
-    function shadowRangeToOriginal(s, e){
-      var startOrig = null;
-      for(var i = s; i < e; i++){
-        if(shadowChars[i].orig !== null){ startOrig = shadowChars[i].orig; break; }
-      }
-      if(startOrig === null){
-        for(var i2 = e; i2 < shadowChars.length; i2++){
-          if(shadowChars[i2].orig !== null){ startOrig = shadowChars[i2].orig; break; }
-        }
-        if(startOrig === null) startOrig = fullText.length;
-      }
-      var endOrig = null;
-      for(var j = e - 1; j >= s; j--){
-        if(shadowChars[j].orig !== null){ endOrig = shadowChars[j].orig + 1; break; }
-      }
-      if(endOrig === null) endOrig = startOrig;
-      return { start: startOrig, end: Math.max(endOrig, startOrig) };
-    }
-
-    /* 與 splitSentences 相同的主／次分句規則，在 shadow 上執行 */
-    var chunks = [];
-    var mainParts = shadowText.split(/(?<=[。！？])/u);
-    var offset = 0;
-    mainParts.forEach(function(chunk){
-      if(!chunk) return;
-      var subParts = chunk.split(/(?<=[，；、])/u);
-      subParts.forEach(function(s){
-        if(s.trim().length > 0) chunks.push(shadowRangeToOriginal(offset, offset + s.length));
-        offset += s.length;
-      });
-    });
-
-    /* 若切出的「有內容」分句數量與朗讀佇列不一致，放棄 highlight（避免錯誤對應）*/
-    if(chunks.length !== speakCount) return [];
-
-    /* 將字元偏移轉換為 Range（可能跨越多個文字節點）*/
-    function offsetToNodePos(charIdx){
-      for(var i = 0; i < textNodes.length; i++){
-        var tn = textNodes[i];
-        var len = tn.text.length;
-        if(charIdx <= tn.start + len){
-          return { node: tn.node, offset: Math.max(0, Math.min(len, charIdx - tn.start)) };
-        }
-      }
-      var last = textNodes[textNodes.length - 1];
-      return { node: last.node, offset: last.text.length };
-    }
-
-    return chunks.map(function(c){
-      try{
-        var range = document.createRange();
-        var s = offsetToNodePos(c.start);
-        var e = offsetToNodePos(c.end);
-        range.setStart(s.node, s.offset);
-        range.setEnd(e.node, e.offset);
-        return range;
-      }catch(err){ return null; }
-    });
-  }
+  function splitSentences(text,language){return ttsText292.splitSentences(text,language);}
+  function buildHighlightRanges(para,speakCount,language){var prepared=prepareTtsQueue(para,language);return prepared.ranges.length===speakCount?prepared.ranges:[];}
 
   function runQueue(onDone,job){
     if(_ttsStopped||job!==_ttsGeneration||_ttsAppPaused) return;
@@ -26622,38 +26515,26 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
   }
 
   /* ── 朗讀單一段落 ── */
-  function speakPara(para, btn, chainCb, labelOverride){
-    if(currentPara === para){ stopTTS(); return; }
+  function speakPara(para,btn,chainCb,labelOverride){
+    if(currentPara===para){stopTTS();return false;}
     stopTTS();
-
-    var raw = para.innerText || para.textContent || '';
-    var language = /^en(?:[-_]|$)/i.test(para.getAttribute('lang') || '') ? 'en-US' : 'zh-TW';
-    var text = cleanText(raw, language);
-    if(!text || text.length < 4) return;
-
-    /* 設定 UI 狀態 */
-    currentBtn  = btn;
-    currentPara = para;
-    /* V30：章節級朗讀時 btn 為 null（段落浮動鈕不存在於尚未注入區） */
-    if(btn){ btn.classList.add('tts-active'); btn.title = '停止朗讀'; }
+    if(!para||!para.isConnected)return false;
+    var language=/^en(?:[-_]|$)/i.test(para.getAttribute('lang')||'')?'en-US':'zh-TW';
+    var prepared=prepareTtsQueue(para,language);
+    if(!prepared.queue.some(function(item){return !item.pause&&String(item.text||'').trim();}))return false;
+    currentBtn=btn;currentPara=para;
+    if(btn){btn.classList.add('tts-active');btn.title='停止朗讀';}
     para.classList.add('tts-reading');
-    barLabel.textContent = labelOverride || ('▶ ' + text.slice(0, 16) + '…');
-    ttsBar.classList.add('tts-bar-on');
-    var rect=para.getBoundingClientRect(), margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
-    window.__acimJump(window.scrollY+rect.top-margin);
-    window.__acimCorrectScroll(para,margin);
-
-    /* 建立分句佇列 */
-    _queue = splitSentences(text, language);
-    _queue.forEach(function(item){ item.lang=language; });
-    /* 計算「真正朗讀」（非靜音）分句數量，並嘗試建立對應的 highlight Range */
-    var speakCount = _queue.filter(function(p){ return !p.pause; }).length;
-    _hlQueue = buildHighlightRanges(para, speakCount, language);
-    _ttsStopped=false;
-    var job=_ttsGeneration; /* V26：此次段落朗讀的工作代碼 */
-    scheduleTtsStart(function(){
-      runQueue(function(){ if(job===_ttsGeneration){ if(typeof chainCb==='function'){ chainCb(); } else { stopTTS(); } } },job);
-    },job);
+    barLabel.textContent=labelOverride||('▶ '+prepared.text.slice(0,16)+'…');ttsBar.classList.add('tts-bar-on');
+    var rect=para.getBoundingClientRect(),margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
+    window.__acimJump(window.scrollY+rect.top-margin);window.__acimCorrectScroll(para,margin);
+    _queue=prepared.queue.slice();_hlQueue=(prepared.ranges||[]).slice();_ttsStopped=false;
+    var job=_ttsGeneration;
+    scheduleTtsStart(function(){runQueue(function(){
+      if(job!==_ttsGeneration)return;
+      if(typeof chainCb==='function')chainCb();else stopTTS();
+    },job);},job);
+    return !_ttsStopped;
   }
 
   /* ══ V30：章節級朗讀（本節連續播放＋段落高亮＋自動捲動）══
@@ -26684,23 +26565,40 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     }
     return (best||heads[0]).closest('section.csec');
   }
-  function _secPlayNext(){
-    if(!_secOn) return;
-    if(_secIdx>=_secParas.length){ stopTTS(); return; }
-    var para=_secParas[_secIdx]; _secIdx++;
-    var label='▶ 本節 '+_secIdx+'/'+_secTotal+'：'+
-      ((para.textContent||'').replace(/\s+/g,' ').trim().slice(0,12))+'…';
-    _secChaining=true;
-    try{
-      speakPara(para,null,function(){ if(_secOn&&!_ttsStopped){ _secTimer=setTimeout(_secPlayNext,140); } },label);
-    } finally { _secChaining=false; }
+  function scheduleSectionNext292(job){
+    if(!_secOn||_ttsStopped||job!==_ttsGeneration)return;
+    var next=function(){if(_secOn&&!_ttsStopped&&job===_ttsGeneration)_secPlayNext();};
+    _ttsPendingStart=next;
+    if(_secTimer!==null)clearTimeout(_secTimer);
+    _secTimer=setTimeout(function(){
+      _secTimer=null;
+      if(!_secOn||_ttsStopped||job!==_ttsGeneration)return;
+      if(document.hidden){suspendAppTTS();return;}
+      if(_ttsAppPaused)return; /* Continue owns the retained next-paragraph action. */
+      _ttsPendingStart=null;next();
+    },140);
   }
+  function _secPlayNext(){
+    if(_secTimer!==null){clearTimeout(_secTimer);_secTimer=null;}
+    if(!_secOn||_ttsAppPaused)return;
+    if(document.hidden){suspendAppTTS();return;}
+    /* Only this section's finite list is considered; empty/formatting paragraphs cannot strand it. */
+    while(_secOn&&_secIdx<_secParas.length){
+      var para=_secParas[_secIdx++],label='▶ 本節 '+_secIdx+'/'+_secTotal+'：'+((para.textContent||'').replace(/\s+/g,' ').trim().slice(0,12))+'…';
+      var started=false;_secChaining=true;
+      try{started=speakPara(para,null,function(){scheduleSectionNext292(_ttsGeneration);},label);}finally{_secChaining=false;}
+      if(started)return;
+    }
+    if(_secOn)stopTTS();
+  }
+
   function speakSection(){
     if(_secOn){ stopTTS(); return; }
+    stopTTS(); /* Starting a section is a new source, even if its first paragraph was playing. */
     var sec=_secCurrentSection();
     if(!sec) return;
     var paras=Array.prototype.slice.call(sec.querySelectorAll('p.mn,p.mns,p.mft')).filter(function(p){
-      return !p.closest('#acim-footnotes-container') && (p.textContent||'').trim().length>=2;
+      return !p.closest('#acim-footnotes-container') && (p.textContent||'').trim().length>=1;
     });
     if(!paras.length){ return; }
     _secOn=true; _secParas=paras; _secIdx=0; _secTotal=paras.length;
@@ -26738,13 +26636,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       if(!fnTextEl) return;
       /* 取得腳注純文字，加上編號前綴 */
       var numTxt = (fnNumEl ? fnNumEl.textContent : '').replace(/\.$/,'');
-      var raw = fnTextEl.innerText || fnTextEl.textContent || '';
-      var text = cleanText(raw);
+      var text;
       var noteBar=document.getElementById('footnote-bar');
       var noteGlobalId=noteBar?noteBar.getAttribute('data-fn-id'):'';
       var noteLabel=window.__acimFootnoteLabel?window.__acimFootnoteLabel(noteGlobalId):'';
-      if(noteLabel) text=noteLabel+'。'+text;
-      else if(numTxt) text='註 '+numTxt+'。'+text;
+      text=prepareTtsQueue(fnTextEl,'zh-TW',{prefix:noteLabel?noteLabel+'。':numTxt?'註 '+numTxt+'。':''});
       speakText(text, null, {fnTts:true});
       /* V24 修復：先啟動朗讀再加 class——原順序會被 speakText 內部的
          stopTTS 立即移除 class，按鈕狀態與實際播放脫節 */
@@ -26761,7 +26657,19 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      連續出現時視為同一組（如 ¹⁰、¹⁴ 等）*/
   var SENT_NUM_RE = /([⁰¹²³⁴⁵⁶⁷⁸⁹]+)/g;
 
+  function flushTtsWrap292(){
+    var input=document.getElementById('toc-search-input'),searching=!!(input&&input.value.trim().length>=2);
+    _ttsDeferredWrap292.forEach(function(para){
+      if(!para||!para.isConnected){_ttsDeferredWrap292.delete(para);return;}
+      if(searching)return;
+      _ttsDeferredWrap292.delete(para);para.removeAttribute('data-acim-pending-sentnums');wrapSentNums(para);
+    });
+  }
   function wrapSentNums(para){
+    if((para===currentPara&&!_ttsStopped)||(window.__fnTtsSpeaking&&para.closest&&para.closest('#fn-text'))){
+      para.dataset.acimPendingSentnums='1';_ttsDeferredWrap292.add(para);return;
+    }
+    _ttsDeferredWrap292.delete(para);
     /* 走訪所有直接文字節點，將句子編號包成 <span class="sent-num"> */
     var walker = document.createTreeWalker(para, NodeFilter.SHOW_TEXT, null, false);
     var nodes = [];
@@ -26819,7 +26727,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       para.dataset.acimPendingSentnums='1';
     }
   }
+  document.addEventListener('acim:footnote-closed',function(){if(window.__fnTtsSpeaking)stopTTS();});
   document.addEventListener('acim:footnote-rendered',function(){
+    var bar292=document.getElementById('footnote-bar'),source292=bar292?bar292.getAttribute('data-fn-id')||'':'';
+    var content292=document.getElementById('fn-text');
+    if(window.__fnTtsSpeaking&&(source292!==_ttsFootnoteSource292||(content292&&content292.firstChild!==_ttsFootnoteContent292)))stopTTS();
     var note=document.getElementById('fn-text');
     if(note) note.querySelectorAll('p').forEach(wrapSentNums);
   });
@@ -26827,7 +26739,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     if(!window.IntersectionObserver){
       /* 舊版瀏覽器：維持原有分批注入行為。 */
       var allParas=Array.from(document.querySelectorAll(SELECTOR)).filter(function(para){
-        return !para.closest('#acim-footnotes-container') && (para.textContent||'').trim().length>=2;
+        return !para.closest('#acim-footnotes-container') && (para.textContent||'').trim().length>=1;
       });
       var k=0;
       function fallback(){
@@ -26874,7 +26786,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
         var start=performance.now(),count=0;
         while(at<paras.length&&count<80&&performance.now()-start<4){
           var para=paras[at++];count++;
-          if(para.closest('#acim-footnotes-container')||(para.textContent||'').trim().length<2)continue;
+          if(para.closest('#acim-footnotes-container')||(para.textContent||'').trim().length<1)continue;
           io.observe(para);ttsStats.observedParagraphs++;
         }
         if(at<paras.length)defer(observeBatch);
