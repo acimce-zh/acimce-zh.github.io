@@ -1,0 +1,737 @@
+{
+  "version": "v40.29.1",
+  "build": {
+    "date": "2026-11-10",
+    "time": "02:36",
+    "timezone": "Asia/Taipei"
+  },
+  "baseVersion": "v40.29",
+  "baseBookSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
+  "releaseId": "991b77437f124345fbfa61bd8be3107896336cfbe27e87d6994be18c72a4257e",
+  "bookSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+  "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+  "unchangedBookMain": true,
+  "verifiedIdenticalAssets": 41,
+  "unchangedFontFiles": 30,
+  "manifestId": "/acim-ce-zh-tw/",
+  "executableScripts": 10,
+  "changes": [
+    "Validated backup preview/commit/recovery",
+    "Local selection lookup and bounded scheduling; no mobile geometry",
+    "Publishing metadata"
+  ],
+  "sourceHashes": {
+    "backup": "a74cdf8835074f538f9b296f344e7643a4d6fb331e01d31aa71fb61323e709e3",
+    "selection": "48857b238ce092637c3cd98f332109d36eec8e430bce9130adda84e511c80cb0"
+  },
+  "passed": 154,
+  "failed": 0,
+  "suites": [
+    {
+      "name": "permanent-links-and-english",
+      "script": "work/test-v4027.mjs",
+      "scriptSha256": "735d999ad94401e47b8319331082fb4b5ea6695ed5daa4cf1825d2bbc3cbf0f1",
+      "input": "outputs/V40.29.1-GitHub-upload/index.html",
+      "baseline": "outputs/V40.29-GitHub-upload/index.html",
+      "inputSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+      "baselineSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
+      "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+      "version": "v40.29.1",
+      "passed": 73,
+      "failed": 0,
+      "checks": [
+        {
+          "name": "Chinese <main> is byte-for-byte unchanged",
+          "ok": true
+        },
+        {
+          "name": "All 5,361 existing reference IDs survive",
+          "ok": true
+        },
+        {
+          "name": "Every existing canonical paragraph and sentence hash still resolves",
+          "ok": true,
+          "details": {
+            "checked": 37302
+          }
+        },
+        {
+          "name": "single canonical",
+          "ok": true
+        },
+        {
+          "name": "old dotted sentence",
+          "ok": true
+        },
+        {
+          "name": "English cite prefix",
+          "ok": true
+        },
+        {
+          "name": "encoded colon",
+          "ok": true
+        },
+        {
+          "name": "full-width punctuation",
+          "ok": true
+        },
+        {
+          "name": "encoded brackets",
+          "ok": true
+        },
+        {
+          "name": "same-paragraph range",
+          "ok": true
+        },
+        {
+          "name": "same-sentence range",
+          "ok": true
+        },
+        {
+          "name": "English bracket range",
+          "ok": true
+        },
+        {
+          "name": "legacy bracket range",
+          "ok": true
+        },
+        {
+          "name": "English bracket same paragraph",
+          "ok": true
+        },
+        {
+          "name": "legacy bracket single",
+          "ok": true
+        },
+        {
+          "name": "paragraph range",
+          "ok": true
+        },
+        {
+          "name": "In explicit range",
+          "ok": true
+        },
+        {
+          "name": "Chinese final introduction retained",
+          "ok": true
+        },
+        {
+          "name": "English final introduction alias",
+          "ok": true
+        },
+        {
+          "name": "chapter epigraph",
+          "ok": true
+        },
+        {
+          "name": "unusual subsection",
+          "ok": true
+        },
+        {
+          "name": "final combined lesson",
+          "ok": true
+        },
+        {
+          "name": "manual subsection",
+          "ok": true
+        },
+        {
+          "name": "physical paragraph extension",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:0",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:999",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:4-999",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:6-4",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.999:1",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #[T-14.VI.5:6]-[T-14.VI.4:4]",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #[T-14.VI.4:4]-[W-24.5:4]",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #[T-14.VI.4:4]-[T-14.VII.1:1]",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #[:T-14.VI.4:4]-[:T-14.VI.5:999]",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5%ZZ4",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:1e2",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:-1",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #T-14.VI.5:1.5",
+          "ok": true
+        },
+        {
+          "name": "reject invalid #<script>alert(1)</script>",
+          "ok": true
+        },
+        {
+          "name": "W-FL alias",
+          "ok": true
+        },
+        {
+          "name": "W-FL range",
+          "ok": true
+        },
+        {
+          "name": "W24 merged sentence",
+          "ok": true
+        },
+        {
+          "name": "W24 last sentence",
+          "ok": true
+        },
+        {
+          "name": "W24 mapped interval",
+          "ok": true
+        },
+        {
+          "name": "T2 shifted first prayer",
+          "ok": true
+        },
+        {
+          "name": "T2 shifted final prayer",
+          "ok": true
+        },
+        {
+          "name": "T2 shifted interval",
+          "ok": true
+        },
+        {
+          "name": "In working bracket output",
+          "ok": true
+        },
+        {
+          "name": "cross paragraph output",
+          "ok": true
+        },
+        {
+          "name": "cross paragraph ends in merged Chinese sentence",
+          "ok": true
+        },
+        {
+          "name": "cross paragraph begins in merged Chinese sentence",
+          "ok": true
+        },
+        {
+          "name": "Chinese-only introduction has no misleading English link 1-0",
+          "ok": true
+        },
+        {
+          "name": "Chinese-only introduction has no misleading English link 1-2",
+          "ok": true
+        },
+        {
+          "name": "Chinese-only introduction has no misleading English link 1-6",
+          "ok": true
+        },
+        {
+          "name": "Cross-paragraph range covering unmatched Chinese introduction is not falsely exact",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid Not-a-reference:0-0",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid T-14.VI.999:1-0",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid T-14.VI.5:999-0",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid T-14.VI.5:-1-0",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid T-14.VI.5:4--1",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid T-14.VI.5:6-4",
+          "ok": true
+        },
+        {
+          "name": "English URL output also rejects invalid T-14.VI.4:4-999",
+          "ok": true
+        },
+        {
+          "name": "All paragraph English targets resolve in real English model",
+          "ok": true,
+          "details": {
+            "checked": 5361
+          }
+        },
+        {
+          "name": "All mapped sentence targets resolve with correct coordinates",
+          "ok": true,
+          "details": {
+            "checked": 31941
+          }
+        },
+        {
+          "name": "Recipient English entry stays present without auto-dismiss",
+          "ok": true
+        },
+        {
+          "name": "Recipient Chinese-only sentence gives no clickable wrong source",
+          "ok": true
+        },
+        {
+          "name": "Whole bilingual exception paragraph discloses its unmatched introduction",
+          "ok": true
+        },
+        {
+          "name": "Ordinary chapter and skip-link anchors do not raise citation errors",
+          "ok": true
+        },
+        {
+          "name": "Invalid sentence cannot retain an old English target or rewrite history as success",
+          "ok": true
+        },
+        {
+          "name": "Copy feedback preserves persistent bilingual alignment note",
+          "ok": true
+        },
+        {
+          "name": "System share includes quote, reference and sentence URL",
+          "ok": true
+        },
+        {
+          "name": "System share unsupported behavior",
+          "ok": true
+        },
+        {
+          "name": "System share denied behavior",
+          "ok": true
+        },
+        {
+          "name": "System share cancelled behavior",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "quote-and-clipboard",
+      "script": "work/test-v40271-copy.mjs",
+      "scriptSha256": "7410d143d316e1d9453c93487370d4b2af8c2840fe8df6ca64a40e4a8b558771",
+      "input": "outputs/V40.29.1-GitHub-upload/index.html",
+      "inputSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+      "version": "v40.29.1",
+      "passed": 25,
+      "failed": 0,
+      "checks": [
+        {
+          "name": "Panel primary copy includes the exact selected excerpt, source and link with real newlines",
+          "ok": true
+        },
+        {
+          "name": "Panel URL-only button deliberately copies only its URL",
+          "ok": true
+        },
+        {
+          "name": "Existing copy-quote action still contains the quote and link",
+          "ok": true
+        },
+        {
+          "name": "Native share contains quote and reference, a correct URL, and real newlines",
+          "ok": true
+        },
+        {
+          "name": "Unavailable native share falls back to a complete text message",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: single sentence excludes its neighbors",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: same-paragraph range preserves all selected sentences",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: nested bold and inline text remain in the quote",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: Chinese-only introductory sentence remains Chinese",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: Chinese merged sentence remains the whole Chinese sentence",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: cross-paragraph endpoints preserve start and end sentence boundaries",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote: title epigraph is copied without a footnote",
+          "ok": true
+        },
+        {
+          "name": "Recipient quote excludes footnote badges and TTS controls",
+          "ok": true
+        },
+        {
+          "name": "Long recipient quote is clearly truncated at its display limit",
+          "ok": true
+        },
+        {
+          "name": "Recipient single-sentence quote preserves its closing punctuation",
+          "ok": true
+        },
+        {
+          "name": "Ordinary numeric SUP markers split across inline spans are not copied as text",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: single sentence excludes its neighbors",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: same-paragraph range preserves all selected sentences",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: nested bold and inline text remain in the quote",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: Chinese-only introductory sentence remains Chinese",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: Chinese merged sentence remains the whole Chinese sentence",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: cross-paragraph endpoints preserve start and end sentence boundaries",
+          "ok": true
+        },
+        {
+          "name": "Recipient primary copy: title epigraph is copied without a footnote",
+          "ok": true
+        },
+        {
+          "name": "Recipient URL-only action remains available and copies only the canonical link",
+          "ok": true
+        },
+        {
+          "name": "Invalid citation exposes neither quote-copy nor URL-only copy actions",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "name": "backup-engine",
+      "script": "work/v40291/test-backup.mjs",
+      "scriptSha256": "913cae903513719278c28eeb74fbce0fed88907e57b7667967c1ed9b65f3ba7b",
+      "passed": 19,
+      "failed": 0,
+      "checks": [
+        "PASS transform is deterministic, compilable, and leaves main bytes identical",
+        "PASS only backup block, its scoped style, shared bookmark adapter and saveProgress guard change",
+        "PASS whole batch rejects null tab without any writes",
+        "PASS unknown schemas/kinds and array/object settings are rejected",
+        "PASS limits validate bytes, types, ids and ranges",
+        "PASS schema1 legacy complete backup, structured bookmarks and legacy array are supported",
+        "PASS V28 appearance keys are validated, explicitly ignored and never read or written by this engine",
+        "PASS successful full export/import roundtrip uses normalized objects and active tab",
+        "PASS replace honors empty arrays, auto theme, missing preferences and empty active tab",
+        "PASS merge retains existing lists, previews duplicates/overflow, applies only supplied settings",
+        "PASS bookmark-only replacement does not touch settings or tabs",
+        "PASS failed persistent write rolls back earlier writes and ephemeral failed write",
+        "PASS snapshot storage denial prevents all reading writes",
+        "PASS rollback failure is honest and retains downloadable preimport snapshot",
+        "PASS stale preview is rejected without writes and blocked storage cannot fake success",
+        "PASS last backup time reports persistent failures",
+        "PASS Taipei display date crosses UTC midnight without changing machine timestamps",
+        "PASS real bookmark click/snapshot/save and rtPin output passes full validator at layout boundaries",
+        "PASS empty/duplicate ids are rejected and same-position merge is deduplicated"
+      ]
+    },
+    {
+      "name": "backup-ui",
+      "script": "work/v40291/test-backup-ui.mjs",
+      "scriptSha256": "e8c6d1c0451a853ab079359bfcbb45ad0682e40fd5e3802bc6ad80a9c29172fb",
+      "passed": 6,
+      "failed": 0,
+      "checks": [
+        "PASS invalid file performs no commit and schedules no reload",
+        "PASS valid preview clears previous failure and cancel reports no changes",
+        "PASS invalid replacement file retires the prior valid preview",
+        "PASS an older asynchronous file read cannot replace the newest preview",
+        "PASS preview requires confirmation; persisted success reloads with imported progress guard",
+        "PASS persistent storage failure remains on page with honest status"
+      ]
+    },
+    {
+      "name": "update-and-offline",
+      "script": "work/v40291/test-worker.mjs",
+      "scriptSha256": "ec8879d52dbc3f4cd7e2065fe135edef941fe34fa448abbfd1e2250cdb8e6874",
+      "version": "v40.29.1",
+      "releaseId": "991b77437f124345fbfa61bd8be3107896336cfbe27e87d6994be18c72a4257e",
+      "bookSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+      "testEnvironment": "Node VM executing unmodified packaged Service Worker with in-memory Cache API and local file responses; not a physical device test",
+      "passed": 11,
+      "checks": [
+        "v40.29 baseline installs and activates",
+        "baseline full offline save verifies 30 font slices and 4 book images",
+        "new worker rejects old index mixture and keeps old active shell",
+        "new worker rejects damaged new index before storing candidate",
+        "valid v40.29.1 candidate installs while old shell remains until activation",
+        "waiting worker reports real v40.29.1 release identity",
+        "activation removes old shell and keeps verified new shell",
+        "v40.29.1 full offline save verifies all expected resources",
+        "offline navigation returns verified v40.29.1 book",
+        "offline status still verifies book, shell, fonts and images",
+        "identical verified release reinstalls with network unavailable"
+      ],
+      "status": {
+        "type": "ACIM_OFFLINE_STATUS",
+        "version": "v40.29.1",
+        "releaseId": "991b77437f124345fbfa61bd8be3107896336cfbe27e87d6994be18c72a4257e",
+        "bookReady": true,
+        "shellReady": true,
+        "shellCached": 5,
+        "shellTotal": 5,
+        "fontsCached": 30,
+        "fontsTotal": 30,
+        "imagesCached": 4,
+        "imagesTotal": 4,
+        "complete": true,
+        "warming": false,
+        "lastWarmError": "",
+        "storageError": ""
+      }
+    }
+  ],
+  "selection": {
+    "ok": true,
+    "passed": 20,
+    "failed": 0,
+    "inputSha256": "14c16cca6863b5444ae6ed7cfb3850b085d90e49d2a4bdcdefdd56731c6d732b",
+    "testedHtmlSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+    "sourceModuleSha256": "48857b238ce092637c3cd98f332109d36eec8e430bce9130adda84e511c80cb0",
+    "checks": [
+      {
+        "name": "正文/原CE parser/英文mapping/buildSharePart逐字不變",
+        "ok": true
+      },
+      {
+        "name": "5361 CE chain與延伸段順序全相同，量測段內DOM規模",
+        "ok": true,
+        "chains": 5361,
+        "maxNodesPerChain": 144
+      },
+      {
+        "name": "同段/延伸/列點引用一致 T-14.VI.5:4-4",
+        "ok": true
+      },
+      {
+        "name": "同段/延伸/列點引用一致 T-14.VI.5:2-5",
+        "ok": true
+      },
+      {
+        "name": "同段/延伸/列點引用一致 T-2.IX.14:1-6",
+        "ok": true
+      },
+      {
+        "name": "同段/延伸/列點引用一致 In.2:0-0",
+        "ok": true
+      },
+      {
+        "name": "同段/延伸/列點引用一致 T-3.VIII.3:0-0",
+        "ok": true
+      },
+      {
+        "name": "同段/延伸/列點引用一致 W-24.5:3-4",
+        "ok": true
+      },
+      {
+        "name": "跨第二CE僅一本文字仍拒絕",
+        "ok": true
+      },
+      {
+        "name": "end下一CE文字offset0不誤算跨段",
+        "ok": true
+      },
+      {
+        "name": "element child-offset及外祖先只包單CE不誤拒絕",
+        "ok": true
+      },
+      {
+        "name": "cache命中後節點換身與同節點文字改變都重建，不沿用失效Range",
+        "ok": true
+      },
+      {
+        "name": "手機publish不讀任何geometry、不字串化Selection、不全書query",
+        "ok": true
+      },
+      {
+        "name": "Android連續selectionchange/pointermove不延後40ms deadline且發布最新範圍",
+        "ok": true,
+        "firstPublishMs": 40,
+        "continuousEvents": 30
+      },
+      {
+        "name": "pointerdown/取消選取讓舊timer失效；單點不建立任何選取",
+        "ok": true
+      },
+      {
+        "name": "Android pointercancel原生接管仍保留有效選取的publisher",
+        "ok": true
+      },
+      {
+        "name": "索引未ready不輪詢；ready callback強制排最新仍有效選取",
+        "ok": true
+      },
+      {
+        "name": "panel同範圍/面板內late event不關，真正鍵盤新書稿範圍關舊並更新",
+        "ok": true
+      },
+      {
+        "name": "多Range即使首Range一字仍顯示拒絕提示，不製造引用",
+        "ok": true
+      },
+      {
+        "name": "字數門檻保留標點/句碼，不以清理後引文長度替代",
+        "ok": true
+      }
+    ],
+    "benchmark": [
+      {
+        "name": "before",
+        "iterations": 20,
+        "cpuMs": 731.14,
+        "queries": 20,
+        "walkerNodes": 0,
+        "geometry": 0,
+        "toString": 0,
+        "models": 20
+      },
+      {
+        "name": "after",
+        "iterations": 20,
+        "cpuMs": 2.68,
+        "queries": 0,
+        "walkerNodes": 0,
+        "geometry": 0,
+        "toString": 0,
+        "models": 0
+      }
+    ],
+    "firstSelection": [
+      {
+        "name": "before",
+        "cpuMs": 34.34,
+        "queries": 1,
+        "walkerNodes": 0,
+        "geometry": 0,
+        "toString": 0,
+        "models": 1
+      },
+      {
+        "name": "after",
+        "cpuMs": 0.22,
+        "queries": 0,
+        "walkerNodes": 0,
+        "geometry": 0,
+        "toString": 0,
+        "models": 1
+      }
+    ],
+    "publicationCounters": [
+      {
+        "name": "before",
+        "queries": 1,
+        "walkerNodes": 0,
+        "geometry": 2,
+        "toString": 1,
+        "models": 1
+      },
+      {
+        "name": "after",
+        "queries": 0,
+        "walkerNodes": 0,
+        "geometry": 0,
+        "toString": 0,
+        "models": 0
+      }
+    ],
+    "limits": "Real full-book DOM and deterministic Android-style event streams in Node; no claim of Android Chrome/PWA device latency, native handles or compositor timing."
+  },
+  "browser": {
+    "bookSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
+    "failed": 0,
+    "environment": "Windows 上的 ChatGPT in-app Chromium browser；390×844、320×740 及預設桌面尺寸。本次沒有實體 Android 手機，也沒有實際傳送 LINE 訊息。",
+    "readerOrigin": "http://127.0.0.1:40432/",
+    "checks": [
+      "390×844：以原生滑鼠拖曳選取正文第一句，分享列出現；按分享後句碼為 T-14.VI.1:1。",
+      "分享面板同時顯示所選引文、繁中網址和 https://acimce.app/:T-14.VI.1:1。",
+      "以實際複製按鈕操作，先確認可見成功回饋，再於下一工具呼叫讀回剪貼簿；包含引文、出處與 http://127.0.0.1:40432/#T-14.VI.1:1，使用真正換行。",
+      "匯入含 null 分頁的損壞備份明示失敗，未出現成功或重新載入。",
+      "合法 schema1 舊備份先顯示書籤1筆、分頁1個的預覽；前一次錯誤訊息會被已驗證狀態取代。",
+      "取消匯入顯示已取消、未更動資料。",
+      "schema2 完整備份選擇取代後顯示空清單／預設模式的還原說明；確認後明示已確認持久保存並匯入完成，接著重新載入。",
+      "重新載入後目前分頁仍為匯入的第六節，呈現 selected；長按書籤按鈕可在書籤清單看到匯入的第六節書籤及引文。",
+      "320×740：備份預覽 clientWidth249、scrollWidth249，沒有內容橫向溢出；可用設定區捲動取得後續動作。",
+      "桌面：舊 dotted 鏈結 W-24.5.3 正規化為 W-24.5:3；英文原典實際 href 為 https://acimce.app/:W-24.5:3-4，並顯示句碼差異說明。",
+      "桌面：T-2.IX.14:1 的英文入口回溯整段 https://acimce.app/:T-2.IX.14，清楚說明中文第一句無英文直接對應。",
+      "桌面：W-FL.1:1 舊鏈結正規化為中文 W-FL.In.1:1；英文入口維持 https://acimce.app/:W-FL.1:1。",
+      "測試頁面 console error 清單為空；測試完成已重設 viewport override。"
+    ],
+    "additionalBackupRoundTrip": {
+      "environment": "同一 backup engine 的前一輪本機候選版 40431；其後只更新備份狀態文案，正式版亦重跑匯入／還原／清單驗證。",
+      "result": "實際下載的完整備份 schema2、version v40.29.1、書籤1筆、分頁1個、activeTab qa-v29-rt1、theme null，沒有 V40.28 閱讀字級／行距設定。"
+    },
+    "screenshots": [
+      "V40.29.1手機分享實測.jpg",
+      "V40.29.1備份預覽實測.jpg"
+    ],
+    "limits": [
+      "沒有宣稱 Android 真機毫秒速度。40ms 是排程測試的期限，實際主執行緒忙碌或初次句碼索引尚未完成仍可能增加等待。",
+      "複製與兩處中英對照已觀察實際 DOM／剪貼簿；沒有把訊息送到 LINE，也沒有宣稱驗證 LINE 預覽卡片。"
+    ]
+  },
+  "storagePolicy": "保留原資料鍵；備份schema1/2和舊書籤檔先整批驗證，預覽後才確認匯入；寫入前保存快照、逐項檢查持久保存；失敗不重新載入並嘗試回復。",
+  "limitations": [
+    "手機尺寸瀏覽器與事件序列測試不代表實體Android裝置的完整效能；請在原Chrome及主畫面App套用更新後驗收。",
+    "網站首次開啟仍需建立原有句碼索引；未完成前保留當前選取，完成時再處理，避免引用尚未收齊的同段文字。",
+    "實體LINE傳送由使用者操作；已驗證複製內容含引文、出處與網址。",
+    "瀏覽器若同時拒絕寫入與回復，畫面會明示並提供匯入前快照，不宣稱可保證瀏覽器儲存永不失敗。"
+  ]
+}
