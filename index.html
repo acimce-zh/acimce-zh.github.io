@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.27">
+<meta name="acim-version" content="v40.27.1">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="1d67e2daa70c7f3d45c8fc97a1438dfcb0a1e8c6803ee0cf11734c36da1ce01c">
+<meta name="acim-release-id" content="7929da8540f3d193930d56dd9bf80c3fba5d79d989d6d09f829d0a3d78681286">
 <meta name="acim-build" content="2026-11-09">
-<meta name="acim-build-time" content="22:54">
+<meta name="acim-build-time" content="23:18">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -163,7 +163,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.27';
+var ACIM_VERSION = 'v40.27.1';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -27561,6 +27561,46 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
      讓收到連結的人不必重新選取文字，也能跨語言回溯英文原典。 */
   /* V40.27: 引用入口持續顯示至關閉或下一次導航；不把無效句碼當成功。 */
   var citeToast=null,citeToastTimer=null;
+  /* V40.27.1: 相同的引文／出處／網址訊息供複製與系統分享使用。 */
+  function quoteShareText(quote,ref,url) {
+    var lines=[];
+    if(quote)lines.push('「'+quote+'」');
+    lines.push('──《完整加註版奇蹟課程》 '+ref);
+    if(url)lines.push(url);
+    return lines.join('\n');
+  }
+  function recipientQuote(p) {
+    if(!validateCitation(p))return '';
+    var ids=rangeIds(p), result=[];
+    for(var i=0;i<ids.length;i++) {
+      var lo=i===0?p.sent:0,hi=i===ids.length-1?p.sentEnd:0;
+      if(ids.length===1&&!hi)hi=lo;
+      var chain=paragraphChain(ids[i]),inherited=1;
+      for(var j=0;j<chain.length;j++) {
+        var model=buildSharePart(chain[j],inherited);inherited=model.lastSent;
+        var first=null,last=null;
+        for(var k=0;k<model.units.length;k++) {
+          var u=model.units[k];
+          if((!lo||u.sent>=lo)&&(!hi||u.sent<=hi)){if(!first)first=u;last=u;}
+        }
+        if(!first)continue;
+        var begin=first.raw,end=last.raw+1;
+        while(begin>0&&/[「『“‘（(《〈【［\[]/.test(model.raw[begin-1]))begin--;
+        while(end<model.raw.length&&/[\s。，！？；：、…‥.,!?;:」』”’）)〉》】］\]]/.test(model.raw[end]))end++;
+        /* raw 已排除註腳與工具按鈕；另外移除 Unicode 及一般 <sup> 句碼。 */
+        var text='',cursor=begin;
+        for(var n=0;n<model.markers.length;n++) {
+          var marker=model.markers[n];
+          if(marker.end<=cursor||marker.start>=end)continue;
+          text+=model.raw.slice(cursor,Math.max(cursor,marker.start));
+          cursor=Math.max(cursor,Math.min(end,marker.end));
+        }
+        text+=model.raw.slice(cursor,end);result.push(text);
+      }
+    }
+    return prepareQuote(result.join(' '));
+  }
+
   function hideCiteToast() {
     clearTimeout(citeToastTimer);
     if(citeToast)citeToast.style.display='none';
@@ -27569,10 +27609,11 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     if(citeToast)return;
     citeToast=document.createElement('div'); citeToast.id='acim-ctoast';
     citeToast.setAttribute('role','region'); citeToast.setAttribute('aria-label','分享引用與英文原典');
-    citeToast.innerHTML='<span id="acim-ct-ref" aria-live="polite"></span><a id="acim-ct-en" target="_blank" rel="noopener">英文原典 ↗</a><button id="acim-ct-copy">複製連結</button><button id="acim-ct-x" aria-label="關閉引用提示">✕</button><span id="acim-ct-note"></span><span id="acim-ct-feedback" role="status"></span>';
+    citeToast.innerHTML='<span id="acim-ct-ref" aria-live="polite"></span><a id="acim-ct-en" target="_blank" rel="noopener">英文原典 ↗</a><button id="acim-ct-copy">複製引文＋連結</button><button id="acim-ct-copy-url">僅複製連結</button><button id="acim-ct-x" aria-label="關閉引用提示">✕</button><span id="acim-ct-note"></span><span id="acim-ct-feedback" role="status"></span>';
     document.body.appendChild(citeToast);
     document.getElementById('acim-ct-x').onclick=hideCiteToast;
-    document.getElementById('acim-ct-copy').onclick=function(){clip(citeToast.dataset.url);};
+    document.getElementById('acim-ct-copy').onclick=function(){return clip(citeToast.dataset.message);};
+    document.getElementById('acim-ct-copy-url').onclick=function(){return clip(citeToast.dataset.url);};
   }
   function showCiteToast(p) {
     ensureCiteToast();
@@ -27583,6 +27624,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-ct-note').textContent=en.note;
     document.getElementById('acim-ct-feedback').textContent='';
     citeToast.dataset.url=location.origin+location.pathname+'#'+ref;
+    citeToast.dataset.message=quoteShareText(recipientQuote(p),ref,citeToast.dataset.url);
+    document.getElementById('acim-ct-copy-url').hidden=false;
     document.getElementById('acim-ct-copy').hidden=false;
     citeToast.style.display='flex';
   }
@@ -27591,6 +27634,8 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-ct-ref').textContent='無法開啟此引用';
     var link=document.getElementById('acim-ct-en');link.hidden=true;link.removeAttribute('href');
     document.getElementById('acim-ct-copy').hidden=true;
+    document.getElementById('acim-ct-copy-url').hidden=true;
+    citeToast.dataset.message='';citeToast.dataset.url='';
     document.getElementById('acim-ct-note').textContent=message;
     document.getElementById('acim-ct-feedback').textContent='';
     citeToast.style.display='flex';
@@ -27733,8 +27778,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       '<div style="margin-bottom:10px">',
       '<div style="font-size:10.5px;color:rgba(201,168,232,.6);margin-bottom:4px">📖 繁體中文版連結</div>',
       '<div id="acim-sp-zh" style="font-size:11px;background:rgba(255,255,255,.06);border-radius:7px;padding:6px 9px;word-break:break-all;cursor:text;user-select:all;border:.5px solid rgba(193,115,36,.2)"></div>',
-      '<div style="display:flex;gap:6px;margin-top:6px">',
-      '<button id="acim-sp-copy-zh" style="flex:1;background:rgba(41,34,74,.5);border:1px solid rgba(193,115,36,.4);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">複製</button>',
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">',
+      '<button id="acim-sp-copy-zh" style="flex:0 0 100%;background:rgba(41,34,74,.5);border:1px solid rgba(193,115,36,.4);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">複製引文＋連結</button>',
+      '<button id="acim-sp-copy-url" style="flex:1;background:rgba(41,34,74,.3);border:1px solid rgba(201,168,232,.25);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">僅複製連結</button>',
       '<button id="acim-sp-native" style="flex:1;background:rgba(41,34,74,.3);border:1px solid rgba(201,168,232,.25);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">分享…</button>',
       '</div>',
       '</div>',
@@ -27767,8 +27813,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       sharePanel.style.display='none';
     };
     document.getElementById('acim-sp-copy-zh').onclick = function() {
-      clip(document.getElementById('acim-sp-zh').textContent);
+      return clip(quoteShareText((shareBar.dataset.quote||'').trim(),document.getElementById('acim-sp-ref').textContent,document.getElementById('acim-sp-zh').textContent));
     };
+    document.getElementById('acim-sp-copy-url').onclick=function(){return clip(document.getElementById('acim-sp-zh').textContent);};
     document.getElementById('acim-sp-copy-en').onclick = function() {
       clip(document.getElementById('acim-sp-en').textContent);
     };
@@ -27776,16 +27823,17 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.getElementById('acim-sp-copy-quote').onclick = function() {
       clip(document.getElementById('acim-sp-quote').textContent);
     };
-    document.getElementById('acim-sp-native').onclick = function() {
+    document.getElementById('acim-sp-native').onclick=function() {
       var url=document.getElementById('acim-sp-zh').textContent;
       var ref=document.getElementById('acim-sp-ref').textContent;
       var quote=(shareBar.dataset.quote||'').trim();
-      var text=(quote?'「'+quote+'」\n':'')+'──《完整加註版奇蹟課程》 '+ref;
+      var text=quoteShareText(quote,ref);
+      var message=quoteShareText(quote,ref,url);
       var payload={title:'完整加註版奇蹟課程 '+ref,text:text,url:url};
-      if(!navigator.share){clip(text+'\n'+url);return;}
-      try{Promise.resolve(navigator.share(payload)).catch(function(error){
-        if(!error||error.name!=='AbortError')clip(text+'\n'+url);
-      });}catch(error){if(error.name!=='AbortError')clip(text+'\n'+url);}
+      if(!navigator.share)return clip(message);
+      try{return Promise.resolve(navigator.share(payload)).catch(function(error){
+        if(!error||error.name!=='AbortError')return clip(message);
+      });}catch(error){if(error.name!=='AbortError')return clip(message);}
     };
     document.addEventListener('pointerdown', function(e) {
       if (sharePanel.style.display !== 'none' &&
@@ -27982,7 +28030,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
       /* V40.23（D3）：raw ＝ 該字元在段落攤平文字中的位置，供引文擷取 */
       if (ri < runs.length) units.push({ node: runs[ri].node, offset: pos - runs[ri].start, sent: sent, raw: pos });
     }
-    return { units: units, lastSent: sent, raw: raw };
+    return { units: units, lastSent: sent, raw: raw, markers: markers };
   }
 
   function getSelectionCitation(sel) {

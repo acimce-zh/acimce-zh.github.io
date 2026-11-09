@@ -1,18 +1,18 @@
-/* ACIM CE PWA v40.27 — release-bound offline book.
+/* ACIM CE PWA v40.27.1 — release-bound offline book.
    The active worker serves only its SHA-256-verified release. A newer release is
    installed in its own cache and becomes visible when its worker activates.
    activate performs local migration/cleanup only: no delay or network warmup.
    WARM_FONTS / PREPARE_OFFLINE run separately, with bounded network work and
    explicit cache status. RELEASE_ID, BOOK_SHA256 and ASSET_SHA256 are filled by
    the deterministic release builder; never hand-edit the compiled worker. */
-const CACHE_VERSION = 'v40.27';
-const RELEASE_ID = '1d67e2daa70c7f3d45c8fc97a1438dfcb0a1e8c6803ee0cf11734c36da1ce01c';
+const CACHE_VERSION = 'v40.27.1';
+const RELEASE_ID = '7929da8540f3d193930d56dd9bf80c3fba5d79d989d6d09f829d0a3d78681286';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = 'c636dbbf140f69fb62d55614d25f9720ad0c79def2862fc1fc83069af8dfb558';
+const BOOK_SHA256 = '8c39147dcfdace95884b63f2abd039802706e6135d13f4670a802ebbbf1fbe3f';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
