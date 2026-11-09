@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.26">
+<meta name="acim-version" content="v40.26.1">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="1a28716f8f26af0adc32792a7f165a10183a935f17b87990e02e93080c69fd82">
+<meta name="acim-release-id" content="5c81207880b7833fd4129e0f7eb4a3195a40833e7c4672e53e3d4864afaca932">
 <meta name="acim-build" content="2026-11-09">
-<meta name="acim-build-time" content="11:44">
+<meta name="acim-build-time" content="12:08">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -161,7 +161,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.26';
+var ACIM_VERSION = 'v40.26.1';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -27806,7 +27806,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     var qbEl = document.getElementById('acim-sp-copy-quote');
     if (quote) {
       qEl.textContent = '「' + quote + '」\n'
-        + '──《奇蹟課程》完整加註版 ' + acimId + sentSuffix + '\n' + zhUrl;
+        + '──《完整加註版奇蹟課程》 ' + acimId + sentSuffix + '\n' + zhUrl;
       qEl.style.display = 'block';
       qbEl.style.display = 'block';
     } else {
