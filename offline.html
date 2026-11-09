@@ -1,131 +1,42 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>離線中 — 完整加註版奇蹟課程</title>
+<html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#29224A"><title>開啟書籍 — 完整加註版奇蹟課程</title>
 <style>
-  :root {
-    --bg: #1B1730;
-    --bg2: #2B2547;
-    --gold: #C9A227;
-    --purple-lt: #B3AFD4;
-    --text: #EDE6F8;
-    --muted: rgba(179,175,212,0.55);
+:root{color-scheme:light dark;--paper:#faf8f5;--surface:#fffdf9;--ink:#29224a;--muted:#645b77;--line:#d2d1e6;--accent:#5b509a}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--paper);color:var(--ink);font:16px/1.8 system-ui,-apple-system,"Microsoft JhengHei",sans-serif;padding:24px}.recovery{width:min(100%,480px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:32px}.brand{letter-spacing:.12em;font-family:Georgia,serif;font-size:22px;margin:0 0 20px}h1{font-size:23px;line-height:1.5;margin:0 0 16px}p{margin:0 0 18px}.help{color:var(--muted);font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 18px}button{font:inherit;min-height:44px;border:1px solid var(--accent);border-radius:8px;padding:8px 16px;background:var(--surface);color:var(--ink);cursor:pointer}button.primary{background:#29224a;color:#fff}button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}button:disabled{opacity:.65;cursor:wait}[hidden]{display:none!important}#recovery-status{min-height:3.6em;overflow-wrap:anywhere}details{font-size:13px;color:var(--muted)}summary{cursor:pointer;min-height:36px}.foot{font-size:12px;color:var(--muted);margin-top:24px}@media(prefers-color-scheme:dark){:root{--paper:#1d1a28;--surface:#262233;--ink:#eceae6;--muted:#b3afd4;--line:#4b425f;--accent:#b3afd4}button.primary{background:#d2d1e6;color:#29224a}}@media(max-width:360px){body{padding:14px}.recovery{padding:24px 20px}h1{font-size:21px}.actions button{width:100%}}
+</style></head><body><main class="recovery"><p class="brand">ACIM CE</p><h1>目前無法開啟已驗證書籍</h1><p>本機書籍可能尚未完整保存、版本已更新，或目前無法連線。請重試，或檢查是否有可套用的更新。</p><p id="recovery-status" class="help" role="status" aria-live="polite">正在確認更新狀態…</p><div class="actions"><button id="recovery-retry" class="primary" type="button">重試開啟書籍</button><button id="recovery-check" type="button">檢查更新</button><button id="recovery-apply" class="primary" type="button" hidden>套用已下載更新</button></div><details><summary>關於書籍與閱讀資料</summary><p>只有版本與完整性檢查通過的書籍才會開啟。這些操作不會清除書籤、閱讀分頁或設定，也不會略過驗證。若裝置離線，請先連線再檢查更新。</p></details><p class="foot">完整加註版奇蹟課程・繁體中文版</p></main>
+<script>
+(function(){
+  'use strict';
+  var retry=document.getElementById('recovery-retry'),check=document.getElementById('recovery-check'),apply=document.getElementById('recovery-apply'),status=document.getElementById('recovery-status');
+  var sw=navigator.serviceWorker,reg=null,waiting=null,checking=false,applying=false,watching=null,applyTimer=null;
+  function message(text){status.textContent=text;}
+  function returnUrl(){var u=new URL(reg&&reg.scope?reg.scope:'./',location.href);u.search=location.search;u.hash=location.hash;return u.href;}
+  function reopen(){location.replace(returnUrl());}
+  retry.addEventListener('click',reopen);
+  function offer(worker){
+    if(!worker)return false;waiting=worker;apply.hidden=false;apply.disabled=false;message('已有更新下載完成。按「套用已下載更新」後會重新開啟書籍。');return true;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    height: 100%;
-    background: linear-gradient(145deg, var(--bg2) 0%, var(--bg) 100%);
-    color: var(--text);
-    font-family: 'PingFang TC', 'Noto Serif TC', 'Microsoft JhengHei', serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  function watch(worker){
+    if(!worker||watching===worker)return;watching=worker;
+    worker.addEventListener('statechange',function(){
+      if(worker.state==='installed'){if(reg&&reg.waiting)offer(reg.waiting);else message('更新已下載，正在準備。請稍後再按「檢查更新」。');}
+      else if(worker.state==='redundant')message('更新尚未準備完成，請重新檢查更新。');
+    });
   }
-  .container {
-    text-align: center;
-    padding: 2rem 1.5rem;
-    max-width: 360px;
+  function inspect(){if(reg&&reg.waiting)return offer(reg.waiting);if(reg&&reg.installing){watch(reg.installing);message('正在下載或驗證更新；完成後會顯示套用按鈕。');return true;}return false;}
+  function getRegistration(){return sw.getRegistration().then(function(found){reg=found||null;if(reg)reg.addEventListener('updatefound',function(){watch(reg.installing);inspect();});return reg;});}
+  function doCheck(){
+    if(checking||applying)return;checking=true;check.disabled=true;message('正在檢查更新…');
+    var timeout=setTimeout(function(){checking=false;check.disabled=false;message('檢查尚未完成。請確認連線後重試。');},15000);
+    return getRegistration().then(function(){if(!reg){message('尚未找到本機書籍服務。請連線後按「重試開啟書籍」。');return;}if(inspect())return;return reg.update().then(function(){if(!inspect())message(navigator.onLine===false?'裝置目前回報離線。請連線後再檢查更新。':'尚無可套用的更新。請按「重試開啟書籍」；若仍無法開啟，請稍後重試。');});}).catch(function(){message('目前無法確認更新。請確認網路連線後重試。');}).then(function(){clearTimeout(timeout);checking=false;check.disabled=false;});
   }
-  /* 星芒圖示（純 CSS，不依賴外部資源）*/
-  .star {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 1.5rem;
-    position: relative;
-    opacity: 0.75;
-  }
-  .star::before, .star::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    background: var(--purple-lt);
-    border-radius: 2px;
-    transform: translate(-50%, -50%);
-  }
-  .star::before { width: 3px; height: 72px; }
-  .star::after  { width: 72px; height: 3px; }
-  .star-diag {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 2px; height: 52px;
-    background: var(--purple-lt);
-    border-radius: 1px;
-    transform-origin: center center;
-    opacity: 0.65;
-  }
-  .star-diag:nth-child(1) { transform: translate(-50%,-50%) rotate(45deg); }
-  .star-diag:nth-child(2) { transform: translate(-50%,-50%) rotate(-45deg); }
-  .dot {
-    width: 10px; height: 10px;
-    background: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-  }
-  h1 {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: var(--text);
-    margin-bottom: .6rem;
-    letter-spacing: .05em;
-  }
-  .subtitle {
-    font-size: .85rem;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 2rem;
-  }
-  .gold-line {
-    width: 60px; height: 1.5px;
-    background: var(--gold);
-    margin: 1.25rem auto;
-    border-radius: 1px;
-    opacity: .7;
-  }
-  .btn {
-    display: inline-block;
-    padding: .65rem 1.5rem;
-    background: rgba(41,34,74,0.45);
-    border: 1px solid rgba(201,162,39,0.45);
-    border-radius: 24px;
-    color: var(--text);
-    font-size: .9rem;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background .2s;
-    font-family: inherit;
-  }
-  .btn:hover { background: rgba(41,34,74,0.7); }
-  .hint {
-    margin-top: 1.25rem;
-    font-size: .75rem;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="star">
-    <div class="star-diag"></div>
-    <div class="star-diag"></div>
-    <div class="dot"></div>
-  </div>
-  <h1>目前處於離線狀態</h1>
-  <div class="gold-line"></div>
-  <p class="subtitle">
-    無法連線至網路，<br>
-    且此頁面尚未存入離線快取。<br>
-    請確認網路連線後再試。
-  </p>
-  <button class="btn" onclick="window.history.back()">← 返回上一頁</button>
-  <p class="hint">
-    若曾連線開啟過主頁，<br>
-    可嘗試直接開啟已快取的內容。
-  </p>
-</div>
-</body>
-</html>
+  apply.addEventListener('click',function(){
+    var target=reg&&reg.waiting||waiting;if(!target||applying)return;applying=true;apply.disabled=true;check.disabled=true;message('正在套用更新，完成後重新開啟書籍…');
+    try{target.postMessage({type:'SKIP_WAITING'});}catch(e){applying=false;apply.disabled=false;check.disabled=false;message('無法套用更新，請重新檢查。');return;}
+    applyTimer=setTimeout(function(){applying=false;apply.disabled=false;check.disabled=false;message('更新尚未完成，請重新檢查或重試。');},15000);
+  });
+  if(!sw||typeof sw.getRegistration!=='function'){check.disabled=true;message('此瀏覽器未提供本機更新服務。請連線後重試開啟書籍。');return;}
+  sw.addEventListener('controllerchange',function(){if(applying){clearTimeout(applyTimer);reopen();}});
+  check.addEventListener('click',doCheck);
+  getRegistration().then(function(){if(!inspect())message(navigator.onLine===false?'裝置目前回報離線。請連線後再檢查更新。':'可先重試開啟書籍，或按「檢查更新」確認版本。');}).catch(function(){message('無法讀取本機更新狀態。請連線後重試。');});
+})();
+</script></body></html>

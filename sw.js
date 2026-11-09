@@ -1,18 +1,18 @@
-/* ACIM CE PWA v40.27.1 — release-bound offline book.
+/* ACIM CE PWA v40.28 — release-bound offline book.
    The active worker serves only its SHA-256-verified release. A newer release is
    installed in its own cache and becomes visible when its worker activates.
    activate performs local migration/cleanup only: no delay or network warmup.
    WARM_FONTS / PREPARE_OFFLINE run separately, with bounded network work and
    explicit cache status. RELEASE_ID, BOOK_SHA256 and ASSET_SHA256 are filled by
    the deterministic release builder; never hand-edit the compiled worker. */
-const CACHE_VERSION = 'v40.27.1';
-const RELEASE_ID = '7929da8540f3d193930d56dd9bf80c3fba5d79d989d6d09f829d0a3d78681286';
+const CACHE_VERSION = 'v40.28';
+const RELEASE_ID = 'f177bd4a8a02e2d4a8dd27ab9daa716fc39230ad1d816759d68ab708c9b663fb';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '8c39147dcfdace95884b63f2abd039802706e6135d13f4670a802ebbbf1fbe3f';
+const BOOK_SHA256 = '3b5f192d4640bee99a96f064735ab2a7d0eac1019d646c17a02c38f66671cb44';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
@@ -58,7 +58,7 @@ const BOOK_TIMEOUT_MS = 45000; /* A 5.5 MB book needs a realistic slow-network b
 const WARMUP_BUDGET_MS = 60000; /* V30：30 個切片，3 並行下載 */
 const ASSET_SHA256 = {
   'index.htm': '9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033',
-  'offline.html': '35195fc2a055e65a75ebbfc91676db1716cd239d3f75d3a3c996848a29959f74',
+  'offline.html': '9f6a2be2df5a56e0f7a9fa291addd52f530547f659d3b62fa06dae06ee3632c0',
   'manifest.json': '7f3a0dd10cf57ba93c98d9e3b3616c6de170d84f93d528e6fe14aeef7bd8833f',
   'fonts/ntc-regular-00.woff2': 'c830483a03e982db87fc7b5faa361cbac7b0c0265b3bf51959994cfc839e7fcd',
   'fonts/ntc-regular-01.woff2': 'ae80842c86375a91f2a3d0a7ff4835f2c39667b45a9a141f734efdc7c245cb0a',

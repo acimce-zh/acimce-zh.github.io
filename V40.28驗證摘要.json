@@ -1,0 +1,196 @@
+{
+  "version": "v40.28",
+  "date": "2026-11-10",
+  "timezone": "Asia/Taipei",
+  "releaseId": "f177bd4a8a02e2d4a8dd27ab9daa716fc39230ad1d816759d68ab708c9b663fb",
+  "bookSha256": "3b5f192d4640bee99a96f064735ab2a7d0eac1019d646c17a02c38f66671cb44",
+  "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+  "unchangedBookMain": true,
+  "unchangedFontFiles": 30,
+  "manifestId": "/acim-ce-zh-tw/",
+  "passed": 166,
+  "failed": 0,
+  "automatedSuites": [
+    {
+      "name": "permanent-links-and-english",
+      "passed": 73,
+      "failed": 0
+    },
+    {
+      "name": "quote-and-clipboard",
+      "passed": 25,
+      "failed": 0
+    },
+    {
+      "name": "service-worker-update-and-offline",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "name": "backup-validation-and-rollback",
+      "passed": 17,
+      "failed": 0
+    },
+    {
+      "name": "backup-ui-confirmation",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "name": "recovery-workflow",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "name": "navigation-focus-and-undo",
+      "passed": 20,
+      "failed": 0
+    }
+  ],
+  "staticChecks": [
+    {
+      "name": "Entire Chinese main including original font classes is byte-identical",
+      "ok": true
+    },
+    {
+      "name": "Book SHA matches release metadata and compiled worker",
+      "ok": true
+    },
+    {
+      "name": "Release identity matches HTML and compiled worker",
+      "ok": true
+    },
+    {
+      "name": "All executable packaged scripts parse",
+      "ok": true
+    },
+    {
+      "name": "Original font-face declarations and serif/Kai authoring classes survive",
+      "ok": true
+    },
+    {
+      "name": "No new duplicate static IDs",
+      "ok": true
+    },
+    {
+      "name": "PWA manifest identity and bytes remain unchanged",
+      "ok": true
+    },
+    {
+      "name": "All 30 original font files remain byte-identical",
+      "ok": true
+    },
+    {
+      "name": "Every core/runtime asset matches the worker hash list",
+      "ok": true
+    },
+    {
+      "name": "Main content fingerprint matches the audited publication baseline",
+      "ok": true
+    }
+  ],
+  "browserChecks": [
+    {
+      "name": "舊版升版",
+      "status": "observed",
+      "details": "本機已快取V40.27.1的瀏覽器收到V40.28提示，明確套用後載入新版；同版不同release也能提示與套用。"
+    },
+    {
+      "name": "舊句碼與英文回溯",
+      "status": "observed",
+      "details": "實際開啟舊點號句碼，正規化為T-14.VI.5:4；W-FL.In導向英文W-FL，W-24.5:3導向英文3–4句，T-2.IX.14:1明示英文整段供對照。"
+    },
+    {
+      "name": "舊章節錨點",
+      "status": "observed",
+      "details": "直接首次載入#h146可等待動態標題建立，再定位到章節；不當作CE句碼或捏造英文對應。過期導航不覆蓋新操作另有隔離測試。"
+    },
+    {
+      "name": "選句與剪貼簿",
+      "status": "observed",
+      "details": "實際拖選中文、打開分享面板、複製；讀回文字包含所選引文、書名／出處與網址。接收引用列複製也讀回完整訊息。"
+    },
+    {
+      "name": "分享焦點",
+      "status": "observed",
+      "details": "分享面板具dialog名稱與modal語義，初始焦點關閉鍵；Escape關閉後背景恢復操作並回到分享入口。"
+    },
+    {
+      "name": "排印",
+      "status": "observed",
+      "details": "18／20px正文computed正確；原書字級14.6667px與行高27.8667px可還原。Noto Serif TC／LXGW WenKai TC原字體差異仍在。"
+    },
+    {
+      "name": "排版定位",
+      "status": "observed",
+      "details": "實際字級切換保留同段閱讀框景；代表測量約0.25至4.2px差異，不代表所有章節或所有裝置同等精度。純排版後英文引用入口仍顯示。"
+    },
+    {
+      "name": "明暗與設定",
+      "status": "observed",
+      "details": "設定為閱讀外觀／資料與離線／關於本書三組；亮暗與系統模式、倍率與重設、可見書籤清單入口可操作。"
+    },
+    {
+      "name": "手機抽屜",
+      "status": "observed",
+      "details": "390px關閉抽屜右界為0，沒有原先49px殘留；開啟焦點在關閉鍵、正文inert，引用列移入抽屜。"
+    },
+    {
+      "name": "巢狀書籤",
+      "status": "observed",
+      "details": "從更多設定開啟書籤，Escape先關書籤而保留抽屜，焦點回開啟書籤清單鍵；關抽屜再回更多鍵。"
+    },
+    {
+      "name": "備份拒絕與取消",
+      "status": "observed",
+      "details": "匯入含null分頁的無效備份，顯示未更動資料；舊schema1先預覽、取消後20px與暗色設定保留。"
+    },
+    {
+      "name": "備份確認還原",
+      "status": "observed",
+      "details": "獨立本機origin匯入空schema2完整備份並確認取代，成功後還原auto／18px、移除當前hash、保留可下載的匯入前快照。"
+    },
+    {
+      "name": "實際備份下載",
+      "status": "observed",
+      "details": "瀏覽器實際下載的JSON檢查為schema2/full-backup、v40.28，含閱讀偏好與activeTab；台北跨日顯示2026-11-10，ISO機器時間保留。"
+    },
+    {
+      "name": "分頁與復原",
+      "status": "observed",
+      "details": "實際新增位置、獨立關閉鍵刪除、復原成功；位置導覽使用navigation與原生按鈕，不冒用缺少tabpanel的tab語義。"
+    },
+    {
+      "name": "註文",
+      "status": "observed",
+      "details": "點擊註腳後焦點進註文、解除inert、英文引用收納；Escape回來源徽章，註文computed仍採Noto Serif TC。"
+    },
+    {
+      "name": "系統朗讀",
+      "status": "observed",
+      "details": "點擊段落朗讀後控制列可操作、不是inert；按停止後控制列收起。語音品質與所有平台背景行為未認證。"
+    },
+    {
+      "name": "離線保存",
+      "status": "observed",
+      "details": "瀏覽器手動補齊後顯示全書、字型與書內圖片已驗證保存；真正斷網導航與混版拒絕另由worker隔離測試驗證。"
+    },
+    {
+      "name": "響應式",
+      "status": "observed",
+      "details": "320／390px檢查無文件橫向溢出，手機底列與收合抽屜符合邊界；桌面閱讀與設定另經實際瀏覽器查看。"
+    },
+    {
+      "name": "手機標題避讓",
+      "status": "observed",
+      "details": "閱讀分頁改為頂端獨立列；實測列底88px、目錄跳轉標題top約100.14px，沒有先前的覆蓋。"
+    }
+  ],
+  "limits": [
+    "瀏覽器視窗寬度模擬不等於實體手機。",
+    "未實測iOS安裝PWA、LINE接收端、VoiceOver/TalkBack/NVDA或所有系統語音。",
+    "未宣稱完整WCAG認證或低階裝置效能評分。",
+    "未對正式網站或使用者真實書籤做破壞性匯入；備份UI驗證使用新的本機origin與自建空測試資料。"
+  ],
+  "scope": "核准A＋B階段；C階段的新句碼搜尋、跨段產生分享、私人註記、日課與雲端未納入本版。"
+}
