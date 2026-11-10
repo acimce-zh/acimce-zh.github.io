@@ -1,18 +1,18 @@
 {
   "version": "v40.30",
-  "variant": "simple-hash-only",
+  "variant": "simple-hash-only-91",
   "build": {
     "date": "2026-11-10",
-    "time": "18:41",
+    "time": "19:26",
     "timezone": "Asia/Taipei"
   },
-  "releaseId": "d04cd1769b0e7f092369852d6f102383fe179c68422e4079e446e85e3a655532",
-  "bookSha256": "460f15ba7e8bfd4ee34739a15824814e243356e71b966cb8550f665209dab004",
+  "releaseId": "56ee942085ddba1947fe6d82ba571035b2b86e8e86dbd022273c2970fd486163",
+  "bookSha256": "47191d8817bcfad4ebf04763cb04a83eb5b779fc3d7558e67abea731d39781bc",
   "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
   "unchangedChineseBookMain": true,
   "textEdition": "zh-ce-body-2e8f9a539c8f7b00",
   "bodyFingerprint": "2e8f9a539c8f7b005932c17cdf17714b0c30d8c1d2a570cc11f4a0e6313e5ff8",
-  "headingEntries": 94,
+  "headingEntries": 91,
   "canonicalShareFormat": "https://acimce-zh.github.io/#ID",
   "ogMode": "shared-homepage",
   "ogPages": 0,
@@ -23,8 +23,8 @@
       "failed": 0
     },
     {
-      "suite": "94短鏈結及分享",
-      "passed": 5,
+      "suite": "91短鏈結及分享",
+      "passed": 6,
       "failed": 0
     },
     {
@@ -54,7 +54,22 @@
     },
     {
       "suite": "短鏈結HTTP及共用OG",
-      "passed": 4,
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "suite": "91入口與移除邊界核心驗證",
+      "passed": 22,
+      "failed": 0
+    },
+    {
+      "suite": "核心改動範圍",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "suite": "全部91短網址HTTP與共用OG",
+      "passed": 95,
       "failed": 0
     },
     {
@@ -65,24 +80,16 @@
   ],
   "realBrowser": {
     "suite": "Visible small-screen browser: actual title text, paint hit, unobscured heading",
-    "passed": 94,
+    "passed": 91,
     "failed": 0,
     "width": 409,
     "height": 440,
-    "releaseId": "d04cd1769b0e7f092369852d6f102383fe179c68422e4079e446e85e3a655532"
+    "releaseId": "56ee942085ddba1947fe6d82ba571035b2b86e8e86dbd022273c2970fd486163"
   },
   "failed": 0,
   "limitations": [
     "Desktop browser small viewport verified, not a physical Android device.",
     "Actual Android home-screen app, native share sheet and LINE card/cache behavior require user checks after upload.",
     "All #ID links share homepage OG; accurate content is sent as quote/title and source text."
-  ],
-  "additionalViewportObservations": [
-    {
-      "width": 281,
-      "height": 440,
-      "headingId": "Glossary",
-      "observation": "The original long bilingual group heading extends below the citation toolbar; Chinese heading and actual target are correct. Close the citation toolbar or scroll to read remaining lines. Original typography/layout preserved."
-    }
   ]
 }
