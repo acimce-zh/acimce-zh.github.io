@@ -1,0 +1,25 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>V40.30.1 簡化版：修正與 GitHub 上傳說明</title><style>:root{color-scheme:light;--purple:#29224a;--line:#d2d1e6}*{box-sizing:border-box}body{margin:0;background:#faf9fc;color:#28232f;font:17px/1.85 system-ui,"Microsoft JhengHei",sans-serif}main{max-width:1120px;margin:auto;padding:32px 22px 75px}header{border-bottom:3px solid var(--purple);padding-bottom:18px}h1,h2{color:var(--purple);line-height:1.5}h1{font-size:29px}h2{font-size:23px;margin-top:32px}a{color:#514582;overflow-wrap:anywhere}code{font-size:.86em;background:#eeecf6;padding:2px 5px;border-radius:3px;overflow-wrap:anywhere}.url{display:block;white-space:normal;overflow-wrap:anywhere}.note{background:#eeecf6;border-left:4px solid #746bb3;padding:14px 18px}.wrap{overflow:auto}table{width:100%;border-collapse:collapse;background:white;font-size:15px}th,td{border:1px solid var(--line);padding:11px;text-align:left;vertical-align:top}th{background:var(--purple);color:white}tr.group td{background:#f0edf8}small,.meta,footer{font-size:14px;color:#625a70}small{display:block;line-height:1.7;margin-top:6px}li{margin:8px 0}footer{border-top:1px solid var(--line);padding-top:16px;margin-top:30px}@media(max-width:600px){main{padding:22px 14px 60px}h1{font-size:25px}body{font-size:16px}.wrap table{min-width:720px}}@media print{body{background:white}main{max-width:none;padding:0}h2{break-after:avoid}tr,li{break-inside:avoid}a{color:inherit}}</style></head><body><main><header><h1>V40.30.1 簡化版：修正與 GitHub 上傳說明</h1><p>V40.30.1 簡化版｜短 # 連結・共用 OG・91 個附錄入口</p><div class="meta">2026-11-10 20:00（台北）</div></header>
+<p class="note"><b>請使用新簡化包 <code>ACIM-CE-ZH-V40.30.1-GitHub-full.zip</code>。</b> 這次是一包55個檔案，可用GitHub網頁單批上傳。本包以V40.30的91入口簡化版為基礎，完整取代前一包，不需混合檔案。</p>
+<p>本次版號由V40.30更新為V40.30.1，發布ID與更新快取也同步更新。這是一份重新建置、重新校驗的完整包，主程式、測試頁、文件、manifest與校驗碼一致。</p>
+<h2>本版內容</h2><p class="note">從LINE或其他App開啟有效分享連結，完成定位與Highlight後直接閱讀，不再自動彈出底部引用／分享框。需要再分享時，仍可主動選句，或按標題旁的「分享標題」。</p><ul>
+<li>正文、小品與詞條分享統一為 <code>https://acimce-zh.github.io/#ID</code>。</li>
+<li>保留91個附錄入口與英文對照：附錄二CE入口1個、33篇小品、57個詞條。</li>
+<li>移除附錄總標題、附錄一總標題、詞彙表總標題的新增分享／公開引用入口；原有標題、目錄與內文保留。附錄二CE依本次指定維持。</li>
+<li>共用首頁OG封面、標題及簡介；精確內容由分享文字提供。沒有獨立OG頁與轉址層。</li>
+<li>中文原文、段落、分句、字型與粗斜體／底線等強調變化維持；保留既有W-FL與兩處中英句碼差異對照。</li>
+<li>收到有效分享連結時，直接定位並保留句子Highlight；不再自動顯示底部引用／分享框。主動選句分享、標題分享及英文對照保留，無效引用仍有錯誤提示。</li>
+<li>保留既有TTS修正、備份還原與離線閱讀；未新增TTS破音字規則。</li>
+</ul>
+<h2>本機測試</h2><ol><li>解壓完整簡化包。</li><li>執行 <code>local-test/啟動本機測試.cmd</code>，再開啟 <code>http://127.0.0.1:4036/v40.30.1-test.html</code>。需要本機Node.js；目前這台電腦已可執行。若4036已在運作，直接開啟網址即可。</li><li>測試頁可選擇91個短鏈結與英文對照，並執行逐筆定位檢查。請以HTTP本機測試入口開啟。</li></ol>
+<p>本機複製／系統分享刻意輸出正式主址。新包尚未上傳前，這些網址仍指向目前正式站版本；本機定位請使用測試頁及對照表的本地連結。</p>
+<h2>GitHub網頁單批上傳</h2><ol>
+<li>打開解壓後的簡化包資料夾，選取裡面的全部檔案與資料夾，包括 <code>.nojekyll</code>、<code>index.html</code>、<code>sw.js</code>、<code>fonts/</code>、<code>index.files/</code>、<code>local-test/</code>、<code>maintenance/</code> 等。</li>
+<li>進入 <a href="https://github.com/acimce-zh/acimce-zh.github.io">儲存庫根目錄</a>，選 <b>Add file → Upload files</b>，把選取的內容拖入上傳區。檔案直接放在根目錄，保留包內資料夾結構。</li>
+<li>等55個檔案載入完成，填入 <code>V40.30.1 quiet citation landing</code>，按 <b>Commit changes</b> 提交一次。</li>
+<li>等GitHub Pages部署完成，再開 <code>https://acimce-zh.github.io/v40.30.1-test.html</code>，測試 <code>#Cameo-2</code>、<code>#Glossary-44</code>及<code>#T-2.I.1:2</code>：有效連結應直接定位，正文句子有Highlight且沒有底部引用／分享框；再主動選句或按「分享標題」，確認引文複製與英文回溯。</li>
+<li>主畫面App若仍顯示舊版，連線後依現有「新版已就緒」提示套用，或完全關閉後重開。更新不強制打斷閱讀。</li>
+</ol>
+<h2>驗證記錄</h2><p>驗證摘要記錄失敗數：0。 本次記錄的實際瀏覽器定位：91 通過、0 失敗。 詳細資料見 <a href="V40.30.1驗證摘要.json">V40.30.1驗證摘要.json</a>。</p><div class="wrap"><table><thead><tr><th>驗證項目</th><th>通過</th><th>失敗</th></tr></thead><tbody><tr><td>正文及中英句碼</td><td>73</td><td>0</td></tr><tr><td>91短鏈結及分享</td><td>6</td><td>0</td></tr><tr><td>接收狀態</td><td>11</td><td>0</td></tr><tr><td>單節渲染定位</td><td>6</td><td>0</td></tr><tr><td>引用捲動及導航權限</td><td>10</td><td>0</td></tr><tr><td>離線與更新</td><td>14</td><td>0</td></tr><tr><td>引用內容指紋</td><td>6</td><td>0</td></tr><tr><td>短鏈結HTTP及共用OG</td><td>5</td><td>0</td></tr><tr><td>接收端不彈框與Highlight驗證</td><td>13</td><td>0</td></tr><tr><td>瀏覽器正文句子Highlight與無自動引用框</td><td>1</td><td>0</td></tr><tr><td>實際瀏覽器引文與短網址複製</td><td>1</td><td>0</td></tr><tr><td>實際瀏覽器標題定位（409 × 440）</td><td>91</td><td>0</td></tr></tbody></table></div>
+<p>驗證涵蓋情況以摘要記錄為準。Android Chrome、主畫面App、LINE原生分享與正式站卡片快取，仍需上傳後以實機確認；本機瀏覽器測試不代表外部平台已實測通過。</p>
+<h2>發布與維護</h2><p>發布ID：<code>484fb81d4aa10d637f24d65db44dd0325fbd2a9f241f92872f16b4c7760846a2</code><br>閱讀主檔SHA-256：<code>0911fb3d50eabc101c4e58aa9833009c8dc11edda3d5153a0a72e0bcc607aaec</code><br>原稿main SHA-256：<code>2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393</code></p>
+<p><a href="V40.30.1引用規則.html">正式引用規則</a>、<a href="V40.30.1中英入口對照.html">91個中英對照</a>、維護基準及校驗碼均隨包提供。維護檔案與測試工具不由閱讀頁自動載入。</p><footer>本文件隨 V40.30.1 簡化包提供。內容 ID 與英文對照維持核定表，對外分享使用繁中根網址加 #ID。</footer></main></body></html>

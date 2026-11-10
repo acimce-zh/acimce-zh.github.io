@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.30">
+<meta name="acim-version" content="v40.30.1">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="56ee942085ddba1947fe6d82ba571035b2b86e8e86dbd022273c2970fd486163">
+<meta name="acim-release-id" content="484fb81d4aa10d637f24d65db44dd0325fbd2a9f241f92872f16b4c7760846a2">
 <meta name="acim-build" content="2026-11-10">
-<meta name="acim-build-time" content="19:26">
+<meta name="acim-build-time" content="20:00">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -164,7 +164,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.30';
+var ACIM_VERSION = 'v40.30.1';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -27061,11 +27061,11 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     tools.appendChild(share);tools.appendChild(enLink);
     node.parentNode.insertBefore(tools,node.nextSibling);
   }
-  function showHeadingContext30(p){showCiteToast(p);}
+  /* V40.30.1: successful arrivals use location/highlight, without a receiving toolbar. */
   function scrollHeading30(p,contextOnly){
     var target=headingTargets30[p.headingId];
     if(!target){showCiteError('此附錄標題尚未就緒，請重新開啟引用。');return;}
-    if(contextOnly){showHeadingContext30(p);return;}
+    if(contextOnly)return;
     document.querySelectorAll('[data-acim-hash-target]').forEach(function(el){el.removeAttribute('data-acim-hash-target');});
     target.setAttribute('data-acim-hash-target','1');target.classList.add('acim-hl');hlEls.push(target);
     var token=window.__acimNav.begin('hash');
@@ -27079,7 +27079,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       scheduleReferenceCorrection30(target,margin,token);
     },150);
     hashClearTimer=setTimeout(clearHL,4500);
-    canonicalizeHash(p,true);showHeadingContext30(p);
+    canonicalizeHash(p,true);
   }
   function headingPanelPosition30(){
     sharePanel.style.visibility='hidden';sharePanel.style.display='block';
@@ -27779,7 +27779,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     var p=parseHash(hash);
     if(!p){invalidateReferenceNavigation30(options);showCiteError(lastParseError);return;}
     if(p.kind==='heading'){scrollHeading30(p,!!options.contextOnly);return;}
-    if(options.contextOnly){showCiteToast(p);return;}
+    if(options.contextOnly)return;
     var ids=rangeIds(p), first=null,last=null;
     for(var i=0;i<ids.length;i++) {
       var parts=paragraphChain(ids[i]), inherited=1;
@@ -27822,7 +27822,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       scheduleReferenceCorrection30(target,margin,token,rectOfTarget);
     },150);
     hashClearTimer=setTimeout(clearHL,4500);
-    canonicalizeHash(p,true);showCiteToast(p);
+    canonicalizeHash(p,true);
   }
 
 

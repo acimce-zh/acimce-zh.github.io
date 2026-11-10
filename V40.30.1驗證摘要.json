@@ -1,0 +1,91 @@
+{
+  "receivingPresentation": "position-and-highlight-without-success-toolbar",
+  "version": "v40.30.1",
+  "variant": "quiet-receiving-91",
+  "build": {
+    "date": "2026-11-10",
+    "time": "20:00",
+    "timezone": "Asia/Taipei"
+  },
+  "releaseId": "484fb81d4aa10d637f24d65db44dd0325fbd2a9f241f92872f16b4c7760846a2",
+  "bookSha256": "0911fb3d50eabc101c4e58aa9833009c8dc11edda3d5153a0a72e0bcc607aaec",
+  "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+  "unchangedChineseBookMain": true,
+  "textEdition": "zh-ce-body-2e8f9a539c8f7b00",
+  "bodyFingerprint": "2e8f9a539c8f7b005932c17cdf17714b0c30d8c1d2a570cc11f4a0e6313e5ff8",
+  "headingEntries": 91,
+  "canonicalShareFormat": "https://acimce-zh.github.io/#ID",
+  "ogMode": "shared-homepage",
+  "ogPages": 0,
+  "suites": [
+    {
+      "suite": "正文及中英句碼",
+      "passed": 73,
+      "failed": 0
+    },
+    {
+      "suite": "91短鏈結及分享",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "suite": "接收狀態",
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "suite": "單節渲染定位",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "suite": "引用捲動及導航權限",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "suite": "離線與更新",
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "suite": "引用內容指紋",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "suite": "短鏈結HTTP及共用OG",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "suite": "接收端不彈框與Highlight驗證",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "suite": "瀏覽器正文句子Highlight與無自動引用框",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "suite": "實際瀏覽器引文與短網址複製",
+      "passed": 1,
+      "failed": 0
+    }
+  ],
+  "realBrowser": {
+    "suite": "Visible small-screen browser: actual title text, paint hit, highlight and no receiving toolbar",
+    "passed": 91,
+    "failed": 0,
+    "width": 409,
+    "height": 440,
+    "releaseId": "484fb81d4aa10d637f24d65db44dd0325fbd2a9f241f92872f16b4c7760846a2"
+  },
+  "failed": 0,
+  "limitations": [
+    "Desktop browser small viewport verified, not a physical Android device.",
+    "Actual Android home-screen app, native share sheet and LINE card/cache behavior require user checks after upload.",
+    "All #ID links share homepage OG; accurate content is sent as quote/title and source text."
+  ]
+}

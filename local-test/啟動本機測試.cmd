@@ -5,5 +5,5 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-node "%~dp0server.mjs" "%~dp0.." 4035
+node "%~dp0server.mjs" "%~dp0.." 4036
 pause
