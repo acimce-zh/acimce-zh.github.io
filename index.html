@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.29.2">
+<meta name="acim-version" content="v40.30">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="0e9ccd4d7ac370de8e87bd8935eda8731bac9cadcb8c145430eda9aa19550102">
+<meta name="acim-release-id" content="d04cd1769b0e7f092369852d6f102383fe179c68422e4079e446e85e3a655532">
 <meta name="acim-build" content="2026-11-10">
-<meta name="acim-build-time" content="03:24">
+<meta name="acim-build-time" content="18:41">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -68,11 +68,11 @@
 
 /* V26：從頁首開始追蹤導航工作與使用者操作，晚到的字型或舊排程不回拉。 */
 (function initAcimNavigation(){
-  var generation=0, job=null, expectedY=null, restorePending=false, previousScrollStyle='';
+  var generation=0, navigationRevision30=0, job=null, expectedY=null, restorePending=false, previousScrollStyle='';
   function cancel(){ generation++; job=null; expectedY=null; }
   function valid(token){ return !!job && job.token===token && generation===token; }
   function begin(kind){
-    generation++;
+    generation++; navigationRevision30++;
     job={token:generation,kind:kind||'navigation',target:null,margin:0};
     expectedY=null;
     document.dispatchEvent(new CustomEvent('acim-navigation',{detail:kind||'navigation'}));
@@ -112,6 +112,7 @@
   }
   window.__acimNav={begin:begin,cancel:cancel,valid:valid,jump:jump,remember:remember,
     current:function(){return job?job.token:null;},canRestore:function(){return generation===0;},
+    revision:function(){return navigationRevision30;},
     correctCurrent:correctCurrent};
   window.addEventListener('wheel',cancel,{passive:true,capture:true});
   window.addEventListener('touchmove',cancel,{passive:true,capture:true});
@@ -163,7 +164,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.29.2';
+var ACIM_VERSION = 'v40.30';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -25877,7 +25878,7 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     }else fallback();
   }
   function show(reason){
-    reason=reason||'auto';
+    reason=reason||'manual';
     if(reason==='auto'&&(!inApp||dismissed||document.hidden))return;
     if(node&&node.isConnected)return;
     if(!document.body)return;
@@ -25909,20 +25910,17 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     document.body.appendChild(node);
   }
   window.__acimBrowserGuide={show:show, inApp:inApp, platform:label, os:os, shareUrl:externalUrl};
-  function schedule(){
-    if(!inApp||dismissed)return;
-    var run=function(){
-      var active=document.activeElement;
-      if(document.hidden||(active&&active.matches&&active.matches('input,textarea,select,[contenteditable="true"]')))return;
-      show('auto');
-    };
-    window.setTimeout(function(){
-      if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:5000});
-      else run();
-    },2200);
+  /* V40.30: a small settings action replaces the unsolicited in-app popup. */
+  if(inApp){
+    var guideHost30=document.getElementById('sidebar-settings-panel');
+    if(guideHost30){
+      var guideEntry30=create('button','','在瀏覽器開啟');
+      guideEntry30.id='acim-browser-guide-open';guideEntry30.type='button';
+      guideEntry30.style.cssText='font:inherit;font-size:12px;min-height:34px;padding:5px 9px;margin:6px 0;border:1px solid var(--c-border);border-radius:6px;background:var(--c-sidebar);color:var(--c-accent);cursor:pointer';
+      guideEntry30.addEventListener('click',function(){show('manual');});
+      guideHost30.appendChild(guideEntry30);
+    }
   }
-  if(document.readyState==='complete')schedule();
-  else window.addEventListener('load',schedule,{once:true});
 })();
 </script>
 
@@ -26934,6 +26932,183 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   /* ══ id 索引 ══ */
   var idIndex = {}; // acimId → Element
 
+  /* ACIM_REFERENCE30_BEGIN */
+  var headingDefs30=[{"id":"Appendix","title":"附錄 Appendices","englishTitle":"Reading Home（無對等附錄總群組）","kind":"group","englishUrl":"https://acimce.app/book","match":"reading-entry-fallback","note":"英文版閱讀入口；無對等總標題","sourceTarget":"h760"},{"id":"Cameo","title":"附錄一 小品散文（Cameo essays）","englishTitle":"Cameos","kind":"group","englishUrl":"https://acimce.app/book/Cameo-1","match":"group-start","note":"英文附錄一首篇","sourceTarget":"h761"},{"id":"Cameo-1","title":"小品1 「這不是一份自私的禮物」","englishTitle":"“This Is Not a Selfish Gift”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-1","match":"same-essay","note":"同篇小品標題","sourceTarget":"h762"},{"id":"Cameo-2","title":"小品2 「我的力量會支持你」","englishTitle":"“My Strength Will Support You”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-2","match":"same-essay","note":"同篇小品標題","sourceTarget":"h763"},{"id":"Cameo-3","title":"小品3 「你必須愛那些孩子並幫助他們」","englishTitle":"“You Must Love the Children and Help Them”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-3","match":"same-essay","note":"同篇小品標題","sourceTarget":"h764"},{"id":"Cameo-4","title":"小品4 「一個震撼效果的例子」","englishTitle":"“An Example of the Shock Effect”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-4","match":"same-essay","note":"同篇小品標題","sourceTarget":"h765"},{"id":"Cameo-5","title":"小品5 庇護協會報告","englishTitle":"The Shield Report","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-5","match":"same-essay","note":"同篇小品標題","sourceTarget":"h766"},{"id":"Cameo-6","title":"小品6 讓他照料瑣事","englishTitle":"Letting Him Take Charge of Minutiae","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-6","match":"same-essay","note":"同篇小品標題","sourceTarget":"h767"},{"id":"Cameo-7","title":"小品7 啟示的經驗","englishTitle":"An Experience of Revelation","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-7","match":"same-essay","note":"同篇小品標題","sourceTarget":"h768"},{"id":"Cameo-8","title":"小品8 孩子們的母親","englishTitle":"The Mother of the Children","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-8","match":"same-essay","note":"同篇小品標題","sourceTarget":"h769"},{"id":"Cameo-9","title":"小品9 行奇蹟的艾伯特太太","englishTitle":"Mrs. Albert, Miracle Worker","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-9","match":"same-essay","note":"同篇小品標題","sourceTarget":"h770"},{"id":"Cameo-10","title":"小品10 「聽從指示」","englishTitle":"“Under Instruction”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-10","match":"same-essay","note":"同篇小品標題","sourceTarget":"h771"},{"id":"Cameo-11","title":"小品11 有關「性」的筆記","englishTitle":"The Notes on Sex","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-11","match":"same-essay","note":"同篇小品標題","sourceTarget":"h772"},{"id":"Cameo-12","title":"小品12 「防衛措施現在用得好多了」","englishTitle":"“Defenses Are Now Being Used Much Better”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-12","match":"same-essay","note":"同篇小品標題","sourceTarget":"h773"},{"id":"Cameo-13","title":"小品13 「上主創造了時間」嗎？","englishTitle":"“God Created Time”?","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-13","match":"same-essay","note":"同篇小品標題","sourceTarget":"h774"},{"id":"Cameo-14","title":"小品14 妄造的環鏈","englishTitle":"The Chain of Miscreation","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-14","match":"same-essay","note":"同篇小品標題","sourceTarget":"h775"},{"id":"Cameo-15","title":"小品15 艾德加‧凱西（Edgar Cayce）","englishTitle":"Edgar Cayce","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-15","match":"same-essay","note":"同篇小品標題","sourceTarget":"h776"},{"id":"Cameo-16","title":"小品16 海倫的額外一哩路","englishTitle":"Helen’s Extra Mile","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-16","match":"same-essay","note":"同篇小品標題","sourceTarget":"h777"},{"id":"Cameo-17","title":"小品17 比爾的課堂","englishTitle":"Bill’s Class","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-17","match":"same-essay","note":"同篇小品標題","sourceTarget":"h778"},{"id":"Cameo-18","title":"小品18 靜坐與指引","englishTitle":"Meditation and Guidance","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-18","match":"same-essay","note":"同篇小品標題","sourceTarget":"h779"},{"id":"Cameo-19","title":"小品19 筆記的編輯","englishTitle":"The Editing of the Notes","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-19","match":"same-essay","note":"同篇小品標題","sourceTarget":"h780"},{"id":"Cameo-20","title":"小品20 全然統一的心靈","englishTitle":"The Undivided Mind","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-20","match":"same-essay","note":"同篇小品標題","sourceTarget":"h781"},{"id":"Cameo-21","title":"小品21 「你倆還不了解自己有多恨對方」","englishTitle":"“You Do Not Realize How Much You Hate Each Other”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-21","match":"same-essay","note":"同篇小品標題","sourceTarget":"h782"},{"id":"Cameo-22","title":"小品22 「恢復他的意志」","englishTitle":"“The Return of His Will”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-22","match":"same-essay","note":"同篇小品標題","sourceTarget":"h783"},{"id":"Cameo-23","title":"小品23 「拒絕弟兄是野蠻行徑」","englishTitle":"“The Savage Problem of Personal Rejection”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-23","match":"same-essay","note":"同篇小品標題","sourceTarget":"h784"},{"id":"Cameo-24","title":"小品24 麥可（Mike）","englishTitle":"Mike","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-24","match":"same-essay","note":"同篇小品標題","sourceTarget":"h785"},{"id":"Cameo-25","title":"小品25 《奇蹟課程》版「主禱文」","englishTitle":"The Course’s Version of the Lord’s Prayer","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-25","match":"same-essay","note":"同篇小品標題","sourceTarget":"h786"},{"id":"Cameo-26","title":"小品26 海倫和比爾的神聖關係","englishTitle":"Helen and Bill’s Holy Relationship","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-26","match":"same-essay","note":"同篇小品標題","sourceTarget":"h787"},{"id":"Cameo-27","title":"小品27 我不需要做任何事","englishTitle":"“I Need Do Nothing”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-27","match":"same-essay","note":"同篇小品標題","sourceTarget":"h788"},{"id":"Cameo-28","title":"小品28 藍灰鳥（The Blue-Gray Bird）","englishTitle":"The Blue-Gray Bird","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-28","match":"same-essay","note":"同篇小品標題","sourceTarget":"h789"},{"id":"Cameo-29","title":"小品29 抑揚五步格（Iambic Pentameter）","englishTitle":"Iambic Pentameter","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-29","match":"same-essay","note":"同篇小品標題","sourceTarget":"h790"},{"id":"Cameo-30","title":"小品30 「你怎麼看他，就會怎麼看你自己」","englishTitle":"“As You See Him You Will See Yourself”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-30","match":"same-essay","note":"同篇小品標題","sourceTarget":"h791"},{"id":"Cameo-31","title":"小品31 女祭司（The Priestess）","englishTitle":"The Priestess","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-31","match":"same-essay","note":"同篇小品標題","sourceTarget":"h792"},{"id":"Cameo-32","title":"小品32 「上主即是」（God Is）","englishTitle":"“God Is”","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-32","match":"same-essay","note":"同篇小品標題","sourceTarget":"h793"},{"id":"Cameo-33","title":"小品33 肉體復活了嗎？","englishTitle":"Was There a Physical Resurrection?","kind":"cameo","englishUrl":"https://acimce.app/book/Cameo-33","match":"same-essay","note":"同篇小品標題","sourceTarget":"h794"},{"id":"CE","title":"附錄二 此新版本之必要性及其編輯過程","englishTitle":"This Edition","kind":"group","englishUrl":"https://acimce.app/book/CE-1","match":"group-start","note":"英文附錄二開頭；中文整章涵蓋 CE-1～CE-5","sourceTarget":"h795"},{"id":"Glossary","title":"附錄三 課程術語詞彙表 Glossary of Course terms","englishTitle":"Glossary of Course Terms","kind":"group","englishUrl":"https://acimce.app/book/Glossary-1","match":"group-start","note":"英文詞彙表開頭（Atonement）","sourceTarget":"h796"},{"id":"Glossary-1","title":"救贖","englishTitle":"Atonement","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-1","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-0"},{"id":"Glossary-2","title":"基督","englishTitle":"Christ","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-2","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-1"},{"id":"Glossary-3","title":"創造","englishTitle":"creation","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-3","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-2"},{"id":"Glossary-4","title":"我們的造化","englishTitle":"creations, our","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-4","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-3"},{"id":"Glossary-5","title":"小我","englishTitle":"ego","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-5","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-4"},{"id":"Glossary-6","title":"永恆","englishTitle":"eternity","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-6","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-5"},{"id":"Glossary-7","title":"延伸、推恩","englishTitle":"extension","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-7","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-6"},{"id":"Glossary-8","title":"基督聖容","englishTitle":"face of Christ","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-8","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-7"},{"id":"Glossary-9","title":"恐懼","englishTitle":"fear","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-9","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-8"},{"id":"Glossary-10","title":"最後一步","englishTitle":"final (or last) step","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-10","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-9"},{"id":"Glossary-11","title":"寬恕","englishTitle":"forgiveness","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-11","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-10"},{"id":"Glossary-12","title":"上主、神","englishTitle":"God","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-12","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-11"},{"id":"Glossary-13","title":"罪疚、內疚","englishTitle":"guilt","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-13","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-12"},{"id":"Glossary-14","title":"天堂","englishTitle":"Heaven","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-14","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-13"},{"id":"Glossary-15","title":"神聖本質","englishTitle":"holiness","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-15","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-14"},{"id":"Glossary-16","title":"神聖一刻","englishTitle":"holy instant","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-16","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-15"},{"id":"Glossary-17","title":"神聖的關係","englishTitle":"holy relationship","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-17","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-16"},{"id":"Glossary-18","title":"聖靈","englishTitle":"Holy Spirit","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-18","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-17"},{"id":"Glossary-19","title":"偶像","englishTitle":"idol","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-19","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-18"},{"id":"Glossary-20","title":"耶穌","englishTitle":"Jesus","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-20","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-19"},{"id":"Glossary-21","title":"正義","englishTitle":"justice","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-21","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-20"},{"id":"Glossary-22","title":"天國、上主的國度","englishTitle":"Kingdom of God","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-22","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-21"},{"id":"Glossary-23","title":"真知","englishTitle":"knowledge","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-23","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-22"},{"id":"Glossary-24","title":"最後（最終）的審判","englishTitle":"Last (or Final) Judgment","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-24","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-23"},{"id":"Glossary-25","title":"層次混淆","englishTitle":"level confusion","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-25","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-24"},{"id":"Glossary-26","title":"愛","englishTitle":"love","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-26","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-25"},{"id":"Glossary-27","title":"幻術","englishTitle":"magic","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-27","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-26"},{"id":"Glossary-28","title":"對上主的記憶","englishTitle":"memory of God","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-28","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-27"},{"id":"Glossary-29","title":"心靈","englishTitle":"mind","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-29","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-28"},{"id":"Glossary-30","title":"奇蹟","englishTitle":"miracle","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-30","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-29"},{"id":"Glossary-31","title":"奇蹟行者","englishTitle":"miracle worker","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-31","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-30"},{"id":"Glossary-32","title":"知見、認知、感知","englishTitle":"perception","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-32","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-31"},{"id":"Glossary-33","title":"練習、操練","englishTitle":"practice","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-33","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-32"},{"id":"Glossary-34","title":"投射","englishTitle":"projection","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-34","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-33"},{"id":"Glossary-35","title":"學徒、弟子","englishTitle":"pupil","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-35","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-34"},{"id":"Glossary-36","title":"真相、真理實相","englishTitle":"reality","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-36","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-35"},{"id":"Glossary-37","title":"真實世界","englishTitle":"real world","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-37","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-36"},{"id":"Glossary-38","title":"回應誘惑","englishTitle":"response to temptation","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-38","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-37"},{"id":"Glossary-39","title":"啟示","englishTitle":"revelation","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-39","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-38"},{"id":"Glossary-40","title":"犧牲","englishTitle":"sacrifice","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-40","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-39"},{"id":"Glossary-41","title":"救恩","englishTitle":"salvation","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-41","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-40"},{"id":"Glossary-42","title":"救主、拯救者","englishTitle":"savior","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-42","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-41"},{"id":"Glossary-43","title":"真我∕自我","englishTitle":"Self/self","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-43","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-42"},{"id":"Glossary-44","title":"原初的分裂","englishTitle":"separation, the","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-44","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-43"},{"id":"Glossary-45","title":"罪、罪咎","englishTitle":"sin","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-45","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-44"},{"id":"Glossary-46","title":"上主之子、聖子","englishTitle":"Son of God","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-46","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-45"},{"id":"Glossary-47","title":"聖子奧體","englishTitle":"Sonship, the","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-47","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-46"},{"id":"Glossary-48","title":"靈魂","englishTitle":"soul","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-48","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-47"},{"id":"Glossary-49","title":"特殊任務","englishTitle":"special function","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-49","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-48"},{"id":"Glossary-50","title":"特殊性","englishTitle":"specialness","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-50","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-49"},{"id":"Glossary-51","title":"特殊關係、特殊之愛的關係、不神聖的關係","englishTitle":"special relationship, special love relationship, unholy relationship","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-51","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-50"},{"id":"Glossary-52","title":"靈性","englishTitle":"spirit","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-52","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-51"},{"id":"Glossary-53","title":"上主之師","englishTitle":"teacher of God","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-53","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-52"},{"id":"Glossary-54","title":"宇宙","englishTitle":"universe","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-54","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-53"},{"id":"Glossary-55","title":"慧見，基督的慧見，真實知見（正確的感知）","englishTitle":"vision, Christ’s vision, true perception","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-55","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-54"},{"id":"Glossary-56","title":"聖言、上主之言","englishTitle":"Word of God","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-56","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-55"},{"id":"Glossary-57","title":"世界","englishTitle":"world","kind":"glossary-term","englishUrl":"https://acimce.app/book/Glossary-57","match":"same-term","note":"同一詞條標題","sourceTarget":"glossary-56"}];
+  var PUBLIC_BASE30='https://acimce-zh.github.io/';
+  var headingById30=Object.create(null),headingByTitle30=Object.create(null),glossaryByEnglish30=Object.create(null);
+  var headingTargets30=Object.create(null),headingBound30=0,activeReferenceReveal30=null,referenceAnchorGuard30=null,lastReferenceToken30=null;
+  function normalizedHeading30(text){return String(text||'').replace(/\s+/g,' ').replace(/&nbsp;/g,' ').trim();}
+  headingDefs30.forEach(function(entry){
+    headingById30[entry.id]=entry;
+    if(entry.kind==='glossary-term')glossaryByEnglish30[normalizedHeading30(entry.englishTitle)]=entry;
+    else headingByTitle30[normalizedHeading30(entry.title)]=entry;
+  });
+  function headingEntry30(id){return headingById30[id]||null;}
+  function headingEnglish30(entry){
+    var exact=entry.match==='same-essay'||entry.match==='same-term';
+    var labels={Appendix:'英文版閱讀入口 ↗',Cameo:'英文附錄一首篇 ↗',CE:'英文附錄二開頭 ↗',Glossary:'英文詞彙表開頭 ↗'};
+    return {url:entry.englishUrl,exact:exact,label:labels[entry.id]||'英文對照 ↗',note:exact?'':entry.note};
+  }
+  function publicCitationUrl30(ref){
+    ref=String(ref||'').replace(/^#/,'');
+    if(headingEntry30(ref))return PUBLIC_BASE30+'#'+ref;
+    var parsed=parseHash('#'+ref);
+    return parsed&&!parsed.kind?PUBLIC_BASE30+'#'+citationRef(parsed):null;
+  }
+  window.__acimCitationUrl30=publicCitationUrl30;
+  window.__acimHeadings30={
+    entries:headingDefs30,
+    get:headingEntry30,
+    resolve:function(raw){return headingEntry30(normalizeCiteRaw(raw));},
+    target:function(id){return headingTargets30[id]||null;},
+    bound:function(){return headingBound30;},
+    pinned:function(){return activeReferenceReveal30?activeReferenceReveal30.sec:null;}
+  };
+  /* A skipped content-visibility subtree can report a plausible target rect
+     while painting another section. Keep exactly the active citation section
+     rendered. A dedicated class also survives old reveal-restoration timers. */
+  function releaseReferenceSection30(){
+    var old=activeReferenceReveal30;if(!old)return;
+    activeReferenceReveal30=null;old.sec.classList.remove('acim-reference-section30');
+    if(old.reveal&&old.sec.style.contentVisibility==='visible')old.sec.style.contentVisibility=old.reveal.prev;
+  }
+  function pinReferenceSection30(target){
+    var sec=target&&target.closest?target.closest('section.csec'):null;
+    if(!sec||!sec.isConnected)return;
+    if(activeReferenceReveal30&&activeReferenceReveal30.sec===sec){sec.classList.add('acim-reference-section30');return;}
+    releaseReferenceSection30();
+    var reveal=window.__acimRevealSection?window.__acimRevealSection(target):null;
+    sec.classList.add('acim-reference-section30');
+    activeReferenceReveal30={sec:sec,reveal:reveal};
+  }
+  /* Pin/release changes real section heights. Disable native scroll anchoring
+     only during this citation's finite correction window; otherwise a layout
+     scroll can look like a user scroll to the existing navigation controller. */
+  function releaseReferenceAnchor30(){
+    var guard=referenceAnchorGuard30;if(!guard)return;
+    referenceAnchorGuard30=null;clearTimeout(guard.timer);
+    ['wheel','touchmove','pointerdown','keydown'].forEach(function(type){window.removeEventListener(type,guard.stop,true);});
+    var style=document.documentElement.style;
+    if(guard.value)style.setProperty('overflow-anchor',guard.value,guard.priority);
+    else style.removeProperty('overflow-anchor');
+  }
+  function holdReferenceAnchor30(token){
+    releaseReferenceAnchor30();
+    lastReferenceToken30=token;
+    var style=document.documentElement.style;
+    var guard={token:token,value:style.getPropertyValue('overflow-anchor'),priority:style.getPropertyPriority('overflow-anchor'),timer:null,stop:null};
+    referenceAnchorGuard30=guard;style.setProperty('overflow-anchor','none');
+    guard.stop=function(e){
+      if(e.type==='keydown'&&!/^(ArrowUp|ArrowDown|ArrowLeft|ArrowRight|PageUp|PageDown|Home|End| |Tab|Escape|Enter)$/.test(e.key))return;
+      if(referenceAnchorGuard30===guard)releaseReferenceAnchor30();
+    };
+    ['wheel','touchmove','pointerdown','keydown'].forEach(function(type){window.addEventListener(type,guard.stop,{passive:true,capture:true});});
+    guard.timer=setTimeout(function(){if(referenceAnchorGuard30===guard)releaseReferenceAnchor30();},3800);
+  }
+  function scheduleReferenceCorrection30(target,margin,token,rectOfTarget){
+    [1200,1800,2400,3200].forEach(function(delay){
+      setTimeout(function(){
+        if(document.hidden||!window.__acimNav.valid(token)||!target.isConnected)return;
+        pinReferenceSection30(target);
+        var rect=rectOfTarget?rectOfTarget():target.getBoundingClientRect();
+        if(Math.abs(rect.top-margin)>4)window.__acimJump(window.scrollY+rect.top-margin,token);
+      },delay);
+    });
+  }
+  function invalidateReferenceNavigation30(options){
+    if(options&&options.contextOnly)return;
+    var nav=window.__acimNav;
+    var ownsCurrent=nav&&lastReferenceToken30!==null&&
+      (typeof nav.current==='function'?nav.current()===lastReferenceToken30:nav.valid&&nav.valid(lastReferenceToken30));
+    releaseReferenceAnchor30();
+    if(ownsCurrent&&nav.cancel)nav.cancel();
+  }
+  document.addEventListener('acim-navigation',function(e){
+    releaseReferenceAnchor30();
+    if(e.detail==='hash'||!activeReferenceReveal30)return;
+    var expected=activeReferenceReveal30;
+    function releaseOffscreen(){
+      if(activeReferenceReveal30!==expected||!expected.sec.isConnected)return;
+      var rect=expected.sec.getBoundingClientRect();
+      if(rect.bottom<=0||rect.top>=window.innerHeight)releaseReferenceSection30();
+    }
+    if(window.requestAnimationFrame)window.requestAnimationFrame(releaseOffscreen);
+    else setTimeout(releaseOffscreen,0);
+  });
+  function bindReferenceNode30(node,raw,tag){
+    var entry=null;
+    if(/^H[1-6]$/.test(tag))entry=headingByTitle30[raw];
+    else if(tag==='P'&&node.classList.contains('acim-glossary-term')){
+      var bold=node.querySelectorAll('b');
+      for(var i=0;i<bold.length;i++){
+        var en=normalizedHeading30(bold[i].textContent);
+        if(en){entry=glossaryByEnglish30[en]||null;break;}
+      }
+    }
+    if(!entry||headingTargets30[entry.id])return;
+    headingTargets30[entry.id]=node;headingBound30++;
+    node.setAttribute('data-acim-heading30',entry.id);
+    var tools=document.createElement('div');tools.className='acim-heading-tools30';
+    tools.setAttribute('data-acim-ui','reference');tools.setAttribute('role','group');
+    tools.setAttribute('aria-label',entry.title+'：分享與英文對照');
+    var share=document.createElement('button');share.type='button';
+    share.className='acim-heading-share30';share.textContent='分享標題';
+    share.setAttribute('aria-label','分享'+entry.title);share.dataset.heading30=entry.id;
+    share.onclick=function(e){e.preventDefault();e.stopPropagation();openHeadingPanel30(entry.id);};
+    var enInfo=headingEnglish30(entry),enLink=document.createElement('a');
+    enLink.href=enInfo.url;enLink.target='_blank';enLink.rel='noopener';
+    enLink.textContent=enInfo.label;enLink.title=entry.englishTitle+(enInfo.note?'；'+enInfo.note:'');
+    tools.appendChild(share);tools.appendChild(enLink);
+    node.parentNode.insertBefore(tools,node.nextSibling);
+  }
+  function showHeadingContext30(p){showCiteToast(p);}
+  function scrollHeading30(p,contextOnly){
+    var target=headingTargets30[p.headingId];
+    if(!target){showCiteError('此附錄標題尚未就緒，請重新開啟引用。');return;}
+    if(contextOnly){showHeadingContext30(p);return;}
+    document.querySelectorAll('[data-acim-hash-target]').forEach(function(el){el.removeAttribute('data-acim-hash-target');});
+    target.setAttribute('data-acim-hash-target','1');target.classList.add('acim-hl');hlEls.push(target);
+    var token=window.__acimNav.begin('hash');
+    holdReferenceAnchor30(token);
+    hashScrollTimer=setTimeout(function(){
+      if(!window.__acimNav.valid(token)||!target.isConnected)return;
+      pinReferenceSection30(target);
+      var margin=84;
+      window.__acimJump(window.scrollY+target.getBoundingClientRect().top-margin,token);
+      window.__acimCorrectScroll(target,margin,token);
+      scheduleReferenceCorrection30(target,margin,token);
+    },150);
+    hashClearTimer=setTimeout(clearHL,4500);
+    canonicalizeHash(p,true);showHeadingContext30(p);
+  }
+  function headingPanelPosition30(){
+    sharePanel.style.visibility='hidden';sharePanel.style.display='block';
+    sharePanel.style.top='50%';sharePanel.style.left='50%';sharePanel.style.bottom='auto';
+    sharePanel.style.transform='translate(-50%,-50%)';sharePanel.style.visibility='visible';
+  }
+  function fillHeadingPanel30(id){
+    var entry=headingEntry30(id);if(!entry)return;
+    var ref=id+'（標題定位）',url=publicCitationUrl30(id),enInfo=headingEnglish30(entry);
+    shareBar.dataset.quote=entry.title;
+    document.getElementById('acim-sp-title').textContent='🔗 分享此標題';
+    document.getElementById('acim-sp-ref').textContent=ref;
+    document.getElementById('acim-sp-zh').textContent=url;
+    document.getElementById('acim-sp-en').textContent=enInfo.url;
+    var link=document.getElementById('acim-sp-open-en');link.href=enInfo.url;link.textContent=enInfo.label;
+    var quote=document.getElementById('acim-sp-quote');quote.textContent=quoteShareText(entry.title,ref,url);quote.style.display='block';
+    document.getElementById('acim-sp-copy-quote').style.display='block';
+    var note=document.getElementById('acim-sp-en-note');
+    if(!note){note=document.createElement('div');note.id='acim-sp-en-note';note.style.cssText='font-size:12px;line-height:1.7;margin:8px 0;color:#F1D4A9';document.getElementById('acim-sp-en').after(note);}
+    note.textContent=enInfo.note;
+    headingPanelPosition30();
+  }
+  function openHeadingPanel30(id){
+    if(!headingEntry30(id)||!shareBar||!sharePanel)return;
+    shareBar.dataset.id=id;shareBar.dataset.sent='0';shareBar.dataset.sentEnd='';
+    shareBar.style.display='none';openPanel();
+  }
+  /* ACIM_REFERENCE30_END */
+
   var lastRegisteredId = null; /* 追蹤最後一個有 id 的段落 */
 
   function register(el, acimId) {
@@ -26949,7 +27124,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
      狀態機：掃描 content-area，賦予所有段落 ACIM id
      ══════════════════════════════════════════════════ */
   var idsReady = false; /* assignIds 完成後設為 true */
-  var pendingHash=null, resumeVerseIndex=null;
+  var resumeVerseIndex=null;
   window.__acimVerseIndexReady=false;
   var verseStats=window.__acimVerseStats={batches:0,candidates:0,maxBatchMs:0};
   document.addEventListener('visibilitychange',function(){
@@ -27040,6 +27215,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       count++;
       var tag = node.tagName;
       var raw = node.textContent.replace(/\s+/g,' ').replace(/&nbsp;/g,' ').trim();
+      bindReferenceNode30(node,raw,tag);
 
       /* ── H1：書冊切換 ── */
       if (tag === 'H1') {
@@ -27364,6 +27540,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   function parseHash(hash) {
     lastParseError='找不到有效的引用位置，請檢查段號與句碼。';
     var raw=normalizeCiteRaw(hash); if(!raw) return null;
+    if(headingEntry30(raw))return {kind:'heading',headingId:raw,sent:0,sentEnd:0};
     var m=raw.match(/^\[([^\]]+)\]-\[([^\]]+)\]$/);
     if(m) {
       var range=makeRange(parseEndpoint(m[1]),parseEndpoint(m[2]));
@@ -27381,6 +27558,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     return ep ? {paraId:ep.paraId,sent:ep.sent,sentEnd:0} : null;
   }
   function citationRef(p) {
+    if(p.kind==='heading')return p.headingId;
     if(p.endParaId) return '['+p.paraId+(p.sent?':'+p.sent:'')+']-['+p.endParaId+(p.sentEnd?':'+p.sentEnd:'')+']';
     return p.paraId+(p.sent?':'+p.sent+(p.sentEnd>p.sent?'-'+p.sentEnd:''):'');
   }
@@ -27483,6 +27661,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     return lines.join('\n');
   }
   function recipientQuote(p) {
+    if(p.kind==='heading'){var heading=headingEntry30(p.headingId);return heading?heading.title:'';}
     if(!validateCitation(p))return '';
     var ids=rangeIds(p), result=[];
     for(var i=0;i<ids.length;i++) {
@@ -27522,28 +27701,41 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     if(citeToast)return;
     citeToast=document.createElement('div'); citeToast.id='acim-ctoast';
     citeToast.setAttribute('role','region'); citeToast.setAttribute('aria-label','分享引用與英文原典');
-    citeToast.innerHTML='<span id="acim-ct-ref" aria-live="polite"></span><a id="acim-ct-en" target="_blank" rel="noopener">英文原典 ↗</a><button id="acim-ct-copy">複製引文＋連結</button><button id="acim-ct-copy-url">僅複製連結</button><button id="acim-ct-x" aria-label="關閉引用提示">✕</button><span id="acim-ct-note"></span><span id="acim-ct-feedback" role="status"></span>';
+    citeToast.innerHTML='<span id="acim-ct-ref" aria-live="polite"></span><button id="acim-ct-return">回到引用</button><button id="acim-ct-browser" hidden>在瀏覽器開啟</button><a id="acim-ct-en" target="_blank" rel="noopener">英文原典 ↗</a><button id="acim-ct-copy">複製引文＋連結</button><button id="acim-ct-copy-url">僅複製連結</button><button id="acim-ct-x" aria-label="關閉引用提示">✕</button><span id="acim-ct-note"></span><span id="acim-ct-feedback" role="status"></span>';
     document.body.appendChild(citeToast);
     document.getElementById('acim-ct-x').onclick=hideCiteToast;
+    document.getElementById('acim-ct-return').onclick=function(){
+      var ref=citeToast.dataset.ref;
+      if(ref)scrollToHash('#'+ref);
+    };
+    document.getElementById('acim-ct-browser').onclick=function(){
+      if(window.__acimBrowserGuide)window.__acimBrowserGuide.show('manual');
+    };
     document.getElementById('acim-ct-copy').onclick=function(){return clip(citeToast.dataset.message);};
     document.getElementById('acim-ct-copy-url').onclick=function(){return clip(citeToast.dataset.url);};
   }
   function showCiteToast(p) {
     ensureCiteToast();
+    document.getElementById('acim-ct-return').hidden=false;
+    document.getElementById('acim-ct-browser').hidden=!(window.__acimBrowserGuide&&window.__acimBrowserGuide.inApp);
     var ref=citationRef(p), en=englishTarget(p), link=document.getElementById('acim-ct-en');
-    document.getElementById('acim-ct-ref').textContent=ref;
-    link.textContent=en.exact?'英文原典 ↗':'英文整段（供對照） ↗';
+    document.getElementById('acim-ct-ref').textContent=ref+(p.kind==='heading'?'（標題定位）':'');
+    citeToast.dataset.ref=ref;
+    link.textContent=en.label||(en.exact?'英文原典 ↗':'英文整段（供對照） ↗');
     if(en.url){link.href=en.url;link.hidden=false;}else{link.removeAttribute('href');link.hidden=true;}
     document.getElementById('acim-ct-note').textContent=en.note;
     document.getElementById('acim-ct-feedback').textContent='';
-    citeToast.dataset.url=location.origin+location.pathname+'#'+ref;
-    citeToast.dataset.message=quoteShareText(recipientQuote(p),ref,citeToast.dataset.url);
+    citeToast.dataset.url=publicCitationUrl30(ref);
+    citeToast.dataset.message=quoteShareText(recipientQuote(p),ref+(p.kind==='heading'?'（標題定位）':''),citeToast.dataset.url);
     document.getElementById('acim-ct-copy-url').hidden=false;
     document.getElementById('acim-ct-copy').hidden=false;
     citeToast.style.display='flex';
   }
   function showCiteError(message) {
     ensureCiteToast();
+    citeToast.dataset.ref='';
+    document.getElementById('acim-ct-return').hidden=true;
+    document.getElementById('acim-ct-browser').hidden=!(window.__acimBrowserGuide&&window.__acimBrowserGuide.inApp);
     document.getElementById('acim-ct-ref').textContent='無法開啟此引用';
     var link=document.getElementById('acim-ct-en');link.hidden=true;link.removeAttribute('href');
     document.getElementById('acim-ct-copy').hidden=true;
@@ -27553,12 +27745,41 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     document.getElementById('acim-ct-feedback').textContent='';
     citeToast.style.display='flex';
   }
-  function scrollToHash(hash) {
-    if(!idsReady){pendingHash=hash;return;}
+
+  /* ACIM_RECIPIENT30_START
+     Retain the latest incoming citation while the existing verse index builds.
+     Manual gestures turn off auto-scroll; explicit navigation discards it.
+     The expected live hash prevents an old completion from reviving a new URL. */
+  function createRecipientQueue30(deliver,isReady,currentHash) {
+    var queued=null;
+    function flush(){
+      if(!isReady()||!queued)return;
+      var request=queued;queued=null;
+      if(request.expectedHash!==currentHash())return;
+      deliver(request.hash,{contextOnly:!request.auto});
+    }
+    return {
+      request:function(hash,auto){
+        queued={hash:hash,expectedHash:currentHash(),auto:auto!==false};flush();
+      },
+      cancelAuto:function(){if(queued)queued.auto=false;},
+      invalidate:function(){queued=null;},
+      flush:flush
+    };
+  }
+  var recipientQueue30=createRecipientQueue30(function(hash,options){scrollToHash(hash,options);},
+    function(){return idsReady;},function(){return location.hash;});
+  /* ACIM_RECIPIENT30_END */
+
+  function scrollToHash(hash,options) {
+    options=options||{};
+    if(!idsReady){recipientQueue30.request(hash,!options.contextOnly);return;}
     clearTimeout(hashScrollTimer);clearTimeout(hashClearTimer);clearHL();hideCiteToast();
-    if(!hash||/^#(?:h\d+|content-area|acim-[\w-]+)$/.test(hash))return;
+    if(!hash||/^#(?:h\d+|content-area|acim-[\w-]+)$/.test(hash)){invalidateReferenceNavigation30(options);return;}
     var p=parseHash(hash);
-    if(!p){showCiteError(lastParseError);return;}
+    if(!p){invalidateReferenceNavigation30(options);showCiteError(lastParseError);return;}
+    if(p.kind==='heading'){scrollHeading30(p,!!options.contextOnly);return;}
+    if(options.contextOnly){showCiteToast(p);return;}
     var ids=rangeIds(p), first=null,last=null;
     for(var i=0;i<ids.length;i++) {
       var parts=paragraphChain(ids[i]), inherited=1;
@@ -27584,6 +27805,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     document.querySelectorAll('[data-acim-hash-target]').forEach(function(el){el.removeAttribute('data-acim-hash-target');});
     target.setAttribute('data-acim-hash-target','1');
     var token=window.__acimNav.begin('hash');
+    holdReferenceAnchor30(token);
     /* 長範圍以首句定位，後續字型校正也使用同一首句 Range，避免回拉段首。 */
     var focusRange=null;
     if(first)try{focusRange=document.createRange();focusRange.setStart(first.node,first.offset);focusRange.setEnd(first.node,first.offset+1);}catch(e){}
@@ -27593,9 +27815,11 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     }
     hashScrollTimer=setTimeout(function(){
       if(!window.__acimNav.valid(token)||!target.isConnected)return;
+      pinReferenceSection30(target);
       var rect=rectOfTarget(), margin=Math.max(56,(window.innerHeight-Math.min(rect.height||0,window.innerHeight-112))/2);
       window.__acimJump(window.scrollY+rect.top-margin,token);
       window.__acimCorrectScroll(target,margin,token,rectOfTarget);
+      scheduleReferenceCorrection30(target,margin,token,rectOfTarget);
     },150);
     hashClearTimer=setTimeout(clearHL,4500);
     canonicalizeHash(p,true);showCiteToast(p);
@@ -27639,6 +27863,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     return '';
   }
   function englishTarget(p) {
+    if(p.kind==='heading'){var heading=headingEntry30(p.headingId);return heading?headingEnglish30(heading):{url:null,exact:false,label:'',note:''};}
     var exact=toAcimceUrl(p.paraId,p.sent,p.sentEnd,p.endParaId);
     return {url:exact||toAcimceUrl(p.paraId,0,0),exact:!!exact,note:englishNote(p)};
   }
@@ -27682,7 +27907,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
 
     sharePanel.innerHTML = [
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">',
-      '<span style="font-size:12px;font-weight:600;color:#C17324;letter-spacing:.04em">🔗 分享此段落</span>',
+      '<span id="acim-sp-title" style="font-size:12px;font-weight:600;color:#C17324;letter-spacing:.04em">🔗 分享此段落</span>',
       '<button id="acim-sp-close" style="background:none;border:none;color:rgba(201,168,232,.55);cursor:pointer;font-size:16px;padding:0;line-height:1">✕</button>',
       '</div>',
 
@@ -27763,6 +27988,8 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     var sent    = parseInt(shareBar.dataset.sent   ||'0', 10);
     var sentEnd = parseInt(shareBar.dataset.sentEnd||'0', 10);
     if (!acimId) return;
+    if(headingEntry30(acimId)){fillHeadingPanel30(acimId);return;}
+    document.getElementById('acim-sp-title').textContent='🔗 分享此段落';
 
     /* 句子後綴：單句 :N，多句 :N-M */
     var sentSuffix = '';
@@ -27773,8 +28000,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
 
     /* 繁中 URL（V40.18：分享連結不再帶 openExternalBrowser 參數，縮短網址；
        內建瀏覽器提醒列的導流連結不受影響） */
-    var zhUrl = location.origin + location.pathname +
-      '#' + acimId + sentSuffix;
+    var zhUrl = publicCitationUrl30(acimId + sentSuffix);
     /* 英文 acimce.app URL：支援範圍格式 :N-M */
     var enInfo=englishTarget({paraId:acimId,sent:sent,sentEnd:sentEnd});
     var enUrl=enInfo.url;
@@ -28185,6 +28411,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   function addCSS() {
     var s=document.createElement('style');
     s.textContent=[
+      '#content-area section.csec.acim-reference-section30{content-visibility:visible!important}.acim-heading-tools30{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 12px;font:12px/1.5 system-ui;}.acim-heading-tools30 button,.acim-heading-tools30 a{display:inline-flex;align-items:center;min-height:36px;padding:3px 10px;border:1px solid var(--c-border,#d2d1e6);border-radius:7px;background:var(--c-sidebar,#f4f2f8);color:var(--c-accent,#5b509a);font:inherit;text-decoration:none;cursor:pointer;}.acim-heading-tools30 :focus-visible{outline:2px solid #746bb3;outline-offset:2px;}@media print{.acim-heading-tools30{display:none!important;}}',
       '#acim-ctoast{position:fixed;z-index:999995;display:none;left:50%;transform:translateX(-50%);bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);background:#29224A;color:#F1EDE4;border:1px solid #C17324;border-radius:14px;padding:6px 10px;width:max-content;max-width:calc(100vw - 20px);box-sizing:border-box;box-shadow:0 4px 18px #0004;font:12.5px/1.5 system-ui;align-items:center;justify-content:center;gap:4px 8px;flex-wrap:wrap;}',
       '#acim-ct-ref{overflow-wrap:anywhere;min-width:0;max-width:100%;color:#FFD09F;font-weight:600;}',
       '#acim-ctoast button,#acim-ctoast a{font:inherit;color:inherit;min-height:36px;display:inline-flex;align-items:center;padding:2px 8px;border:1px solid #B5CCF555;border-radius:8px;background:transparent;cursor:pointer;text-decoration:none;box-sizing:border-box;}',
@@ -28221,24 +28448,35 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   function init() {
     addCSS();
     buildUI();
-    /* 一般捲動保留分享來源；目錄、搜尋、書籤等新導航清除上一個引用。 */
-    document.addEventListener('acim-navigation',function(e){if(e.detail!=='hash')hideCiteToast();});
-
+    /* V40.30: source context survives gestures, but never survives a new navigation. */
+    document.addEventListener('acim-navigation',function(e){
+      if(e.detail!=='hash'){recipientQueue30.invalidate();hideCiteToast();}
+    });
+    function stopRecipientAuto30(){recipientQueue30.cancelAuto();}
+    window.addEventListener('wheel',stopRecipientAuto30,{passive:true,capture:true});
+    window.addEventListener('touchmove',stopRecipientAuto30,{passive:true,capture:true});
+    window.addEventListener('pointerdown',stopRecipientAuto30,{passive:true,capture:true});
+    window.addEventListener('scroll',stopRecipientAuto30,{passive:true});
+    window.addEventListener('keydown',function(e){
+      if(/^(ArrowUp|ArrowDown|ArrowLeft|ArrowRight|PageUp|PageDown|Home|End| |Tab|Escape|Enter)$/.test(e.key))stopRecipientAuto30();
+    },true);
+    var nav30=window.__acimNav;
+    /* A begin before this module initialized is an explicit navigation, even if
+       a later touch canceled its job. A gesture alone only suppresses scrolling. */
+    if(location.hash&&(!nav30.revision||nav30.revision()===0)){
+      recipientQueue30.request(location.hash,nav30.canRestore());
+    }
     function run() {
       assignIds(function(){
-        if(pendingHash!==null){
-          var requested=pendingHash;pendingHash=null;
-          if(requested===location.hash)scrollToHash(requested);
-        }else if(location.hash&&window.__acimNav.canRestore())scrollToHash(location.hash);
+        recipientQueue30.flush();
         var selection=window.getSelection&&window.getSelection();
         if(selection&&!selection.isCollapsed)scheduleShareSelection291(0,true);
       });
     }
-    /* setTimeout(0)：讓頁面先渲染一幀，立即執行 assignIds
-       確保 data-acim-id 在用戶選取文字前已賦予完成 */
-    setTimeout(run, 0);
-
-    window.addEventListener('hashchange', function() { scrollToHash(location.hash); });
+    setTimeout(run,0);
+    window.addEventListener('hashchange',function(){
+      recipientQueue30.request(location.hash,true);
+    });
 
     /* Native long-press/drag selection remains the only trigger; clicks do not create a range. */
     document.addEventListener('selectionchange',function(){scheduleShareSelection291(40);});

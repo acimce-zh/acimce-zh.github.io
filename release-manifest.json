@@ -1,33 +1,42 @@
 {
-  "version": "v40.29.2",
+  "version": "v40.30",
+  "variant": "simple-hash-only",
   "build": {
     "date": "2026-11-10",
-    "time": "03:24",
+    "time": "18:41",
     "timezone": "Asia/Taipei"
   },
-  "baseVersion": "v40.29.1",
-  "baseBookSha256": "ed046dff9f45eb5daca1eb24da253331c20e2e1d7da45fd2852e61de16d81ce7",
-  "releaseId": "0e9ccd4d7ac370de8e87bd8935eda8731bac9cadcb8c145430eda9aa19550102",
-  "bookSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+  "baseVersion": "v40.29.2",
+  "baseCommit": "195482078d501284e181e7df752500f9cc1f8330",
+  "baseBookSha256": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+  "releaseId": "d04cd1769b0e7f092369852d6f102383fe179c68422e4079e446e85e3a655532",
+  "bookSha256": "460f15ba7e8bfd4ee34739a15824814e243356e71b966cb8550f665209dab004",
   "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
   "unchangedBookMain": true,
-  "verifiedIdenticalAssets": 41,
-  "unchangedFontFiles": 30,
-  "manifestId": "/acim-ce-zh-tw/",
-  "executableScripts": 10,
-  "sourceHashes": {
-    "text": "d1639b1eb858fa4581acb187a617d30898fb9c3aa6b427861478fd0f49f491df",
-    "playback": "f680b16b1d71514ae68e046952edac9de0f265b236e7c33cd08f9359c9fcce76"
+  "headingEntries": 94,
+  "ogMode": "shared-homepage",
+  "ogPages": 0,
+  "canonicalShareFormat": "https://acimce-zh.github.io/#ID",
+  "sharedOg": {
+    "title": "完整加註版奇蹟課程",
+    "description": "支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。",
+    "image": "https://acimce-zh.github.io/screenshot-og.png",
+    "url": "https://acimce-zh.github.io/"
   },
-  "changes": [
-    "TTS text extraction, punctuation and course-reference reading",
-    "TTS queue and control lifecycle",
-    "Publishing metadata"
-  ],
+  "inlineScripts": 10,
+  "textEdition": "zh-ce-body-2e8f9a539c8f7b00",
+  "bodyFingerprint": "2e8f9a539c8f7b005932c17cdf17714b0c30d8c1d2a570cc11f4a0e6313e5ff8",
+  "referenceBaseline": "maintenance/reference-baseline-v40.30.json",
+  "fonts": 30,
+  "bookImages": 4,
+  "validation": "V40.30驗證摘要.json",
   "files": {
     ".nojekyll": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-    "V40.29.2修正與上傳說明.html": "130383c1d847494020d493dd33f3293da72388369411854b1174db96b979f456",
-    "V40.29.2驗證摘要.json": "dcd9a75911a8a778c3131ee19fd8bfbb82aa4679dd322a128ec4bda836e289a0",
+    "404.html": "8e4f86557e1f7bea9143937e9407c791876fcba7cb5241446fad6e325886e4fa",
+    "V40.30中英入口對照.html": "628b6ffcfff0b7a6d8aeb08760f0794cd46a27b6824682f2151609924290fb39",
+    "V40.30修正與上傳說明.html": "283925f0b27991ab8bf78bc25e2541cae03a92d375964f8420b888e51ed12262",
+    "V40.30引用規則.html": "5b831146b70a3baa24272525b37f5eb8ccb558eba5bf57575776846a5ee9d7bc",
+    "V40.30驗證摘要.json": "8995c9f271cc08e8ea05be6b46d99a707c7e778a11f4cd5529ee4125fe6c5686",
     "acimce-icon-512.png": "0d1f12e14131861ceef02c6d5b24aa04b3e00d22213f29afde8c85f61558261a",
     "acimce-pwa-192x192.png": "95c27ae9b91a9a96065c9760139889ac56f9a15ed4967d0dddcf65a00a4249bc",
     "favicon.ico": "0c3efbc9e430c0acef49275c9f6e4a5dbd8bc4ae9baf3432212cf59c87351fa4",
@@ -66,11 +75,14 @@
     "index.files/image002.webp": "c4bfe8793c7811d8a0d6f9cc7ed152c8a38da36f69ffb410aa944c9554928395",
     "index.files/image003.jpg": "c3189d69a3c2df5250db3575e15374c72e5c8e957d8d272eab0765a50e228675",
     "index.htm": "9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033",
-    "index.html": "cdd0925eabc5ccf9eb174f4daae32cb069c3b6574fcaa8c6876eb6881b8b5bac",
+    "index.html": "460f15ba7e8bfd4ee34739a15824814e243356e71b966cb8550f665209dab004",
+    "local-test/server.mjs": "ff44ec182f0e2b1d19df907b424b263d69f5069029f6ed1454b9f518ef36f0ad",
+    "local-test/啟動本機測試.cmd": "fe0ddecf02116e4af23f5a38ff6777fc9284ae56f9fa403ceea9ca9c546dab97",
+    "maintenance/reference-baseline-v40.30.json": "4add548330e6fd6a245c11344c2a6c9ae3ccb29702cc4f14501292c60df735ca",
     "manifest.json": "7f3a0dd10cf57ba93c98d9e3b3616c6de170d84f93d528e6fe14aeef7bd8833f",
     "offline.html": "35195fc2a055e65a75ebbfc91676db1716cd239d3f75d3a3c996848a29959f74",
     "screenshot-og.png": "ae268a06eef2abd19f4631a4131e0f90c845292f68e9763fd14524f19078d804",
-    "sw.js": "98206ffeae15922e5043554389e594a8b915fb6dfcf9af9804abc273a2f06bc3",
-    "v40.29.2-test.html": "a326ed3732aabcc3a71243b96484eb639caa49f2571af9af1d1499ade050004d"
+    "sw.js": "3eafb86fd4ce208c50451519e437bb5a87e024094fc657366962ac1053b3b9d7",
+    "v40.30-test.html": "1000ffee12bf6a4bd6fc741b68c0b3991d5edb51e52a22d1e3e96cd75d36b4f6"
   }
 }
