@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.30.1">
+<meta name="acim-version" content="v40.30.2">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="484fb81d4aa10d637f24d65db44dd0325fbd2a9f241f92872f16b4c7760846a2">
+<meta name="acim-release-id" content="6e24cf71f3765b78a625daf0e15d67da17b4690d80e361b684dfda7bb55aa7ce">
 <meta name="acim-build" content="2026-11-10">
-<meta name="acim-build-time" content="20:00">
+<meta name="acim-build-time" content="22:42">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -164,7 +164,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.30.1';
+var ACIM_VERSION = 'v40.30.2';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -27086,16 +27086,19 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     sharePanel.style.top='50%';sharePanel.style.left='50%';sharePanel.style.bottom='auto';
     sharePanel.style.transform='translate(-50%,-50%)';sharePanel.style.visibility='visible';
   }
+  function headingQuote302(entry){
+    return entry.kind==='glossary-term'?entry.title+'（'+entry.englishTitle+'）':entry.title;
+  }
   function fillHeadingPanel30(id){
     var entry=headingEntry30(id);if(!entry)return;
     var ref=id+'（標題定位）',url=publicCitationUrl30(id),enInfo=headingEnglish30(entry);
-    shareBar.dataset.quote=entry.title;
+    shareBar.dataset.quote=headingQuote302(entry);
     document.getElementById('acim-sp-title').textContent='🔗 分享此標題';
     document.getElementById('acim-sp-ref').textContent=ref;
     document.getElementById('acim-sp-zh').textContent=url;
     document.getElementById('acim-sp-en').textContent=enInfo.url;
     var link=document.getElementById('acim-sp-open-en');link.href=enInfo.url;link.textContent=enInfo.label;
-    var quote=document.getElementById('acim-sp-quote');quote.textContent=quoteShareText(entry.title,ref,url);quote.style.display='block';
+    var quote=document.getElementById('acim-sp-quote');quote.textContent=quoteShareText(headingQuote302(entry),ref,url);quote.style.display='block';
     document.getElementById('acim-sp-copy-quote').style.display='block';
     var note=document.getElementById('acim-sp-en-note');
     if(!note){note=document.createElement('div');note.id='acim-sp-en-note';note.style.cssText='font-size:12px;line-height:1.7;margin:8px 0;color:#F1D4A9';document.getElementById('acim-sp-en').after(note);}
@@ -27661,7 +27664,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     return lines.join('\n');
   }
   function recipientQuote(p) {
-    if(p.kind==='heading'){var heading=headingEntry30(p.headingId);return heading?heading.title:'';}
+    if(p.kind==='heading'){var heading=headingEntry30(p.headingId);return heading?headingQuote302(heading):'';}
     if(!validateCitation(p))return '';
     var ids=rangeIds(p), result=[];
     for(var i=0;i<ids.length;i++) {
@@ -27917,7 +27920,6 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       '<div style="font-size:10.5px;color:rgba(201,168,232,.6);margin-bottom:4px">📖 繁體中文版連結</div>',
       '<div id="acim-sp-zh" style="font-size:11px;background:rgba(255,255,255,.06);border-radius:7px;padding:6px 9px;word-break:break-all;cursor:text;user-select:all;border:.5px solid rgba(193,115,36,.2)"></div>',
       '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">',
-      '<button id="acim-sp-copy-zh" style="flex:0 0 100%;background:rgba(41,34,74,.5);border:1px solid rgba(193,115,36,.4);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">複製引文＋連結</button>',
       '<button id="acim-sp-copy-url" style="flex:1;background:rgba(41,34,74,.3);border:1px solid rgba(201,168,232,.25);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">僅複製連結</button>',
       '<button id="acim-sp-native" style="flex:1;background:rgba(41,34,74,.3);border:1px solid rgba(201,168,232,.25);color:#F1EDE4;border-radius:7px;padding:5px;cursor:pointer;font-size:12px">分享…</button>',
       '</div>',
@@ -27949,9 +27951,6 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     };
     document.getElementById('acim-sp-close').onclick = function() {
       sharePanel.style.display='none';
-    };
-    document.getElementById('acim-sp-copy-zh').onclick = function() {
-      return clip(quoteShareText((shareBar.dataset.quote||'').trim(),document.getElementById('acim-sp-ref').textContent,document.getElementById('acim-sp-zh').textContent));
     };
     document.getElementById('acim-sp-copy-url').onclick=function(){return clip(document.getElementById('acim-sp-zh').textContent);};
     document.getElementById('acim-sp-copy-en').onclick = function() {

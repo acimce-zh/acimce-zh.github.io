@@ -1,0 +1,88 @@
+{
+  "version": "v40.30.2",
+  "variant": "compact-bilingual-sharing-91",
+  "build": {
+    "date": "2026-11-10",
+    "time": "22:42",
+    "timezone": "Asia/Taipei"
+  },
+  "releaseId": "6e24cf71f3765b78a625daf0e15d67da17b4690d80e361b684dfda7bb55aa7ce",
+  "bookSha256": "1d9a3fc37845c9c1982897b78313c4961919ae4b080fe847f3a0e058d39d4cdb",
+  "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
+  "unchangedChineseBookMain": true,
+  "textEdition": "zh-ce-body-2e8f9a539c8f7b00",
+  "bodyFingerprint": "2e8f9a539c8f7b005932c17cdf17714b0c30d8c1d2a570cc11f4a0e6313e5ff8",
+  "headingEntries": 91,
+  "bilingualGlossaryEntries": 57,
+  "canonicalShareFormat": "https://acimce-zh.github.io/#ID",
+  "ogMode": "shared-homepage",
+  "ogPages": 0,
+  "receivingPresentation": "position-and-highlight-without-success-toolbar",
+  "sharingPresentation": "single-quote-copy-with-bilingual-glossary-titles",
+  "suites": [
+    {
+      "suite": "正文及中英句碼",
+      "passed": 73,
+      "failed": 0
+    },
+    {
+      "suite": "91短鏈結及分享",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "suite": "接收狀態",
+      "passed": 11,
+      "failed": 0
+    },
+    {
+      "suite": "單節渲染定位",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "suite": "引用捲動及導航權限",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "suite": "離線與版本更新",
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "suite": "引用內容指紋",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "suite": "HTTP及共用OG",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "suite": "成功接收不彈框與Highlight",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "suite": "單一複製按鈕與57詞條雙語引文",
+      "passed": 64,
+      "failed": 0
+    }
+  ],
+  "realBrowser": {
+    "suite": "實際瀏覽器：正文、永恆及長詞條的分享框與剪貼簿",
+    "passed": 3,
+    "failed": 0,
+    "width": 390,
+    "height": 844,
+    "releaseId": "6e24cf71f3765b78a625daf0e15d67da17b4690d80e361b684dfda7bb55aa7ce"
+  },
+  "failed": 0,
+  "limitations": [
+    "Desktop browser responsive viewport verified, not a physical Android device.",
+    "Native Android share sheet and LINE rendering/cache require device checks after upload.",
+    "All #ID links share homepage OG; precise quotation is provided by copied/shared text."
+  ]
+}
