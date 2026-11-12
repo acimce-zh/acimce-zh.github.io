@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.0.8">
+<meta name="acim-version" content="v50.0.9">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="361fc5242f076c372f0ac25e055f5c231ed99c94580c63d458aba675f7d082c2">
+<meta name="acim-release-id" content="452c31ee08d53f6ca99e8bd122ba4e37d2fe596024012265e87d630659463cf5">
 <meta name="acim-build" content="2026-11-13">
-<meta name="acim-build-time" content="03:39">
+<meta name="acim-build-time" content="04:18">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -29,7 +29,8 @@
 <meta name="twitter:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
-<title>完整加註版奇蹟課程｜V50.0.8 五分鐘試讀版</title>
+<meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
+<title>完整加註版奇蹟課程｜V50.0.9 五分鐘試讀版</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -57,6 +58,45 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.0.9 變更記錄（追查指南）——PWA 名稱固定化＋新版更新提示對話框化
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】(1) 桌機／手機安裝後的 App 圖示名稱要分別改為「完整加註
+   版奇蹟課程」／「奇蹟課程CE」。(2) 版本進版偵測得到，卻沒有套出新版
+   通知讓讀者決定是否更新。
+
+   【名稱】manifest.json name=完整加註版奇蹟課程（桌機捷徑名）、
+   short_name=奇蹟課程CE（手機主畫面名），新增 apple-mobile-web-app-title
+   meta（iOS 加主畫面名）。名稱不再內嵌版本號——圖示名稱是「安裝當下」
+   的快照（平台行為，改 manifest 不會回頭改名），內嵌版本號等於每次改版
+   都要重裝才會改名；固定名稱一次到位。已安裝讀者需解除安裝後重新安裝
+   才會看到新名稱。
+
+   【更新通知根因】sw.js 自 V40.16 起刻意不自動 skipWaiting（等讀者點按
+   套用），但「更新檢查→下載全書→安裝完成」需時；讀者在安裝期間關閉
+   App 時，安裝於背景完成進入等待，下次冷啟動瀏覽器會在舊 worker 無人
+   使用下「自動啟用」等待新版（Service Worker 平台標準行為，頁面無從
+   攔截）——V40.21 橫幅只在「App 開著且等到安裝完成」的短時間窗出現，
+   實務上極易整段錯過，讀者因此全程未被詢問。
+
+   【修法】(1) offerUpdate() 由底部橫幅升級為對話框：「📖 偵測到新版
+   vX」＋〔稍後〕〔立即更新〕雙鈕，啟動時已有等待新版或閱讀中途安裝
+   完成都會彈出、持續顯示到讀者選擇為止；僅按「立即更新」才 SKIP_WAITING
+   ＋重載（V40.16「絕不自動重載」原則不變）。(2) 冷啟動被平台靜默套用
+   後的首次啟動，比對 localStorage acim-last-version 顯示一次性「✅ 已自
+   動更新至 vX」告知（點按套用路徑維持原「✅ 已套用」，以 sessionStorage
+   acim-sw-applied 區隔不重複）。(3) 加固：applyWaiting／offerUpdate 的
+   worker 取得改 waiting||installed-installing 雙來源；updatefound 附加
+   監聽後立即補查一次狀態，避免事件時序漏問。
+
+   【驗收】(1) 無等待新版時不彈窗。(2) 有等待新版：啟動即彈、閱讀中途
+   裝完即彈；按「稍後」不重載、本頁不再打擾，下次啟動仍有等待新版會再
+   問。(3) 按「立即更新」→ 重載後版本更新、無 JS 錯誤。(4) 冷啟動靜默
+   套用後首次啟動顯示「已自動更新至 vX」一次。(5) 名稱：解除安裝重裝後
+   桌機捷徑＝完整加註版奇蹟課程、手機主畫面＝奇蹟課程CE。
+   位置：offerUpdate()／applyWaiting()／updatefound（Service Worker 登記
+   區）、靜默套用告知 IIFE（V40.9「已套用」提示之前）、manifest.json。
+   ═══════════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════════
    V50.0.8 變更記錄（追查指南）——「重新試讀五分鐘」按鈕顯示條件反轉
    ═══════════════════════════════════════════════════════════════════
@@ -561,8 +601,40 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.0.8';
+var ACIM_VERSION = 'v50.0.9';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
+
+/* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
+   後，下次冷啟動瀏覽器會在舊 worker 無人使用時直接啟用新版（Service
+   Worker 平台標準行為，頁面無從攔截，因此沒有機會先問）——此路徑原本
+   完全無聲，讀者只知道「版本偵測到了，怎沒套出通知」。改為比對
+   localStorage 上次執行版本（acim-last-version），首次以新版本啟動且非
+   「點按套用」路徑時，顯示一次性「✅ 已自動更新至 vX」；點按套用路徑
+   仍由下方 V40.9 IIFE 顯示「✅ 已套用」，以 sessionStorage acim-sw-applied
+   區隔，不重複顯示。 */
+(function(){
+  var lastSeen=null, appliedClick=null;
+  try{ lastSeen=window.__acimStorage.get('acim-last-version'); }catch(e){}
+  try{ appliedClick=sessionStorage.getItem('acim-sw-applied'); }catch(e){}
+  try{ window.__acimStorage.set('acim-last-version', ACIM_VERSION); }catch(e){}
+  if(appliedClick) return;
+  if(lastSeen===null||lastSeen===ACIM_VERSION) return;
+  window.addEventListener('DOMContentLoaded', function(){
+    try{
+      var t=document.createElement('div');
+      t.textContent='✅ 已自動更新至 '+ACIM_VERSION;
+      t.setAttribute('role','status');
+      t.style.cssText='position:fixed;left:50%;transform:translateX(-50%);'
+        +'bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);'
+        +'background:#29224A;color:#fff;padding:9px 20px;border-radius:22px;'
+        +'font-size:13px;z-index:999999;box-shadow:0 4px 16px rgba(0,0,0,.35);'
+        +'opacity:0;transition:opacity .3s;white-space:nowrap;';
+      document.body.appendChild(t);
+      requestAnimationFrame(function(){ t.style.opacity='1'; });
+      setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ if(t.parentNode)t.parentNode.removeChild(t); },380); },2800);
+    }catch(e){}
+  });
+})();
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
    開發者都能一眼確認裝置真正運行的版本（對照字級面板內的版本標籤）。 */
@@ -599,7 +671,9 @@ var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同
      無人使用時自然啟用等待中的新版（平台標準行為，發生在兩次閱讀之間，
      不打斷閱讀；此路徑不會出現「✅ 已套用」提示——僅點按套用者有，可據
      此區分兩種套用路徑）。
-   ③ 套用後的首次啟動顯示「✅ 已套用 vX」一次性確認（僅點按路徑）。 */
+   ③ 套用後的首次啟動顯示「✅ 已套用 vX」一次性確認（僅點按路徑）。
+   ④ V50.0.9：平台靜默套用（冷啟動自動啟用）路徑補上「已自動更新至
+   vX」一次性告知（見上方 V50.0.9 IIFE），不再完全無聲。 */
 /* V40.15＋V40.16：橫幅版本號必須是「偵測到的新版」本身。
    實機定案（V40.15、V40.16 兩張回報截圖）：裝置還在跑舊版 index.html 時，
    舊碼用頁面自己的 ACIM_VERSION 拼字串——V40.14 頁面偵測到 V40.15，
@@ -658,46 +732,70 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'})
       .then(function(reg) {
         function applyWaiting() {
-          if (!reg.waiting) return false;
+          /* V50.0.9：worker 取得改雙來源——waiting 優先，其次「已 installed
+             的 installing」，避免瀏覽器在 statechange 派發當下 registration
+             .waiting 尚未換人時漏套用。 */
+          var waiting = reg.waiting ||
+            (reg.installing && reg.installing.state === 'installed' ? reg.installing : null);
+          if (!waiting) return false;
           try { sessionStorage.setItem('acim-sw-applied', ACIM_VERSION); } catch(e) {}
           navigator.serviceWorker.addEventListener('controllerchange', function() {
             window.location.reload();
           }, {once: true});
-          reg.waiting.postMessage({type: 'SKIP_WAITING'});
+          waiting.postMessage({type: 'SKIP_WAITING'});
           return true;
         }
+        /* V50.0.9（讀者回報「版本偵測到了，怎沒有套出新版通知讓我決定」）：
+           底部橫幅升級為「偵測到新版」對話框。根因——V40.21 橫幅只在
+           「App 開著且等到安裝完成」的短時間窗出現；讀者在安裝（下載全書
+           需時）期間關閉 App 時，安裝於背景完成進入等待，下次冷啟動瀏覽器
+           會在舊 worker 無人使用下自動啟用新版（Service Worker 平台標準
+           行為，頁面無從攔截），全程沒有機會被詢問。修法——
+           ① 啟動時已有等待新版、或閱讀中途安裝完成 → 一律彈出對話框：
+             「📖 偵測到新版 vX」＋〔稍後〕〔立即更新〕，持續顯示到讀者選擇
+             為止；僅按「立即更新」才 SKIP_WAITING＋重載，維持 V40.16
+             「絕不自動重載」原則不變。
+           ② 冷啟動被平台靜默套用 → 首次啟動顯示一次性「已自動更新至 vX」
+             告知（見 V40.9「已套用」提示前的 V50.0.9 IIFE），套用了就一定
+             說。
+           ③ worker 取得改 waiting||installed-installing 雙來源；updatefound
+             監聽掛上後立即補查一次狀態，避免事件時序漏問。 */
         function offerUpdate() {
-          if (!navigator.serviceWorker.controller || !reg.waiting ||
+          var waiting = reg.waiting ||
+            (reg.installing && reg.installing.state === 'installed' ? reg.installing : null);
+          if (!navigator.serviceWorker.controller || !waiting ||
               document.getElementById('acim-update-toast')) return;
-          var toast = document.createElement('button');
-          toast.type = 'button';
-          toast.id = 'acim-update-toast';
-          /* V40.15：先以不帶版本號的誠實文案立即顯示，再向等待中 worker
-             取得真正版本號後原地改寫（見 acimUpdateToastVersion）。
-             V40.16：主源逾時由線上 sw.js 解析接手；舊碼用頁面自己的
-             ACIM_VERSION——V40.14 頁面偵測到 V40.15 仍錯示「v40.14」。 */
-          toast.textContent = '📖 新版已就緒，點此套用 →';
-          toast.setAttribute('aria-label', '新版本已下載，點擊套用');
+          var dlg = document.createElement('div');
+          dlg.id = 'acim-update-toast'; /* 沿用舊 id：去重守衛與驗收掛點不變 */
+          dlg.setAttribute('role', 'dialog');
+          dlg.setAttribute('aria-label', '新版本已下載，是否立即套用');
+          /* V40.15：先以不帶版本號的誠實文案立即顯示，再向等待中 worker 取得
+             真正版本號後原地改寫（見 acimUpdateToastVersion）；V40.16：主源
+             逾時由線上 sw.js 解析接手。 */
+          dlg.innerHTML =
+            '<div id="acim-update-title">📖 偵測到新版</div>' +
+            '<div id="acim-update-desc">新版已下載完成，是否立即套用？套用會重新載入一次，閱讀位置、閱讀碼與設定都會保留。</div>' +
+            '<div id="acim-update-actions">' +
+            '<button type="button" id="acim-update-later">稍後</button>' +
+            '<button type="button" id="acim-update-apply">立即更新</button></div>';
           if (typeof acimUpdateToastVersion === 'function') {
-            acimUpdateToastVersion(reg.waiting, function(v) {
-              var t = document.getElementById('acim-update-toast');
+            acimUpdateToastVersion(waiting, function(v) {
+              var t = document.getElementById('acim-update-title');
               if (!t) return;
-              t.textContent = '📖 新版 ' + (v ? v + ' ' : '') + '已就緒，點此套用 →';
-              t.setAttribute('aria-label',
-                (v ? '新版本 ' + v + ' 已下載' : '新版本已下載') + '，點擊套用');
+              t.textContent = '📖 偵測到新版' + (v ? ' ' + v : '');
+              dlg.setAttribute('aria-label',
+                (v ? '新版本 ' + v : '新版本') + '已下載，是否立即套用');
             });
           }
-          toast.style.cssText = [
-            'position:fixed;bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);left:50%;transform:translateX(-50%)',
-            'background:#29224A;color:#fff;padding:10px 20px;border:none',
-            'border-radius:24px;font-size:14px;cursor:pointer',
-            'z-index:999999;box-shadow:0 4px 16px rgba(0,0,0,.35)',
-            'max-width:calc(100vw - 32px);white-space:normal;text-align:center;line-height:1.5;user-select:none',
-            'animation:acimFadeIn .3s ease'
-          ].join(';');
-          toast.onclick = function() {
+          dlg.querySelector('#acim-update-later').onclick = function() {
+            /* V40.16 原則不變：稍後＝本頁面先不套用；下次啟動若仍有等待中
+               新版會再度詢問；App 完全關閉後重開可能由平台自然套用（見上方
+               根因說明），套用後首次啟動會顯示「已自動更新至 vX」告知。 */
+            dlg.remove();
+          };
+          dlg.querySelector('#acim-update-apply').onclick = function() {
             applyWaiting();
-            toast.remove();
+            dlg.remove();
           };
           if (!document.getElementById('acim-toast-style')) {
             var style = document.createElement('style');
@@ -705,23 +803,39 @@ if ('serviceWorker' in navigator) {
             style.textContent = '@keyframes acimFadeIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
             document.head.appendChild(style);
           }
-          document.body.appendChild(toast);
-          /* V40.21：橫幅不再 12 秒自動消失——實測手機讀者常錯過時限，
-             新版下載完成後遲遲未套用（「手機要等很久才會更新」根因之一）。
-             改為持續顯示直到點按套用；是否套用仍由讀者主動點按決定，
-             維持 V40.16「絕不自動重載」原則。 */
+          var st = document.createElement('style');
+          st.id = 'acim-update-dlg-style';
+          st.textContent = '#acim-update-title{font-size:15px;font-weight:700;margin:0 0 4px}'
+            + '#acim-update-desc{font-size:13px;opacity:.92;margin:0 0 10px}'
+            + '#acim-update-actions{display:flex;gap:10px;justify-content:flex-end}'
+            + '#acim-update-actions button{font:inherit;font-size:14px;min-height:38px;border-radius:19px;padding:6px 16px;cursor:pointer;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}'
+            + '#acim-update-apply{background:#fff;color:#29224A;border-color:#fff;font-weight:700}'
+            + '@media(pointer:coarse){#acim-update-actions button{min-height:42px}}';
+          document.head.appendChild(st);
+          dlg.style.cssText = [
+            'position:fixed;bottom:calc(var(--acim-nav-h,64px) + env(safe-area-inset-bottom,0px) + 14px);left:50%;transform:translateX(-50%)',
+            'background:#29224A;color:#fff;padding:14px 18px;border-radius:14px',
+            'z-index:999999;box-shadow:0 6px 24px rgba(0,0,0,.4)',
+            'max-width:calc(100vw - 32px);text-align:left;line-height:1.55',
+            'animation:acimFadeIn .3s ease'
+          ].join(';');
+          document.body.appendChild(dlg);
         }
         reg.addEventListener('updatefound', function() {
           var next = reg.installing;
           if (!next) return;
           next.addEventListener('statechange', function() {
-            if (next.state === 'installed') offerUpdate(false);
+            if (next.state === 'installed') offerUpdate();
           });
+          /* V50.0.9：監聽掛上前 worker 可能已達 installed（例如背景安裝
+             完成後才走到這裡的時序）→ 附加監聽後立即補查一次，避免漏問。 */
+          if (next.state === 'installed') offerUpdate();
         });
         /* V40.16：啟動時已有等待中的新版 → 只顯示橫幅（與閱讀中途偵測同一
-           條路），讀者點按橫幅才套用。舊版（V40.9~V40.15）此處 offerUpdate(true)
-           會自動 SKIP_WAITING＋重載——「沒有按就自動更新」的根因，移除。 */
-        offerUpdate(false);
+           條路），讀者點「立即更新」才套用（V50.0.9 起為對話框）。舊版
+           （V40.9~V40.15）此處 offerUpdate(true) 會自動 SKIP_WAITING＋重載——
+           「沒有按就自動更新」的根因，移除。 */
+        offerUpdate();
         /* V40.21：更新檢查節奏補強——瀏覽器僅在導航時自動檢查 SW 更新，
            手機 PWA 常駐記憶體，閱讀中途與「從背景喚回」都不會檢查，
            新版感知因此遲滯。改為：
