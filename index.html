@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v40.30.2">
+<meta name="acim-version" content="v50.0.5">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="6e24cf71f3765b78a625daf0e15d67da17b4690d80e361b684dfda7bb55aa7ce">
-<meta name="acim-build" content="2026-11-10">
-<meta name="acim-build-time" content="22:42">
+<meta name="acim-release-id" content="bb081e4e3b8fba61d952a8c6fc59c1fe9f912cea652c638a11892f722df2aa1d">
+<meta name="acim-build" content="2026-11-12">
+<meta name="acim-build-time" content="21:17">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -29,13 +29,266 @@
 <meta name="twitter:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
-<title>完整加註版奇蹟課程</title>
+<title>完整加註版奇蹟課程｜V50.0.5 五分鐘試讀版</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
 <noscript></noscript>
 
+<script id="acim-v50-origin-guard">
+/* V50_SITE_BOUND_ORIGIN */
+(function(){
+  var expected=new URL("https://acimce-zh.github.io/"),local=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  var hostOK=location.origin===expected.origin;
+  var pathOK=[expected.pathname,expected.pathname+'index.html',expected.pathname+'index.htm'].indexOf(location.pathname)!==-1;
+  window.__acimV50WrongOrigin=location.protocol==='file:'||(!local&&!hostOK)||!pathOK;
+  if(window.__acimV50WrongOrigin)document.addEventListener('DOMContentLoaded',function(){
+    var box=document.createElement('div');box.id='acim-v50-wrong-origin';box.setAttribute('role','alert');
+    box.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#faf8f5;color:#29224a;padding:8vh 8vw;box-sizing:border-box;font:18px/1.8 system-ui;overflow:auto';
+    var title=document.createElement('h1');title.textContent='請開啟此版本的閱讀網址';
+    var message=document.createElement('p');message.textContent=location.protocol==='file:'?'請使用本機測試伺服器，或上傳後開啟閱讀站。':'此更新包適用於下方網址。';
+    var link=document.createElement('a');link.href=expected.href;link.textContent=expected.href;box.appendChild(title);box.appendChild(message);box.appendChild(link);document.body.appendChild(box);
+  });
+})();
+</script>
+<script id="acim-v5004-icons">
+/* Local inline icons; no downloads, observers or book traversal. */
+window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-menu\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M4 6h16M4 12h16M4 18h16\"/></svg>","search":"<svg class=\"acim-icon acim-search\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M21 21l-5-5\"/><path d=\"M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0\"/></svg>","bookmark":"<svg class=\"acim-icon acim-bookmark\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M6 3h12v18l-6-4-6 4Z\"/></svg>","more":"<svg class=\"acim-icon acim-more\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M5 12h.01M12 12h.01M19 12h.01\"/></svg>","up":"<svg class=\"acim-icon acim-up\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M12 20V4M5 11l7-7 7 7\"/></svg>","speaker":"<svg class=\"acim-icon acim-speaker\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M11 5 6 9H3v6h3l5 4Z\"/><path d=\"M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14\"/></svg>","moon":"<svg class=\"acim-icon acim-moon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z\"/></svg>","sun":"<svg class=\"acim-icon acim-sun\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8\"/><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5\"/></svg>","theme":"<span class=\"acim-theme-icon\"><svg class=\"acim-icon acim-moon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z\"/></svg><svg class=\"acim-icon acim-sun\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8\"/><path d=\"M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5\"/></svg></span>"};return function(name){return icons[name]||'';};})();
+</script>
+<script id="acim-v50-session">
+if(!window.__acimV50WrongOrigin){
+/* V50_SESSION_START */
+(function sessionRuntimeV50(createCore){
+  'use strict';
+  if(window.__acimV50WrongOrigin||window.__acimV50)return;
+  var KEY='acim-v50-github-root-session-v1',pendingHash=null,mounted=false,dialogOpen=false,lastBlocked=false,wasBlocked=false,resetArmed=false,resetTimer=null;
+  var hud,overlay,card,title,intro,status,renewButton,closeButton,codeInput,feedback,resetButton,persistNotice,codeDetails,previousFocus=null,lockedElements=[],bodyObserver=null,scrollLock=null;
+  function emit(type,detail){document.dispatchEvent(new CustomEvent(type,{detail:detail}));}
+  function load(){var raw=localStorage.getItem(KEY);return raw?JSON.parse(raw):null;}
+  function changed(s,reason){
+    var blocked=s.status==='expired';
+    if(blocked&&!lastBlocked){lastBlocked=true;wasBlocked=true;emit('acim-v50-block',{reason:reason,state:s});if(mounted)openDialog();}
+    else if(!blocked&&lastBlocked){lastBlocked=false;if(mounted)closeDialog(true);emit('acim-v50-resume',{reason:reason,state:s,pendingHash:pendingHash});}
+    else if(reason==='unlock'||reason==='reset'){if(mounted)closeDialog(true);emit('acim-v50-resume',{reason:reason,state:s,pendingHash:pendingHash});}
+    if(mounted)render(s);emit('acim-v50-state',{reason:reason,state:s});
+  }
+  var core=createCore({visible:!document.hidden,monoNow:function(){return performance.now();},wallNow:function(){return Date.now();},load:load,save:function(s){localStorage.setItem(KEY,JSON.stringify(s));},onChange:changed});
+  lastBlocked=core.snapshot().status==='expired';
+  function check(){var s=core.check();if(mounted)render(s);return s;}
+  function time(ms){var seconds=Math.max(0,Math.ceil(ms/1000));return Math.floor(seconds/60).toString().padStart(2,'0')+':'+(seconds%60).toString().padStart(2,'0');}
+  function quarantine(el){
+    if(!el||el===overlay||el===hud||/^(SCRIPT|STYLE|LINK)$/.test(el.tagName)||lockedElements.some(function(v){return v.el===el;}))return;
+    lockedElements.push({el:el,inert:el.getAttribute('inert'),hidden:el.getAttribute('aria-hidden')});el.setAttribute('inert','');el.setAttribute('aria-hidden','true');
+  }
+  function lockReader(){
+    if(scrollLock)return;
+    previousFocus=document.activeElement;
+    scrollLock={x:window.scrollX,y:window.scrollY,overflow:document.documentElement.style.overflow,gutter:document.documentElement.style.scrollbarGutter};
+    document.documentElement.style.scrollbarGutter='stable';document.documentElement.style.overflow='hidden';
+    Array.from(document.body.children).forEach(quarantine);
+    if(window.MutationObserver){bodyObserver=new MutationObserver(function(records){records.forEach(function(r){Array.from(r.addedNodes).forEach(function(n){if(n.nodeType===1)quarantine(n);});});});bodyObserver.observe(document.body,{childList:true});}
+  }
+  function unlockReader(){
+    if(bodyObserver){bodyObserver.disconnect();bodyObserver=null;}
+    lockedElements.forEach(function(v){if(!v.el.isConnected)return;if(v.inert===null)v.el.removeAttribute('inert');else v.el.setAttribute('inert',v.inert);if(v.hidden===null)v.el.removeAttribute('aria-hidden');else v.el.setAttribute('aria-hidden',v.hidden);});lockedElements=[];
+    if(scrollLock){var old=scrollLock;scrollLock=null;document.documentElement.style.overflow=old.overflow;document.documentElement.style.scrollbarGutter=old.gutter;window.scrollTo(old.x,old.y);}
+    if(previousFocus&&previousFocus.isConnected&&previousFocus.focus)try{previousFocus.focus({preventScroll:true});}catch(e){}previousFocus=null;
+  }
+  function fitDialog(){if(!dialogOpen||!window.visualViewport)return;var viewport=window.visualViewport;overlay.style.top=viewport.offsetTop+'px';overlay.style.left=viewport.offsetLeft+'px';overlay.style.width=viewport.width+'px';overlay.style.height=viewport.height+'px';overlay.style.bottom='auto';card.style.maxHeight=Math.max(80,viewport.height-32)+'px';}
+  function openDialog(){if(!mounted)return;check();if(dialogOpen)return;dialogOpen=true;overlay.hidden=false;hud.hidden=true;lockReader();fitDialog();render(core.snapshot());setTimeout(function(){if(dialogOpen)(core.snapshot().status==='expired'?card:closeButton).focus({preventScroll:true});},0);}
+  function closeDialog(force){if(!dialogOpen)return;if(!force&&core.snapshot().status==='expired')return;dialogOpen=false;overlay.hidden=true;hud.hidden=false;unlockReader();render(core.snapshot());}
+  function render(s){
+    var expired=s.status==='expired',unlocked=s.status==='unlocked';
+    hud.textContent=unlocked?'已啟用閱讀碼':!s.ready?'準備閱讀中':expired?'本輪試讀已結束':'試讀剩餘 '+time(s.remainingMs);
+    hud.setAttribute('aria-label',hud.textContent+'；開啟閱讀控制');
+    title.textContent=unlocked?'已啟用閱讀碼':'繼續你的閱讀';
+    intro.textContent=expired?'這一輪五分鐘試讀已告一段落。閱讀位置已為你保留，歡迎從這裡繼續。':unlocked?'閱讀碼已啟用，可繼續閱讀。':!s.ready?'內容與定位準備完成後，即可開始五分鐘試讀。':'可繼續本輪試讀，也可以輸入閱讀碼。';
+    status.textContent=expired?(s.waitRemainingMs>0?'再等 '+time(s.waitRemainingMs)+'，即可繼續試讀。':'可以繼續下一輪五分鐘試讀了。'):unlocked?'已啟用閱讀碼。':!s.ready?'正在準備內容與定位，尚未開始計時。':'本輪試讀剩餘 '+time(s.remainingMs);
+    renewButton.hidden=!expired;renewButton.disabled=expired&&s.waitRemainingMs>0;renewButton.textContent=expired&&s.waitRemainingMs>0?'稍候再試讀五分鐘（'+time(s.waitRemainingMs)+'）':'繼續試讀五分鐘';
+    closeButton.hidden=expired;resetButton.hidden=!unlocked;
+    codeInput.closest('form').hidden=unlocked;codeDetails.hidden=unlocked;
+    persistNotice.hidden=s.persistent;
+  }
+  function make(tag,id,text){var el=document.createElement(tag);if(id)el.id=id;if(text)el.textContent=text;return el;}
+  function mount(){
+    if(mounted||!document.body)return;mounted=true;
+    var style=make('style','acim-v50-style');style.textContent=`#acim-v50-hud{position:fixed;right:12px;top:4px;z-index:999995;isolation:isolate;max-width:calc(100vw - 24px);height:44px;padding:0 13px;border:0;background:transparent;color:#D8BC7E;font:12px/1.5 system-ui,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap;cursor:pointer}
+#acim-v50-hud::before{content:'';position:absolute;inset:8px 0;background:#29224A;border:1px solid #806B48;border-radius:999px;z-index:-1}
+html.dark-mode #acim-v50-hud{color:#CBB27B}
+html.dark-mode #acim-v50-hud::before{background:#302A40;border-color:#7A6B89}
+#acim-v50-hud:focus-visible{outline:2px solid var(--c-gold,#806124);outline-offset:1px;border-radius:8px}
+#acim-v50-overlay[hidden],#acim-v50-hud[hidden]{display:none!important}
+#acim-v50-overlay{position:fixed;inset:0;z-index:10000010;background:#18132280;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+#acim-v50-dialog{--v50-paper:#FAF8F5;--v50-ink:#302D3D;--v50-muted:#625A74;--v50-rule:#DCD7E2;--v50-soft:#F4F2F8;--v50-button:#29224A;--v50-button-ink:#D8BC7E;--v50-action:#FAF8F5;--v50-border:#A69AAE;--v50-gold:#806124;--v50-error:#923B2B;box-sizing:border-box;width:480px;max-width:100%;max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border:1px solid var(--v50-border);border-top:2px solid var(--v50-gold);border-radius:16px;background:var(--v50-paper);color:var(--v50-ink);padding:26px 28px 22px;font:14px/1.7 system-ui,'Microsoft JhengHei',sans-serif;box-shadow:0 8px 24px #18132226;color-scheme:light}
+html.dark-mode #acim-v50-dialog{--v50-paper:#302A40;--v50-ink:#E8E2D6;--v50-muted:#B8B0C8;--v50-rule:#51485E;--v50-soft:#262233;--v50-button:#29224A;--v50-button-ink:#CBB27B;--v50-action:#262233;--v50-border:#7A6B89;--v50-gold:#CBB27B;--v50-error:#F2B6A7;color-scheme:dark;box-shadow:none}
+#acim-v50-dialog *{box-sizing:border-box}
+#acim-v50-dialog:focus{outline:2px solid var(--v50-gold);outline-offset:2px}
+#acim-v50-dialog p{font:inherit;margin:0}
+#acim-v50-dialog h2{font:500 28px/1.5 'Noto Serif TC','PMingLiU',serif;letter-spacing:.06em;margin:10px 30px 12px 0;color:var(--v50-ink)}
+#acim-v50-eyebrow{font-size:11px;letter-spacing:.08em;color:var(--v50-gold)}
+#acim-v50-dialog p#acim-v50-intro{font-size:14px;line-height:1.85;color:var(--v50-muted)}
+#acim-v50-info{padding:18px 0 0;margin-top:18px;border-top:1px solid var(--v50-rule)}
+#acim-v50-info h3{font:500 19px/1.5 'Noto Serif TC','PMingLiU',serif;letter-spacing:.04em;margin:0 0 7px;color:var(--v50-ink)}
+#acim-v50-dialog #acim-v50-info>p{font-size:13px;line-height:1.8;color:var(--v50-muted)}
+#acim-v50-contact-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+#acim-v50-dialog .acim-v50-contact-action{display:flex;align-items:center;gap:10px;width:100%;min-height:58px;padding:9px 12px;border:1px solid var(--v50-border);border-radius:8px;background:var(--v50-action);color:var(--v50-ink);text-align:left;text-decoration:none;font:inherit;cursor:pointer}
+#acim-v50-dialog #acim-v50-email{background:var(--v50-button);border-color:var(--v50-gold);color:var(--v50-button-ink)}
+#acim-v50-dialog .acim-v50-contact-action>svg{width:18px;height:18px;flex-shrink:0;color:var(--v50-gold)}
+#acim-v50-dialog #acim-v50-email>svg{color:inherit}
+#acim-v50-dialog .acim-v50-contact-action>span{display:flex;flex-direction:column;flex:1;min-width:0;gap:1px}
+#acim-v50-dialog .acim-v50-contact-title{font-size:14px;font-weight:500}
+#acim-v50-dialog .acim-v50-contact-value{font-size:12px;line-height:1.5;color:var(--v50-muted);overflow-wrap:anywhere;user-select:text;-webkit-user-select:text}
+#acim-v50-dialog #acim-v50-email .acim-v50-contact-value{color:inherit}
+#acim-v50-dialog p#acim-v50-contact-feedback{font-size:11px;line-height:1.6;color:var(--v50-muted);margin-top:8px}
+#acim-v50-trial{margin:15px 0 0;padding:12px;border-radius:8px;background:var(--v50-soft)}
+#acim-v50-dialog p#acim-v50-status{font-size:12px;line-height:1.7;text-align:center;font-variant-numeric:tabular-nums}
+#acim-v50-dialog button,#acim-v50-code{font:inherit;min-height:44px;border-radius:8px;padding:9px 12px}
+#acim-v50-dialog button{border:1px solid var(--v50-border);cursor:pointer;background:var(--v50-action);color:var(--v50-ink)}
+#acim-v50-dialog button:focus-visible,#acim-v50-code:focus-visible,#acim-v50-dialog a:focus-visible,#acim-v50-code-details>summary:focus-visible{outline:2px solid var(--v50-gold);outline-offset:3px}
+#acim-v50-dialog #acim-v50-renew{width:100%;margin-top:8px;background:var(--v50-paper);color:var(--v50-gold);border-color:var(--v50-gold);font-size:14px}
+#acim-v50-dialog #acim-v50-renew:disabled{color:var(--v50-muted);border-color:var(--v50-rule);cursor:default}
+#acim-v50-dialog #acim-v50-close{float:right;min-width:44px;min-height:44px;margin:-9px -12px 0 0;padding:0;background:transparent;border:0;color:var(--v50-muted);font-size:25px}
+#acim-v50-code-details{margin-top:15px;border-top:1px solid var(--v50-rule)}
+#acim-v50-code-details>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;list-style:none;cursor:pointer;min-height:44px;color:var(--v50-gold);font-size:13px}
+#acim-v50-code-details>summary::-webkit-details-marker{display:none}
+#acim-v50-code-details>summary::after{content:'＋';font-size:18px}
+#acim-v50-code-details[open]>summary::after{content:'−'}
+#acim-v50-form{margin:0;padding:5px 0 2px}
+#acim-v50-form label{display:block;font-size:13px;font-weight:500;margin-bottom:7px}
+#acim-v50-code{display:block;width:100%;min-width:0;border:1px solid var(--v50-border);background:var(--v50-action);color:var(--v50-ink);font-size:16px;letter-spacing:.02em}
+#acim-v50-code::placeholder{color:var(--v50-muted);opacity:1;font-size:14px}
+#acim-v50-code[aria-invalid="true"]{border-color:var(--v50-error)}
+#acim-v50-dialog #acim-v50-unlock{width:100%;margin-top:9px;background:var(--v50-button);color:var(--v50-button-ink);border-color:var(--v50-gold);letter-spacing:.03em}
+#acim-v50-dialog p#acim-v50-feedback{font-size:12px;color:var(--v50-error);line-height:1.6;margin-top:7px}
+#acim-v50-feedback:empty{display:none}
+#acim-v50-dialog p#acim-v50-code-note{font-size:11px;line-height:1.7;color:var(--v50-muted);margin-top:8px}
+#acim-v50-dialog p#acim-v50-share-note{font-size:11px;line-height:1.7;text-align:center;color:var(--v50-muted);margin-top:8px}
+#acim-v50-dialog #acim-v50-reset{width:100%;margin-top:12px;font-size:13px;background:transparent}
+#acim-v50-dialog p#acim-v50-persistence{font-size:12px;background:var(--v50-soft);color:var(--v50-ink);padding:9px;border:1px solid var(--v50-border);border-radius:6px;margin-top:12px}
+#acim-v50-dialog [hidden]{display:none!important}
+@media(max-width:768px){#acim-v50-hud{top:-4px;right:8px;width:144px;max-width:144px;padding:0 8px;font-size:11.5px;overflow:visible}#chapter-crumb{padding-right:160px}}
+@media(max-width:460px){#acim-v50-overlay{padding:12px}#acim-v50-dialog{padding:20px 19px 16px;border-radius:12px}#acim-v50-dialog h2{font-size:25px;margin-bottom:10px}#acim-v50-info{margin-top:14px;padding-top:14px}}
+@media(max-width:359px){#acim-v50-dialog .acim-v50-contact-action>svg:last-child{display:none}#acim-v50-dialog .acim-v50-contact-action{gap:8px}}
+@media(max-height:560px){#acim-v50-overlay{align-items:flex-start;padding:8px}#acim-v50-dialog{max-height:calc(100dvh - 16px);padding:16px}#acim-v50-dialog h2{font-size:23px}}
+@media print{#acim-v50-hud,#acim-v50-overlay{display:none!important}}
+`;
+    document.head.appendChild(style);
+    hud=make('button','acim-v50-hud');hud.type='button';hud.onclick=openDialog;
+    overlay=make('div','acim-v50-overlay');overlay.hidden=true;
+    card=make('section','acim-v50-dialog');card.tabIndex=-1;card.setAttribute('role','dialog');card.setAttribute('aria-modal','true');card.setAttribute('aria-labelledby','acim-v50-title');
+    closeButton=make('button','acim-v50-close','×');closeButton.type='button';closeButton.setAttribute('aria-label','關閉體驗控制');closeButton.onclick=function(){closeDialog(false);};card.appendChild(closeButton);
+    card.appendChild(make('div','acim-v50-eyebrow','完整加註版奇蹟課程'));
+    title=make('h2','acim-v50-title');card.appendChild(title);
+    intro=make('p','acim-v50-intro');card.appendChild(intro);
+    var trialPanel=make('div','acim-v50-trial');status=make('p','acim-v50-status');status.setAttribute('role','timer');status.setAttribute('aria-live','off');trialPanel.appendChild(status);
+    renewButton=make('button','acim-v50-renew','再試用五分鐘');renewButton.type='button';renewButton.onclick=function(){if(core.renew()){feedback.textContent='';resetArmed=false;}};trialPanel.appendChild(renewButton);
+    var form=make('form','acim-v50-form'),label=make('label','','輸入閱讀碼');label.htmlFor='acim-v50-code';form.appendChild(label);
+    codeInput=make('input','acim-v50-code');codeInput.type='text';codeInput.maxLength=80;codeInput.autocomplete='off';codeInput.spellcheck=false;codeInput.setAttribute('autocapitalize','characters');codeInput.placeholder='請貼上慧軍老師提供的閱讀碼';form.appendChild(codeInput);
+    var submit=make('button','acim-v50-unlock','啟用並繼續閱讀');submit.type='submit';form.appendChild(submit);
+    feedback=make('p','acim-v50-feedback');feedback.setAttribute('role','status');form.appendChild(feedback);
+    form.onsubmit=function(e){e.preventDefault();if(core.unlock(codeInput.value)){codeInput.value='';codeInput.removeAttribute('aria-invalid');feedback.textContent='';}else{codeDetails.open=true;feedback.textContent='閱讀碼不正確，請核對後再試一次。';codeInput.setAttribute('aria-invalid','true');codeInput.focus();}};
+    codeInput.setAttribute('aria-describedby','acim-v50-feedback acim-v50-code-note');
+    codeInput.addEventListener('input',function(){codeInput.removeAttribute('aria-invalid');feedback.textContent='';});
+    var note=make('p','acim-v50-code-note','閱讀碼啟用狀態會保存在目前使用的瀏覽器。');form.appendChild(note);
+    var info=make('section','acim-v50-info');info.setAttribute('aria-label','聯絡慧軍老師');
+    info.appendChild(make('h3','','與慧軍老師聯繫'));
+    info.appendChild(make('p','','想繼續深入閱讀，歡迎與老師聯繫，了解閱讀碼的取得方式。'));
+    var actions=make('div','acim-v50-contact-actions');
+    function contactIcon(kind){
+      var ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
+      svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('width','18');svg.setAttribute('height','18');svg.setAttribute('fill','none');svg.setAttribute('stroke','currentColor');svg.setAttribute('stroke-width','1.5');svg.setAttribute('stroke-linecap','round');svg.setAttribute('stroke-linejoin','round');svg.setAttribute('aria-hidden','true');
+      var paths=kind==='mail'?['M4 5h16v14H4z','m4 6 8 6 8-6']:kind==='message'?['M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-2 2v-8.5A8.5 8.5 0 1 1 21 11.5Z']:kind==='arrow'?['M7 17 17 7','M7 7h10v10']:['M9 9h11v12H9z','M5 15H3V3h11v2'];
+      paths.forEach(function(d){var p=document.createElementNS(ns,'path');p.setAttribute('d',d);svg.appendChild(p);});return svg;
+    }
+    function contactLabel(label,value,id){var span=make('span');var top=make('span','',label);top.className='acim-v50-contact-title';var bottom=make('span',id||'',value);bottom.className='acim-v50-contact-value';span.appendChild(top);span.appendChild(bottom);return span;}
+    var email=make('a','acim-v50-email');email.className='acim-v50-contact-action';email.href='mailto:chang.wenchih@gmail.com?subject='+encodeURIComponent('《完整加註版奇蹟課程》閱讀碼詢問');email.setAttribute('aria-label','寫 E-mail 給慧軍老師');email.appendChild(contactIcon('mail'));email.appendChild(contactLabel('寫 E-mail 給慧軍老師','chang.wenchih@gmail.com'));email.appendChild(contactIcon('arrow'));actions.appendChild(email);
+    var line=make('button','acim-v50-copy-line');line.type='button';line.className='acim-v50-contact-action';line.appendChild(contactIcon('message'));line.appendChild(contactLabel('複製 LINE ID','huijun0928','acim-v50-line-id'));line.appendChild(contactIcon('copy'));actions.appendChild(line);info.appendChild(actions);
+    var contactFeedback=make('p','acim-v50-contact-feedback','可在 LINE 搜尋 ID，加入後與老師聯繫。');contactFeedback.setAttribute('role','status');contactFeedback.setAttribute('aria-live','polite');info.appendChild(contactFeedback);
+    line.onclick=async function(){
+      try{var clipboard=window.navigator&&window.navigator.clipboard;if(!clipboard||typeof clipboard.writeText!=='function')throw new Error('clipboard-unavailable');await clipboard.writeText('huijun0928');contactFeedback.textContent='已複製 LINE ID。請到 LINE 搜尋並加入好友。';}
+      catch(e){contactFeedback.textContent='LINE ID：huijun0928。可長按上方 ID 複製，再到 LINE 搜尋。';}
+    };
+    card.appendChild(info);card.appendChild(trialPanel);
+    codeDetails=make('details','acim-v50-code-details');
+    var codeSummary=make('summary','','已有閱讀碼');codeDetails.appendChild(codeSummary);codeDetails.appendChild(form);card.appendChild(codeDetails);
+    card.appendChild(make('p','acim-v50-share-note','歡迎分享閱讀網址，讓更多人先來試讀。'));
+
+    persistNotice=make('p','acim-v50-persistence','此環境無法持續保存體驗狀態；目前仍可試讀與輸入閱讀碼，重開後可能需要再次輸入。');persistNotice.hidden=true;card.appendChild(persistNotice);
+    resetButton=make('button','acim-v50-reset','重新試讀五分鐘');resetButton.type='button';resetButton.onclick=function(){if(!resetArmed){resetArmed=true;resetButton.textContent='再次按下確認：只重設試讀時間與閱讀碼啟用狀態';clearTimeout(resetTimer);resetTimer=setTimeout(function(){resetArmed=false;resetButton.textContent='重新試讀五分鐘';},6000);return;}resetArmed=false;resetButton.textContent='重新試讀五分鐘';core.reset();};card.appendChild(resetButton);
+    overlay.appendChild(card);document.body.appendChild(hud);document.body.appendChild(overlay);
+    if(window.visualViewport){window.visualViewport.addEventListener('resize',fitDialog,{passive:true});window.visualViewport.addEventListener('scroll',fitDialog,{passive:true});}
+    function blockOutside(e){if(!dialogOpen||overlay.contains(e.target))return;if(e.cancelable)e.preventDefault();e.stopImmediatePropagation();}
+    ['click','dblclick','pointerdown','touchstart','wheel','touchmove','contextmenu'].forEach(function(type){window.addEventListener(type,blockOutside,{capture:true,passive:false});});
+    window.addEventListener('keydown',function(e){
+      if(!dialogOpen)return;
+      if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();closeDialog(false);return;}
+      if(!overlay.contains(e.target)){if(e.cancelable)e.preventDefault();e.stopImmediatePropagation();return;}
+      if(e.key==='Tab'){var all=Array.from(card.querySelectorAll('button:not([disabled]),input,summary,a[href]')).filter(function(el){return !el.hidden&&el.getClientRects().length;});if(!all.length)return;var first=all[0],last=all[all.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
+    },true);
+    render(core.snapshot());if(core.snapshot().status==='expired'){emit('acim-v50-block',{reason:'restore',state:core.snapshot()});openDialog();}
+    setInterval(check,1000);
+  }
+  window.__acimV50={
+    storageKey:KEY,canRead:function(){var s=core.check();return s.ready&&s.status!=='expired';},isBlocked:function(){return core.check().status==='expired';},
+    markReady:function(){return core.markReady();},check:check,state:function(){return core.check();},openControls:openDialog,
+    deferHash:function(hash){pendingHash=typeof hash==='string'?hash.slice(0,1000):null;},takePendingHash:function(){var h=pendingHash;pendingHash=null;return h;},
+    prepareNavigation:function(hash){if(core.check().status==='expired'){if(typeof hash==='string')pendingHash=hash.slice(0,1000);openDialog();return false;}return true;}
+  };
+  document.addEventListener('acim-v50-ready',function(){core.markReady();});
+  document.addEventListener('visibilitychange',function(){core.setVisible(!document.hidden);check();});
+  window.addEventListener('pagehide',function(){core.setVisible(false);core.flush();});
+  window.addEventListener('pageshow',function(){core.setVisible(!document.hidden);check();});
+  window.addEventListener('storage',function(e){if(e.key!==KEY||!e.newValue)return;try{core.ingest(JSON.parse(e.newValue));check();}catch(err){}});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
+})(function createSessionV50(deps){
+  var PRODUCT='acim-ce-zh-v50-demo',DURATION=300000,WAIT=60000,ready=false,visible=deps.visible!==false,running=null,lastSave=0,persistent=true;
+  var mono=deps.monoNow||function(){return performance.now();},wall=deps.wallNow||function(){return Date.now();};
+  function fresh(round,revision){return {schema:1,product:PRODUCT,status:'trial',usedMs:0,waitUntil:0,round:round||1,roundId:String(wall())+'-'+Math.random().toString(36).slice(2,9),revision:revision||0,updatedAt:wall()};}
+  function valid(v){return !!(v&&v.schema===1&&v.product===PRODUCT&&/^(trial|expired|unlocked)$/.test(v.status)&&Number.isFinite(v.usedMs)&&v.usedMs>=0&&v.usedMs<=DURATION&&Number.isFinite(v.waitUntil)&&v.waitUntil>=0&&Number.isSafeInteger(v.round)&&v.round>0&&typeof v.roundId==='string'&&v.roundId.length<100&&Number.isSafeInteger(v.revision)&&v.revision>=0&&Number.isFinite(v.updatedAt));}
+  var state;try{var initial=deps.load&&deps.load();state=valid(initial)?Object.assign({},initial):fresh();}catch(e){persistent=false;state=fresh();}
+  if(state.status==='trial'&&state.usedMs>=DURATION){state.status='expired';state.waitUntil=wall()+WAIT;}
+  function runningNow(){return ready&&visible&&state.status==='trial';}
+  function snapshot(){return {schema:state.schema,product:PRODUCT,status:state.status,usedMs:state.usedMs,remainingMs:state.status==='unlocked'?0:Math.max(0,DURATION-state.usedMs),waitUntil:state.waitUntil,waitRemainingMs:state.status==='expired'?Math.max(0,state.waitUntil-wall()):0,round:state.round,roundId:state.roundId,revision:state.revision,updatedAt:state.updatedAt,ready:ready,visible:visible,persistent:persistent};}
+  function notify(reason){if(deps.onChange)deps.onChange(snapshot(),reason);}
+  function save(force){
+    var now=mono();if(!force&&now-lastSave<5000)return;
+    state.revision++;state.updatedAt=wall();lastSave=now;
+    try{if(deps.save)deps.save(Object.assign({},state));}catch(e){persistent=false;}
+  }
+  function settle(){
+    var now=mono(),expired=false;
+    if(running!==null){var delta=Math.max(0,now-running);state.usedMs=Math.min(DURATION,state.usedMs+delta);}
+    if(state.status==='trial'&&state.usedMs>=DURATION){state.status='expired';state.waitUntil=wall()+WAIT;expired=true;}
+    running=runningNow()?now:null;
+    if(expired){save(true);notify('expire');}else if(running!==null)save(false);
+    return expired;
+  }
+  return {
+    snapshot:snapshot,
+    check:function(){settle();return snapshot();},
+    markReady:function(){if(ready)return snapshot();settle();ready=true;running=runningNow()?mono():null;save(true);notify('ready');return snapshot();},
+    setVisible:function(next){settle();visible=!!next;running=runningNow()?mono():null;save(true);notify('visibility');return snapshot();},
+    flush:function(){settle();save(true);return snapshot();},
+    renew:function(){settle();if(state.status!=='expired'||wall()<state.waitUntil)return false;state=fresh(state.round+1,state.revision);running=runningNow()?mono():null;save(true);notify('renew');return true;},
+    unlock:function(code){settle();if(String(code||'').toUpperCase().replace(/[\s-]+/g,'')!=='ACIMV50DEMO')return false;state.status='unlocked';state.usedMs=0;state.waitUntil=0;running=null;save(true);notify('unlock');return true;},
+    reset:function(){settle();state=fresh(state.round+1,state.revision);running=runningNow()?mono():null;save(true);notify('reset');return snapshot();},
+    ingest:function(incoming){
+      if(!valid(incoming)||incoming.revision<state.revision||(incoming.revision===state.revision&&incoming.updatedAt<=state.updatedAt))return false;
+      settle();var previous=state;
+      state=Object.assign({},incoming);
+      if(previous.roundId===state.roundId&&state.status==='trial')state.usedMs=Math.max(previous.usedMs,state.usedMs);
+      if(state.status==='trial'&&state.usedMs>=DURATION){state.status='expired';state.waitUntil=wall()+WAIT;}
+      running=runningNow()?mono():null;notify('sync');return true;
+    }
+  };
+});
+/* V50_SESSION_END */
+}
+</script>
 <script>
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 /* V26：統一儲存容錯。未能持久保存時，這次分頁仍可讀回最新操作。 */
 (function initAcimStorage(){
   var memory=Object.create(null), dirty=Object.create(null), durable=Object.create(null);
@@ -70,8 +323,10 @@
 (function initAcimNavigation(){
   var generation=0, navigationRevision30=0, job=null, expectedY=null, restorePending=false, previousScrollStyle='';
   function cancel(){ generation++; job=null; expectedY=null; }
-  function valid(token){ return !!job && job.token===token && generation===token; }
+  function valid(token){
+    /* V50_INTEGRATION */ if(window.__acimV50&&window.__acimV50.isBlocked())return false; return !!job && job.token===token && generation===token; }
   function begin(kind){
+    /* V50_INTEGRATION */ if(window.__acimV50&&window.__acimV50.isBlocked())return null;
     generation++; navigationRevision30++;
     job={token:generation,kind:kind||'navigation',target:null,margin:0};
     expectedY=null;
@@ -164,7 +419,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v40.30.2';
+var ACIM_VERSION = 'v50.0.5';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -363,10 +618,16 @@ if ('serviceWorker' in navigator) {
     document.documentElement.classList.add('dark-mode');
   }
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 
 <script type="text/plain" id="acim-fontfaces">@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-00.woff2) format('woff2');unicode-range:U+0020-007E,U+00A0-00A9,U+00AB-00AD,U+00B0-00B7,U+00B9,U+00BB,U+00E9,U+2003,U+2010-2016,U+2018-201A,U+201C-201E,U+2020-2022,U+2025-2027,U+2030,U+2032-2033,U+2035,U+2039-203B,U+2074,U+2190-2199,U+2215,U+2248,U+2264-2265,U+2460-2469,U+2500-25AB,U+25B1-25B3,U+25B6-25B7,U+25BC-25BD,U+25C0-25C1,U+25C6-25C7,U+25C9-25CC,U+25CE-25CF,U+2600-2601,U+2640,U+2642,U+2660-2667,U+2713,U+3000-303F,U+30FB,U+3127,U+4E00-4E01,U+4E03,U+4E08-4E0B,U+4E0D,U+4E14,U+4E16,U+4E18,U+4E1F,U+4E26,U+4E2D,U+4E32,U+4E38-4E39,U+4E3B,U+4E43,U+4E45,U+4E4B,U+4E4D-4E4F,U+4E56,U+4E58,U+4E5D,U+4E5F,U+4E7E,U+4E82,U+4E86,U+4E88,U+4E8B-4E8C,U+4E8E,U+4E92,U+4E94-4E95,U+4E99,U+4E9B,U+4E9E-4E9F,U+4EA1,U+4EA4,U+4EA6,U+4EA8,U+4EAB-4EAC,U+4EAE,U+4EBA,U+4EC0-4EC1,U+4EC6-4EC7,U+4ECA-4ECB,U+4ECD,U+4ED4,U+4ED6-4ED8;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-01.woff2) format('woff2');unicode-range:U+4ED9,U+4EE3-4EE5,U+4EF0,U+4EF2,U+4EF6,U+4EFB,U+4EFD,U+4EFF,U+4F01,U+4F0A,U+4F0D-4F11,U+4F2F-4F30,U+4F34,U+4F36,U+4F38,U+4F3A,U+4F3C-4F3D,U+4F46-4F48,U+4F4D-4F51,U+4F54-4F55,U+4F5B-4F5C,U+4F60,U+4F69,U+4F6F,U+4F73,U+4F75,U+4F7F,U+4F86,U+4F8B,U+4F8D,U+4F9B,U+4F9D,U+4FAE,U+4FB5-4FB7,U+4FBF,U+4FC2-4FC4,U+4FCE-4FCF,U+4FD7-4FD8,U+4FDD,U+4FE1,U+4FEE-4FEF,U+4FF1,U+5006,U+5009,U+500B,U+500D,U+500F,U+5011-5012,U+5016,U+5018-501A,U+501F,U+5021,U+5026,U+502A-502B,U+503C,U+5047,U+5049,U+504C,U+504E-504F,U+5055,U+505A,U+505C,U+5065,U+5074-5077,U+507D,U+5080,U+5085,U+5091,U+5099,U+50AC,U+50B2-50B3,U+50B5,U+50B7,U+50BB,U+50BE,U+50C5,U+50CF,U+50D5,U+50E5,U+50E7,U+50ED,U+50F5,U+50F9,U+50FB,U+5100,U+5104,U+5106,U+5118,U+511F,U+5121,U+512A,U+5132,U+513C,U+5140-5141,U+5143-5149,U+514B-514D,U+5152,U+515C,U+5162,U+5165,U+5167-5169,U+516B-516D,U+5171,U+5175-5178,U+517C,U+5180,U+518A,U+518D,U+5192,U+5195,U+5197,U+51A0,U+51A4-51A5,U+51AC,U+51B0,U+51B3,U+51B5,U+51B7,U+51BD,U+51C6,U+51CB-51CD,U+51DC-51DD,U+51E1,U+51F1,U+51F3,U+51F6,U+51F8,U+51FA,U+51FD,U+5200,U+5203,U+5206-5207,U+5211,U+5217,U+521D,U+5224-5225,U+5229-522A,U+5230,U+5236-5237,U+523A-523B,U+5247,U+524A,U+524D-524E,U+5254,U+5256,U+525B-525D,U+5269-526A,U+526F,U+5272,U+5275,U+5283,U+5287,U+528A,U+528D,U+5291,U+529B,U+529F-52A0,U+52A3,U+52A9-52AB,U+52C1,U+52C3,U+52C7,U+52C9,U+52D2,U+52D5,U+52D8-52D9,U+52DD-52DF,U+52E2,U+52E4,U+52F5,U+52F8,U+52FB,U+52FE-52FF,U+5305-5306,U+530D,U+5310,U+5316-5317,U+5319,U+532A,U+532F,U+5331,U+5339,U+533F-5341,U+5343,U+5347-5348,U+534A,U+5351-5354,U+5357,U+535A,U+535C,U+5360-5361,U+5370-5371,U+5373,U+5377-5378,U+537B,U+5384,U+539A,U+539F,U+53AD,U+53B2,U+53BB,U+53C3,U+53C8-53CB,U+53CD,U+53D6-53D7,U+53DB,U+53E2-53E6,U+53E9-53F0,U+53F2-53F3,U+53F5,U+53F8,U+5403-5404,U+5408-540E,U+5410-5411,U+541B,U+541D-541F,U+5426-5427,U+5429,U+542B,U+542D,U+5431,U+5435-5436,U+5438-5439,U+543B-543C,U+5446,U+5448,U+544A,U+5462,U+5468,U+5473,U+5475,U+547B-547D,U+5480,U+5486,U+548C,U+548E,U+5490,U+5492,U+54A8,U+54AB-54AC,U+54B8,U+54BD,U+54C0-54C1,U+54C4,U+54C7-54C8,U+54E1,U+54E5,U+54E9-54EA,U+54ED-54EE,U+54F2,U+5507,U+5510,U+552C,U+552E-552F,U+5531,U+5538,U+5546,U+554A,U+554F,U+555E-555F,U+557B-557C,U+5582-5584,U+5587,U+5589-558A,U+5591,U+5598,U+559A,U+559C-559D,U+55A7,U+55AA,U+55AC,U+55AE,U+55BB,U+55C5,U+55C7,U+55CE,U+55DF,U+55EF,U+5606,U+5609,U+5617,U+5629,U+5632,U+5634,U+5636,U+5639,U+5662,U+5668-566A,U+566C,U+5680,U+5687,U+56AE,U+56B4,U+56B7,U+56BC,U+56C2,U+56CA,U+56D1,U+56DA-56DB,U+56DE,U+56E0,U+56E4,U+56F0,U+56F9-56FA,U+56FF,U+5704,U+5708,U+570B,U+570D,U+5712-5713,U+5716,U+5718,U+571F,U+5728,U+5730,U+573E,U+5740,U+5747,U+574A,U+574D-5751,U+5761,U+5766,U+576A,U+5782-5783,U+578B,U+57A2,U+57AE,U+57C3,U+57CB,U+57CE,U+57DF,U+57F7,U+57F9-57FA,U+5802,U+5805-5806,U+5821,U+582A,U+5831,U+5834-5835,U+584A,U+584C,U+5851,U+5854,U+5857,U+585E,U+586B,U+5875,U+5883,U+5893,U+589C,U+589E,U+58A8,U+58AE,U+58B3,U+58C1,U+58C7,U+58D3,U+58D5,U+58D8,U+58DE,U+58E4,U+58EB,U+58EF,U+590F;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-02.woff2) format('woff2');unicode-range:U+5915-5916,U+591A,U+591C,U+5920,U+5922,U+5925,U+5927,U+5929-592B,U+592E,U+5931,U+5937,U+593E,U+5944,U+5947-5949,U+594F,U+5951,U+5954,U+5957,U+5960,U+5967,U+596A,U+596E,U+5973-5974,U+5978-5979,U+597D,U+5982,U+5984,U+5992-5993,U+5996,U+5999,U+599D,U+59A5,U+59A8,U+59AE,U+59B3,U+59B9,U+59BB,U+59C6,U+59CA-59CB,U+59D1,U+59D3-59D4,U+59FB,U+59FF,U+5A01,U+5A03,U+5A11,U+5A18,U+5A29,U+5A46,U+5A5A,U+5A62,U+5A66,U+5A6A,U+5A6D,U+5A77,U+5A92,U+5A9A,U+5AB2,U+5ABD,U+5AC1,U+5AC9,U+5ACC,U+5AFB,U+5B30,U+5B50-5B51,U+5B54-5B55,U+5B57-5B58,U+5B63-5B64,U+5B69,U+5B6B,U+5B70,U+5B78,U+5B7D,U+5B83,U+5B87-5B89,U+5B8C,U+5B8F,U+5B97-5B9C,U+5BA2-5BA4,U+5BAE,U+5BB0,U+5BB3-5BB4,U+5BB6,U+5BB9,U+5BBF,U+5BC2,U+5BC4,U+5BC6,U+5BCC,U+5BD0,U+5BD2-5BD3,U+5BDE-5BDF,U+5BE1-5BE2,U+5BE5-5BE7,U+5BE9,U+5BEB-5BEC,U+5BF5-5BF6,U+5BF8,U+5C01,U+5C04,U+5C07-5C08,U+5C0A-5C0B,U+5C0D-5C0F,U+5C11,U+5C16,U+5C1A,U+5C24,U+5C2C,U+5C31,U+5C37-5C38,U+5C3A,U+5C3C,U+5C3E,U+5C40,U+5C45-5C46,U+5C48,U+5C4B,U+5C4D,U+5C4F,U+5C51,U+5C55,U+5C60,U+5C62-5C65,U+5C6C,U+5C71,U+5C79,U+5C8C,U+5C94,U+5CA9,U+5CB8,U+5CCB,U+5CD9,U+5CF0,U+5CF6,U+5CFB,U+5D07,U+5D0E,U+5D16-5D17,U+5D29,U+5D4C,U+5D84,U+5D87,U+5D99,U+5DBA,U+5DBC,U+5DD4,U+5DDE,U+5DE2,U+5DE5-5DE8,U+5DEB,U+5DEE,U+5DF1-5DF2,U+5DF4,U+5DFE,U+5E02-5E03,U+5E0C,U+5E16,U+5E19,U+5E1D,U+5E2B,U+5E2D,U+5E33,U+5E36-5E38,U+5E40,U+5E45,U+5E4C,U+5E54-5E55,U+5E5F,U+5E6B,U+5E72-5E74,U+5E78-5E79,U+5E7B-5E7E,U+5E87,U+5E8A,U+5E8F,U+5E95-5E97,U+5E9C,U+5EA6-5EA7,U+5EAB,U+5EAD,U+5EB7-5EB8,U+5EC2,U+5EC9-5ECA,U+5ED3,U+5EDD,U+5EDF,U+5EE2-5EE3,U+5EF3,U+5EF6-5EF7,U+5EFA,U+5F04,U+5F0A,U+5F0F,U+5F13,U+5F15,U+5F17-5F18,U+5F1F,U+5F27,U+5F2D,U+5F31,U+5F35,U+5F37,U+5F3A,U+5F46,U+5F48,U+5F4C,U+5F59,U+5F62,U+5F69,U+5F70-5F71,U+5F77,U+5F79,U+5F7C,U+5F7F-5F81,U+5F85,U+5F88-5F8C,U+5F90-5F92,U+5F97-5F98,U+5F9C,U+5F9E,U+5FA1,U+5FA8-5FAA,U+5FAC,U+5FAE,U+5FB5,U+5FB7,U+5FB9,U+5FBD,U+5FC3,U+5FC5,U+5FCC-5FCD,U+5FD7-5FD9,U+5FE0,U+5FEB,U+5FF1,U+5FF5,U+5FFD,U+600E,U+6012,U+6015-6016,U+6019,U+601D,U+6020-6021,U+6025,U+6027-6028,U+602A,U+602F,U+6043,U+6046,U+604D,U+6050,U+6055,U+6059,U+6062-6063,U+6065,U+6068-606A,U+606C-606D,U+606F-6070,U+607F,U+6084-6085,U+6089,U+608D,U+6094,U+6096,U+609F-60A0,U+60A3,U+60A8,U+60B2,U+60B6,U+60B8,U+60BC-60BD,U+60C5,U+60D1,U+60D5,U+60D8,U+60DA,U+60DC,U+60DF-60E1,U+60E6,U+60F1,U+60F3-60F4,U+60F6,U+60F9,U+6101,U+6108-6109,U+610F,U+611A-611C,U+611F,U+6127,U+6134,U+6137,U+6144,U+6148,U+614B-614C,U+614E,U+6155,U+6158,U+615A,U+6162-6163,U+6167-6168,U+616B,U+616E,U+6170,U+6176-6177,U+617E,U+6182,U+618A,U+618E,U+6190-6191,U+619A,U+61A4,U+61A9,U+61AB,U+61B6,U+61BE,U+61C2,U+61C7-61CA,U+61E3,U+61E6,U+61F2,U+61F5-61F8,U+61FA,U+61FC,U+61FE,U+6200,U+6208,U+620E,U+6210-6212,U+6216,U+621A-621B,U+621F,U+622A,U+622E,U+6230,U+6232-6234,U+6236,U+623E-6241,U+6247,U+6249,U+624B,U+624D-624E,U+6253-6254,U+6258,U+625E,U+6263,U+626D-626F,U+6276,U+6279,U+627C,U+627E-6280,U+6284,U+6289-628A,U+6291-6298,U+62A8,U+62AB-62AC,U+62B1,U+62B5,U+62B9,U+62BC-62BD,U+62C2,U+62C6,U+62C9,U+62CB,U+62CD,U+62D2-62D4,U+62D6,U+62D8-62D9;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-03.woff2) format('woff2');unicode-range:U+62DB-62DC,U+62EC-62ED,U+62EF,U+62F1,U+62F3,U+62FC,U+62FE-62FF,U+6301,U+6307,U+6309,U+6311,U+6316,U+6328,U+632A-632B,U+632F,U+633A,U+633D-633E,U+6346,U+6349,U+634D-6350,U+6355,U+6367-6369,U+636B,U+6372,U+6377,U+6380,U+6383,U+6388-6389,U+638C,U+6392,U+6396,U+6398-6399,U+639B,U+63A0-63A2,U+63A5,U+63A7-63AA,U+63B0,U+63C0,U+63CF-63D0,U+63D2,U+63DA-63DB,U+63E1,U+63E3,U+63ED-63EE,U+63F4,U+640D,U+640F,U+6416,U+641C,U+641E,U+642C-642D,U+6436,U+6452,U+6454,U+6458,U+6467,U+6469,U+646F,U+6478,U+647A-647B,U+6487,U+6490,U+6492-6493,U+6495,U+649E,U+64A4-64A5,U+64AB-64AE,U+64B0,U+64B2,U+64BC,U+64BF,U+64C1,U+64C4-64C5,U+64C7,U+64CA-64CB,U+64CD-64CE,U+64D2,U+64D4,U+64D8,U+64DA,U+64E0,U+64E6,U+64EC,U+64EF,U+64F1-64F2,U+64F4,U+64FA,U+64FE,U+6500,U+6506,U+650F,U+6514,U+6518,U+651C-651D,U+6522,U+6524,U+652A-652B,U+652F,U+6536,U+6539,U+653B,U+653E-653F,U+6545,U+6548,U+654F,U+6551,U+6557-6559,U+655D-655E,U+6562-6563,U+6566,U+656C,U+6572,U+6574-6575,U+6578,U+6582-6583,U+6587,U+6591,U+6599,U+659C,U+65A1,U+65A5,U+65AC,U+65AF-65B0,U+65B7,U+65B9,U+65BC-65BD,U+65C1,U+65C5,U+65CB,U+65CF,U+65D7,U+65E2,U+65E5-65E6,U+65E8-65E9,U+65EC,U+65FA,U+6602,U+6606-6607,U+660E-660F,U+6613-6614,U+661F-6620,U+6625,U+6627-6628,U+662D,U+662F,U+6642-6643,U+6649,U+665A,U+665D,U+6664,U+6666,U+6668,U+666E-6670,U+6674,U+6676,U+667A,U+6687-6688,U+6696-6697,U+66A2,U+66AB,U+66AE,U+66B1,U+66B4,U+66C6,U+66C9,U+66D6,U+66D9,U+66DD,U+66E0,U+66F0,U+66F2-66F4,U+66F8,U+66FC,U+66FE-6700,U+6703,U+6708-6709,U+670B,U+670D,U+6717,U+671B,U+671D,U+671F,U+6726-6728,U+672A-672D,U+6731,U+6735,U+673D,U+674E,U+6750-6751,U+6756,U+675C,U+675F,U+676D,U+676F,U+6771,U+6773,U+677F,U+6789,U+6790,U+6795,U+6797,U+679A,U+679C-679D,U+67AF,U+67B6-67B7,U+67C4,U+67CF-67D0,U+67D3-67D4,U+67E2,U+67E5,U+67EF,U+67F1,U+67F4-67F5,U+6813,U+6821,U+6838-6839,U+683C-683D,U+6846,U+6848,U+684C,U+684E,U+6851,U+687F,U+6881,U+6885,U+688F,U+6897,U+689D,U+68AF-68B0,U+68B3,U+68B5,U+68C4,U+68C9,U+68CB,U+68D2,U+68D5,U+68D8,U+68DF,U+68EE,U+68F2,U+68F5,U+6905,U+690D-690F,U+695A,U+696D,U+6975,U+6977,U+6982,U+699C,U+69AE,U+69BB,U+69C1,U+69CB,U+69CD,U+69F3,U+69FD,U+6A01-6A02,U+6A11,U+6A13,U+6A19,U+6A1E,U+6A21,U+6A23,U+6A38-6A39,U+6A44,U+6A4B,U+6A5F,U+6A6B,U+6A94,U+6AA2,U+6AAF,U+6ABB,U+6AC3,U+6ADA,U+6B04,U+6B0A,U+6B16,U+6B20-6B21,U+6B23,U+6B32,U+6B3A,U+6B3D-6B3E,U+6B43,U+6B47,U+6B49,U+6B4C,U+6B4E,U+6B50,U+6B61-6B67,U+6B6A,U+6B72,U+6B77-6B79,U+6B7B,U+6B86,U+6B89-6B8A,U+6B96,U+6B98,U+6BB5,U+6BB7,U+6BBA,U+6BBC,U+6BBF-6BC0,U+6BC5-6BC6,U+6BCB,U+6BCD,U+6BCF,U+6BD2,U+6BD4,U+6BDB,U+6BEB,U+6BEF,U+6C0F,U+6C11,U+6C1B,U+6C23,U+6C34,U+6C38,U+6C3E,U+6C40,U+6C42,U+6C50,U+6C57,U+6C59,U+6C5F-6C61,U+6C72,U+6C7A,U+6C83,U+6C86,U+6C89,U+6C8C,U+6C90,U+6C92,U+6C96,U+6C99,U+6C9B,U+6CAE,U+6CB3,U+6CB8-6CB9,U+6CBB,U+6CBE-6CBF,U+6CC1,U+6CC9-6CCA,U+6CCC,U+6CD5,U+6CDB,U+6CE1-6CE3,U+6CE5,U+6CE8,U+6CF0,U+6D0B,U+6D17,U+6D1B,U+6D1E,U+6D25,U+6D29-6D2A,U+6D32,U+6D36,U+6D3B,U+6D3D-6D3E,U+6D41,U+6D69-6D6A,U+6D6E,U+6D74,U+6D77-6D78,U+6D87-6D89,U+6D95,U+6DAF,U+6DB2,U+6DB5,U+6DB8,U+6DBC,U+6DC6,U+6DCB-6DCC,U+6DD2,U+6DDA,U+6DE1,U+6DE8-6DEB,U+6DF1,U+6DF5,U+6DF7,U+6DF9-6DFB,U+6E05,U+6E1B,U+6E1D,U+6E20-6E21,U+6E23,U+6E2C-6E2D,U+6E2F,U+6E32;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-04.woff2) format('woff2');unicode-range:U+6E34,U+6E38,U+6E3A,U+6E3E,U+6E4A,U+6E4D-6E4E,U+6E56,U+6E5B,U+6E67,U+6E6F,U+6E90,U+6E96,U+6E98,U+6E9C-6E9D,U+6EA2,U+6EAA-6EAB,U+6EAF,U+6EBA,U+6EC4-6EC5,U+6ECB-6ECC,U+6ED1,U+6ED3,U+6EEF,U+6EF2,U+6EF4,U+6EF8,U+6EFE-6EFF,U+6F02,U+6F06,U+6F0F,U+6F13-6F14,U+6F20,U+6F22-6F23,U+6F2A-6F2C,U+6F38,U+6F54,U+6F5B,U+6F64,U+6F66,U+6F6E,U+6F70,U+6F78,U+6F80,U+6F84,U+6F86,U+6F88,U+6FA4,U+6FB9,U+6FC0,U+6FC3,U+6FDF,U+6FE4,U+6FEB,U+6FEF,U+6FFE,U+7006,U+7009,U+700F,U+7015,U+701A,U+7023,U+7030,U+704C,U+7051,U+7058,U+7063,U+706B,U+7070,U+7076,U+707C-707D,U+70AB,U+70B8,U+70BA,U+70C8,U+70CF,U+70D8-70D9,U+70DF,U+70FD,U+7109,U+7119-711A,U+7121,U+7126,U+7130,U+7136,U+7149,U+714C,U+714E,U+7159,U+715E,U+7162,U+7165,U+7167,U+7169,U+7184,U+718A,U+7199,U+719F-71A0,U+71AC,U+71B1,U+71BE,U+71C3,U+71C8-71C9,U+71D2,U+71D4,U+71DF,U+71E6,U+71ED,U+71FC,U+720D,U+7210,U+721B,U+722A,U+722C-722D,U+7235-7236,U+723E,U+7246-7248,U+724C,U+7258-7259,U+725B,U+725F-7260,U+7262,U+7267,U+7269,U+7272,U+7274,U+7279,U+727D,U+7281,U+72A2,U+72A7,U+72AC,U+72AF,U+72C0,U+72C2,U+72C4,U+72D0,U+72D7,U+72E0-72E1,U+72F9,U+72FC,U+7316,U+7319,U+731B-731C,U+7336,U+7344-7345,U+734E,U+7357,U+7368,U+7370,U+7372,U+7375,U+7378,U+737B,U+7384,U+7387,U+7389,U+738B,U+73A9,U+73AB,U+73B7,U+73BB,U+73CA,U+73CD,U+73E0,U+73ED,U+73FE,U+7403,U+7406,U+7422,U+7455,U+745A,U+745C,U+745E-745F,U+7463,U+746A,U+7470,U+7480,U+7483,U+74A8,U+74B0,U+74DC,U+74E3,U+74E6,U+74F6,U+7518,U+751A,U+751C,U+751F,U+7522,U+7526,U+7528-7529,U+7530-7533,U+7537-7538,U+754C,U+754F,U+7559,U+755C,U+7562,U+7565,U+756A-756B,U+7570,U+7576,U+7578,U+7586-7587,U+758A,U+758F,U+7591,U+759A,U+75AB,U+75B2,U+75B5,U+75BC,U+75BE,U+75C5,U+75C7,U+75CA,U+75D5,U+75DB,U+75F2,U+75FA,U+75FF,U+760B,U+7613,U+7620,U+7624,U+7626,U+7638,U+7642,U+764C,U+7652,U+7656,U+7661-7662,U+7665,U+766E,U+7671-7672,U+767B-767E,U+7682,U+7684,U+7686-7688;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-05.woff2) format('woff2');unicode-range:U+768E,U+76AE,U+76BA,U+76C6,U+76C8,U+76CA,U+76CE,U+76D2,U+76D4,U+76DB-76DC,U+76DE-76DF,U+76E1,U+76E3-76E4,U+76EA,U+76EE-76EF,U+76F2,U+76F4,U+76F8,U+76FC,U+76FE,U+7701,U+7709,U+770B,U+771F-7720,U+7728,U+7736-7737,U+773C,U+773E,U+7740,U+774F,U+775B-775C,U+7761,U+7763,U+7766,U+776C,U+7779,U+777F,U+7784,U+778B,U+778E,U+779E,U+77A5,U+77A7,U+77AA,U+77AC-77AD,U+77BB-77BC,U+77D7,U+77DA-77DC,U+77E3,U+77E5,U+77ED-77EF,U+77F3,U+780C-780D,U+7814,U+7834,U+7838,U+786B-786C,U+788C,U+788E,U+7891,U+7897,U+78A7,U+78A9,U+78B0,U+78BA,U+78BC,U+78BE,U+78D0,U+78E8,U+78FA,U+790E,U+7919,U+7926,U+793A,U+793E,U+7940,U+7942,U+7947-7949,U+7955-7956,U+795B,U+795D-795F,U+7962,U+7965,U+7968,U+796D,U+7981,U+798D,U+798F,U+79A6,U+79AE,U+79B1,U+79C0-79C1,U+79C9,U+79CB,U+79D1-79D2,U+79D8,U+79E4,U+79E9,U+79FB,U+7A00,U+7A05,U+7A0B,U+7A0D,U+7A1A,U+7A1C,U+7A1F-7A20,U+7A2E,U+7A31,U+7A3B-7A3D,U+7A3F,U+7A46,U+7A4C-7A4E,U+7A57,U+7A62,U+7A69,U+7A6B,U+7A74,U+7A76,U+7A79-7A7A,U+7A7F,U+7A81,U+7A84,U+7A92,U+7A96-7A98,U+7A9F,U+7AA9,U+7AAE,U+7ABA,U+7ABF,U+7AC4,U+7ACA-7ACB,U+7AD9,U+7ADF-7AE0,U+7AE3,U+7AE5,U+7AED,U+7AEF,U+7AF6,U+7AFA,U+7AFF,U+7B11,U+7B1B,U+7B26,U+7B28,U+7B2C,U+7B46,U+7B49,U+7B4B,U+7B52,U+7B54,U+7B56,U+7B8D,U+7B97,U+7B9D,U+7BA1,U+7BAD,U+7BB1,U+7BB4,U+7BC0,U+7BC4,U+7BC7,U+7BC9,U+7BE1,U+7BE4,U+7BE9,U+7BF7,U+7C07,U+7C21,U+7C37,U+7C3D-7C3F,U+7C43,U+7C4C-7C4D,U+7C60,U+7C64,U+7C6C,U+7C72-7C73,U+7C89,U+7C92,U+7C97,U+7CA5,U+7CB9,U+7CBE,U+7CCA,U+7CD5,U+7CD9,U+7CDF,U+7CE7,U+7CFB,U+7CFE,U+7D00,U+7D02,U+7D04-7D05,U+7D0D,U+7D10,U+7D13-7D14,U+7D17,U+7D19-7D1C,U+7D20-7D22,U+7D2B,U+7D2E-7D30,U+7D39,U+7D42,U+7D44,U+7D46,U+7D50,U+7D55,U+7D61,U+7D66,U+7D68,U+7D6E,U+7D71-7D72,U+7D81,U+7D91,U+7D93,U+7D9C,U+7DA0,U+7DA2,U+7DAD,U+7DB1-7DB2,U+7DB4,U+7DBB,U+7DBD,U+7DBF,U+7DCA,U+7DD2,U+7DD8,U+7DDA,U+7DE0,U+7DE3,U+7DE8-7DE9;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-06.woff2) format('woff2');unicode-range:U+7DEC,U+7DF2,U+7DF4,U+7DFB,U+7E08,U+7E1B,U+7E1D,U+7E2B,U+7E2E,U+7E31,U+7E37,U+7E39,U+7E3D-7E3E,U+7E41,U+7E43,U+7E46,U+7E54,U+7E5E,U+7E69-7E6B,U+7E6D,U+7E73,U+7E79,U+7E7C,U+7E82,U+7E8C,U+7E8F,U+7E96,U+7F3A,U+7F3D,U+7F44,U+7F50,U+7F54-7F55,U+7F63,U+7F69-7F6A,U+7F6E,U+7F70,U+7F75,U+7F77,U+7F79,U+7F85,U+7F88,U+7F8A,U+7F8E,U+7F94,U+7F9E,U+7FA4,U+7FA9,U+7FB8-7FB9,U+7FBD,U+7FC5,U+7FCE,U+7FD2,U+7FD4,U+7FE0-7FE1,U+7FE9,U+7FF0-7FF1,U+7FFB-7FFC,U+8000-8001,U+8003,U+8005,U+800C-800D,U+8010,U+8015,U+8017,U+8033,U+8036,U+803D,U+8046,U+804A,U+8056,U+805A,U+805E,U+806F-8070,U+8072-8073,U+8077,U+807D-807E,U+8085-8087,U+8089,U+808B,U+8096,U+809A-809B,U+80A1-80A2,U+80A5,U+80A9,U+80AF,U+80B2,U+80BA,U+80C3,U+80CC,U+80CE,U+80D6,U+80DE,U+80E1,U+80F8,U+80FD,U+8102,U+8105-8106,U+8108,U+810A,U+811A,U+812B,U+8139,U+813E,U+8150-8151,U+8153-8155,U+8165-8166,U+816B,U+8170,U+8173,U+8179-817A,U+8180,U+818F,U+819A,U+819C-819D,U+81A8,U+81BA,U+81BD,U+81C2,U+81C9,U+81D8,U+81DF,U+81E3,U+81E5,U+81E8,U+81EA,U+81ED,U+81F3-81F4,U+81FA-81FB,U+81FE,U+8207-820A,U+820C-820D,U+8212,U+821E-821F,U+822A,U+822C,U+8235,U+8239,U+8258,U+826F,U+8271-8272,U+8277,U+827E,U+8292,U+829D,U+82A5,U+82AC,U+82B1,U+82B3,U+82B8,U+82BD,U+82D7,U+82DB,U+82DF,U+82E5-82E6,U+82F1,U+8301,U+832B,U+8331-8332,U+8335,U+8349-834A,U+8352,U+8377,U+8389-838A,U+838E,U+8393,U+8396,U+83A0,U+83AB,U+83BD,U+83CC,U+83DC,U+83EF,U+83F2,U+8404,U+840A,U+840C,U+840E,U+842C,U+843D,U+8449,U+8457,U+845B,U+8461,U+8463,U+846C,U+8482,U+8490,U+8499,U+849E,U+84BC,U+84C4,U+84CB,U+84EC,U+8513,U+852C-852D,U+853D,U+8569-856A,U+857E,U+8584,U+85A6,U+85AA,U+85C9,U+85CD,U+85CF-85D0,U+85DD,U+85E5,U+85EA,U+8607,U+860A-860B,U+862D,U+863F,U+864E,U+8650,U+8654-8655,U+865B-865C,U+865E-865F,U+8667,U+8679,U+86C0,U+86C7,U+86CB,U+86DB,U+86FB,U+86FE,U+8702-8703,U+8718,U+871C,U+8755,U+878D,U+87A2,U+87BA,U+87F2,U+87FB;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-07.woff2) format('woff2');unicode-range:U+8805,U+880D,U+881F,U+8822,U+8836,U+883B,U+8840,U+884C-884D,U+8853,U+8857,U+885B,U+885D,U+8861,U+8863,U+8868,U+886B,U+8870,U+8877,U+8879,U+8882,U+888B,U+888D,U+8892,U+8896,U+88AB,U+88B1,U+88C1-88C2,U+88CF,U+88D4-88D5,U+88DC-88DD,U+88E1,U+88E8,U+88F3,U+88F8-88F9,U+88FD,U+8907,U+8913,U+8925,U+892A,U+8936,U+8938,U+893B,U+8941,U+8964,U+896A,U+896F,U+8972,U+897F,U+8981,U+8986,U+898B,U+898F,U+8993,U+8996,U+89AA,U+89B7,U+89BA,U+89BD,U+89C0,U+89D2,U+89E3,U+89F8,U+8A00,U+8A02,U+8A08,U+8A0A,U+8A0E,U+8A13,U+8A17-8A18,U+8A1D,U+8A23,U+8A2A,U+8A2D,U+8A31,U+8A34,U+8A36,U+8A3A-8A3B,U+8A50,U+8A55,U+8A5B,U+8A5E,U+8A60-8A62,U+8A66,U+8A69,U+8A6B,U+8A6D-8A6E,U+8A71-8A73,U+8A79,U+8A87,U+8A8C-8A8D,U+8A93,U+8A95,U+8A98,U+8A9A,U+8A9E,U+8AA0-8AA1,U+8AA3-8AA4,U+8AA6,U+8AA8,U+8AAA,U+8AB0,U+8AB2,U+8ABC,U+8ABF,U+8AC7,U+8ACB,U+8AD2,U+8AD6,U+8AE6-8AE7,U+8AEE,U+8AF1,U+8AF3,U+8AF7-8AF8,U+8AFA,U+8AFE,U+8B00,U+8B02,U+8B04,U+8B0A,U+8B0E,U+8B10,U+8B14,U+8B19,U+8B1B,U+8B1D,U+8B2C,U+8B39,U+8B49,U+8B4F,U+8B58,U+8B5C,U+8B66,U+8B6C,U+8B6F-8B70,U+8B74,U+8B77,U+8B7D,U+8B80,U+8B8A,U+8B93,U+8B9A,U+8C37,U+8C41,U+8C46,U+8C48,U+8C4E,U+8C50,U+8C54,U+8C61,U+8C6A-8C6B,U+8C79-8C7A,U+8C8C,U+8C9D-8C9E,U+8CA0-8CA2,U+8CA7-8CA8,U+8CAA-8CAC,U+8CB4,U+8CB6-8CB8,U+8CBB-8CBC,U+8CC0,U+8CC7,U+8CCA,U+8CD3,U+8CDC,U+8CDE,U+8CE0,U+8CE3-8CE4,U+8CE6,U+8CEA,U+8CED,U+8CF4,U+8CFA,U+8CFC-8CFD,U+8D05,U+8D08,U+8D0A,U+8D0F,U+8D16-8D17,U+8D64,U+8D66,U+8D6B,U+8D70,U+8D74,U+8D77,U+8D85,U+8D8A,U+8D95,U+8D9F,U+8DA3,U+8DA8,U+8DB3,U+8DCB-8DCC,U+8DCE,U+8DD1,U+8DDA-8DDB,U+8DDD,U+8DDF,U+8DE1,U+8DE4,U+8DE8,U+8DEA,U+8DEF,U+8DF3,U+8E09,U+8E0F-8E10,U+8E1D-8E1F,U+8E29-8E2A,U+8E35,U+8E3D,U+8E42,U+8E48-8E49,U+8E4B-8E4C,U+8E5F,U+8E63-8E64,U+8E66,U+8E81,U+8E87,U+8E8A-8E8B,U+8E8D,U+8E95,U+8EAA-8EAC,U+8EB2,U+8EBA,U+8EC0,U+8ECA,U+8ECC-8ECD,U+8ED2,U+8EDB,U+8EDF,U+8EF8,U+8EFB,U+8F03,U+8F09;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-08.woff2) format('woff2');unicode-range:U+8F0A,U+8F13-8F15,U+8F1B,U+8F1D,U+8F1F,U+8F29-8F2A,U+8F2F,U+8F38,U+8F3B,U+8F44-8F45,U+8F49,U+8F4D,U+8F5F,U+8F9B-8F9C,U+8FA3,U+8FA6,U+8FA8,U+8FAD,U+8FAF-8FB2,U+8FC2,U+8FC4-8FC5,U+8FCE,U+8FD1,U+8FD4,U+8FE5-8FE6,U+8FEA-8FEB,U+8FED,U+8FF0,U+8FF4,U+8FF7,U+8FF9,U+8FFB,U+8FFD,U+9000-9001,U+9003,U+9006,U+900D,U+900F-9010,U+9014-9015,U+9017,U+9019-901A,U+901D-9020,U+9022-9023,U+902E,U+9031-9032,U+9038,U+903C,U+903E,U+9041-9042,U+9047,U+904A-904B,U+904D-904F,U+9053-9055,U+9059,U+905C,U+905E,U+9060,U+9062-9063,U+9068-9069,U+906D-906E,U+9072,U+9075,U+9077-9078,U+907A,U+907C,U+907F-9081,U+9083-9084,U+908A-908B,U+908F,U+90A3,U+90A6,U+90AA,U+90C1,U+90DD,U+90E8,U+90F5,U+90FD,U+9109,U+9119,U+912D,U+9130,U+914D,U+9152,U+9157,U+9163,U+916C,U+9177-9178,U+9189,U+9192,U+919C,U+919E,U+91AB,U+91C0-91C1,U+91C7,U+91CB-91D1,U+91D8,U+91DC-91DD,U+920D,U+9214-9215,U+9234,U+9245,U+925A-925B,U+9264,U+9280,U+9285,U+9293,U+9298,U+929C,U+92B3,U+92B7,U+92D2,U+92EA,U+92F8,U+9304,U+9322,U+9326,U+9328,U+932B,U+932E-932F,U+934A,U+935B,U+9365,U+9375,U+937E,U+9396,U+93AE,U+93C8,U+93D7-93D8,U+93E1-93E2,U+93FD,U+9418,U+9435,U+9444,U+9451-9452,U+9463,U+9470,U+9472,U+947C-947D,U+947F,U+9577,U+9580,U+9582-9583,U+9589,U+958B,U+9592-9593,U+95A1,U+95B1,U+95B9,U+95C6-95C7,U+95CA,U+95D5-95D6,U+95DC,U+95E1-95E2,U+9631-9632,U+963B,U+963F-9640,U+9644,U+964B-964D,U+9650,U+9661-9664,U+966A,U+9670,U+9673,U+9676-9678,U+967D,U+968A,U+968E,U+9694,U+9698-9699,U+969B-969C,U+96A8,U+96AA,U+96B1,U+96B8,U+96BB,U+96C0,U+96C4-96C7,U+96D5-96D6,U+96D9,U+96DB-96DC,U+96DE,U+96E2-96E3,U+96E8,U+96EA,U+96F2,U+96F6-96F7,U+96FB,U+9700,U+9704,U+9706-9707,U+970D-970E,U+9716,U+971C,U+9727,U+9732,U+9738,U+9748,U+9752,U+975C,U+975E,U+9760-9762;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/ntc-regular-09.woff2) format('woff2');unicode-range:U+978B,U+978F,U+9798,U+97A0,U+97CB,U+97F3,U+97FB,U+97FF,U+9801-9803,U+9805-9806,U+9808,U+980C,U+9810-9811,U+9813,U+9817-9818,U+9824,U+982D,U+9830,U+9838-9839,U+983B,U+9846,U+984C-984D,U+984F,U+9858,U+985B,U+985E,U+9867,U+986B,U+986F,U+98A8,U+98B3,U+98B6,U+98C4,U+98C6,U+98DB,U+98DF,U+98E2,U+98EF,U+98F2,U+98FD-98FE,U+9905,U+990A,U+990C,U+9910,U+9912-9913,U+9918,U+9928,U+992C,U+9935,U+9948,U+994B,U+9951-9952,U+9957,U+995C,U+9996,U+9999,U+99A5,U+99A8,U+99AC-99AD,U+99B3,U+99C1,U+99D0,U+99D5,U+99DB,U+99DD,U+99E1,U+99ED,U+99F1,U+9A0E,U+9A19,U+9A30,U+9A37,U+9A45,U+9A55,U+9A57,U+9A5A,U+9A5F,U+9A62,U+9AA8,U+9AB7-9AB8,U+9ABC,U+9ACF,U+9AD2-9AD4,U+9AD8,U+9AEE,U+9B03,U+9B06,U+9B25,U+9B27,U+9B31,U+9B3C,U+9B42,U+9B45,U+9B54,U+9B58,U+9B5A,U+9B6F,U+9B91,U+9BAE,U+9CE5,U+9CE9,U+9CF4,U+9D3B,U+9D72,U+9DA9,U+9DF9,U+9E7D,U+9E97,U+9EA5,U+9EB5,U+9EBB-9EBC,U+9EC3,U+9ECE,U+9ED1,U+9ED8,U+9EDE,U+9EE8,U+9EEF,U+9F13,U+9F20,U+9F3B,U+9F4A,U+9F52,U+9F63,U+9F8D,U+9F90,U+9F95,U+FE30-FE4F,U+FE5D-FE5E,U+FF01-FF65;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-00.woff2) format('woff2');unicode-range:U+0020-007E,U+00A0-00A9,U+00AB-00AD,U+00B0-00B7,U+00B9,U+00BB,U+00E9,U+2003,U+2010-2016,U+2018-201A,U+201C-201E,U+2020-2022,U+2025-2027,U+2030,U+2032-2033,U+2035,U+2039-203B,U+2074,U+2190-2199,U+2215,U+2248,U+2264-2265,U+2460-2469,U+2500-25AB,U+25B1-25B3,U+25B6-25B7,U+25BC-25BD,U+25C0-25C1,U+25C6-25C7,U+25C9-25CC,U+25CE-25CF,U+2600-2601,U+2640,U+2642,U+2660-2667,U+2713,U+3000-303F,U+30FB,U+3127,U+4E00-4E01,U+4E03,U+4E08-4E0B,U+4E0D,U+4E14,U+4E16,U+4E18,U+4E1F,U+4E26,U+4E2D,U+4E32,U+4E38-4E39,U+4E3B,U+4E43,U+4E45,U+4E4B,U+4E4D-4E4F,U+4E56,U+4E58,U+4E5D,U+4E5F,U+4E7E,U+4E82,U+4E86,U+4E88,U+4E8B-4E8C,U+4E8E,U+4E92,U+4E94-4E95,U+4E99,U+4E9B,U+4E9E-4E9F,U+4EA1,U+4EA4,U+4EA6,U+4EA8,U+4EAB-4EAC,U+4EAE,U+4EBA,U+4EC0-4EC1,U+4EC6-4EC7,U+4ECA-4ECB,U+4ECD,U+4ED4,U+4ED6-4ED8;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-01.woff2) format('woff2');unicode-range:U+4ED9,U+4EE3-4EE5,U+4EF0,U+4EF2,U+4EF6,U+4EFB,U+4EFD,U+4EFF,U+4F01,U+4F0A,U+4F0D-4F11,U+4F2F-4F30,U+4F34,U+4F36,U+4F38,U+4F3A,U+4F3C-4F3D,U+4F46-4F48,U+4F4D-4F51,U+4F54-4F55,U+4F5B-4F5C,U+4F60,U+4F69,U+4F6F,U+4F73,U+4F75,U+4F7F,U+4F86,U+4F8B,U+4F8D,U+4F9B,U+4F9D,U+4FAE,U+4FB5-4FB7,U+4FBF,U+4FC2-4FC4,U+4FCE-4FCF,U+4FD7-4FD8,U+4FDD,U+4FE1,U+4FEE-4FEF,U+4FF1,U+5006,U+5009,U+500B,U+500D,U+500F,U+5011-5012,U+5016,U+5018-501A,U+501F,U+5021,U+5026,U+502A-502B,U+503C,U+5047,U+5049,U+504C,U+504E-504F,U+5055,U+505A,U+505C,U+5065,U+5074-5077,U+507D,U+5080,U+5085,U+5091,U+5099,U+50AC,U+50B2-50B3,U+50B5,U+50B7,U+50BB,U+50BE,U+50C5,U+50CF,U+50D5,U+50E5,U+50E7,U+50ED,U+50F5,U+50F9,U+50FB,U+5100,U+5104,U+5106,U+5118,U+511F,U+5121,U+512A,U+5132,U+513C,U+5140-5141,U+5143-5149,U+514B-514D,U+5152,U+515C,U+5162,U+5165,U+5167-5169,U+516B-516D,U+5171,U+5175-5178,U+517C,U+5180,U+518A,U+518D,U+5192,U+5195,U+5197,U+51A0,U+51A4-51A5,U+51AC,U+51B0,U+51B3,U+51B5,U+51B7,U+51BD,U+51C6,U+51CB-51CD,U+51DC-51DD,U+51E1,U+51F1,U+51F3,U+51F6,U+51F8,U+51FA,U+51FD,U+5200,U+5203,U+5206-5207,U+5211,U+5217,U+521D,U+5224-5225,U+5229-522A,U+5230,U+5236-5237,U+523A-523B,U+5247,U+524A,U+524D-524E,U+5254,U+5256,U+525B-525D,U+5269-526A,U+526F,U+5272,U+5275,U+5283,U+5287,U+528A,U+528D,U+5291,U+529B,U+529F-52A0,U+52A3,U+52A9-52AB,U+52C1,U+52C3,U+52C7,U+52C9,U+52D2,U+52D5,U+52D8-52D9,U+52DD-52DF,U+52E2,U+52E4,U+52F5,U+52F8,U+52FB,U+52FE-52FF,U+5305-5306,U+530D,U+5310,U+5316-5317,U+5319,U+532A,U+532F,U+5331,U+5339,U+533F-5341,U+5343,U+5347-5348,U+534A,U+5351-5354,U+5357,U+535A,U+535C,U+5360-5361,U+5370-5371,U+5373,U+5377-5378,U+537B,U+5384,U+539A,U+539F,U+53AD,U+53B2,U+53BB,U+53C3,U+53C8-53CB,U+53CD,U+53D6-53D7,U+53DB,U+53E2-53E6,U+53E9-53F0,U+53F2-53F3,U+53F5,U+53F8,U+5403-5404,U+5408-540E,U+5410-5411,U+541B,U+541D-541F,U+5426-5427,U+5429,U+542B,U+542D,U+5431,U+5435-5436,U+5438-5439,U+543B-543C,U+5446,U+5448,U+544A,U+5462,U+5468,U+5473,U+5475,U+547B-547D,U+5480,U+5486,U+548C,U+548E,U+5490,U+5492,U+54A8,U+54AB-54AC,U+54B8,U+54BD,U+54C0-54C1,U+54C4,U+54C7-54C8,U+54E1,U+54E5,U+54E9-54EA,U+54ED-54EE,U+54F2,U+5507,U+5510,U+552C,U+552E-552F,U+5531,U+5538,U+5546,U+554A,U+554F,U+555E-555F,U+557B-557C,U+5582-5584,U+5587,U+5589-558A,U+5591,U+5598,U+559A,U+559C-559D,U+55A7,U+55AA,U+55AC,U+55AE,U+55BB,U+55C5,U+55C7,U+55CE,U+55DF,U+55EF,U+5606,U+5609,U+5617,U+5629,U+5632,U+5634,U+5636,U+5639,U+5662,U+5668-566A,U+566C,U+5680,U+5687,U+56AE,U+56B4,U+56B7,U+56BC,U+56C2,U+56CA,U+56D1,U+56DA-56DB,U+56DE,U+56E0,U+56E4,U+56F0,U+56F9-56FA,U+56FF,U+5704,U+5708,U+570B,U+570D,U+5712-5713,U+5716,U+5718,U+571F,U+5728,U+5730,U+573E,U+5740,U+5747,U+574A,U+574D-5751,U+5761,U+5766,U+576A,U+5782-5783,U+578B,U+57A2,U+57AE,U+57C3,U+57CB,U+57CE,U+57DF,U+57F7,U+57F9-57FA,U+5802,U+5805-5806,U+5821,U+582A,U+5831,U+5834-5835,U+584A,U+584C,U+5851,U+5854,U+5857,U+585E,U+586B,U+5875,U+5883,U+5893,U+589C,U+589E,U+58A8,U+58AE,U+58B3,U+58C1,U+58C7,U+58D3,U+58D5,U+58D8,U+58DE,U+58E4,U+58EB,U+58EF,U+590F;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-02.woff2) format('woff2');unicode-range:U+5915-5916,U+591A,U+591C,U+5920,U+5922,U+5925,U+5927,U+5929-592B,U+592E,U+5931,U+5937,U+593E,U+5944,U+5947-5949,U+594F,U+5951,U+5954,U+5957,U+5960,U+5967,U+596A,U+596E,U+5973-5974,U+5978-5979,U+597D,U+5982,U+5984,U+5992-5993,U+5996,U+5999,U+599D,U+59A5,U+59A8,U+59AE,U+59B3,U+59B9,U+59BB,U+59C6,U+59CA-59CB,U+59D1,U+59D3-59D4,U+59FB,U+59FF,U+5A01,U+5A03,U+5A11,U+5A18,U+5A29,U+5A46,U+5A5A,U+5A62,U+5A66,U+5A6A,U+5A6D,U+5A77,U+5A92,U+5A9A,U+5AB2,U+5ABD,U+5AC1,U+5AC9,U+5ACC,U+5AFB,U+5B30,U+5B50-5B51,U+5B54-5B55,U+5B57-5B58,U+5B63-5B64,U+5B69,U+5B6B,U+5B70,U+5B78,U+5B7D,U+5B83,U+5B87-5B89,U+5B8C,U+5B8F,U+5B97-5B9C,U+5BA2-5BA4,U+5BAE,U+5BB0,U+5BB3-5BB4,U+5BB6,U+5BB9,U+5BBF,U+5BC2,U+5BC4,U+5BC6,U+5BCC,U+5BD0,U+5BD2-5BD3,U+5BDE-5BDF,U+5BE1-5BE2,U+5BE5-5BE7,U+5BE9,U+5BEB-5BEC,U+5BF5-5BF6,U+5BF8,U+5C01,U+5C04,U+5C07-5C08,U+5C0A-5C0B,U+5C0D-5C0F,U+5C11,U+5C16,U+5C1A,U+5C24,U+5C2C,U+5C31,U+5C37-5C38,U+5C3A,U+5C3C,U+5C3E,U+5C40,U+5C45-5C46,U+5C48,U+5C4B,U+5C4D,U+5C4F,U+5C51,U+5C55,U+5C60,U+5C62-5C65,U+5C6C,U+5C71,U+5C79,U+5C8C,U+5C94,U+5CA9,U+5CB8,U+5CCB,U+5CD9,U+5CF0,U+5CF6,U+5CFB,U+5D07,U+5D0E,U+5D16-5D17,U+5D29,U+5D4C,U+5D84,U+5D87,U+5D99,U+5DBA,U+5DBC,U+5DD4,U+5DDE,U+5DE2,U+5DE5-5DE8,U+5DEB,U+5DEE,U+5DF1-5DF2,U+5DF4,U+5DFE,U+5E02-5E03,U+5E0C,U+5E16,U+5E19,U+5E1D,U+5E2B,U+5E2D,U+5E33,U+5E36-5E38,U+5E40,U+5E45,U+5E4C,U+5E54-5E55,U+5E5F,U+5E6B,U+5E72-5E74,U+5E78-5E79,U+5E7B-5E7E,U+5E87,U+5E8A,U+5E8F,U+5E95-5E97,U+5E9C,U+5EA6-5EA7,U+5EAB,U+5EAD,U+5EB7-5EB8,U+5EC2,U+5EC9-5ECA,U+5ED3,U+5EDD,U+5EDF,U+5EE2-5EE3,U+5EF3,U+5EF6-5EF7,U+5EFA,U+5F04,U+5F0A,U+5F0F,U+5F13,U+5F15,U+5F17-5F18,U+5F1F,U+5F27,U+5F2D,U+5F31,U+5F35,U+5F37,U+5F3A,U+5F46,U+5F48,U+5F4C,U+5F59,U+5F62,U+5F69,U+5F70-5F71,U+5F77,U+5F79,U+5F7C,U+5F7F-5F81,U+5F85,U+5F88-5F8C,U+5F90-5F92,U+5F97-5F98,U+5F9C,U+5F9E,U+5FA1,U+5FA8-5FAA,U+5FAC,U+5FAE,U+5FB5,U+5FB7,U+5FB9,U+5FBD,U+5FC3,U+5FC5,U+5FCC-5FCD,U+5FD7-5FD9,U+5FE0,U+5FEB,U+5FF1,U+5FF5,U+5FFD,U+600E,U+6012,U+6015-6016,U+6019,U+601D,U+6020-6021,U+6025,U+6027-6028,U+602A,U+602F,U+6043,U+6046,U+604D,U+6050,U+6055,U+6059,U+6062-6063,U+6065,U+6068-606A,U+606C-606D,U+606F-6070,U+607F,U+6084-6085,U+6089,U+608D,U+6094,U+6096,U+609F-60A0,U+60A3,U+60A8,U+60B2,U+60B6,U+60B8,U+60BC-60BD,U+60C5,U+60D1,U+60D5,U+60D8,U+60DA,U+60DC,U+60DF-60E1,U+60E6,U+60F1,U+60F3-60F4,U+60F6,U+60F9,U+6101,U+6108-6109,U+610F,U+611A-611C,U+611F,U+6127,U+6134,U+6137,U+6144,U+6148,U+614B-614C,U+614E,U+6155,U+6158,U+615A,U+6162-6163,U+6167-6168,U+616B,U+616E,U+6170,U+6176-6177,U+617E,U+6182,U+618A,U+618E,U+6190-6191,U+619A,U+61A4,U+61A9,U+61AB,U+61B6,U+61BE,U+61C2,U+61C7-61CA,U+61E3,U+61E6,U+61F2,U+61F5-61F8,U+61FA,U+61FC,U+61FE,U+6200,U+6208,U+620E,U+6210-6212,U+6216,U+621A-621B,U+621F,U+622A,U+622E,U+6230,U+6232-6234,U+6236,U+623E-6241,U+6247,U+6249,U+624B,U+624D-624E,U+6253-6254,U+6258,U+625E,U+6263,U+626D-626F,U+6276,U+6279,U+627C,U+627E-6280,U+6284,U+6289-628A,U+6291-6298,U+62A8,U+62AB-62AC,U+62B1,U+62B5,U+62B9,U+62BC-62BD,U+62C2,U+62C6,U+62C9,U+62CB,U+62CD,U+62D2-62D4,U+62D6,U+62D8-62D9;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-03.woff2) format('woff2');unicode-range:U+62DB-62DC,U+62EC-62ED,U+62EF,U+62F1,U+62F3,U+62FC,U+62FE-62FF,U+6301,U+6307,U+6309,U+6311,U+6316,U+6328,U+632A-632B,U+632F,U+633A,U+633D-633E,U+6346,U+6349,U+634D-6350,U+6355,U+6367-6369,U+636B,U+6372,U+6377,U+6380,U+6383,U+6388-6389,U+638C,U+6392,U+6396,U+6398-6399,U+639B,U+63A0-63A2,U+63A5,U+63A7-63AA,U+63B0,U+63C0,U+63CF-63D0,U+63D2,U+63DA-63DB,U+63E1,U+63E3,U+63ED-63EE,U+63F4,U+640D,U+640F,U+6416,U+641C,U+641E,U+642C-642D,U+6436,U+6452,U+6454,U+6458,U+6467,U+6469,U+646F,U+6478,U+647A-647B,U+6487,U+6490,U+6492-6493,U+6495,U+649E,U+64A4-64A5,U+64AB-64AE,U+64B0,U+64B2,U+64BC,U+64BF,U+64C1,U+64C4-64C5,U+64C7,U+64CA-64CB,U+64CD-64CE,U+64D2,U+64D4,U+64D8,U+64DA,U+64E0,U+64E6,U+64EC,U+64EF,U+64F1-64F2,U+64F4,U+64FA,U+64FE,U+6500,U+6506,U+650F,U+6514,U+6518,U+651C-651D,U+6522,U+6524,U+652A-652B,U+652F,U+6536,U+6539,U+653B,U+653E-653F,U+6545,U+6548,U+654F,U+6551,U+6557-6559,U+655D-655E,U+6562-6563,U+6566,U+656C,U+6572,U+6574-6575,U+6578,U+6582-6583,U+6587,U+6591,U+6599,U+659C,U+65A1,U+65A5,U+65AC,U+65AF-65B0,U+65B7,U+65B9,U+65BC-65BD,U+65C1,U+65C5,U+65CB,U+65CF,U+65D7,U+65E2,U+65E5-65E6,U+65E8-65E9,U+65EC,U+65FA,U+6602,U+6606-6607,U+660E-660F,U+6613-6614,U+661F-6620,U+6625,U+6627-6628,U+662D,U+662F,U+6642-6643,U+6649,U+665A,U+665D,U+6664,U+6666,U+6668,U+666E-6670,U+6674,U+6676,U+667A,U+6687-6688,U+6696-6697,U+66A2,U+66AB,U+66AE,U+66B1,U+66B4,U+66C6,U+66C9,U+66D6,U+66D9,U+66DD,U+66E0,U+66F0,U+66F2-66F4,U+66F8,U+66FC,U+66FE-6700,U+6703,U+6708-6709,U+670B,U+670D,U+6717,U+671B,U+671D,U+671F,U+6726-6728,U+672A-672D,U+6731,U+6735,U+673D,U+674E,U+6750-6751,U+6756,U+675C,U+675F,U+676D,U+676F,U+6771,U+6773,U+677F,U+6789,U+6790,U+6795,U+6797,U+679A,U+679C-679D,U+67AF,U+67B6-67B7,U+67C4,U+67CF-67D0,U+67D3-67D4,U+67E2,U+67E5,U+67EF,U+67F1,U+67F4-67F5,U+6813,U+6821,U+6838-6839,U+683C-683D,U+6846,U+6848,U+684C,U+684E,U+6851,U+687F,U+6881,U+6885,U+688F,U+6897,U+689D,U+68AF-68B0,U+68B3,U+68B5,U+68C4,U+68C9,U+68CB,U+68D2,U+68D5,U+68D8,U+68DF,U+68EE,U+68F2,U+68F5,U+6905,U+690D-690F,U+695A,U+696D,U+6975,U+6977,U+6982,U+699C,U+69AE,U+69BB,U+69C1,U+69CB,U+69CD,U+69F3,U+69FD,U+6A01-6A02,U+6A11,U+6A13,U+6A19,U+6A1E,U+6A21,U+6A23,U+6A38-6A39,U+6A44,U+6A4B,U+6A5F,U+6A6B,U+6A94,U+6AA2,U+6AAF,U+6ABB,U+6AC3,U+6ADA,U+6B04,U+6B0A,U+6B16,U+6B20-6B21,U+6B23,U+6B32,U+6B3A,U+6B3D-6B3E,U+6B43,U+6B47,U+6B49,U+6B4C,U+6B4E,U+6B50,U+6B61-6B67,U+6B6A,U+6B72,U+6B77-6B79,U+6B7B,U+6B86,U+6B89-6B8A,U+6B96,U+6B98,U+6BB5,U+6BB7,U+6BBA,U+6BBC,U+6BBF-6BC0,U+6BC5-6BC6,U+6BCB,U+6BCD,U+6BCF,U+6BD2,U+6BD4,U+6BDB,U+6BEB,U+6BEF,U+6C0F,U+6C11,U+6C1B,U+6C23,U+6C34,U+6C38,U+6C3E,U+6C40,U+6C42,U+6C50,U+6C57,U+6C59,U+6C5F-6C61,U+6C72,U+6C7A,U+6C83,U+6C86,U+6C89,U+6C8C,U+6C90,U+6C92,U+6C96,U+6C99,U+6C9B,U+6CAE,U+6CB3,U+6CB8-6CB9,U+6CBB,U+6CBE-6CBF,U+6CC1,U+6CC9-6CCA,U+6CCC,U+6CD5,U+6CDB,U+6CE1-6CE3,U+6CE5,U+6CE8,U+6CF0,U+6D0B,U+6D17,U+6D1B,U+6D1E,U+6D25,U+6D29-6D2A,U+6D32,U+6D36,U+6D3B,U+6D3D-6D3E,U+6D41,U+6D69-6D6A,U+6D6E,U+6D74,U+6D77-6D78,U+6D87-6D89,U+6D95,U+6DAF,U+6DB2,U+6DB5,U+6DB8,U+6DBC,U+6DC6,U+6DCB-6DCC,U+6DD2,U+6DDA,U+6DE1,U+6DE8-6DEB,U+6DF1,U+6DF5,U+6DF7,U+6DF9-6DFB,U+6E05,U+6E1B,U+6E1D,U+6E20-6E21,U+6E23,U+6E2C-6E2D,U+6E2F,U+6E32;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-04.woff2) format('woff2');unicode-range:U+6E34,U+6E38,U+6E3A,U+6E3E,U+6E4A,U+6E4D-6E4E,U+6E56,U+6E5B,U+6E67,U+6E6F,U+6E90,U+6E96,U+6E98,U+6E9C-6E9D,U+6EA2,U+6EAA-6EAB,U+6EAF,U+6EBA,U+6EC4-6EC5,U+6ECB-6ECC,U+6ED1,U+6ED3,U+6EEF,U+6EF2,U+6EF4,U+6EF8,U+6EFE-6EFF,U+6F02,U+6F06,U+6F0F,U+6F13-6F14,U+6F20,U+6F22-6F23,U+6F2A-6F2C,U+6F38,U+6F54,U+6F5B,U+6F64,U+6F66,U+6F6E,U+6F70,U+6F78,U+6F80,U+6F84,U+6F86,U+6F88,U+6FA4,U+6FB9,U+6FC0,U+6FC3,U+6FDF,U+6FE4,U+6FEB,U+6FEF,U+6FFE,U+7006,U+7009,U+700F,U+7015,U+701A,U+7023,U+7030,U+704C,U+7051,U+7058,U+7063,U+706B,U+7070,U+7076,U+707C-707D,U+70AB,U+70B8,U+70BA,U+70C8,U+70CF,U+70D8-70D9,U+70DF,U+70FD,U+7109,U+7119-711A,U+7121,U+7126,U+7130,U+7136,U+7149,U+714C,U+714E,U+7159,U+715E,U+7162,U+7165,U+7167,U+7169,U+7184,U+718A,U+7199,U+719F-71A0,U+71AC,U+71B1,U+71BE,U+71C3,U+71C8-71C9,U+71D2,U+71D4,U+71DF,U+71E6,U+71ED,U+71FC,U+720D,U+7210,U+721B,U+722A,U+722C-722D,U+7235-7236,U+723E,U+7246-7248,U+724C,U+7258-7259,U+725B,U+725F-7260,U+7262,U+7267,U+7269,U+7272,U+7274,U+7279,U+727D,U+7281,U+72A2,U+72A7,U+72AC,U+72AF,U+72C0,U+72C2,U+72C4,U+72D0,U+72D7,U+72E0-72E1,U+72F9,U+72FC,U+7316,U+7319,U+731B-731C,U+7336,U+7344-7345,U+734E,U+7357,U+7368,U+7370,U+7372,U+7375,U+7378,U+737B,U+7384,U+7387,U+7389,U+738B,U+73A9,U+73AB,U+73B7,U+73BB,U+73CA,U+73CD,U+73E0,U+73ED,U+73FE,U+7403,U+7406,U+7422,U+7455,U+745A,U+745C,U+745E-745F,U+7463,U+746A,U+7470,U+7480,U+7483,U+74A8,U+74B0,U+74DC,U+74E3,U+74E6,U+74F6,U+7518,U+751A,U+751C,U+751F,U+7522,U+7526,U+7528-7529,U+7530-7533,U+7537-7538,U+754C,U+754F,U+7559,U+755C,U+7562,U+7565,U+756A-756B,U+7570,U+7576,U+7578,U+7586-7587,U+758A,U+758F,U+7591,U+759A,U+75AB,U+75B2,U+75B5,U+75BC,U+75BE,U+75C5,U+75C7,U+75CA,U+75D5,U+75DB,U+75F2,U+75FA,U+75FF,U+760B,U+7613,U+7620,U+7624,U+7626,U+7638,U+7642,U+764C,U+7652,U+7656,U+7661-7662,U+7665,U+766E,U+7671-7672,U+767B-767E,U+7682,U+7684,U+7686-7688;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-05.woff2) format('woff2');unicode-range:U+768E,U+76AE,U+76BA,U+76C6,U+76C8,U+76CA,U+76CE,U+76D2,U+76D4,U+76DB-76DC,U+76DE-76DF,U+76E1,U+76E3-76E4,U+76EA,U+76EE-76EF,U+76F2,U+76F4,U+76F8,U+76FC,U+76FE,U+7701,U+7709,U+770B,U+771F-7720,U+7728,U+7736-7737,U+773C,U+773E,U+7740,U+774F,U+775B-775C,U+7761,U+7763,U+7766,U+776C,U+7779,U+777F,U+7784,U+778B,U+778E,U+779E,U+77A5,U+77A7,U+77AA,U+77AC-77AD,U+77BB-77BC,U+77D7,U+77DA-77DC,U+77E3,U+77E5,U+77ED-77EF,U+77F3,U+780C-780D,U+7814,U+7834,U+7838,U+786B-786C,U+788C,U+788E,U+7891,U+7897,U+78A7,U+78A9,U+78B0,U+78BA,U+78BC,U+78BE,U+78D0,U+78E8,U+78FA,U+790E,U+7919,U+7926,U+793A,U+793E,U+7940,U+7942,U+7947-7949,U+7955-7956,U+795B,U+795D-795F,U+7962,U+7965,U+7968,U+796D,U+7981,U+798D,U+798F,U+79A6,U+79AE,U+79B1,U+79C0-79C1,U+79C9,U+79CB,U+79D1-79D2,U+79D8,U+79E4,U+79E9,U+79FB,U+7A00,U+7A05,U+7A0B,U+7A0D,U+7A1A,U+7A1C,U+7A1F-7A20,U+7A2E,U+7A31,U+7A3B-7A3D,U+7A3F,U+7A46,U+7A4C-7A4E,U+7A57,U+7A62,U+7A69,U+7A6B,U+7A74,U+7A76,U+7A79-7A7A,U+7A7F,U+7A81,U+7A84,U+7A92,U+7A96-7A98,U+7A9F,U+7AA9,U+7AAE,U+7ABA,U+7ABF,U+7AC4,U+7ACA-7ACB,U+7AD9,U+7ADF-7AE0,U+7AE3,U+7AE5,U+7AED,U+7AEF,U+7AF6,U+7AFA,U+7AFF,U+7B11,U+7B1B,U+7B26,U+7B28,U+7B2C,U+7B46,U+7B49,U+7B4B,U+7B52,U+7B54,U+7B56,U+7B8D,U+7B97,U+7B9D,U+7BA1,U+7BAD,U+7BB1,U+7BB4,U+7BC0,U+7BC4,U+7BC7,U+7BC9,U+7BE1,U+7BE4,U+7BE9,U+7BF7,U+7C07,U+7C21,U+7C37,U+7C3D-7C3F,U+7C43,U+7C4C-7C4D,U+7C60,U+7C64,U+7C6C,U+7C72-7C73,U+7C89,U+7C92,U+7C97,U+7CA5,U+7CB9,U+7CBE,U+7CCA,U+7CD5,U+7CD9,U+7CDF,U+7CE7,U+7CFB,U+7CFE,U+7D00,U+7D02,U+7D04-7D05,U+7D0D,U+7D10,U+7D13-7D14,U+7D17,U+7D19-7D1C,U+7D20-7D22,U+7D2B,U+7D2E-7D30,U+7D39,U+7D42,U+7D44,U+7D46,U+7D50,U+7D55,U+7D61,U+7D66,U+7D68,U+7D6E,U+7D71-7D72,U+7D81,U+7D91,U+7D93,U+7D9C,U+7DA0,U+7DA2,U+7DAD,U+7DB1-7DB2,U+7DB4,U+7DBB,U+7DBD,U+7DBF,U+7DCA,U+7DD2,U+7DD8,U+7DDA,U+7DE0,U+7DE3,U+7DE8-7DE9;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-06.woff2) format('woff2');unicode-range:U+7DEC,U+7DF2,U+7DF4,U+7DFB,U+7E08,U+7E1B,U+7E1D,U+7E2B,U+7E2E,U+7E31,U+7E37,U+7E39,U+7E3D-7E3E,U+7E41,U+7E43,U+7E46,U+7E54,U+7E5E,U+7E69-7E6B,U+7E6D,U+7E73,U+7E79,U+7E7C,U+7E82,U+7E8C,U+7E8F,U+7E96,U+7F3A,U+7F3D,U+7F44,U+7F50,U+7F54-7F55,U+7F63,U+7F69-7F6A,U+7F6E,U+7F70,U+7F75,U+7F77,U+7F79,U+7F85,U+7F88,U+7F8A,U+7F8E,U+7F94,U+7F9E,U+7FA4,U+7FA9,U+7FB8-7FB9,U+7FBD,U+7FC5,U+7FCE,U+7FD2,U+7FD4,U+7FE0-7FE1,U+7FE9,U+7FF0-7FF1,U+7FFB-7FFC,U+8000-8001,U+8003,U+8005,U+800C-800D,U+8010,U+8015,U+8017,U+8033,U+8036,U+803D,U+8046,U+804A,U+8056,U+805A,U+805E,U+806F-8070,U+8072-8073,U+8077,U+807D-807E,U+8085-8087,U+8089,U+808B,U+8096,U+809A-809B,U+80A1-80A2,U+80A5,U+80A9,U+80AF,U+80B2,U+80BA,U+80C3,U+80CC,U+80CE,U+80D6,U+80DE,U+80E1,U+80F8,U+80FD,U+8102,U+8105-8106,U+8108,U+810A,U+811A,U+812B,U+8139,U+813E,U+8150-8151,U+8153-8155,U+8165-8166,U+816B,U+8170,U+8173,U+8179-817A,U+8180,U+818F,U+819A,U+819C-819D,U+81A8,U+81BA,U+81BD,U+81C2,U+81C9,U+81D8,U+81DF,U+81E3,U+81E5,U+81E8,U+81EA,U+81ED,U+81F3-81F4,U+81FA-81FB,U+81FE,U+8207-820A,U+820C-820D,U+8212,U+821E-821F,U+822A,U+822C,U+8235,U+8239,U+8258,U+826F,U+8271-8272,U+8277,U+827E,U+8292,U+829D,U+82A5,U+82AC,U+82B1,U+82B3,U+82B8,U+82BD,U+82D7,U+82DB,U+82DF,U+82E5-82E6,U+82F1,U+8301,U+832B,U+8331-8332,U+8335,U+8349-834A,U+8352,U+8377,U+8389-838A,U+838E,U+8393,U+8396,U+83A0,U+83AB,U+83BD,U+83CC,U+83DC,U+83EF,U+83F2,U+8404,U+840A,U+840C,U+840E,U+842C,U+843D,U+8449,U+8457,U+845B,U+8461,U+8463,U+846C,U+8482,U+8490,U+8499,U+849E,U+84BC,U+84C4,U+84CB,U+84EC,U+8513,U+852C-852D,U+853D,U+8569-856A,U+857E,U+8584,U+85A6,U+85AA,U+85C9,U+85CD,U+85CF-85D0,U+85DD,U+85E5,U+85EA,U+8607,U+860A-860B,U+862D,U+863F,U+864E,U+8650,U+8654-8655,U+865B-865C,U+865E-865F,U+8667,U+8679,U+86C0,U+86C7,U+86CB,U+86DB,U+86FB,U+86FE,U+8702-8703,U+8718,U+871C,U+8755,U+878D,U+87A2,U+87BA,U+87F2,U+87FB;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-07.woff2) format('woff2');unicode-range:U+8805,U+880D,U+881F,U+8822,U+8836,U+883B,U+8840,U+884C-884D,U+8853,U+8857,U+885B,U+885D,U+8861,U+8863,U+8868,U+886B,U+8870,U+8877,U+8879,U+8882,U+888B,U+888D,U+8892,U+8896,U+88AB,U+88B1,U+88C1-88C2,U+88CF,U+88D4-88D5,U+88DC-88DD,U+88E1,U+88E8,U+88F3,U+88F8-88F9,U+88FD,U+8907,U+8913,U+8925,U+892A,U+8936,U+8938,U+893B,U+8941,U+8964,U+896A,U+896F,U+8972,U+897F,U+8981,U+8986,U+898B,U+898F,U+8993,U+8996,U+89AA,U+89B7,U+89BA,U+89BD,U+89C0,U+89D2,U+89E3,U+89F8,U+8A00,U+8A02,U+8A08,U+8A0A,U+8A0E,U+8A13,U+8A17-8A18,U+8A1D,U+8A23,U+8A2A,U+8A2D,U+8A31,U+8A34,U+8A36,U+8A3A-8A3B,U+8A50,U+8A55,U+8A5B,U+8A5E,U+8A60-8A62,U+8A66,U+8A69,U+8A6B,U+8A6D-8A6E,U+8A71-8A73,U+8A79,U+8A87,U+8A8C-8A8D,U+8A93,U+8A95,U+8A98,U+8A9A,U+8A9E,U+8AA0-8AA1,U+8AA3-8AA4,U+8AA6,U+8AA8,U+8AAA,U+8AB0,U+8AB2,U+8ABC,U+8ABF,U+8AC7,U+8ACB,U+8AD2,U+8AD6,U+8AE6-8AE7,U+8AEE,U+8AF1,U+8AF3,U+8AF7-8AF8,U+8AFA,U+8AFE,U+8B00,U+8B02,U+8B04,U+8B0A,U+8B0E,U+8B10,U+8B14,U+8B19,U+8B1B,U+8B1D,U+8B2C,U+8B39,U+8B49,U+8B4F,U+8B58,U+8B5C,U+8B66,U+8B6C,U+8B6F-8B70,U+8B74,U+8B77,U+8B7D,U+8B80,U+8B8A,U+8B93,U+8B9A,U+8C37,U+8C41,U+8C46,U+8C48,U+8C4E,U+8C50,U+8C54,U+8C61,U+8C6A-8C6B,U+8C79-8C7A,U+8C8C,U+8C9D-8C9E,U+8CA0-8CA2,U+8CA7-8CA8,U+8CAA-8CAC,U+8CB4,U+8CB6-8CB8,U+8CBB-8CBC,U+8CC0,U+8CC7,U+8CCA,U+8CD3,U+8CDC,U+8CDE,U+8CE0,U+8CE3-8CE4,U+8CE6,U+8CEA,U+8CED,U+8CF4,U+8CFA,U+8CFC-8CFD,U+8D05,U+8D08,U+8D0A,U+8D0F,U+8D16-8D17,U+8D64,U+8D66,U+8D6B,U+8D70,U+8D74,U+8D77,U+8D85,U+8D8A,U+8D95,U+8D9F,U+8DA3,U+8DA8,U+8DB3,U+8DCB-8DCC,U+8DCE,U+8DD1,U+8DDA-8DDB,U+8DDD,U+8DDF,U+8DE1,U+8DE4,U+8DE8,U+8DEA,U+8DEF,U+8DF3,U+8E09,U+8E0F-8E10,U+8E1D-8E1F,U+8E29-8E2A,U+8E35,U+8E3D,U+8E42,U+8E48-8E49,U+8E4B-8E4C,U+8E5F,U+8E63-8E64,U+8E66,U+8E81,U+8E87,U+8E8A-8E8B,U+8E8D,U+8E95,U+8EAA-8EAC,U+8EB2,U+8EBA,U+8EC0,U+8ECA,U+8ECC-8ECD,U+8ED2,U+8EDB,U+8EDF,U+8EF8,U+8EFB,U+8F03,U+8F09;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-08.woff2) format('woff2');unicode-range:U+8F0A,U+8F13-8F15,U+8F1B,U+8F1D,U+8F1F,U+8F29-8F2A,U+8F2F,U+8F38,U+8F3B,U+8F44-8F45,U+8F49,U+8F4D,U+8F5F,U+8F9B-8F9C,U+8FA3,U+8FA6,U+8FA8,U+8FAD,U+8FAF-8FB2,U+8FC2,U+8FC4-8FC5,U+8FCE,U+8FD1,U+8FD4,U+8FE5-8FE6,U+8FEA-8FEB,U+8FED,U+8FF0,U+8FF4,U+8FF7,U+8FF9,U+8FFB,U+8FFD,U+9000-9001,U+9003,U+9006,U+900D,U+900F-9010,U+9014-9015,U+9017,U+9019-901A,U+901D-9020,U+9022-9023,U+902E,U+9031-9032,U+9038,U+903C,U+903E,U+9041-9042,U+9047,U+904A-904B,U+904D-904F,U+9053-9055,U+9059,U+905C,U+905E,U+9060,U+9062-9063,U+9068-9069,U+906D-906E,U+9072,U+9075,U+9077-9078,U+907A,U+907C,U+907F-9081,U+9083-9084,U+908A-908B,U+908F,U+90A3,U+90A6,U+90AA,U+90C1,U+90DD,U+90E8,U+90F5,U+90FD,U+9109,U+9119,U+912D,U+9130,U+914D,U+9152,U+9157,U+9163,U+916C,U+9177-9178,U+9189,U+9192,U+919C,U+919E,U+91AB,U+91C0-91C1,U+91C7,U+91CB-91D1,U+91D8,U+91DC-91DD,U+920D,U+9214-9215,U+9234,U+9245,U+925A-925B,U+9264,U+9280,U+9285,U+9293,U+9298,U+929C,U+92B3,U+92B7,U+92D2,U+92EA,U+92F8,U+9304,U+9322,U+9326,U+9328,U+932B,U+932E-932F,U+934A,U+935B,U+9365,U+9375,U+937E,U+9396,U+93AE,U+93C8,U+93D7-93D8,U+93E1-93E2,U+93FD,U+9418,U+9435,U+9444,U+9451-9452,U+9463,U+9470,U+9472,U+947C-947D,U+947F,U+9577,U+9580,U+9582-9583,U+9589,U+958B,U+9592-9593,U+95A1,U+95B1,U+95B9,U+95C6-95C7,U+95CA,U+95D5-95D6,U+95DC,U+95E1-95E2,U+9631-9632,U+963B,U+963F-9640,U+9644,U+964B-964D,U+9650,U+9661-9664,U+966A,U+9670,U+9673,U+9676-9678,U+967D,U+968A,U+968E,U+9694,U+9698-9699,U+969B-969C,U+96A8,U+96AA,U+96B1,U+96B8,U+96BB,U+96C0,U+96C4-96C7,U+96D5-96D6,U+96D9,U+96DB-96DC,U+96DE,U+96E2-96E3,U+96E8,U+96EA,U+96F2,U+96F6-96F7,U+96FB,U+9700,U+9704,U+9706-9707,U+970D-970E,U+9716,U+971C,U+9727,U+9732,U+9738,U+9748,U+9752,U+975C,U+975E,U+9760-9762;}@font-face{font-family:'Noto Serif TC';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/ntc-bold-09.woff2) format('woff2');unicode-range:U+978B,U+978F,U+9798,U+97A0,U+97CB,U+97F3,U+97FB,U+97FF,U+9801-9803,U+9805-9806,U+9808,U+980C,U+9810-9811,U+9813,U+9817-9818,U+9824,U+982D,U+9830,U+9838-9839,U+983B,U+9846,U+984C-984D,U+984F,U+9858,U+985B,U+985E,U+9867,U+986B,U+986F,U+98A8,U+98B3,U+98B6,U+98C4,U+98C6,U+98DB,U+98DF,U+98E2,U+98EF,U+98F2,U+98FD-98FE,U+9905,U+990A,U+990C,U+9910,U+9912-9913,U+9918,U+9928,U+992C,U+9935,U+9948,U+994B,U+9951-9952,U+9957,U+995C,U+9996,U+9999,U+99A5,U+99A8,U+99AC-99AD,U+99B3,U+99C1,U+99D0,U+99D5,U+99DB,U+99DD,U+99E1,U+99ED,U+99F1,U+9A0E,U+9A19,U+9A30,U+9A37,U+9A45,U+9A55,U+9A57,U+9A5A,U+9A5F,U+9A62,U+9AA8,U+9AB7-9AB8,U+9ABC,U+9ACF,U+9AD2-9AD4,U+9AD8,U+9AEE,U+9B03,U+9B06,U+9B25,U+9B27,U+9B31,U+9B3C,U+9B42,U+9B45,U+9B54,U+9B58,U+9B5A,U+9B6F,U+9B91,U+9BAE,U+9CE5,U+9CE9,U+9CF4,U+9D3B,U+9D72,U+9DA9,U+9DF9,U+9E7D,U+9E97,U+9EA5,U+9EB5,U+9EBB-9EBC,U+9EC3,U+9ECE,U+9ED1,U+9ED8,U+9EDE,U+9EE8,U+9EEF,U+9F13,U+9F20,U+9F3B,U+9F4A,U+9F52,U+9F63,U+9F8D,U+9F90,U+9F95,U+FE30-FE4F,U+FE5D-FE5E,U+FF01-FF65;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-00.woff2) format('woff2');unicode-range:U+0020-007E,U+00A0-00A9,U+00AB-00AC,U+00B0-00B7,U+00B9,U+00BB,U+00E9,U+2003,U+2010-2016,U+2018-2022,U+2025-2027,U+2030-2037,U+2039-203B,U+2070,U+2074-2079,U+2190-2199,U+2215,U+2248,U+2264-2265,U+2460-2469,U+2500-25AB,U+25B1-25B3,U+25B6-25B7,U+25BC-25BD,U+25C0-25C1,U+25C6-25C7,U+25C9-25CC,U+25CE-25CF,U+2600-2601,U+2630,U+2640,U+2642,U+2660-2667,U+2713,U+3000-302D,U+3030,U+3033-303F,U+30FB,U+3127,U+4E00-4E01,U+4E03,U+4E08-4E0B,U+4E0D,U+4E14,U+4E16,U+4E18,U+4E1F,U+4E26,U+4E2D,U+4E32,U+4E38-4E39,U+4E3B,U+4E43,U+4E45,U+4E4B,U+4E4D-4E4F,U+4E56,U+4E58,U+4E5D,U+4E5F,U+4E7E,U+4E82,U+4E86,U+4E88,U+4E8B-4E8C,U+4E8E,U+4E92,U+4E94-4E95,U+4E99,U+4E9B,U+4E9E-4E9F,U+4EA1,U+4EA4,U+4EA6,U+4EA8,U+4EAB-4EAC,U+4EAE,U+4EBA,U+4EC0-4EC1,U+4EC6;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-01.woff2) format('woff2');unicode-range:U+4EC7,U+4ECA-4ECB,U+4ECD,U+4ED4,U+4ED6-4ED9,U+4EE3-4EE5,U+4EF0,U+4EF2,U+4EF6,U+4EFB,U+4EFD,U+4EFF,U+4F01,U+4F0A,U+4F0D-4F11,U+4F2F-4F30,U+4F34,U+4F36,U+4F38,U+4F3A,U+4F3C-4F3D,U+4F46-4F48,U+4F4D-4F51,U+4F54-4F55,U+4F5B-4F5C,U+4F60,U+4F69,U+4F6F,U+4F73,U+4F75,U+4F7F,U+4F86,U+4F8B,U+4F8D,U+4F9B,U+4F9D,U+4FAE,U+4FB5-4FB7,U+4FBF,U+4FC2-4FC4,U+4FCE-4FCF,U+4FD7-4FD8,U+4FDD,U+4FE1,U+4FEE-4FEF,U+4FF1,U+5006,U+5009,U+500B,U+500D,U+500F,U+5011-5012,U+5016,U+5018-501A,U+501F,U+5021,U+5026,U+502A-502B,U+503C,U+5047,U+5049,U+504C,U+504E-504F,U+5055,U+505A,U+505C,U+5065,U+5074-5077,U+507D,U+5080,U+5085,U+5091,U+5099,U+50AC,U+50B2-50B3,U+50B5,U+50B7,U+50BB,U+50BE,U+50C5,U+50CF,U+50D5,U+50E5,U+50E7,U+50ED,U+50F5,U+50F9,U+50FB,U+5100,U+5104,U+5106,U+5118,U+511F,U+5121,U+512A,U+5132,U+513C,U+5140-5141,U+5143-5149,U+514B-514D,U+5152,U+515C,U+5162,U+5165,U+5167-5169,U+516B-516D,U+5171,U+5175-5178,U+517C,U+5180,U+5185,U+518A,U+518C-518D,U+5192,U+5195,U+5197,U+51A0,U+51A4-51A5,U+51AC,U+51B0,U+51B3,U+51B5,U+51B7,U+51BD,U+51C6,U+51CB-51CD,U+51DC-51DD,U+51E1,U+51F1,U+51F3,U+51F6,U+51F8,U+51FA,U+51FD,U+5200,U+5203,U+5206-5207,U+5211,U+5217,U+521D,U+5224-5225,U+5229-522A,U+5230,U+5236-5237,U+523A-523B,U+5247,U+524A,U+524D-524E,U+5254,U+5256,U+525B-525D,U+5269-526A,U+526F,U+5272,U+5275,U+5283,U+5287,U+528A,U+528D,U+5291,U+529B,U+529F-52A0,U+52A3,U+52A9-52AB,U+52C1,U+52C3,U+52C7,U+52C9,U+52D2,U+52D5,U+52D8-52D9,U+52DD-52DF,U+52E2,U+52E4,U+52F5,U+52F8,U+52FB,U+52FE-52FF,U+5305-5306,U+530D,U+5310,U+5316-5317,U+5319,U+532A,U+532F,U+5331,U+5339,U+533F-5341,U+5343,U+5347-5348,U+534A,U+5351-5354,U+5357,U+535A,U+535C,U+5360-5361,U+5370-5371,U+5373,U+5377-5378,U+537B,U+5384,U+539A,U+539F,U+53AD,U+53B2,U+53BB,U+53C3,U+53C8-53CB,U+53CD,U+53D6-53D7,U+53DB,U+53E2-53E6,U+53E9-53F0,U+53F2-53F3,U+53F5,U+53F8,U+5403-5404,U+5408-540E,U+5410-5411,U+541B,U+541D-541F,U+5426-5427,U+5429,U+542B,U+542D,U+5431,U+5435-5436,U+5438-5439,U+543B-543C,U+5446,U+5448,U+544A,U+5462,U+5468,U+5473,U+5475,U+547B-547D,U+5480,U+5486,U+548C,U+548E,U+5490,U+5492,U+54A8,U+54AB-54AC,U+54B8,U+54BD,U+54C0-54C1,U+54C4,U+54C7-54C8,U+54E1,U+54E5,U+54E9-54EA,U+54ED-54EE,U+54F2,U+5507,U+5510,U+552C,U+552E-552F,U+5531,U+5538,U+5546,U+554A,U+554F,U+555E-555F,U+557B-557C,U+5582-5584,U+5587,U+5589-558A,U+5591,U+5598,U+559A,U+559C-559D,U+55A7,U+55AA,U+55AC,U+55AE,U+55BB,U+55C5,U+55C7,U+55CE,U+55DF,U+55EF,U+5606,U+5609,U+5617,U+5629,U+5632,U+5634,U+5636,U+5639,U+5662,U+5668-566A,U+566C,U+5680,U+5687,U+56AE,U+56B4,U+56B7,U+56BC,U+56C2,U+56CA,U+56D1,U+56DA-56DB,U+56DE,U+56E0,U+56E4,U+56F0,U+56F9-56FA,U+56FF,U+5704,U+5708,U+570B,U+570D,U+5712-5713,U+5716,U+5718,U+571F,U+5728,U+5730,U+573E,U+5740,U+5747,U+574A,U+574D-5751,U+5761,U+5766,U+576A,U+5782-5783,U+578B,U+57A2,U+57AE,U+57C3,U+57CB,U+57CE,U+57DF,U+57F7,U+57F9-57FA,U+5802,U+5805-5806,U+5821,U+582A,U+5831,U+5834-5835,U+584A,U+584C,U+5851,U+5854,U+5857,U+585E,U+586B,U+5875,U+5883,U+5893,U+589C,U+589E,U+58A8,U+58AE,U+58B3;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-02.woff2) format('woff2');unicode-range:U+58C1,U+58C7,U+58D3,U+58D5,U+58D8,U+58DE,U+58E4,U+58EB,U+58EF,U+590F,U+5915-5916,U+591A,U+591C,U+5920,U+5922,U+5925,U+5927,U+5929-592B,U+592E,U+5931,U+5937,U+593E,U+5944,U+5947-5949,U+594F,U+5951,U+5954,U+5957,U+5960,U+5967,U+596A,U+596E,U+5973-5974,U+5978-5979,U+597D,U+5982,U+5984,U+5992-5993,U+5996,U+5999,U+599D,U+59A5,U+59A8,U+59AE,U+59B3,U+59B9,U+59BB,U+59C6,U+59CA-59CB,U+59D1,U+59D3-59D4,U+59FB,U+59FF,U+5A01,U+5A03,U+5A11,U+5A18,U+5A29,U+5A46,U+5A5A,U+5A62,U+5A66,U+5A6A,U+5A6D,U+5A77,U+5A92,U+5A9A,U+5AB2,U+5ABD,U+5AC1,U+5AC9,U+5ACC,U+5AFB,U+5B30,U+5B50-5B51,U+5B54-5B55,U+5B57-5B58,U+5B63-5B64,U+5B69,U+5B6B,U+5B70,U+5B78,U+5B7D,U+5B83,U+5B87-5B89,U+5B8C,U+5B8F,U+5B97-5B9C,U+5BA2-5BA4,U+5BAE,U+5BB0,U+5BB3-5BB4,U+5BB6,U+5BB9,U+5BBF,U+5BC2,U+5BC4,U+5BC6,U+5BCC,U+5BD0,U+5BD2-5BD3,U+5BDE-5BDF,U+5BE1-5BE2,U+5BE5-5BE7,U+5BE9,U+5BEB-5BEC,U+5BF5-5BF6,U+5BF8,U+5C01,U+5C04,U+5C07-5C08,U+5C0A-5C0B,U+5C0D-5C0F,U+5C11,U+5C16,U+5C1A,U+5C24,U+5C2C,U+5C31,U+5C37-5C38,U+5C3A,U+5C3C,U+5C3E,U+5C40,U+5C45-5C46,U+5C48,U+5C4B,U+5C4D,U+5C4F,U+5C51,U+5C55,U+5C60,U+5C62-5C65,U+5C6C,U+5C71,U+5C79,U+5C8C,U+5C94,U+5CA9,U+5CB8,U+5CCB,U+5CD9,U+5CF0,U+5CF6,U+5CFB,U+5D07,U+5D0E,U+5D16-5D17,U+5D29,U+5D4C,U+5D84,U+5D87,U+5D99,U+5DBA,U+5DBC,U+5DD4,U+5DDE,U+5DE2,U+5DE5-5DE8,U+5DEB,U+5DEE,U+5DF1-5DF2,U+5DF4,U+5DFE,U+5E02-5E03,U+5E0C,U+5E16,U+5E19,U+5E1D,U+5E2B,U+5E2D,U+5E33,U+5E36-5E38,U+5E40,U+5E45,U+5E4C,U+5E54-5E55,U+5E5F,U+5E6B,U+5E72-5E74,U+5E78-5E79,U+5E7B-5E7E,U+5E87,U+5E8A,U+5E8F,U+5E95-5E97,U+5E9C,U+5EA6-5EA7,U+5EAB,U+5EAD,U+5EB7-5EB8,U+5EC2,U+5EC9-5ECA,U+5ED3,U+5EDD,U+5EDF,U+5EE2-5EE3,U+5EF3,U+5EF6-5EF7,U+5EFA,U+5F04,U+5F0A,U+5F0F,U+5F13,U+5F15,U+5F17-5F18,U+5F1F,U+5F27,U+5F2D,U+5F31,U+5F35,U+5F37,U+5F3A,U+5F46,U+5F48,U+5F4C,U+5F59,U+5F62,U+5F69,U+5F70-5F71,U+5F77,U+5F79,U+5F7C,U+5F7F-5F81,U+5F85,U+5F88-5F8C,U+5F90-5F92,U+5F97-5F98,U+5F9C,U+5F9E,U+5FA1,U+5FA8-5FAA,U+5FAC,U+5FAE,U+5FB5,U+5FB7,U+5FB9,U+5FBD,U+5FC3,U+5FC5,U+5FCC-5FCD,U+5FD7-5FD9,U+5FE0,U+5FEB,U+5FF1,U+5FF5,U+5FFD,U+600E,U+6012,U+6015-6016,U+6019,U+601D,U+6020-6021,U+6025,U+6027-6028,U+602A,U+602F,U+6043,U+6046,U+604D,U+6050,U+6055,U+6059,U+6062-6063,U+6065,U+6068-606A,U+606C-606D,U+606F-6070,U+607F,U+6084-6085,U+6089,U+608D,U+6094,U+6096,U+609F-60A0,U+60A3,U+60A8,U+60B2,U+60B6,U+60B8,U+60BC-60BD,U+60C5,U+60D1,U+60D5,U+60D8,U+60DA,U+60DC,U+60DF-60E1,U+60E6,U+60F1,U+60F3-60F4,U+60F6,U+60F9,U+6101,U+6108-6109,U+610F,U+611A-611C,U+611F,U+6127,U+6134,U+6137,U+6144,U+6148,U+614B-614C,U+614E,U+6155,U+6158,U+615A,U+6162-6163,U+6167-6168,U+616B,U+616E,U+6170,U+6176-6177,U+617E,U+6182,U+618A,U+618E,U+6190-6191,U+619A,U+61A4,U+61A9,U+61AB,U+61B6,U+61BE,U+61C2,U+61C7-61CA,U+61E3,U+61E6,U+61F2,U+61F5-61F8,U+61FA,U+61FC,U+61FE,U+6200,U+6208,U+620E,U+6210-6212,U+6216,U+621A-621B,U+621F,U+622A,U+622E,U+6230,U+6232-6234,U+6236,U+623E-6241,U+6247,U+6249,U+624B,U+624D-624E,U+6253-6254,U+6258,U+625E,U+6263,U+626D-626F,U+6276,U+6279,U+627C,U+627E-6280,U+6284,U+6289-628A,U+6291-6298,U+62A8,U+62AB-62AC,U+62B1,U+62B5,U+62B9,U+62BC-62BD,U+62C2;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-03.woff2) format('woff2');unicode-range:U+62C6,U+62C9,U+62CB,U+62CD,U+62D2-62D4,U+62D6,U+62D8-62D9,U+62DB-62DC,U+62EC-62ED,U+62EF,U+62F1,U+62F3,U+62FC,U+62FE-62FF,U+6301,U+6307,U+6309,U+6311,U+6316,U+6328,U+632A-632B,U+632F,U+633A,U+633D-633E,U+6346,U+6349,U+634D-6350,U+6355,U+6367-6369,U+636B,U+6372,U+6377,U+6380,U+6383,U+6388-6389,U+638C,U+6392,U+6396,U+6398-6399,U+639B,U+63A0-63A2,U+63A5,U+63A7-63AA,U+63B0,U+63C0,U+63CF-63D0,U+63D2,U+63DA-63DB,U+63E1,U+63E3,U+63ED-63EE,U+63F4,U+640D,U+640F,U+6416,U+641C,U+641E,U+642C-642D,U+6436,U+6452,U+6454,U+6458,U+6467,U+6469,U+646F,U+6478,U+647A-647B,U+6487,U+6490,U+6492-6493,U+6495,U+649E,U+64A4-64A5,U+64AB-64AE,U+64B0,U+64B2,U+64BC,U+64BF,U+64C1,U+64C4-64C5,U+64C7,U+64CA-64CB,U+64CD-64CE,U+64D2,U+64D4,U+64D8,U+64DA,U+64E0,U+64E6,U+64EC,U+64EF,U+64F1-64F2,U+64F4,U+64FA,U+64FE,U+6500,U+6506,U+650F,U+6514,U+6518,U+651C-651D,U+6522,U+6524,U+652A-652B,U+652F,U+6536,U+6539,U+653B,U+653E-653F,U+6545,U+6548,U+654F,U+6551,U+6557-6559,U+655D-655E,U+6562-6563,U+6566,U+656C,U+6572,U+6574-6575,U+6578,U+6582-6583,U+6587,U+6591,U+6599,U+659C,U+65A1,U+65A5,U+65AC,U+65AF-65B0,U+65B7,U+65B9,U+65BC-65BD,U+65C1,U+65C5,U+65CB,U+65CF,U+65D7,U+65E2,U+65E5-65E6,U+65E8-65E9,U+65EC,U+65FA,U+6602,U+6606-6607,U+660E-660F,U+6613-6614,U+661F-6620,U+6625,U+6627-6628,U+662D,U+662F,U+6642-6643,U+6649,U+665A,U+665D,U+6664,U+6666,U+6668,U+666E-6670,U+6674,U+6676,U+667A,U+6687-6688,U+6696-6697,U+66A2,U+66AB,U+66AE,U+66B1,U+66B4,U+66C6,U+66C9,U+66D6,U+66D9,U+66DD,U+66E0,U+66F0,U+66F2-66F4,U+66F8,U+66FC,U+66FE-6700,U+6703,U+6708-6709,U+670B,U+670D,U+6717,U+671B,U+671D,U+671F,U+6726-6728,U+672A-672D,U+6731,U+6735,U+673D,U+674E,U+6750-6751,U+6756,U+675C,U+675F,U+676D,U+676F,U+6771,U+6773,U+677F,U+6789,U+6790,U+6795,U+6797,U+679A,U+679C-679D,U+67AF,U+67B6-67B7,U+67C4,U+67CF-67D0,U+67D3-67D4,U+67E2,U+67E5,U+67EF,U+67F1,U+67F4-67F5,U+6813,U+6821,U+6838-6839,U+683C-683D,U+6846,U+6848,U+684C,U+684E,U+6851,U+687F,U+6881,U+6885,U+688F,U+6897,U+689D,U+68AF-68B0,U+68B3,U+68B5,U+68C4,U+68C9,U+68CB,U+68D2,U+68D5,U+68D8,U+68DF,U+68EE,U+68F2,U+68F5,U+6905,U+690D-690F,U+695A,U+696D,U+6975,U+6977,U+6982,U+699C,U+69AE,U+69BB,U+69C1,U+69CB,U+69CD,U+69F3,U+69FD,U+6A01-6A02,U+6A11,U+6A13,U+6A19,U+6A1E,U+6A21,U+6A23,U+6A38-6A39,U+6A44,U+6A4B,U+6A5F,U+6A6B,U+6A94,U+6AA2,U+6AAF,U+6ABB,U+6AC3,U+6ADA,U+6B04,U+6B0A,U+6B16,U+6B20-6B21,U+6B23,U+6B32,U+6B3A,U+6B3D-6B3E,U+6B43,U+6B47,U+6B49,U+6B4C,U+6B4E,U+6B50,U+6B61-6B67,U+6B6A,U+6B72,U+6B77-6B79,U+6B7B,U+6B86,U+6B89-6B8A,U+6B96,U+6B98,U+6BB5,U+6BB7,U+6BBA,U+6BBC,U+6BBF-6BC0,U+6BC5-6BC6,U+6BCB,U+6BCD,U+6BCF,U+6BD2,U+6BD4,U+6BDB,U+6BEB,U+6BEF,U+6C0F,U+6C11,U+6C1B,U+6C23,U+6C34,U+6C38,U+6C3E,U+6C40,U+6C42,U+6C50,U+6C57,U+6C59,U+6C5F-6C61,U+6C72,U+6C7A,U+6C83,U+6C86,U+6C89,U+6C8C,U+6C90,U+6C92,U+6C96,U+6C99,U+6C9B,U+6CAE,U+6CB3,U+6CB8-6CB9,U+6CBB,U+6CBE-6CBF,U+6CC1,U+6CC9-6CCA,U+6CCC,U+6CD5,U+6CDB,U+6CE1-6CE3,U+6CE5,U+6CE8,U+6CF0,U+6D0B,U+6D17,U+6D1B,U+6D1E,U+6D25,U+6D29-6D2A,U+6D32,U+6D36,U+6D3B,U+6D3D-6D3E,U+6D41,U+6D69-6D6A,U+6D6E,U+6D74,U+6D77-6D78,U+6D87-6D89,U+6D95,U+6DAF,U+6DB2,U+6DB5,U+6DB8,U+6DBC,U+6DC6,U+6DCB-6DCC,U+6DD2,U+6DDA,U+6DE1,U+6DE8-6DEB,U+6DF1,U+6DF5,U+6DF7,U+6DF9-6DFB;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-04.woff2) format('woff2');unicode-range:U+6E05,U+6E1B,U+6E1D,U+6E20-6E21,U+6E23,U+6E2C-6E2D,U+6E2F,U+6E32,U+6E34,U+6E38,U+6E3A,U+6E3E,U+6E4A,U+6E4D-6E4E,U+6E56,U+6E5B,U+6E67,U+6E6F,U+6E90,U+6E96,U+6E98,U+6E9C-6E9D,U+6EA2,U+6EAA-6EAB,U+6EAF,U+6EBA,U+6EC4-6EC5,U+6ECB-6ECC,U+6ED1,U+6ED3,U+6EEF,U+6EF2,U+6EF4,U+6EF8,U+6EFE-6EFF,U+6F02,U+6F06,U+6F0F,U+6F13-6F14,U+6F20,U+6F22-6F23,U+6F2A-6F2C,U+6F38,U+6F54,U+6F5B,U+6F64,U+6F66,U+6F6E,U+6F70,U+6F78,U+6F80,U+6F84,U+6F86,U+6F88,U+6FA4,U+6FB9,U+6FC0,U+6FC3,U+6FDF,U+6FE4,U+6FEB,U+6FEF,U+6FFE,U+7006,U+7009,U+700F,U+7015,U+701A,U+7023,U+7030,U+704C,U+7051,U+7058,U+7063,U+706B,U+7070,U+7076,U+707C-707D,U+70AB,U+70B8,U+70BA,U+70C8,U+70CF,U+70D8-70D9,U+70DF,U+70FD,U+7109,U+7119-711A,U+7121,U+7126,U+7130,U+7136,U+7149,U+714C,U+714E,U+7159,U+715E,U+7162,U+7165,U+7167,U+7169,U+7184,U+718A,U+7199,U+719F-71A0,U+71AC,U+71B1,U+71BE,U+71C3,U+71C8-71C9,U+71D2,U+71D4,U+71DF,U+71E6,U+71ED,U+71FC,U+720D,U+7210,U+721B,U+722A,U+722C-722D,U+7232,U+7235-7236,U+723E,U+7246-7248,U+724C,U+7258-7259,U+725B,U+725F-7260,U+7262,U+7267,U+7269,U+7272,U+7274,U+7279,U+727D,U+7281,U+72A2,U+72A7,U+72AC,U+72AF,U+72C0,U+72C2,U+72C4,U+72D0,U+72D7,U+72E0-72E1,U+72F9,U+72FC,U+7316,U+7319,U+731B-731C,U+7336,U+7344-7345,U+734E,U+7357,U+7368,U+7370,U+7372,U+7375,U+7378,U+737B,U+7384,U+7387,U+7389,U+738B,U+73A9,U+73AB,U+73B7,U+73BB,U+73CA,U+73CD,U+73E0,U+73ED,U+73FE,U+7403,U+7406,U+7422,U+7455,U+745A,U+745C,U+745E-745F,U+7463,U+746A,U+7470,U+7480,U+7483,U+74A8,U+74B0,U+74DC,U+74E3,U+74E6,U+74F6,U+7518,U+751A,U+751C,U+751F,U+7522,U+7526,U+7528-7529,U+7530-7533,U+7537-7538,U+754C,U+754F,U+7559,U+755C,U+7562,U+7565,U+756A-756B,U+7570,U+7576,U+7578,U+7586-7587,U+758A,U+758F,U+7591,U+759A,U+75AB,U+75B2,U+75B5,U+75BC,U+75BE,U+75C5,U+75C7,U+75CA,U+75D5,U+75DB,U+75F2,U+75FA,U+75FF,U+760B,U+7613,U+7620,U+7624,U+7626,U+7638,U+7642,U+764C,U+7652,U+7656,U+7661-7662,U+7665,U+766E,U+7671-7672,U+767B;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-05.woff2) format('woff2');unicode-range:U+767C-767E,U+7682,U+7684,U+7686-7688,U+768E,U+76AE,U+76BA,U+76C6,U+76C8,U+76CA,U+76CE,U+76D2,U+76D4,U+76DB-76DC,U+76DE-76DF,U+76E1,U+76E3-76E4,U+76EA,U+76EE-76EF,U+76F2,U+76F4,U+76F8,U+76FC,U+76FE,U+7701,U+7709,U+770B,U+771F-7720,U+7728,U+7736-7737,U+773C,U+773E,U+7740,U+774F,U+775B-775C,U+7761,U+7763,U+7766,U+776C,U+7779,U+777F,U+7784,U+778B,U+778E,U+779E,U+77A5,U+77A7,U+77AA,U+77AC-77AD,U+77BB-77BC,U+77D7,U+77DA-77DC,U+77E3,U+77E5,U+77ED-77EF,U+77F3,U+780C-780D,U+7814,U+7834,U+7838,U+786B-786C,U+788C,U+788E,U+7891,U+7897,U+78A7,U+78A9,U+78B0,U+78BA,U+78BC,U+78BE,U+78D0,U+78E8,U+78FA,U+790E,U+7919,U+7926,U+793A,U+793E,U+7940,U+7942,U+7947-7949,U+7955-7956,U+795B,U+795D-795F,U+7962,U+7965,U+7968,U+796D,U+7981,U+798D,U+798F,U+79A6,U+79AE,U+79B1,U+79C0-79C1,U+79C9,U+79CB,U+79D1-79D2,U+79D8,U+79E4,U+79E9,U+79FB,U+7A00,U+7A05,U+7A0B,U+7A0D,U+7A1A,U+7A1C,U+7A1F-7A20,U+7A2E,U+7A31,U+7A3B-7A3D,U+7A3F,U+7A46,U+7A4C-7A4E,U+7A57,U+7A62,U+7A69,U+7A6B,U+7A74,U+7A76,U+7A79-7A7A,U+7A7F,U+7A81,U+7A84,U+7A92,U+7A96-7A98,U+7A9F,U+7AA9,U+7AAE,U+7ABA,U+7ABF,U+7AC4,U+7ACA-7ACB,U+7AD9,U+7ADF-7AE0,U+7AE3,U+7AE5,U+7AED,U+7AEF,U+7AF6,U+7AFA,U+7AFF,U+7B11,U+7B1B,U+7B26,U+7B28,U+7B2C,U+7B46,U+7B49,U+7B4B,U+7B52,U+7B54,U+7B56,U+7B8D,U+7B97,U+7B9D,U+7BA1,U+7BAD,U+7BB1,U+7BB4,U+7BC0,U+7BC4,U+7BC7,U+7BC9,U+7BE1,U+7BE4,U+7BE9,U+7BF7,U+7C07,U+7C21,U+7C37,U+7C3D-7C3F,U+7C43,U+7C4C-7C4D,U+7C60,U+7C64,U+7C6C,U+7C72-7C73,U+7C89,U+7C92,U+7C97,U+7CA4-7CA5,U+7CB9,U+7CBE,U+7CCA,U+7CD5,U+7CD9,U+7CDF,U+7CE7,U+7CFB,U+7CFE,U+7D00,U+7D02,U+7D04-7D05,U+7D0D,U+7D10,U+7D13-7D14,U+7D17,U+7D19-7D1C,U+7D20-7D22,U+7D2B,U+7D2E-7D30,U+7D39,U+7D42,U+7D44,U+7D46,U+7D50,U+7D55,U+7D61,U+7D66,U+7D68,U+7D6E,U+7D71-7D72,U+7D76,U+7D81,U+7D91,U+7D93,U+7D9C,U+7DA0,U+7DA2,U+7DAD,U+7DB1-7DB2,U+7DB4,U+7DBB,U+7DBD,U+7DBF,U+7DCA;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-06.woff2) format('woff2');unicode-range:U+7DD2,U+7DD8,U+7DDA,U+7DE0,U+7DE3,U+7DE8-7DE9,U+7DEC,U+7DF2,U+7DF4,U+7DFB,U+7E08,U+7E1B,U+7E1D,U+7E2B,U+7E2E,U+7E31,U+7E37,U+7E39,U+7E3D-7E3E,U+7E41,U+7E43,U+7E46,U+7E54,U+7E5E,U+7E69-7E6B,U+7E6D,U+7E73,U+7E79,U+7E7C,U+7E82,U+7E8C,U+7E8F,U+7E96,U+7F3A,U+7F3D,U+7F44,U+7F50,U+7F54-7F55,U+7F63,U+7F69-7F6A,U+7F6E,U+7F70,U+7F75,U+7F77,U+7F79,U+7F85,U+7F88,U+7F8A,U+7F8E,U+7F94,U+7F9E,U+7FA4,U+7FA9,U+7FB8-7FB9,U+7FBD,U+7FC5,U+7FCE,U+7FD2,U+7FD4,U+7FE0-7FE1,U+7FE9,U+7FF0-7FF1,U+7FFB-7FFC,U+8000-8001,U+8003,U+8005,U+800C-800D,U+8010,U+8015,U+8017,U+8033,U+8036,U+803D,U+8046,U+804A,U+8056,U+805A,U+805E,U+806F-8070,U+8072-8073,U+8077,U+807D-807E,U+8085-8087,U+8089,U+808B,U+8096,U+809A-809B,U+80A1-80A2,U+80A5,U+80A9,U+80AF,U+80B2,U+80BA,U+80C3,U+80CC,U+80CE,U+80D6,U+80DE,U+80E1,U+80F8,U+80FD,U+8102,U+8105-8106,U+8108,U+810A,U+811A,U+812B,U+8139,U+813E,U+8150-8151,U+8153-8155,U+8165-8166,U+816B,U+8170,U+8173,U+8179-817A,U+8180,U+818F,U+819A,U+819C-819D,U+81A8,U+81BA,U+81BD,U+81C2,U+81C9,U+81D8,U+81DF,U+81E3,U+81E5,U+81E8,U+81EA,U+81ED,U+81F3-81F4,U+81FA-81FB,U+81FE,U+8207-820A,U+820C-820D,U+8212,U+821E-821F,U+822A,U+822C,U+8235,U+8239,U+8258,U+826F,U+8271-8272,U+8277,U+827E,U+8292,U+829D,U+82A5,U+82AC,U+82B1,U+82B3,U+82B8,U+82BD,U+82D7,U+82DB,U+82DF,U+82E5-82E6,U+82F1,U+8301,U+832B,U+8331-8332,U+8335,U+8349-834A,U+8352,U+8377,U+8389-838A,U+838E,U+8393,U+8396,U+83A0,U+83AB,U+83BD,U+83CC,U+83DC,U+83EF,U+83F2,U+8404,U+840A,U+840C,U+840E,U+842C,U+843D,U+8449,U+8457,U+845B,U+8461,U+8463,U+846C,U+8482,U+8490,U+8499,U+849E,U+84BC,U+84C4,U+84CB,U+84EC,U+8513,U+852C-852D,U+853D,U+8569-856A,U+857E,U+8584,U+85A6,U+85AA,U+85C9,U+85CD,U+85CF-85D0,U+85DD,U+85E5,U+85EA,U+8607,U+860A-860B,U+862D,U+863F,U+864E,U+8650,U+8654-8655,U+865B-865C,U+865E-865F,U+8667,U+8679,U+86C0,U+86C7,U+86CB,U+86DB,U+86FB,U+86FE,U+8702-8703,U+8718,U+871C,U+8755,U+878D;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-07.woff2) format('woff2');unicode-range:U+87A2,U+87BA,U+87F2,U+87FB,U+8805,U+880D,U+881F,U+8822,U+8836,U+883B,U+8840,U+884C-884D,U+8853,U+8857,U+885B,U+885D,U+8861,U+8863,U+8868,U+886B,U+8870,U+8877,U+8879,U+8882,U+888B,U+888D,U+8892,U+8896,U+88AB,U+88B1,U+88C1-88C2,U+88CF,U+88D4-88D5,U+88DC-88DD,U+88E1,U+88E8,U+88F3,U+88F8-88F9,U+88FD,U+8907,U+8913,U+8925,U+892A,U+8936,U+8938,U+893B,U+8941,U+8964,U+896A,U+896F,U+8972,U+897F,U+8981,U+8986,U+898B,U+898F,U+8993,U+8996,U+89AA,U+89B7,U+89BA,U+89BD,U+89C0,U+89D2,U+89E3,U+89F8,U+8A00,U+8A02,U+8A08,U+8A0A,U+8A0E,U+8A13,U+8A17-8A18,U+8A1D,U+8A23,U+8A2A,U+8A2D,U+8A31,U+8A34,U+8A36,U+8A3A-8A3B,U+8A50,U+8A55,U+8A5B,U+8A5E,U+8A60-8A62,U+8A66,U+8A69,U+8A6B,U+8A6D-8A6E,U+8A71-8A73,U+8A79,U+8A87,U+8A8C-8A8D,U+8A93,U+8A95,U+8A98,U+8A9A,U+8A9E,U+8AA0-8AA1,U+8AA3-8AA4,U+8AA6,U+8AA8,U+8AAA,U+8AB0,U+8AB2,U+8ABC,U+8ABF,U+8AC7,U+8ACB,U+8AD2,U+8AD6,U+8AE6-8AE7,U+8AEE,U+8AF1,U+8AF3,U+8AF7-8AF8,U+8AFA,U+8AFE,U+8B00,U+8B02,U+8B04,U+8B0A,U+8B0E,U+8B10,U+8B14,U+8B19,U+8B1B,U+8B1D,U+8B2C,U+8B39,U+8B49,U+8B4F,U+8B58,U+8B5C,U+8B66,U+8B6C,U+8B6F-8B70,U+8B74,U+8B77,U+8B7D,U+8B80,U+8B8A,U+8B93,U+8B9A,U+8BDD,U+8C37,U+8C41,U+8C46,U+8C48,U+8C4E,U+8C50,U+8C54,U+8C61,U+8C6A-8C6B,U+8C79-8C7A,U+8C8C,U+8C9D-8C9E,U+8CA0-8CA2,U+8CA7-8CA8,U+8CAA-8CAC,U+8CB4,U+8CB6-8CB8,U+8CBB-8CBC,U+8CC0,U+8CC7,U+8CCA,U+8CD3,U+8CDC,U+8CDE,U+8CE0,U+8CE3-8CE4,U+8CE6,U+8CEA,U+8CED,U+8CF4,U+8CFA,U+8CFC-8CFD,U+8D05,U+8D08,U+8D0A,U+8D0F,U+8D16-8D17,U+8D64,U+8D66,U+8D6B,U+8D70,U+8D74,U+8D77,U+8D85,U+8D8A,U+8D95,U+8D9F,U+8DA3,U+8DA8,U+8DB3,U+8DCB-8DCC,U+8DCE,U+8DD1,U+8DDA-8DDB,U+8DDD,U+8DDF,U+8DE1,U+8DE4,U+8DE8,U+8DEA,U+8DEF,U+8DF3,U+8E09,U+8E0F-8E10,U+8E1D-8E1F,U+8E29-8E2A,U+8E35,U+8E3D,U+8E42,U+8E48-8E49,U+8E4B-8E4C,U+8E5F,U+8E63-8E64,U+8E66,U+8E81,U+8E87,U+8E8A-8E8B,U+8E8D,U+8E95,U+8EAA-8EAC,U+8EB2,U+8EBA,U+8EC0,U+8ECA,U+8ECC-8ECD,U+8ED2,U+8EDB,U+8EDF,U+8EF8,U+8EFB;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-08.woff2) format('woff2');unicode-range:U+8F03,U+8F09-8F0A,U+8F13-8F15,U+8F1B,U+8F1D,U+8F1F,U+8F29-8F2A,U+8F2F,U+8F38,U+8F3B,U+8F44-8F45,U+8F49,U+8F4D,U+8F5F,U+8F9B-8F9C,U+8FA3,U+8FA6,U+8FA8,U+8FAD,U+8FAF-8FB2,U+8FC2,U+8FC4-8FC5,U+8FCE,U+8FD1,U+8FD4,U+8FE5-8FE6,U+8FEA-8FEB,U+8FED,U+8FF0,U+8FF4,U+8FF7,U+8FF9,U+8FFB,U+8FFD,U+9000-9001,U+9003,U+9006,U+900D,U+900F-9010,U+9014-9015,U+9017,U+9019-901A,U+901D-9020,U+9022-9023,U+902E,U+9031-9032,U+9038,U+903C,U+903E,U+9041-9042,U+9047,U+904A-904B,U+904D-904F,U+9053-9055,U+9059,U+905C,U+905E,U+9060,U+9062-9063,U+9068-9069,U+906D-906E,U+9072,U+9075,U+9077-9078,U+907A,U+907C,U+907F-9081,U+9083-9084,U+908A-908B,U+908F,U+90A3,U+90A6,U+90AA,U+90C1,U+90DD,U+90E8,U+90F5,U+90FD,U+9109,U+9119,U+912D,U+9130,U+914D,U+9152,U+9157,U+9163,U+916C,U+9177-9178,U+9189,U+9192,U+919C,U+919E,U+91AB,U+91C0-91C1,U+91C7,U+91CB-91D1,U+91D8,U+91DC-91DD,U+920D,U+9214-9215,U+9234,U+9245,U+925A-925B,U+9264,U+9280,U+9285,U+9293,U+9298,U+929C,U+92B3,U+92B7,U+92D2,U+92EA,U+92F8,U+9304,U+9322,U+9326,U+9328,U+932B,U+932E-932F,U+934A,U+935B,U+9365,U+9375,U+937E,U+9396,U+93AE,U+93C8,U+93D7-93D8,U+93E1-93E2,U+93FD,U+9418,U+9435,U+9444,U+9451-9452,U+9463,U+9470,U+9472,U+947C-947D,U+947F,U+9577,U+9580,U+9582-9583,U+9589,U+958B,U+9592-9593,U+95A1,U+95B1,U+95B9,U+95C6-95C7,U+95CA,U+95D5-95D6,U+95DC,U+95E1-95E2,U+9631-9632,U+963B,U+963F-9640,U+9644,U+964B-964D,U+9650,U+9661-9664,U+966A,U+9670,U+9673,U+9676-9678,U+967D,U+968A,U+968E,U+9694,U+9698-9699,U+969B-969C,U+96A8,U+96AA,U+96B1,U+96B8,U+96BB,U+96C0,U+96C4-96C7,U+96D5-96D6,U+96D9,U+96DB-96DC,U+96DE,U+96E2-96E3,U+96E8,U+96EA,U+96F2,U+96F6-96F7,U+96FB,U+9700,U+9704,U+9706-9707,U+970D-970E,U+9716,U+971C,U+9727,U+9732,U+9738,U+9748,U+9752,U+975C,U+975E,U+9760-9762,U+978B;}@font-face{font-family:'LXGW WenKai TC';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/wenkai-09.woff2) format('woff2');unicode-range:U+978F,U+9798,U+97A0,U+97CB,U+97F3,U+97FB,U+97FF,U+9801-9803,U+9805-9806,U+9808,U+980C,U+9810-9811,U+9813,U+9817-9818,U+9824,U+982D,U+9830,U+9838-9839,U+983B,U+9846,U+984C-984D,U+984F,U+9858,U+985B,U+985E,U+9867,U+986B,U+986F,U+98A8,U+98B3,U+98B6,U+98C4,U+98C6,U+98DB,U+98DF,U+98E2,U+98EF,U+98F2,U+98FD-98FE,U+9905,U+990A,U+990C,U+9910,U+9912-9913,U+9918,U+9928,U+992C,U+9935,U+9948,U+994B,U+9951-9952,U+9957,U+995C,U+9996,U+9999,U+99A5,U+99A8,U+99AC-99AD,U+99B3,U+99C1,U+99D0,U+99D5,U+99DB,U+99DD,U+99E1,U+99ED,U+99F1,U+9A0E,U+9A19,U+9A30,U+9A37,U+9A45,U+9A55,U+9A57,U+9A5A,U+9A5F,U+9A62,U+9AA8,U+9AB7-9AB8,U+9ABC,U+9ACF,U+9AD2-9AD4,U+9AD8,U+9AEE,U+9B03,U+9B06,U+9B25,U+9B27,U+9B31,U+9B3C,U+9B42,U+9B45,U+9B54,U+9B58,U+9B5A,U+9B6F,U+9B91,U+9BAE,U+9CE5,U+9CE9,U+9CF4,U+9D3B,U+9D72,U+9DA9,U+9DF9,U+9E7D,U+9E97,U+9EA5,U+9EB5,U+9EBB-9EBC,U+9EC3,U+9ECE,U+9ED1,U+9ED8,U+9EDE,U+9EE8,U+9EEF,U+9F13,U+9F20,U+9F3B,U+9F4A,U+9F52,U+9F63,U+9F8D,U+9F90,U+9F95,U+FE30-FE4F,U+FE5D-FE5E,U+FF01-FF65;}</script>
 <script id="acim-v305-background">
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 /* ACIM_V305_BACKGROUND_BEGIN
    One cooperative queue for optional work. No geometry reads or focus changes.
    A deadline never forces work while a reader is typing, scrolling or hidden. */
@@ -520,6 +781,9 @@ if ('serviceWorker' in navigator) {
 })();
 /* ACIM_V305_BACKGROUND_END */
 
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 <style>
 /* ══ 奇蹟課程 PWA eBook — 版本由 ACIM_VERSION 統一管理 ══ */
@@ -2373,6 +2637,116 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
 #acim-migration-help a{color:var(--c-accent);text-decoration:underline;text-underline-offset:2px}
 </style>
 <style id="acim-backup291-style">#acim-backup291-status{font-size:12px;line-height:1.7;overflow-wrap:anywhere;margin:8px 0}.acim-backup291-preview{border:1px solid var(--c-border);border-radius:8px;padding:12px;margin:10px 0;background:var(--c-bg);color:var(--c-text);font-size:13px;line-height:1.7}.acim-backup291-preview h3{margin:0 0 8px;font-size:15px}.acim-backup291-preview select{display:block;max-width:100%;width:100%;white-space:normal;font:inherit;color:var(--c-text);background:var(--c-bg);padding:6px}.acim-backup291-actions{display:flex;gap:8px;flex-wrap:wrap}.acim-backup291-actions button,.acim-backup291-previous{font:inherit;min-height:40px;padding:6px 9px;border:1px solid var(--c-border);border-radius:6px;background:var(--c-sidebar);color:var(--c-accent);cursor:pointer}.acim-backup291-preview [hidden],.acim-backup291-previous[hidden]{display:none!important}.acim-backup291-actions button:focus-visible,.acim-backup291-previous:focus-visible{outline:2px solid var(--c-accent);outline-offset:2px}</style>
+<style id="acim-v5004-art">
+/* V50.0.5: presentation only. Original book markup and interaction pipelines are retained. */
+:root{
+ --c-bg:#FAF8F5;--c-page:#FAF8F5;--c-sidebar:#F4F2F8;
+ --c-text:#302D3D;--c-muted:#625A74;--c-accent:#29224A;--c-accent2:#625A74;
+ --c-gold:#806124;--c-border:#DCD7E2;--art-gold:#D8BC7E;--art-selected:#E7E2EF;
+ --art-input:#A69AAE;--art-panel:#FAF8F5;--sidebar-w:280px;--fs-base:20px;--content-max:680px;
+ color-scheme:light;
+}
+html.dark-mode{
+ --c-bg:#1D1A28;--c-page:#211E2D;--c-sidebar:#262233;
+ --c-text:#E8E2D6;--c-muted:#B8B0C8;--c-accent:#CBB27B;--c-accent2:#B8B0C8;
+ --c-gold:#CBB27B;--c-border:#51485E;--art-gold:#CBB27B;--art-selected:#3B324B;
+ --art-input:#7A6B89;--art-panel:#302A40;color-scheme:dark;
+}
+#content-area{padding:56px 80px 100px 40px;box-shadow:none;}
+#content-area p.mn,#content-area li.mn,#content-area div.mn{font-size:1em;}
+#content-area p.mft,#content-area li.mft,#content-area div.mft{font-size:.91em;}
+#content-area h1,#content-area h2{color:#29224A;}
+#content-area h3{color:#4B407A;}
+html.dark-mode #content-area h1,html.dark-mode #content-area h2{color:#E8E2D6;}
+html.dark-mode #content-area h3{color:#D2C9DF;}
+/* Underlining stays on the author's original words, in the same ink as the text. */
+#content-area u{ text-decoration-color:currentColor!important;text-decoration-thickness:1px!important;text-underline-offset:.2em!important;}
+html.dark-mode #content-area u{ text-decoration-color:currentColor!important;}
+#sidebar-header{border-bottom:1px solid var(--c-border);padding-top:15px;padding-bottom:12px;}
+#sidebar-header h3{font-family:'Noto Serif TC','PMingLiU',serif;font-weight:600;letter-spacing:.12em;color:var(--c-accent);}
+#sidebar-settings-toggle{color:var(--c-muted);border-color:var(--c-border);}
+#toc-search-frame{border-color:var(--art-input);box-shadow:none;}
+#toc-search-frame:focus-within{border-color:var(--c-gold);box-shadow:none;}
+#toc-search-input{color:var(--c-text);}
+#toc-search-input::placeholder{color:var(--c-muted);opacity:1;}
+html.dark-mode #toc-search-frame{background:var(--c-bg)!important;border-color:var(--art-input)!important;}
+#toc-search-clear{color:var(--c-muted);}
+#acim-search-scope button.acim-scope-on{background:#29224A;border-color:#29224A;color:#D8BC7E;}
+html.dark-mode #acim-search-scope button.acim-scope-on{background:#3B324B;border-color:#CBB27B;color:#CBB27B;}
+#toc-wrapper a{color:var(--c-muted);}
+#toc-wrapper .toc-h1{font-weight:600;color:var(--c-accent);}
+#toc-wrapper .toc-h2{font-weight:500;color:var(--c-muted);}
+#toc-wrapper .toc-h3,#toc-wrapper .toc-h4,#toc-wrapper .toc-h5{font-weight:400;color:var(--c-muted);}
+html.dark-mode #toc-wrapper a{color:#B8B0C8!important;}
+html.dark-mode #toc-wrapper .toc-h1{color:#E8E2D6!important;}
+#toc-wrapper a.toc-link.toc-active,html.dark-mode #toc-wrapper a.toc-link.toc-active{
+ background:var(--art-selected)!important;color:var(--c-gold)!important;box-shadow:inset 2px 0 0 var(--c-gold);font-weight:600;
+}
+#toc-wrapper a:hover,html.dark-mode #toc-wrapper a:hover{background:var(--art-selected)!important;}
+#pwa-tools .pwa-btn{width:44px;height:44px;background:#29224A!important;color:#D8BC7E;border:1px solid #625574;box-shadow:0 2px 6px #1D1A281A;transition:none;}
+html.dark-mode #pwa-tools .pwa-btn{background:#302A40!important;color:#CBB27B;border-color:#7A6B89;box-shadow:none;}
+#pwa-tools .pwa-btn:hover,#pwa-tools .pwa-btn:active{transform:none;border-color:var(--c-gold);}
+#pwa-tools #btn-bm.bm-marked,#pwa-tools #btn-sec-tts.pwa-btn-on{background:#4B407A!important;box-shadow:inset 0 0 0 1px var(--art-gold);color:var(--art-gold);}
+.acim-icon{width:20px;height:20px;display:inline-block;flex:none;vertical-align:middle;pointer-events:none;}
+.acim-theme-icon{display:inline-flex;align-items:center;justify-content:center;}
+.acim-theme-icon .acim-sun{display:none;}
+html.dark-mode .acim-theme-icon .acim-sun{display:inline-block;}
+html.dark-mode .acim-theme-icon .acim-moon{display:none;}
+#chapter-crumb>span:first-child,#toc-search-frame>span:first-child{color:var(--c-muted)!important;display:inline-flex;align-items:center;}
+#acim-bottomnav{box-shadow:none;}
+#acim-bottomnav .bn-ico{display:flex;align-items:center;justify-content:center;height:21px;color:inherit;}
+#acim-bottomnav button.acim-bn-on{color:var(--c-gold);}
+#acim-quick-sheet{background:var(--art-panel);border-color:var(--art-input);box-shadow:0 3px 12px #1D1A2820;}
+#acim-quick-sheet button{min-height:44px;}
+#acim-quick-sheet button>span:first-child{display:inline-flex;justify-content:center;align-items:center;min-width:24px;color:var(--c-gold);}
+#rtabs-bar{background:var(--art-panel);border-color:var(--art-input);box-shadow:none;}
+#rtabs-bar .rtab.rtab-on{background:#29224A;color:#D8BC7E;}
+html.dark-mode #rtabs-bar .rtab.rtab-on{background:#3B324B;color:#CBB27B;box-shadow:inset 0 0 0 1px #CBB27B;}
+#toc-locate-btn,#theme-mode{border-color:var(--art-input);}
+.sr-item,.sr-hint,.sr-no-result{color:var(--c-muted);border-color:var(--c-border);}
+#bm-panel{background:var(--art-panel);color:var(--c-text);border-color:var(--art-input);box-shadow:0 4px 16px #1D1A2826;}
+#bm-panel-header,#bm-panel-footer,.bm-item{border-color:var(--c-border);}
+.bm-item-title{color:var(--c-text);}
+.bm-empty,.bm-item-time,.bm-item-excerpt,#bm-storage-status,#bm-panel-close,.bm-item-del{color:var(--c-muted);}
+#bm-panel-footer button{color:var(--c-text);border-color:var(--art-input);min-height:36px;}
+#bm-panel-close,.bm-item-del{min-width:32px;min-height:32px;}
+#footnote-bar,html.dark-mode #footnote-bar{background:var(--art-panel);color:var(--c-text);border-top:1px solid var(--c-gold);box-shadow:0 -2px 10px #1D1A281A;}
+#fn-text *,#fn-num{color:var(--c-text)!important;}
+#fn-context{color:var(--c-muted);}
+#fn-text{font-size:17px;line-height:1.85;}
+#fn-text p.mn,#fn-text p.mft,#fn-text li.mn,#fn-text li.mft{font-size:inherit;}
+#fn-text a{color:var(--c-gold)!important;}
+#fn-text u,#fn-text [style*="underline"]{text-decoration-color:currentColor!important;}
+.fn-action-btn,#fn-close{background:var(--art-selected);color:var(--c-gold);width:36px;height:36px;}
+#fn-tts-btn::before{content:none;}
+#tts-bar{background:var(--art-panel);color:var(--c-text);border-color:var(--art-input);box-shadow:none;}
+#tts-pause-btn,#tts-stop-btn,#tts-bar .tts-gender-btn{color:var(--c-text);border-color:var(--art-input);}
+#pwa-install-bar{background:#29224A;color:#E8E2D6;box-shadow:none;}
+#pwa-install-btn{border:1px solid #D8BC7E;color:#D8BC7E;}
+:where(#pwa-tools,#acim-bottomnav,#acim-quick-sheet,#sidebar-toc,#bm-panel,#footnote-bar) button:focus-visible{outline:2px solid var(--c-gold);outline-offset:2px;}
+@media(min-width:1400px){:root{--sidebar-w:300px;}}
+@media(min-width:769px) and (max-width:1100px){:root{--sidebar-w:260px;}#content-area{padding-left:30px;padding-right:88px;}}
+@media(max-width:768px){
+ :root{--fs-base:18px;}
+ #content-area{padding:52px 18px calc(130px + env(safe-area-inset-bottom,0px));}
+ #content-area>*:not(#reading-progress){max-width:680px!important;margin-left:auto!important;margin-right:auto!important;}
+ #sidebar-header{padding-top:12px;}
+}
+@media(min-width:600px) and (max-width:768px){:root{--fs-base:20px;}#content-area{padding-left:40px;padding-right:40px;}}
+@media(max-width:359px){#content-area{padding-left:16px;padding-right:16px;}}
+@media(prefers-reduced-motion:reduce){#acim-bottomnav,#acim-quick-sheet,.pwa-btn{transition:none;}}
+@media print{#content-area{padding:0!important;}#content-area>*:not(#reading-progress){max-width:100%!important;}}
+
+
+</style>
+<style id="acim-v5005-fixes">/* Keep every title, including parenthetical English and following Chinese, together. */
+#toc-wrapper a.toc-link{white-space:normal;overflow-wrap:anywhere;word-break:normal;}
+/* The fixed mobile navigation occupies real space in both sidebar pages. */
+@media(max-width:768px){
+ #sidebar-toc{padding-bottom:calc(var(--acim-nav-h,56px) + env(safe-area-inset-bottom,0px));}
+ #sidebar-navigation>#toc-wrapper{min-height:0;overscroll-behavior:contain;}
+}
+</style>
 </head>
 
 <body>
@@ -2387,7 +2761,7 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
 <div id="reading-progress"></div>
 
 <div id="chapter-crumb">
-  <span style="font-size:14px;color:#29224A;flex-shrink:0;">☰</span>
+  <span aria-hidden="true"><svg class="acim-icon acim-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>
   <span id="crumb-text">目錄</span>
 </div>
 
@@ -2413,7 +2787,7 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
         <div class="acim-backup-row"><span>資料備份</span><button id="acim-bk-export" type="button">匯出</button><button id="acim-bk-import" type="button">匯入</button><input id="acim-bk-file" type="file" accept=".json,application/json" hidden></div>
         <details id="acim-migration-help">
           <summary>從舊網址搬移書籤與閱讀進度</summary>
-          <p>舊網址與本站的閱讀資料分開保存。請先<a href="https://ananda-sat-chit.github.io/acim-ce-zh-tw/" target="_blank" rel="noopener noreferrer">開啟舊站</a>，在「資料備份」按「匯出」，再回本站按「匯入」。匯入前，也可先匯出本站資料作備份。</p>
+          <p>不同網址的閱讀資料分開保存。需要搬移時，請先在原網址的「資料備份」按「匯出」，再回本站按「匯入」。匯入前，也可先匯出本站資料作備份。</p>
           <p>新網址的 App 與離線資料需另行安裝、保存。</p>
         </details>
         <div class="sidebar-info-box">
@@ -2428,7 +2802,7 @@ html.dark-mode sup.fn-badge.acim-fn-locate{
       <div id="sidebar-navigation">
         <div id="toc-search-box" role="search" aria-label="搜尋書籍內文">
         <div id="toc-search-frame">
-          <span style="font-size:14px;color:#746BB3;flex-shrink:0;">🔍</span>
+          <span aria-hidden="true"><svg class="acim-icon acim-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 21l-5-5"/><path d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0"/></svg></span>
           <input id="toc-search-input" type="search" aria-label="搜尋書籍內文" aria-controls="toc-search-results" placeholder="搜尋內文關鍵字…" autocomplete="off" spellcheck="false">
           <button id="toc-search-clear" aria-label="清除搜尋">✕</button>
         </div>
@@ -22697,10 +23071,10 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 <!-- 工具按鈕（JS 建立） -->
 <div id="pwa-tools">
   <div class="pwa-btn-wrap" data-tip="朗讀本節">
-    <button id="btn-sec-tts" class="pwa-btn" title="朗讀本節" aria-label="朗讀本節" style="background:#29224A">🔊</button>
+    <button id="btn-sec-tts" class="pwa-btn" title="朗讀本節" aria-label="朗讀本節" style="background:#29224A"><svg class="acim-icon acim-speaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5 6 9H3v6h3l5 4Z"/><path d="M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg></button>
   </div>
   <div class="pwa-btn-wrap" data-tip="回到頂部" id="wrap-top" style='display: none'>
-    <button id="btn-top" class="pwa-btn" title="回到頂部" aria-label="回到頂部" style="background:rgba(41,34,74,0.75)">↑</button>
+    <button id="btn-top" class="pwa-btn" title="回到頂部" aria-label="回到頂部" style="background:rgba(41,34,74,0.75)"><svg class="acim-icon acim-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20V4M5 11l7-7 7 7"/></svg></button>
   </div>
   <div class="pwa-btn-wrap" data-tip="放大字體">
     <button id="btn-fup" class="pwa-btn" title="放大字體" aria-label="放大字體" style="background:#29224A">A＋</button>
@@ -22709,13 +23083,13 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     <button id="btn-fdn" class="pwa-btn" title="縮小字體" aria-label="縮小字體" style="background:#29224A">A－</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="切換深色">
-    <button id="btn-dark" class="pwa-btn" title="切換深色" aria-label="切換深色" style="background:#34343B">🌓</button>
+    <button id="btn-dark" class="pwa-btn" title="切換深色" aria-label="切換深色" style="background:#34343B"><span class="acim-theme-icon"><svg class="acim-icon acim-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z"/></svg><svg class="acim-icon acim-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg></span></button>
   </div>
   <div class="pwa-btn-wrap" data-tip="目錄">
-    <button id="btn-toc" class="pwa-btn" title="目錄" aria-label="目錄" style="background:#29224A">☰</button>
+    <button id="btn-toc" class="pwa-btn" title="目錄" aria-label="目錄" style="background:#29224A"><svg class="acim-icon acim-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </div>
   <div class="pwa-btn-wrap" data-tip="書籤">
-    <button id="btn-bm" class="pwa-btn" title="加入/移除書籤" aria-label="加入或移除書籤" style="background:#29224A">🔖</button>
+    <button id="btn-bm" class="pwa-btn" title="加入/移除書籤" aria-label="加入或移除書籤" style="background:#29224A"><svg class="acim-icon acim-bookmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h12v18l-6-4-6 4Z"/></svg></button>
   </div>
 </div>
 
@@ -22744,7 +23118,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     <span id="fn-num"></span>
     <div id="fn-text"></div>
     <div id="fn-actions">
-      <button id="fn-tts-btn" class="fn-action-btn" title="朗讀此腳注" aria-label="朗讀此腳注"></button>
+      <button id="fn-tts-btn" class="fn-action-btn" title="朗讀此腳注" aria-label="朗讀此腳注"><svg class="acim-icon acim-speaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 5 6 9H3v6h3l5 4Z"/><path d="M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg></button>
       <button id="fn-close" title="關閉" aria-label="關閉">✕</button>
     </div>
   </div>
@@ -22753,6 +23127,9 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 <div id="sidebar-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.45); z-index:10000; opacity:0; transition:opacity 0.25s"></div>
 
 <script>
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 /* ══ 奇蹟課程 eBook — 主控程式（無 DOM 搬移）══ */
   /* 版本由頁面頂端 ACIM_VERSION 常數統一管理         */
   (function(){
@@ -23011,8 +23388,141 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
      抽屜滑入後將 #content-area display:none，這筆結算從結構上消失；
      關閉抽屜時恢復書本、以「暫存錨點＋自帶輕量校正」還原捲動位置，
      重新附著的樣式債交給 V30.10 背景結清排程器。 */
+/* V50.0.5: retain a visible character across reflow. No full-book geometry scan. */
+function createReadingFrameV5005(){
+  var active=null,session=null;
+  function root(){return document.getElementById('content-area');}
+  function eligible(node){
+    return !!(node&&node.nodeType===3&&node.length&&node.parentElement&&
+      !node.parentElement.closest('button,svg,.fn-badge,.tts-btn'));
+  }
+  function localText(block){
+    return document.createTreeWalker(block,4,{acceptNode:function(n){return eligible(n)?1:2;}});
+  }
+  function offsetInBlock(block,node,offset){
+    var walk=localText(block),n,total=0,count=0;
+    while((n=walk.nextNode())&&count++<512){if(n===node)return total+offset;total+=n.length;}
+    return null;
+  }
+  function resolve(frame){
+    if(eligible(frame.node)&&frame.node.isConnected&&frame.block.contains(frame.node))return true;
+    if(frame.textOffset===null)return false;
+    var walk=localText(frame.block),n,left=frame.textOffset,count=0;
+    while((n=walk.nextNode())&&count++<512){
+      if(left<n.length){frame.node=n;frame.offset=left;return true;}left-=n.length;
+    }
+    return false;
+  }
+  function rect(frame){
+    if(!frame.block||!frame.block.isConnected)return null;
+    if(resolve(frame)){
+      var range=frame.range||document.createRange();frame.range=range;
+      var start=Math.max(0,Math.min(frame.offset,frame.node.length-1));
+      range.setStart(frame.node,start);range.setEnd(frame.node,start+1);
+      var boxes=range.getClientRects();
+      for(var i=0;i<boxes.length;i++)if(boxes[i].height>0&&boxes[i].width>0)return boxes[i];
+    }
+    return frame.node?null:frame.block.getBoundingClientRect();
+  }
+  function cancel(){
+    var run=active;if(!run)return;active=null;
+    if(run.raf!==null)cancelAnimationFrame(run.raf);
+    run.timers.forEach(clearTimeout);
+    if(run.observer)run.observer.disconnect();
+    run.events.forEach(function(v){v[0].removeEventListener(v[1],v[2],v[3]);});
+    if(run.section)run.section.style.contentVisibility=run.sectionVisibility;
+    if(run.root)run.root.style.overflowAnchor=run.overflowAnchor;
+  }
+  function forget(){session=null;cancel();}
+  /* Font controls retain one character across repeated presses. Reading gestures,
+     navigation and a viewport change start a new reading position. */
+  ['wheel','touchmove','resize','pagehide'].forEach(function(name){window.addEventListener(name,forget,{passive:true,capture:true});});
+  document.addEventListener('acim-navigation',forget);
+  window.addEventListener('pointerdown',function(e){
+    var el=e.target;
+    if(!el||!el.closest||!el.closest('#btn-fup,#btn-fdn,#acim-bn-font,#acim-quick-sheet'))forget();
+  },{passive:true,capture:true});
+  window.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&(e.key==='['||e.key===']'))return;
+    if(e.key==='Enter'||e.key===' '){var el=e.target;if(el&&el.closest&&el.closest('#btn-fup,#btn-fdn,#acim-bn-font,#acim-quick-sheet'))return;}
+    forget();
+  },{capture:true});
+  function capture(){
+    cancel();
+    var content=root();if(!content||document.documentElement.classList.contains('acim-book-veiled'))return null;
+    if(window.__acimNav)window.__acimNav.cancel();
+    if(session){
+      try{var retained=rect(session);if(retained&&retained.height&&Math.abs(retained.top-session.top)<=Math.max(4,retained.height*.5))return session;}catch(e){}
+      session=null;
+    }
+    var column=content.firstElementChild||content,bounds=column.getBoundingClientRect();
+    var crumb=document.getElementById('chapter-crumb'),tabs=document.getElementById('rtabs-bar');
+    var top=64;
+    [crumb,tabs].forEach(function(el){if(!el)return;var r=el.getBoundingClientRect();if(r.height&&r.bottom<180)top=Math.max(top,r.bottom+18);});
+    var bottom=Math.max(top+1,window.innerHeight-80),ys=[top,top+36,top+84,window.innerHeight*.35];
+    var xs=[.28,.5,.72],fallback=null;
+    for(var yi=0;yi<ys.length;yi++)for(var xi=0;xi<xs.length;xi++){
+      var x=bounds.left+bounds.width*xs[xi],y=Math.min(bottom,ys[yi]);
+      var stack=document.elementsFromPoint?document.elementsFromPoint(x,y):[document.elementFromPoint(x,y)];
+      var block=null;
+      for(var si=0;si<stack.length;si++){
+        var candidate=stack[si],p=candidate&&candidate.closest?candidate.closest('p,h1,h2,h3,h4,h5,h6,li,td,blockquote'):null;
+        if(p&&content.contains(p)&&p.getBoundingClientRect().height){block=p;break;}
+      }
+      if(!block)continue;
+      var frame={block:block,node:null,offset:0,textOffset:null,range:null,top:block.getBoundingClientRect().top};
+      if(!fallback)fallback=frame;
+      var node=null,offset=0;
+      try{
+        if(document.caretPositionFromPoint){var caret=document.caretPositionFromPoint(x,y);if(caret){node=caret.offsetNode;offset=caret.offset;}}
+        else if(document.caretRangeFromPoint){var hit=document.caretRangeFromPoint(x,y);if(hit){node=hit.startContainer;offset=hit.startOffset;}}
+      }catch(e){}
+      if(!eligible(node)||!block.contains(node))continue;
+      frame.node=node;frame.offset=Math.max(0,Math.min(offset,node.length-1));
+      frame.textOffset=offsetInBlock(block,node,frame.offset);
+      var r=rect(frame);
+      if(r&&r.height&&r.top<window.innerHeight&&r.bottom>0){frame.top=r.top;session=frame;return frame;}
+    }
+    session=fallback;return fallback;
+  }
+  function restore(frame,immediate){
+    cancel();if(!frame||!frame.block||!frame.block.isConnected)return;
+    var content=root();if(!content)return;
+    var run={frame:frame,root:content,overflowAnchor:content.style.overflowAnchor,section:frame.block.closest('section.csec'),sectionVisibility:'',observer:null,raf:null,timers:[],events:[]};
+    active=run;
+    content.style.overflowAnchor='none';
+    if(run.section){run.sectionVisibility=run.section.style.contentVisibility;run.section.style.contentVisibility='visible';}
+    function listen(target,name,fn,options){target.addEventListener(name,fn,options);run.events.push([target,name,fn,options]);}
+    function pin(){
+      run.raf=null;
+      if(active!==run)return;
+      if(document.documentElement.classList.contains('acim-book-veiled')){cancel();return;}
+      if(window.__acimV50&&window.__acimV50.isBlocked()){cancel();return;}
+      var r;try{r=rect(frame);}catch(e){cancel();return;}
+      if(!r||!r.height)return;
+      var drift=r.top-frame.top;
+      if(Math.abs(drift)>1.5)acimScrollNow(0,Math.max(0,window.scrollY+drift));
+    }
+    function queue(){if(active===run&&run.raf===null)run.raf=requestAnimationFrame(pin);}
+    ['wheel','touchmove','pointerdown','keydown'].forEach(function(name){listen(window,name,cancel,{capture:true,passive:true});});
+    ['acim-navigation','acim-v50-block'].forEach(function(name){listen(document,name,cancel,false);});
+    listen(window,'pagehide',cancel,false);listen(window,'resize',queue,{passive:true});
+    if(window.visualViewport)listen(window.visualViewport,'resize',queue,{passive:true});
+    if(document.fonts&&document.fonts.addEventListener){listen(document.fonts,'loadingdone',queue,false);listen(document.fonts,'loadingerror',queue,false);}
+    if(window.ResizeObserver){
+      run.observer=new ResizeObserver(queue);
+      [frame.block,run.section,content.firstElementChild].forEach(function(el){if(el)run.observer.observe(el);});
+    }
+    [90,260,700,1400,2600,4300,6500].forEach(function(ms){run.timers.push(setTimeout(queue,ms));});
+    run.timers.push(setTimeout(function(){if(active===run)cancel();},8000));
+    if(immediate)pin();else queue();
+  }
+  return {capture:capture,restore:restore,cancel:cancel,forget:forget};
+}
+
+  var readingFrame=createReadingFrameV5005();
   var _veil={on:false,timer:null,y:0,zoom:'',aid:null,aidOrig:null,atop:null,gen:0,waiting:null,
-    session:null}; /* V40.4：session＝字級連調錨點（同段落＋同框景跨週期沿用） */
+    session:null,frame:null}; /* V40.4：session＝字級連調錨點（同段落＋同框景跨週期沿用） */
   /* V40.1：面紗為「共享資源」——抽屜或字級快選單任一開啟即掛紗，
      兩者全關才解紗；先開其一不重掛、關其中之一不解全紗。 */
   function acimPanelOpen(){
@@ -23061,7 +23571,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
         if(_veil.aidOrig)el.id=_veil.aidOrig;else el.removeAttribute('id');
       }
     }catch(e){}
-    _veil.aid=null;_veil.aidOrig=null;_veil.atop=null;
+    _veil.aid=null;_veil.aidOrig=null;_veil.atop=null;_veil.frame=null;
   }
   /* V40.7：瞬捲工具——面紗路徑所有程式捲動必須即時到位。CSS smooth 已於
      樣式表根除（見 html 規則註解），本工具再加單幀 inline 防護雙保險：
@@ -23168,7 +23678,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
        跳頂改由解紗回調（rAF#2，書本已繪製一幀、版面乾淨）中的 __acimJump(0)
        完成，與浮動↑鈕同一成本。 */
     try{if(window.__acimTopJumpTrace)window.__acimTopJumpTrace.tVeil=(window.performance&&performance.now)?performance.now():0;}catch(e){}
-    var y=_veil.y,aid=_veil.aid,atop=_veil.atop,gen=_veil.gen;
+    var y=_veil.y,aid=_veil.aid,atop=_veil.atop,gen=_veil.gen,readingAnchor=_veil.frame;
     /* V40.1：面紗期間字級若被改變（快選單 A＋／A－），解紗後上方各節
        會隨背景結清持續長高，原 1300ms 內的四次校正擋不住——zoom 有變時
        校正窗口延長至 6 秒，「使用者讓位」守衛同步延長。 */
@@ -23223,6 +23733,8 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
         if(topMode){
           try{window.__acimVeilDebug={topMode:true,zeroWork:true,
             scrollAtRestore:Math.round(window.scrollY)};}catch(e){}
+        }else if(!skipRestore&&!pendingJump&&readingAnchor){
+          readingFrame.restore(readingAnchor,true);
         }else if(!skipRestore&&!pendingJump&&(window.scrollY||0)<=2&&y>2){
           /* V40.15：pendingJump＝解紗回調即將執行程式跳轉（搜尋／書籤／
              目錄連結）。此時 scrollY 仍在面紗期夾限的 0，舊條件會判定
@@ -23316,6 +23828,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
       var ca=document.getElementById('content-area');
       if(!ca)return;
       veilClearAnchor();
+      _veil.frame=readingFrame.capture();
       _veil.y=Math.max(0,window.scrollY||0);
       _veil.zoom=(content&&content.style.zoom)||'';
       /* V40.4：字級連調錨點 session——連續多次 A＋／A－（各自開關快選單）時，
@@ -23415,9 +23928,9 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   function openSidebar(){
     if(sidebarHideTimer!==null){clearTimeout(sidebarHideTimer);sidebarHideTimer=null;}
     if(sidebar.classList.contains('mobile-open')&&overlay.style.display==='block')return;
+    if(window.innerWidth<=768)veilScheduleForDrawer();
     sidebar.classList.add('mobile-open');
     overlay.style.display='block';
-    if(window.innerWidth<=768)veilScheduleForDrawer();
     sidebarOpenFrame=requestAnimationFrame(function(){
       sidebarOpenFrame=null;
       if(sidebar.classList.contains('mobile-open'))overlay.style.opacity='1';
@@ -23504,34 +24017,8 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   var hasZoom = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('zoom','1');
 
   function applyZoom(keepFrame) {
-    var z = zSteps[fi];
-    /* V40.15：桌面位置保全（僅使用者主動變更字級時，keepFrame===true）——
-       桌面無面紗管線（面紗僅 ≤768 掛），zoom 直接套用＝全書重排，瀏覽器
-       捲動錨定在 CSS zoom 大文件上無法保持閱讀框景（E2E 實測 A＋ 後框景
-       段落已換位，A－ 回到原字級也回不到原段落）。套用前記錄視口內錨點
-       段落（多點探測，與面紗同一手法），套用後釘回＋短程校正（桌面書本
-       始終在版面樹上、量測隨時真實；CVA 節隨結清重新渲染的高度微調由
-       校正吸收）。行動裝置不在此處處理：A＋／A－ 由快選單先掛紗再套用，
-       解紗錨點還原管線（_veil.session）負責框景，兩者不得重複校正。
-       啟動時的初次套用（未帶 keepFrame）不啟用——避免與 buildTOC
-       的 savedY 閱讀位置還原互搶。 */
-    var _anchor=null;
-    if(keepFrame===true&&window.innerWidth>768){
-      try{
-        var _pts=[[0.5,0.35],[0.5,0.5],[0.5,0.22],[0.5,0.65],[0.3,0.4],[0.7,0.4]];
-        for(var _pi=0;_pi<_pts.length&&!_anchor;_pi++){
-          var _stack=document.elementsFromPoint?
-            document.elementsFromPoint(Math.round(window.innerWidth*_pts[_pi][0]),Math.round(window.innerHeight*_pts[_pi][1])):[];
-          for(var _si=0;_si<_stack.length;_si++){
-            var _cand=_stack[_si];
-            var _pp=_cand&&_cand.closest?_cand.closest('#content-area p,#content-area h1,#content-area h2,#content-area h3,#content-area h4,#content-area li'):null;
-            if(_pp&&_pp.getBoundingClientRect().height>0){
-              _anchor={el:_pp,top:_pp.getBoundingClientRect().top};break;
-            }
-          }
-        }
-      }catch(e){}
-    }
+    var z=zSteps[fi];
+    var frame=keepFrame===true&&!_veil.on?readingFrame.capture():null;
     if (hasZoom) {
       content.style.zoom = z;
       content.style.transform = '';
@@ -23546,30 +24033,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     if (u) u.style.opacity = fi >= 6 ? '0.38' : '1';
     if (d) d.style.opacity = fi <= 0 ? '0.38' : '1';
     scheduleStyleDischarge();
-    if(_anchor){
-      try{
-        var _stopped=false, _stop=function(){_stopped=true;};
-        ['wheel','touchmove','pointerdown','keydown'].forEach(function(n){
-          window.addEventListener(n,_stop,{capture:true,passive:true});
-        });
-        setTimeout(function(){
-          ['wheel','touchmove','pointerdown','keydown'].forEach(function(n){
-            window.removeEventListener(n,_stop,{capture:true,passive:true});
-          });
-        },3600);
-        var _pin=function(){
-          if(_stopped||!_anchor.el||!_anchor.el.isConnected)return;
-          var t=window.scrollY+_anchor.el.getBoundingClientRect().top-_anchor.top;
-          if(Math.abs(t-window.scrollY)>2)window.__acimJump(t);
-        };
-        requestAnimationFrame(function(){
-          _pin();
-          [90,260,700,1300,2200,3400].forEach(function(ms){
-            setTimeout(_pin,ms);
-          });
-        });
-      }catch(e){}
-    }
+    if(frame)readingFrame.restore(frame,false);
   }
   applyZoom();
 
@@ -23577,12 +24041,15 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     btn.classList.remove('at-limit'); void btn.offsetWidth; btn.classList.add('at-limit');
     setTimeout(function(){ btn.classList.remove('at-limit'); }, 350);
   }
-  document.getElementById('btn-fup').addEventListener('click', function(){
-    if (fi < 6){ fi++; applyZoom(true); } else shake(this);
-  });
-  document.getElementById('btn-fdn').addEventListener('click', function(){
-    if (fi > 0){ fi--; applyZoom(true); } else shake(this);
-  });
+  function adjustFont(delta){
+    if(fi+delta<0||fi+delta>=zSteps.length){shake(document.getElementById(delta>0?'btn-fup':'btn-fdn'));return;}
+    var mobile=window.innerWidth<=768;
+    if(mobile)window.__acimVeilApplyNow();
+    fi+=delta;applyZoom(true);
+    if(mobile&&!acimPanelOpen())unveilBookBehindDrawer();
+  }
+  document.getElementById('btn-fup').addEventListener('click',function(){adjustFont(1);});
+  document.getElementById('btn-fdn').addEventListener('click',function(){adjustFont(-1);});
 
   /* ── 深色模式 ── */
   var btnDark = document.getElementById('btn-dark');
@@ -23590,7 +24057,8 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   function syncDark() {
     var dark=document.documentElement.classList.contains('dark-mode');
     var saved=window.__acimStorage.get('acim-dark');
-    btnDark.innerHTML=dark?'☀️':'🌓';
+    btnDark.innerHTML=window.__acimIcon('theme');
+    btnDark.setAttribute('aria-pressed',String(dark));
     btnDark.title=(dark?'切換亮色':'切換深色')+'；長按 0.6 秒跟隨系統';
     btnDark.setAttribute('aria-label',btnDark.title);
     btnDark.parentElement.setAttribute('data-tip',btnDark.title);
@@ -23846,7 +24314,7 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     function mkLink(h, cls) {
       var a = document.createElement('a');
       a.href='#'+h.id; a.className='toc-link '+cls; a.dataset.id=h.id;
-      var t=h.textContent.trim(); a.textContent=t.length>38?t.slice(0,38)+'…':t;
+      var t=h.textContent.trim(); a.textContent=t; a.title=t;
       a.addEventListener('click', function(e){
         e.preventDefault();
         var el=document.getElementById(a.dataset.id);
@@ -24903,6 +25371,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     return item;
   }
   function renderBatch(results,rx,from,append){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     var frag=document.createDocumentFragment(),to=Math.min(from+BATCH,results.length);
     for(var i=from;i<to;i++)frag.appendChild(makeItem(results[i],rx));
     var old=sr.querySelector('.sr-more-btn');if(old)old.remove();
@@ -24919,6 +25388,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     sr.classList.add('visible');sr.setAttribute('aria-busy','false');
   }
   function doSearch(kw){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     cancelPending();var token=_searchToken,k=kw.replace(/\s+/g,' ').trim();
     sr.innerHTML='';sr.classList.remove('visible');sb.style.display='none';_shownCount=0;
     _lastResults=[];_lastRx=null;stats.query=k;stats.resultCount=0;
@@ -24971,6 +25441,9 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     if(searchIndex)execute();
     else{sb.textContent='\u6b63\u5728\u5efa\u7acb\u5168\u6587\u7d22\u5f15\u2026';buildIndex(execute,true);}
   }
+  /* V50_INTEGRATION_START */
+  document.addEventListener('acim-v50-block',function(){cancelPending();});
+  /* V50_INTEGRATION_END */
   function scheduleSearch(){
     cancelPending();
     sc.style.display=si.value?'block':'none';
@@ -24999,12 +25472,10 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape') closeSidebar();
     if((e.ctrlKey||e.metaKey)&&e.key==='['){
-      e.preventDefault(); if(fi>0){fi--;applyZoom();}
-      else shake(document.getElementById('btn-fdn'));
+      e.preventDefault();adjustFont(-1);
     }
     if((e.ctrlKey||e.metaKey)&&e.key===']'){
-      e.preventDefault(); if(fi<6){fi++;applyZoom();}
-      else shake(document.getElementById('btn-fup'));
+      e.preventDefault();adjustFont(1);
     }
   });
 
@@ -25799,6 +26270,9 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
   })();
 
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 
 <!-- V30.6: Browser support guidance (lightweight; no TOC or reading-content mutations). -->
@@ -25818,6 +26292,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
 @media(max-width:480px){#acim-external-guide{top:calc(env(safe-area-inset-top,0px) + 46px);padding:11px 12px;font-size:12.5px}}
 </style>
 <script id="acim-browser-guide-script">
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 (function(){
   'use strict';
   var ua=navigator.userAgent||'';
@@ -25922,6 +26399,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
     }
   }
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 
 <!-- ══ TTS 語音朗讀模組 ══ -->
@@ -25942,6 +26422,9 @@ html.dark-mode #acim-external-guide .acim-eg-note{color:#c4b8d2}
 </div>
 
 <script>
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 /* ══ TTS 語音朗讀（Web Speech API）v2 ══
    修正：
    1. 按鈕改用 CSS ::before 顯示🔊，DOM 無文字，語音引擎不再念出「音量」
@@ -26360,6 +26843,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     if(clearPending) _ttsPendingStart=null;
   }
   function scheduleTtsStart(action,job){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(_ttsStopped || job!==_ttsGeneration || _ttsAppPaused) return;
     if(_speakTimer!==null) clearTimeout(_speakTimer);
     _ttsPendingStart=action;
@@ -26395,6 +26879,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     updatePauseControl();
   }
   function resumeAppTTS(){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(_ttsStopped || !_ttsAppPaused || document.hidden) return;
     var job=_ttsGeneration, unit=_ttsCurrentUnit;
     var action=unit ? function(){ speakTtsUnit(unit,job); } : _ttsPendingStart;
@@ -26411,6 +26896,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     pauseAppTTS();
   }
   function speakTtsUnit(unit,job){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(_ttsStopped || job!==_ttsGeneration || _ttsAppPaused) return;
     _ttsCurrentUnit=unit;
     if(document.hidden){ suspendAppTTS(); return; }
@@ -26475,6 +26961,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
 
   /* ── 朗讀純文字（供腳注使用）── */
   function speakText(text,onEndCb,opts){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     stopTTS();
     var prepared=text&&typeof text==='object'&&Array.isArray(text.queue)?text:prepareTtsQueue(String(text||''),'zh-TW');
     if(!prepared.queue.some(function(item){return !item.pause&&String(item.text||'').trim();}))return false;
@@ -26514,6 +27001,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
 
   /* ── 朗讀單一段落 ── */
   function speakPara(para,btn,chainCb,labelOverride){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(currentPara===para){stopTTS();return false;}
     stopTTS();
     if(!para||!para.isConnected)return false;
@@ -26577,6 +27065,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     },140);
   }
   function _secPlayNext(){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(_secTimer!==null){clearTimeout(_secTimer);_secTimer=null;}
     if(!_secOn||_ttsAppPaused)return;
     if(document.hidden){suspendAppTTS();return;}
@@ -26591,6 +27080,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   }
 
   function speakSection(){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(_secOn){ stopTTS(); return; }
     stopTTS(); /* Starting a section is a new source, even if its first paragraph was playing. */
     var sec=_secCurrentSection();
@@ -26614,6 +27104,9 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   });
   stopBtn.addEventListener('click', stopTTS);
   updatePauseControl();
+  /* V50_INTEGRATION_START */
+  document.addEventListener('acim-v50-block',suspendAppTTS);
+  /* V50_INTEGRATION_END */
   document.addEventListener('visibilitychange',function(){ if(document.hidden) suspendAppTTS(); });
   document.addEventListener('freeze',suspendAppTTS);
   window.addEventListener('pagehide',suspendAppTTS);
@@ -26827,11 +27320,17 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   } else setTimeout(doInject,1200);
 
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 
 
 <!-- ═══ ACIM 經句永久連結系統 ═══ -->
 <script>
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 
 /* ═══════════════════════════════════════════════════════════════
    完整加註版奇蹟課程 — 經句永久連結系統 v1.0
@@ -27077,10 +27576,41 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       window.__acimJump(window.scrollY+target.getBoundingClientRect().top-margin,token);
       window.__acimCorrectScroll(target,margin,token);
       scheduleReferenceCorrection30(target,margin,token);
+      /* V50_INTEGRATION */ v50ReadingReady(target,null,token);
     },150);
     hashClearTimer=setTimeout(clearHL,4500);
     canonicalizeHash(p,true);
   }
+
+  /* V50_INTEGRATION_START */
+  var v50ReadyPending=false;
+  function v50ReadingReady(target,rectOfTarget,token){
+    var session=window.__acimV50;if(!session||v50ReadyPending||session.state().ready)return;
+    v50ReadyPending=true;var attempts=0;
+    function examine(){
+      if(document.hidden){v50ReadyPending=false;return;}
+      if(session.isBlocked()){v50ReadyPending=false;session.markReady();return;}
+      var readable=!target||!target.isConnected;
+      if(target&&target.isConnected){
+        var rect=rectOfTarget?rectOfTarget():target.getBoundingClientRect();
+        var y=Math.max(1,Math.min(window.innerHeight-70,rect.top+Math.min(8,rect.height/2))),x=Math.max(1,Math.min(window.innerWidth-2,rect.left+Math.min(8,rect.width/2)));
+        var hit=document.elementFromPoint(x,y);
+        readable=!!(rect.height&&rect.bottom>40&&rect.top<window.innerHeight-64&&hit&&(hit===target||target.contains(hit)));
+        if(token!==undefined&&!window.__acimNav.valid(token))readable=true; // a real reader action wins over an initial jump
+      }
+      if(readable){v50ReadyPending=false;session.markReady();return;}
+      if(++attempts<20){setTimeout(examine,150);return;}
+      v50ReadyPending=false;
+      // A canceled/failed initial position must not strand controls after the book is readable.
+      if(document.getElementById('content-area'))session.markReady();
+    }
+    requestAnimationFrame(function(){requestAnimationFrame(examine);});
+  }
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden&&window.__acimVerseIndexReady&&window.__acimV50&&!window.__acimV50.state().ready)v50ReadingReady(document.querySelector('[data-acim-hash-target]'));
+  });
+  /* V50_INTEGRATION_END */
+
   function headingPanelPosition30(){
     sharePanel.style.visibility='hidden';sharePanel.style.display='block';
     sharePanel.style.top='50%';sharePanel.style.left='50%';sharePanel.style.bottom='auto';
@@ -27106,6 +27636,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     headingPanelPosition30();
   }
   function openHeadingPanel30(id){
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(!headingEntry30(id)||!shareBar||!sharePanel)return;
     shareBar.dataset.id=id;shareBar.dataset.sent='0';shareBar.dataset.sentEnd='';
     shareBar.style.display='none';openPanel();
@@ -27775,6 +28306,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   /* ACIM_RECIPIENT30_END */
 
   function scrollToHash(hash,options) {
+    /* V50_INTEGRATION */ if(window.__acimV50&&window.__acimV50.isBlocked()){window.__acimV50.deferHash(hash);return;}
     options=options||{};
     if(!idsReady){recipientQueue30.request(hash,!options.contextOnly);return;}
     clearTimeout(hashScrollTimer);clearTimeout(hashClearTimer);clearHL();hideCiteToast();
@@ -27823,6 +28355,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       window.__acimJump(window.scrollY+rect.top-margin,token);
       window.__acimCorrectScroll(target,margin,token,rectOfTarget);
       scheduleReferenceCorrection30(target,margin,token,rectOfTarget);
+      /* V50_INTEGRATION */ v50ReadingReady(target,rectOfTarget,token);
     },150);
     hashClearTimer=setTimeout(clearHL,4500);
     canonicalizeHash(p,true);
@@ -27981,6 +28514,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   }
 
   function openPanel() {
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     sharePanelSnapshot291=shareSnapshot291()||sharePublished291;
     cancelShareSelection291(false);
     var acimId  = shareBar.dataset.id;
@@ -28369,6 +28903,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     barTimer=setTimeout(function(){barTimer=null;if(epoch===shareEpoch291)onSel();},delay==null?40:delay);
   }
   function onSel() {
+    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     var snap=shareSnapshot291();
     if(sharePanelBlocks291(snap))return;
     if(!snap){cancelShareSelection291(true);return;}
@@ -28468,6 +29003,12 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     function run() {
       assignIds(function(){
         recipientQueue30.flush();
+        /* V50_INTEGRATION_START */
+        if(window.__acimV50){
+          if(window.__acimV50.isBlocked()){if(location.hash)window.__acimV50.deferHash(location.hash);window.__acimV50.markReady();}
+          else if(!document.querySelector('[data-acim-hash-target]'))v50ReadingReady(null);
+        }
+        /* V50_INTEGRATION_END */
         var selection=window.getSelection&&window.getSelection();
         if(selection&&!selection.isCollapsed)scheduleShareSelection291(0,true);
       });
@@ -28476,6 +29017,27 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     window.addEventListener('hashchange',function(){
       recipientQueue30.request(location.hash,true);
     });
+    /* V50_INTEGRATION_START */
+    document.addEventListener('acim-v50-block',function(){
+      recipientQueue30.invalidate();
+      if(window.__acimNav)window.__acimNav.cancel();
+      clearTimeout(hashScrollTimer);clearTimeout(hashClearTimer);
+      cancelShareSelection291(true);
+      if(sharePanel)sharePanel.style.display='none';
+      hideCiteToast();
+    });
+    function resumeV50Reference(){
+      if(!idsReady)return;
+      // Restore the modal's old scroll before creating a new citation navigation job.
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        var session=window.__acimV50;if(!session||session.isBlocked())return;
+        var hash=session.takePendingHash();
+        if(hash!==null&&hash!==undefined&&hash===location.hash)recipientQueue30.request(hash,true);
+      });});
+    }
+    document.addEventListener('acim-v50-resume',resumeV50Reference);
+    document.addEventListener('acim-v50-state',function(e){if(e.detail&&e.detail.reason==='ready')resumeV50Reference();});
+    /* V50_INTEGRATION_END */
 
     /* Native long-press/drag selection remains the only trigger; clicks do not create a range. */
     document.addEventListener('selectionchange',function(){scheduleShareSelection291(40);});
@@ -28504,9 +29066,15 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
 })();
 
 
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 
 <script id="acim-offline-controller">
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 /* V30.5: retain exact-release verification; defer automatic I/O until a
    reading idle period. Manual checks still verify actual cached bytes. */
 (function initOfflineStatus(){
@@ -28720,8 +29288,14 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   if(sw.controller)scheduleAutomaticCheck(true);
   sw.ready.then(function(){if(!latest)scheduleAutomaticCheck(true);}).catch(function(){paint('離線保存尚未就緒，請稍後重新檢查。');});
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 <script id="acim-v304-touch-actions">
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 (function(){
   'use strict';
   /* V30.4 extends the S3 touch policy to sidebar actions. Native editors,
@@ -28844,8 +29418,14 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       target.focus({preventScroll:true});
   },true);
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 <script id="acim-settings-s3">
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 (function(){
   'use strict';
   // S3 applies the same bounded touch/pen policy to opening and closing.
@@ -28961,8 +29541,14 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     }
   },true);
 })();
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 <script id="acim-v30-ui">
+if(!window.__acimV50WrongOrigin){
+/* V50_GUARDED_APP_START */
+
 /* ═══════════════════════════════════════════════════════════════
    V30 介面強化（規劃書 P0/P1 落地）：
    1. 章末「上一節／下一節」pill 導覽（P0 導覽三件套補完）
@@ -29265,7 +29851,9 @@ function buildBottomNav(){
     var b=document.createElement('button');
     b.type='button';
     if(id) b.id=id;
-    var i=document.createElement('span'); i.className='bn-ico'; i.textContent=ico;
+    var i=document.createElement('span'); i.className='bn-ico';
+    var symbol=({'acim-bn-toc':'menu','acim-bn-search':'search','acim-bn-bm':'bookmark','acim-bn-more':'more'})[id];
+    if(symbol)i.innerHTML=window.__acimIcon(symbol);else i.textContent=ico;
     var t=document.createElement('span'); t.className='bn-tx'; t.textContent=label;
     b.appendChild(i); b.appendChild(t);
     b.addEventListener('click',fn);
@@ -29359,7 +29947,7 @@ function buildBottomNav(){
   function row(ico,label,target){
     var b=document.createElement('button');
     b.type='button';
-    var i=document.createElement('span'); i.textContent=ico;
+    var i=document.createElement('span'); if(target==='btn-dark')i.innerHTML=window.__acimIcon('theme');else i.textContent=ico;
     var t=document.createElement('span'); t.textContent=label;
     b.appendChild(i); b.appendChild(t);
     b.addEventListener('click',function(){
@@ -29384,7 +29972,7 @@ function buildBottomNav(){
   row('🌓','切換深色／亮色','btn-dark');
   var bTop=document.createElement('button');
   bTop.type='button';
-  var i3=document.createElement('span'); i3.textContent='↑';
+  var i3=document.createElement('span'); i3.innerHTML=window.__acimIcon('up');
   var t3=document.createElement('span'); t3.textContent='回到頂部';
   bTop.appendChild(i3); bTop.appendChild(t3);
   bTop.addEventListener('click',function(){
@@ -30009,6 +30597,9 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 else setTimeout(init,400);
 })();
 
+
+/* V50_GUARDED_APP_END */
+}
 </script>
 </body>
 </html>
