@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.0.6">
+<meta name="acim-version" content="v50.0.7">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="df621259546ed16797b5fc8d9aa1880556a32404e2844955f60d40c25eb67832">
-<meta name="acim-build" content="2026-11-12">
-<meta name="acim-build-time" content="23:10">
+<meta name="acim-release-id" content="824557b3733ed092dd5c9fbd6de819b2698b0ce259c77bbb83edb34f85d47dfe">
+<meta name="acim-build" content="2026-11-13">
+<meta name="acim-build-time" content="02:48">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -29,7 +29,7 @@
 <meta name="twitter:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
-<title>完整加註版奇蹟課程｜V50.0.6 五分鐘試讀版</title>
+<title>完整加註版奇蹟課程｜V50.0.7 五分鐘試讀版</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -57,12 +57,53 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.0.7 變更記錄（追查指南）——試讀對話框「點輸入欄卡數秒」修正
+   ═══════════════════════════════════════════════════════════════════
+   【症狀】行動裝置開啟試讀對話框後，點「閱讀碼」輸入欄，鍵盤彈出後
+   畫面凍結數秒才能輸入；倒數秒數顯示亦同。
+
+   【根因鏈】本對話框是全站唯一「軟鍵盤彈出時整本書仍在版面樹上」的路徑：
+   1. V30.11 起書本面紗（html.acim-book-veiled #content-area{display:none}）
+     只接了目錄抽屜與字級快選單；本對話框的 lockReader() 只做
+     overflow/inert 鎖定，未掛紗（G1，結構性缺口）。
+   2. 點輸入欄 → 聚焦 → 鍵盤彈出 → visualViewport 連發 resize/scroll。
+   3. 瀏覽器為回應 viewport 變化需要「最新版面」→ 同步結算當下全部
+     樣式失效＝開框新失效（G2：根節點 overflow/scrollbar-gutter 改寫）
+     ＋歷史全書樣式債（799 個 content-visibility:auto 未渲染節承接的
+     全書失效，見主腳本 V30.10 註解）＝實機數秒單一 long task。
+   4. 放大器：fitDialog 每事件重寫 6 個版面屬性（G3）、每秒 render()
+     無條件重寫對話框 DOM（G4）、樣式債結清僅由 visualViewport resize
+     事後觸發、互動前無預清（G5）。
+
+   【修法】
+   A（結構性）行動裝置（≤768px）開框即掛「書本面紗」——共用 V40.1 的
+     共享資源設計，計數持有旗標 window.__acimV50DialogHold 計入主腳本
+     acimPanelOpen()，抽屜／快選單／對話框全關才解紗；關框經 maybeUnveil
+     的解紗債閘門＋閱讀錨點還原（見主腳本 unveilBookBehindDrawer）。
+   B 開框即預結清一次樣式債（window.__acimScheduleStyleDischarge）。
+   C fitDialog / render 逐屬性值比對守衛：內容未變不寫 DOM。
+   D 對話框期間取消閱讀錨點校正（主腳本 restore→pin 檢查 isDialogOpen）。
+
+   【驗收】行動裝置：開對話框→documentElement 應含 acim-book-veiled
+   class；點輸入欄到可輸入 <300ms、最大 long task <200ms；關對話框→
+   面紗解除、閱讀位置還原。桌面（>768px）行為不變（不掛紗）。
+   相關程式碼：v50VeilHold / openDialog / closeDialog / fitDialog /
+   render（本檔）；acimPanelOpen / __acimScheduleStyleDischarge /
+   restore→pin（主腳本 V40 面紗區）。
+
+   【歷史對照】V30＝全書級樣式結算（聚焦搜尋欄卡 6~8 秒）→ 樣式債背景
+   分片結清＋書本面紗。V40＝字級面板 12 秒凍結（scroll-behavior:smooth
+   全書逐幀排版＋display:none 移除與 scrollTo 同任務）→ 面紗管線強化＋
+   解紗債閘門。V50＝本條（對話框未接面紗）。三代同一病根：
+   「鍵盤 / viewport 事件強制同步結算整本書」，追查時先看面紗接線。
+   ═══════════════════════════════════════════════════════════════════ */
 /* V50_SESSION_START */
 (function sessionRuntimeV50(createCore){
   'use strict';
   if(window.__acimV50WrongOrigin||window.__acimV50)return;
   var KEY='acim-v50-github-root-session-v1',pendingHash=null,mounted=false,dialogOpen=false,lastBlocked=false,wasBlocked=false,resetArmed=false,resetTimer=null;
-  var hud,overlay,card,title,intro,status,renewButton,closeButton,codeInput,feedback,resetButton,persistNotice,codeDetails,previousFocus=null,lockedElements=[],bodyObserver=null,scrollLock=null;
+  var hud,overlay,card,title,intro,status,renewButton,closeButton,codeInput,feedback,resetButton,persistNotice,codeDetails,previousFocus=null,lockedElements=[],bodyObserver=null,scrollLock=null,veilHeld=false; /* V50.0.7（方案 A）：對話框是否持有面紗（計數持有旗標之一） */
   function emit(type,detail){document.dispatchEvent(new CustomEvent(type,{detail:detail}));}
   function load(){var raw=localStorage.getItem(KEY);return raw?JSON.parse(raw):null;}
   function changed(s,reason){
@@ -94,20 +135,83 @@ if(!window.__acimV50WrongOrigin){
     if(scrollLock){var old=scrollLock;scrollLock=null;document.documentElement.style.overflow=old.overflow;document.documentElement.style.scrollbarGutter=old.gutter;window.scrollTo(old.x,old.y);}
     if(previousFocus&&previousFocus.isConnected&&previousFocus.focus)try{previousFocus.focus({preventScroll:true});}catch(e){}previousFocus=null;
   }
-  function fitDialog(){if(!dialogOpen||!window.visualViewport)return;var viewport=window.visualViewport;overlay.style.top=viewport.offsetTop+'px';overlay.style.left=viewport.offsetLeft+'px';overlay.style.width=viewport.width+'px';overlay.style.height=viewport.height+'px';overlay.style.bottom='auto';card.style.maxHeight=Math.max(80,viewport.height-32)+'px';}
-  function openDialog(){if(!mounted)return;check();if(dialogOpen)return;dialogOpen=true;overlay.hidden=false;hud.hidden=true;lockReader();fitDialog();render(core.snapshot());setTimeout(function(){if(dialogOpen)(core.snapshot().status==='expired'?card:closeButton).focus({preventScroll:true});},0);}
-  function closeDialog(force){if(!dialogOpen)return;if(!force&&core.snapshot().status==='expired')return;dialogOpen=false;overlay.hidden=true;hud.hidden=false;unlockReader();render(core.snapshot());}
+  /* V50.0.7（方案 C，G3）：fitDialog 值比對守衛。鍵盤彈出／收合動畫期間 visualViewport 每幀連發 resize/scroll（實機每秒可達數十次），舊版每次無條件重寫 overlay 六個版面屬性＋card.maxHeight——即使數值完全沒變，每次寫入都讓 overlay/card 重吃樣式失效，與每秒 render() 的 DOM 寫入疊加。改為逐屬性比對，僅在數值真變時寫入；數值未變時本函式為純讀取、零樣式失效。 */
+  function fitDialog(){if(!dialogOpen||!window.visualViewport)return;var viewport=window.visualViewport;var t=viewport.offsetTop+'px',l=viewport.offsetLeft+'px',w=viewport.width+'px',h=viewport.height+'px',mh=Math.max(80,viewport.height-32)+'px';if(overlay.style.top!==t)overlay.style.top=t;if(overlay.style.left!==l)overlay.style.left=l;if(overlay.style.width!==w)overlay.style.width=w;if(overlay.style.height!==h)overlay.style.height=h;if(overlay.style.bottom!=='auto')overlay.style.bottom='auto';if(card.style.maxHeight!==mh)card.style.maxHeight=mh;}
+  /* V50.0.7（方案 A）：v50VeilHold——試讀對話框接入「書本面紗」共享機制。
+     症狀與根因（追查起點）：手機點閱讀碼輸入欄→聚焦→鍵盤彈出→
+     visualViewport 連發→瀏覽器需最新版面→同步結清「開框新失效＋全書 799 節
+     content-visibility 樣式債」＝實機數秒單一 long task。結構性原因：對話框
+     是全站唯一「鍵盤彈出時整本書仍在版面樹上」的路徑——V30.11 面紗只接了
+     目錄抽屜與字級快選單，沒接本對話框（G1）。
+     修法：行動裝置（≤768px，與抽屜／快選單同門檻）開框先掛紗——乾淨版面上
+     由 veilScheduleForDrawer 捕獲閱讀錨點與捲動位置，再 display:none 整本書；
+     關框經 maybeUnveil 的解紗債閘門還原——與抽屜／快選單共用同一個 _veil
+     狀態機、同一把鎖（window.__acimV50DialogHold 計入主腳本 acimPanelOpen()，
+     兩面板全關才解紗）。面紗期間背景結清排程器自動以大分片清債（方案 B 一併
+     達成），鍵盤彈出時已無債可結。桌面（>768px）不掛紗：無軟鍵盤、結算成本低，
+     維持原行為。 */
+  function v50VeilHold(on){
+    if(on){
+      if(window.innerWidth>768)return;
+      if(veilHeld)return;
+      veilHeld=true;
+      try{window.__acimV50DialogHold=true;}catch(e){}
+      /* 先掛紗再 lockReader：veilScheduleForDrawer 需在版面乾淨時捕獲錨點
+         （lockReader 改根 overflow 會弄髒版面）；掛紗同時啟動背景結清。 */
+      try{if(window.__acimVeilApplyNow)window.__acimVeilApplyNow();}catch(e){}
+    }else{
+      if(!veilHeld)return;
+      veilHeld=false;
+      try{window.__acimV50DialogHold=false;}catch(e){}
+      /* 經 maybeUnveil 解紗：檢查抽屜／快選單是否仍開（共享資源，全關才解），
+         並走 unveilBookBehindDrawer 的債閘門＋錨點還原，不帶傷恢復。 */
+      try{if(window.__acimSheetVeilClose)window.__acimSheetVeilClose();}catch(e){}
+    }
+  }
+  function openDialog(){
+    if(!mounted)return;check();if(dialogOpen)return;
+    /* V50.0.7（方案 B，G5）：開框即預結清一次樣式債——桌面不掛紗也補一趟
+       背景走訪；行動裝置由 veilApplyNow 內的 scheduleStyleDischarge 已含，
+       此處再呼叫亦安全（排程器有 V40.5 restart 防風暴，重複呼叫只續 timer）。 */
+    try{if(window.__acimScheduleStyleDischarge)window.__acimScheduleStyleDischarge();}catch(e){}
+    /* V50.0.7（方案 A）：先掛紗（錨點捕獲需乾淨版面、且需在 overlay 顯示前
+       探測書本段落），再開框鎖滾動。 */
+    try{v50VeilHold(true);}catch(e){}
+    dialogOpen=true;overlay.hidden=false;hud.hidden=true;lockReader();fitDialog();render(core.snapshot());setTimeout(function(){if(dialogOpen)(core.snapshot().status==='expired'?card:closeButton).focus({preventScroll:true});},0);}
+  function closeDialog(force){
+    if(!dialogOpen)return;
+    if(!force&&core.snapshot().status==='expired')return;
+    dialogOpen=false;overlay.hidden=true;hud.hidden=false;unlockReader();render(core.snapshot());
+    /* V50.0.7（方案 A）：關框釋放面紗持有；抽屜／快選單已全關時由債閘門
+       擇時解紗並還原閱讀錨點（等待期間書區短暫空白，換取零凍結——同 V40.3
+       抽屜解紗設計）。桌面未掛紗時 v50VeilHold 為無動作。 */
+    try{v50VeilHold(false);}catch(e){}
+  }
+  /* V50.0.7（方案 C，G4）：render 值比對守衛。render 由 setInterval(check,1000)
+     每秒無條件呼叫（對話框開或關都一樣），舊版每次重寫 hud/title/intro/status
+     等 10+ 個節點的文字與 hidden/disabled 屬性——「內容完全沒變」的輪詢也讓
+     對話框子樹每秒吃一次樣式失效，鍵盤彈出期間與 fitDialog 的連環寫入疊加。
+     倒數計時文字每秒本來就會變，照常更新；此守衛只消除「無變化輪詢」的寫入。 */
   function render(s){
     var expired=s.status==='expired',unlocked=s.status==='unlocked';
-    hud.textContent=unlocked?'已啟用閱讀碼':!s.ready?'準備閱讀中':expired?'本輪試讀已結束':'試讀剩餘 '+time(s.remainingMs);
-    hud.setAttribute('aria-label',hud.textContent+'；開啟閱讀控制');
-    title.textContent=unlocked?'已啟用閱讀碼':'繼續你的閱讀';
-    intro.textContent=expired?'這一輪五分鐘試讀已告一段落。閱讀位置已為你保留，歡迎從這裡繼續。':unlocked?'閱讀碼已啟用，可繼續閱讀。':!s.ready?'內容與定位準備完成後，即可開始五分鐘試讀。':'可繼續本輪試讀，也可以輸入閱讀碼。';
-    status.textContent=expired?(s.waitRemainingMs>0?'再等 '+time(s.waitRemainingMs)+'，即可繼續試讀。':'可以繼續下一輪五分鐘試讀了。'):unlocked?'已啟用閱讀碼。':!s.ready?'正在準備內容與定位，尚未開始計時。':'本輪試讀剩餘 '+time(s.remainingMs);
-    renewButton.hidden=!expired;renewButton.disabled=expired&&s.waitRemainingMs>0;renewButton.textContent=expired&&s.waitRemainingMs>0?'稍候再試讀五分鐘（'+time(s.waitRemainingMs)+'）':'繼續試讀五分鐘';
-    closeButton.hidden=expired;resetButton.hidden=!unlocked;
-    codeInput.closest('form').hidden=unlocked;codeDetails.hidden=unlocked;
-    persistNotice.hidden=s.persistent;
+    var hudText=unlocked?'已啟用閱讀碼':!s.ready?'準備閱讀中':expired?'本輪試讀已結束':'試讀剩餘 '+time(s.remainingMs);
+    if(hud.textContent!==hudText){hud.textContent=hudText;hud.setAttribute('aria-label',hudText+'；開啟閱讀控制');}
+    var titleText=unlocked?'已啟用閱讀碼':'繼續你的閱讀';
+    if(title.textContent!==titleText)title.textContent=titleText;
+    var introText=expired?'這一輪五分鐘試讀已告一段落。閱讀位置已為你保留，歡迎從這裡繼續。':unlocked?'閱讀碼已啟用，可繼續閱讀。':!s.ready?'內容與定位準備完成後，即可開始五分鐘試讀。':'可繼續本輪試讀，也可以輸入閱讀碼。';
+    if(intro.textContent!==introText)intro.textContent=introText;
+    var statusText=expired?(s.waitRemainingMs>0?'再等 '+time(s.waitRemainingMs)+'，即可繼續試讀。':'可以繼續下一輪五分鐘試讀了。'):unlocked?'已啟用閱讀碼。':!s.ready?'正在準備內容與定位，尚未開始計時。':'本輪試讀剩餘 '+time(s.remainingMs);
+    if(status.textContent!==statusText)status.textContent=statusText;
+    var renewHidden=!expired;if(renewButton.hidden!==renewHidden)renewButton.hidden=renewHidden;
+    var renewDisabled=expired&&s.waitRemainingMs>0;if(renewButton.disabled!==renewDisabled)renewButton.disabled=renewDisabled;
+    var renewText=renewDisabled?'稍候再試讀五分鐘（'+time(s.waitRemainingMs)+'）':'繼續試讀五分鐘';
+    if(renewButton.textContent!==renewText)renewButton.textContent=renewText;
+    if(closeButton.hidden!==expired)closeButton.hidden=expired;
+    if(resetButton.hidden!==unlocked)resetButton.hidden=unlocked;
+    var formEl=codeInput.closest('form');
+    if(formEl.hidden!==unlocked)formEl.hidden=unlocked;
+    if(codeDetails.hidden!==unlocked)codeDetails.hidden=unlocked;
+    var noticeHidden=!!s.persistent;if(persistNotice.hidden!==noticeHidden)persistNotice.hidden=noticeHidden;
   }
   function make(tag,id,text){var el=document.createElement(tag);if(id)el.id=id;if(text)el.textContent=text;return el;}
   function mount(){
@@ -229,7 +333,7 @@ html.dark-mode #acim-v50-dialog{--v50-paper:#302A40;--v50-ink:#E8E2D6;--v50-mute
     setInterval(check,1000);
   }
   window.__acimV50={
-    storageKey:KEY,canRead:function(){var s=core.check();return s.ready&&s.status!=='expired';},isBlocked:function(){return core.check().status==='expired';},
+    storageKey:KEY,canRead:function(){var s=core.check();return s.ready&&s.status!=='expired';},isBlocked:function(){return core.check().status==='expired';},/* V50.0.7（方案 D）：對話框開啟狀態，供閱讀錨點校正（主腳本 pin）暫停判斷 */isDialogOpen:function(){return dialogOpen;},
     markReady:function(){return core.markReady();},check:check,state:function(){return core.check();},openControls:openDialog,
     deferHash:function(hash){pendingHash=typeof hash==='string'?hash.slice(0,1000):null;},takePendingHash:function(){var h=pendingHash;pendingHash=null;return h;},
     prepareNavigation:function(hash){if(core.check().status==='expired'){if(typeof hash==='string')pendingHash=hash.slice(0,1000);openDialog();return false;}return true;}
@@ -419,7 +523,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.0.6';
+var ACIM_VERSION = 'v50.0.7';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與
@@ -23497,7 +23601,11 @@ function createReadingFrameV5005(){
       run.raf=null;
       if(active!==run)return;
       if(document.documentElement.classList.contains('acim-book-veiled')){cancel();return;}
-      if(window.__acimV50&&window.__acimV50.isBlocked()){cancel();return;}
+      /* V50.0.7（方案 D）：對話框開啟期間暫停閱讀錨點校正——鍵盤彈出的
+         visualViewport 連發會驅動 pin() 的 rAF 迴圈，每次 getBoundingClientRect
+         與可能的 acimScrollNow 都是強制版面；書本已離版面樹（面紗）時本就
+         無座標可校，直接取消讓位給對話框。 */
+      if(window.__acimV50&&(window.__acimV50.isBlocked&&window.__acimV50.isBlocked()||window.__acimV50.isDialogOpen&&window.__acimV50.isDialogOpen())){cancel();return;}
       var r;try{r=rect(frame);}catch(e){cancel();return;}
       if(!r||!r.height)return;
       var drift=r.top-frame.top;
@@ -23528,7 +23636,14 @@ function createReadingFrameV5005(){
   function acimPanelOpen(){
     if(sidebar.classList.contains('mobile-open'))return true;
     var sh=document.getElementById('acim-quick-sheet');
-    return !!(sh&&sh.classList.contains('open'));
+    if(sh&&sh.classList.contains('open'))return true;
+    /* V50.0.7（方案 A）：試讀對話框持有面紗期間視同「面板開啟」——面紗是
+       共享資源（V40.1 設計），抽屜／快選單／對話框任一開著都不解紗；
+       持有旗標由 v50 session runtime 的 v50VeilHold() 掛卸（G1 修正）。
+       追查：若對話框關閉後書本沒有回來，先查 _veil.waiting 債閘門與
+       window.__acimV50DialogHold 是否確實歸 false。 */
+    if(window.__acimV50DialogHold===true)return true;
+    return false;
   }
   function maybeUnveil(){ if(acimPanelOpen())return; unveilBookBehindDrawer(); }
   window.__acimPanelOpen=acimPanelOpen;
@@ -24909,6 +25024,10 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     if(!_disCbs)_disCbs=[];
     _disCbs.push(cb);
   };
+  /* V50.0.7（方案 B，G5）：供 V50 試讀對話框開啟時預結清樣式債（見該檔
+     openDialog / v50VeilHold 註解）。排程器自身有 V40.5 restart 防風暴，
+     重複呼叫安全：走訪中只續 timer，不歸零進度。 */
+  window.__acimScheduleStyleDischarge=scheduleStyleDischarge;
   if(window.visualViewport&&visualViewport.addEventListener)
     visualViewport.addEventListener('resize',scheduleStyleDischarge,{passive:true});
   function afterPresentation(fn){
@@ -30505,7 +30624,7 @@ function backupInit(){
   panel.id='acim-backup291-preview';panel.className='acim-backup291-preview';panel.hidden=true;panel.setAttribute('role','region');panel.setAttribute('aria-label','匯入備份預覽');
   host.append(status,previous,panel);
   var incoming=null,previewPlan=null,fileReadSerial=0;
-  function paint(message){var s=engine.status();status.textContent=(message?message+' ':'')+(s.temporary?'部分資料僅於本分頁暫存，關閉前請匯出。':'閱讀資料儲存在此瀏覽器；清除網站資料會一併移除。')+(s.lastExport?' 上次產生備份：'+engine.formatTaipeiDate(s.lastExport)+'。':' 尚未產生完整備份。');previous.hidden=!s.hasSnapshot;}
+  function paint(message){var s=engine.status();status.textContent=(message?message+' ':'')+(s.temporary?'部分資料僅於本分頁暫存，關閉前請匯出。':'閱讀資料儲存在此瀏覽器；清除網站資料會一併移除。')+(s.lastExport?' 上次產生備份：'+engine.formatTaipeiDate(s.lastExport)+'。':'');/* V50.0.7：依讀者回報移除狀態列尾端「尚未產生完整備份。」——從未匯出過時該句只造成困惑（「設定與資訊」面板最後一行）；有備份紀錄時「上次產生備份：…」照常顯示。 */previous.hidden=!s.hasSnapshot;}
   function download(data,name){var url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'}));var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1200);}
   function exportNow(){try{var d=engine.exportCurrent();download(d,'acim-backup-'+engine.formatTaipeiDate()+'.json');var saved=engine.markExport();paint('已準備完整備份下載，請確認檔案已保存。'+(saved?'':' 備份日期無法持久記錄。'));return true;}catch(e){paint('無法產生備份：'+e.message);return false;}}
   ex.addEventListener('click',exportNow);

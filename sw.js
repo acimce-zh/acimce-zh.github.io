@@ -8,15 +8,23 @@
    activate performs local migration/cleanup only: no delay or network warmup.
    WARM_FONTS / PREPARE_OFFLINE run separately, with bounded network work and
    explicit cache status. RELEASE_ID, BOOK_SHA256 and ASSET_SHA256 are filled by
-   the deterministic release builder; never hand-edit the compiled worker. */
-const CACHE_VERSION = 'v50.0.6';
-const RELEASE_ID = 'df621259546ed16797b5fc8d9aa1880556a32404e2844955f60d40c25eb67832';
+   the deterministic release builder; never hand-edit the compiled worker.
+   ── V50.0.7 重建記錄（追查用）──────────────────────────────
+   本版由更新包腳本人工重建（建置器不在 repo 內）。同步更新的常數：
+   BOOK_SHA256 = sha256(index.html)；ASSET_SHA256['manifest.json'] =
+   sha256(manifest.json)；其餘資產未變更沿用。
+   RELEASE_ID 自本版起採文件化可重現規則：
+   sha256('acimce-zh-tw-release\nv50.0.7\n' + CORE_FILES 四檔
+   (index.htm, offline.html, manifest.json, favicon.ico) 的 SHA-256
+   依序以 \n 串接)。後續版本沿用此規則並更新版本字串。 */
+const CACHE_VERSION = 'v50.0.7';
+const RELEASE_ID = '824557b3733ed092dd5c9fbd6de819b2698b0ce259c77bbb83edb34f85d47dfe';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '324919a56d2c64d3c1d7be42a8e46ed0ba495344ab4ff7457b8633c5a71d4d7d';
+const BOOK_SHA256 = '572fe3bba9cdb8ef0551953c6e17143790ed34ddf716d21aa63b21d931f4162b';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
@@ -63,7 +71,7 @@ const WARMUP_BUDGET_MS = 60000; /* V30：30 個切片，3 並行下載 */
 const ASSET_SHA256 = {
   "index.htm": "9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033",
   "offline.html": "8fd37124c69be414443fda46b6a1e5c5d939fbf3bba713dfe56cecca83b0a665",
-  "manifest.json": "09175152b5a79badaed09737d803f6f7d259e0f3873bea9e5d44643af70fc021",
+  "manifest.json": "018e29dab918c4ecf3a018c6bff6debb46180474cc28f70a64832a60cac6dd1f",
   "fonts/ntc-regular-00.woff2": "c830483a03e982db87fc7b5faa361cbac7b0c0265b3bf51959994cfc839e7fcd",
   "fonts/ntc-regular-01.woff2": "ae80842c86375a91f2a3d0a7ff4835f2c39667b45a9a141f734efdc7c245cb0a",
   "fonts/ntc-regular-02.woff2": "9c55164062f33e520c84bf3aac7bad90c3c7a7f5c83dc45b82ef581463236c76",
