@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.0.7">
+<meta name="acim-version" content="v50.0.8">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="824557b3733ed092dd5c9fbd6de819b2698b0ce259c77bbb83edb34f85d47dfe">
+<meta name="acim-release-id" content="361fc5242f076c372f0ac25e055f5c231ed99c94580c63d458aba675f7d082c2">
 <meta name="acim-build" content="2026-11-13">
-<meta name="acim-build-time" content="02:48">
+<meta name="acim-build-time" content="03:39">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -29,7 +29,7 @@
 <meta name="twitter:image:alt" content="完整加註版奇蹟課程 ACIM CE 繁體中文版分享預覽圖">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
-<title>完整加註版奇蹟課程｜V50.0.7 五分鐘試讀版</title>
+<title>完整加註版奇蹟課程｜V50.0.8 五分鐘試讀版</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -57,6 +57,35 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.0.8 變更記錄（追查指南）——「重新試讀五分鐘」按鈕顯示條件反轉
+   ═══════════════════════════════════════════════════════════════════
+   【症狀】讀者回報：輸入閱讀碼啟用後，試讀對話框最下方的「重新試讀
+   五分鐘」按鈕（含其「再次按下確認：只重設試讀時間與閱讀碼啟用狀態」
+   確認態）整組失蹤；反而是尚未輸入閱讀碼的試讀／冷卻狀態看得到按鈕。
+
+   【根因】render() 一行寫反：if(resetButton.hidden!==unlocked)
+   resetButton.hidden=unlocked——把「已啟用閱讀碼」當成隱藏條件。
+   語意上，這顆按鈕的作用是 core.reset()＝清除閱讀碼（unlocked→fresh
+   trial）並重置試讀時鐘，只有「已啟用閱讀碼」的人需要它：自行決定
+   是否放棄閱讀碼、回到沒有閱讀碼的五分鐘倒數機制。未輸入閱讀碼時
+   試讀本來就在倒數軸上，顯示這顆按鈕只會造成困惑；expired 狀態下
+   舊版甚至能藉它繞過 60 秒冷卻（reset() 不檢查 waitUntil）。
+
+   【修法】hidden 條件反轉為 !unlocked（trial/expired 隱藏、unlocked
+   顯示）；按鈕被隱藏的當下同步解除確認武裝（resetArmed→false、
+   清 resetTimer、還原鈕面文字），避免跨分頁 storage 同步（ingest）
+   把狀態拉回 trial 後按鈕重現時殘留「再次按下確認」字樣。
+   按鈕本體與 core.reset() 行為不變（引擎見本檔尾 createSessionV50）。
+
+   【驗收】(1) 全新訪客（trial）：對話框內看不到「重新試讀五分鐘」。
+   (2) 輸入閱讀碼啟用後重開對話框：按鈕出現在最下方。(3) 按第一次→
+   鈕面變「再次按下確認：…」，逾 6 秒未按自動還原；按第二次→閱讀碼
+   清除、回到 trial 倒數、按鈕隱藏、閱讀碼表單重新出現。(4) unlocked
+   狀態下由另一分頁 reset（storage 事件 ingest）→本分頁按鈕即時隱藏
+   且不殘留確認文字。(5) expired 狀態：按鈕隱藏，只能等冷卻或輸入碼。
+   位置：render()（本檔，搜「V50.0.8」）。
+   ═══════════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════════
    V50.0.7 變更記錄（追查指南）——試讀對話框「點輸入欄卡數秒」修正
    ═══════════════════════════════════════════════════════════════════
@@ -207,7 +236,16 @@ if(!window.__acimV50WrongOrigin){
     var renewText=renewDisabled?'稍候再試讀五分鐘（'+time(s.waitRemainingMs)+'）':'繼續試讀五分鐘';
     if(renewButton.textContent!==renewText)renewButton.textContent=renewText;
     if(closeButton.hidden!==expired)closeButton.hidden=expired;
-    if(resetButton.hidden!==unlocked)resetButton.hidden=unlocked;
+    /* V50.0.8（讀者回報）：「重新試讀五分鐘」按鈕顯示條件寫反——V50.0.7（含）以前為
+       hidden=unlocked，變成「未輸入閱讀碼的試讀／冷卻狀態看得到按鈕、輸入閱讀碼
+       啟用後反而消失」。按鈕的作用是 core.reset()＝清除閱讀碼（unlocked→fresh
+       trial）並重置試讀時鐘，只有已啟用閱讀碼的人需要它（自行決定是否放棄閱讀碼、
+       回到沒有閱讀碼的五分鐘倒數機制）；未輸入閱讀碼時顯示只會造成困惑，expired
+       狀態下還能藉它繞過 60 秒冷卻。修正為 hidden=!unlocked；且按鈕因狀態同步
+       （跨分頁 storage→ingest）被隱藏的當下解除確認武裝，避免重現時殘留
+       「再次按下確認」鈕面文字。詳見本檔 V50.0.8 變更記錄。 */
+    var resetHidden=!unlocked;
+    if(resetButton.hidden!==resetHidden){resetButton.hidden=resetHidden;if(resetHidden&&resetArmed){resetArmed=false;clearTimeout(resetTimer);resetButton.textContent='重新試讀五分鐘';}}
     var formEl=codeInput.closest('form');
     if(formEl.hidden!==unlocked)formEl.hidden=unlocked;
     if(codeDetails.hidden!==unlocked)codeDetails.hidden=unlocked;
@@ -523,7 +561,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.0.7';
+var ACIM_VERSION = 'v50.0.8';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V40.9：套用新版後的首次啟動，顯示一次性「已套用」確認——讓讀者與

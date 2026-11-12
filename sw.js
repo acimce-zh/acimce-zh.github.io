@@ -16,15 +16,24 @@
    RELEASE_ID 自本版起採文件化可重現規則：
    sha256('acimce-zh-tw-release\nv50.0.7\n' + CORE_FILES 四檔
    (index.htm, offline.html, manifest.json, favicon.ico) 的 SHA-256
-   依序以 \n 串接)。後續版本沿用此規則並更新版本字串。 */
-const CACHE_VERSION = 'v50.0.7';
-const RELEASE_ID = '824557b3733ed092dd5c9fbd6de819b2698b0ce259c77bbb83edb34f85d47dfe';
+   依序以 \n 串接)。後續版本沿用此規則並更新版本字串。
+   ── V50.0.8 重建記錄（追查用）──────────────────────────────
+   同一規則重算：BOOK_SHA256 = sha256(index.html V50.0.8)；
+   ASSET_SHA256['manifest.json'] = sha256(manifest.json V50.0.8)；
+   RELEASE_ID = sha256('acimce-zh-tw-release\nv50.0.8\n' + CORE_FILES
+   四檔 SHA-256 依序 \n 串接)；index.htm / offline.html /
+   favicon.ico 未變更沿用。本版修正：試讀對話框「重新試讀五分鐘」
+   按鈕顯示條件反轉（僅已啟用閱讀碼時顯示、隱藏時解除確認武裝），
+   詳見 index.html <script id="acim-v50-session"> 開頭
+   V50.0.8 變更記錄。 */
+const CACHE_VERSION = 'v50.0.8';
+const RELEASE_ID = '361fc5242f076c372f0ac25e055f5c231ed99c94580c63d458aba675f7d082c2';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '572fe3bba9cdb8ef0551953c6e17143790ed34ddf716d21aa63b21d931f4162b';
+const BOOK_SHA256 = '08f837d6dd43f8a5df282602df03a33f1eefb1e673582421de38ce5168e45519';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
@@ -71,7 +80,7 @@ const WARMUP_BUDGET_MS = 60000; /* V30：30 個切片，3 並行下載 */
 const ASSET_SHA256 = {
   "index.htm": "9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033",
   "offline.html": "8fd37124c69be414443fda46b6a1e5c5d939fbf3bba713dfe56cecca83b0a665",
-  "manifest.json": "018e29dab918c4ecf3a018c6bff6debb46180474cc28f70a64832a60cac6dd1f",
+  "manifest.json": "57d3ebcef59c682597f566bdc264509f6bedc33a9d56e479256436042e9fa733",
   "fonts/ntc-regular-00.woff2": "c830483a03e982db87fc7b5faa361cbac7b0c0265b3bf51959994cfc839e7fcd",
   "fonts/ntc-regular-01.woff2": "ae80842c86375a91f2a3d0a7ff4835f2c39667b45a9a141f734efdc7c245cb0a",
   "fonts/ntc-regular-02.woff2": "9c55164062f33e520c84bf3aac7bad90c3c7a7f5c83dc45b82ef581463236c76",
