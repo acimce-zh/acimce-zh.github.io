@@ -2,21 +2,21 @@
 {const target=new URL("https://acimce-zh.github.io/"),scope=new URL(self.registration.scope),local=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(scope.hostname);
  const hostOK=scope.origin===target.origin;
  if((!local&&!hostOK)||scope.pathname!==target.pathname)throw new Error('Reading package origin or scope mismatch');}
-/* ACIM CE PWA v50.0.5 — release-bound offline book.
+/* ACIM CE PWA v50.0.6 — release-bound offline book.
    The active worker serves only its SHA-256-verified release. A newer release is
    installed in its own cache and becomes visible when its worker activates.
    activate performs local migration/cleanup only: no delay or network warmup.
    WARM_FONTS / PREPARE_OFFLINE run separately, with bounded network work and
    explicit cache status. RELEASE_ID, BOOK_SHA256 and ASSET_SHA256 are filled by
    the deterministic release builder; never hand-edit the compiled worker. */
-const CACHE_VERSION = 'v50.0.5';
-const RELEASE_ID = 'bb081e4e3b8fba61d952a8c6fc59c1fe9f912cea652c638a11892f722df2aa1d';
+const CACHE_VERSION = 'v50.0.6';
+const RELEASE_ID = '9d8e44a5bb93346d17232a43e6d111525f13c3dd18f1e536ce3d87ff8b4879c2';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '0a86b150bb044e421bfceb0e38ff219fc35a60ddd5f6ef00d735119886b3e622';
+const BOOK_SHA256 = '571355cd4ad4676eb21b3ba21fcba3abb5aef585001643156f0425e9706cf999';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
@@ -63,7 +63,7 @@ const WARMUP_BUDGET_MS = 60000; /* V30：30 個切片，3 並行下載 */
 const ASSET_SHA256 = {
   "index.htm": "9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033",
   "offline.html": "8fd37124c69be414443fda46b6a1e5c5d939fbf3bba713dfe56cecca83b0a665",
-  "manifest.json": "6b2c285bfc6c7620a70ca4c05292e68bb4eb6525e66f5c2cdf5c37325f3a884d",
+  "manifest.json": "09175152b5a79badaed09737d803f6f7d259e0f3873bea9e5d44643af70fc021",
   "fonts/ntc-regular-00.woff2": "c830483a03e982db87fc7b5faa361cbac7b0c0265b3bf51959994cfc839e7fcd",
   "fonts/ntc-regular-01.woff2": "ae80842c86375a91f2a3d0a7ff4835f2c39667b45a9a141f734efdc7c245cb0a",
   "fonts/ntc-regular-02.woff2": "9c55164062f33e520c84bf3aac7bad90c3c7a7f5c83dc45b82ef581463236c76",
