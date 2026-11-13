@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.1.1">
+<meta name="acim-version" content="v50.2.0">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="d31c9d951379c8fa0ede6c19dcb671e41d13d3cba92d6eabf48af0097a9f4485">
+<meta name="acim-release-id" content="ea1ef759d18a51b013b62c289f90b39144ee551683b7630827c46187b4c3fc19">
 <meta name="acim-build" content="2026-11-13">
-<meta name="acim-build-time" content="04:18">
+<meta name="acim-build-time" content="16:09">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.1.1</title>
+<title>完整加註版奇蹟課程｜V50.2.0</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -59,6 +59,81 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
 /* ═══════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════
+   V50.2.0 變更記錄（追查指南）——依「V50.1.1 全面測試報告」實作九項修正
+   （報告總分 8.8/10；讀者指定 D 試讀節奏暫不更動，本版試讀輪次機制
+   trialSeconds=300／waitSeconds=60 一字未動）
+   ═══════════════════════════════════════════════════════════════════
+   【修正 A・重大：浮動「儲存閱讀分頁」膠囊覆蓋正文】
+   根因：V50.1.0 的 acim-v5010-fixes 樣式把 #rtabs-bar 強制 display:flex，
+   覆蓋了基底「無分頁時 display:none」——空狀態膠囊（＋鈕＋「儲存閱讀分頁」
+   提示）遂以 fixed/z-index:9998/不透明底常駐上緣中央，桌面蓋住置中章節
+   路徑標題、手機直向壓在正文第二行（實測最大重疊 128×42px），捲動全程
+   不隱藏。
+   修法（四件套）：① 移除常駐 display:flex，回復「.has-tabs 才顯示」；
+   ② 有分頁時加「捲動自動隱藏」——下滑淡出、停止捲動 900ms 或上滑淡入、
+   近頁頂恆顯、鍵盤焦點進入保持可見（prefers-reduced-motion 不動畫）；
+   ③ 桌面入口：右側工具列新增「＋ 儲存閱讀分頁」圓鈕（書籤鈕之後）；
+   ④ 手機入口：字級快選單新增「＋ 儲存閱讀分頁」列（直接呼叫 rtPin，
+   不走通用 row() 的面紗管線以免框景量測失真）。分頁全數關閉後鍵盤焦點
+   自動改回右列新增鈕（display:none 不可聚焦）。
+   【修正 B・中度：橫向＋注文面板蓋住右列】
+   根因：面板最高 min(52dvh,480px) 高於讓位假設 42vh，且 v5010 在
+   桌面矮窗（≥769px、≤620px 高）把 body.fn-open #pwa-tools 覆寫回
+   bottom:10px——橫向 844×390 實測面板蓋住右列 135px，「目錄／書籤」
+   完全不可點。
+   修法：ResizeObserver 實測面板高度寫入 --acim-fn-h；右列與 TTS 列改
+   bottom:calc(var(--acim-fn-h,42vh) + 讓位)，任何面板高度真實避讓；
+   矮窗媒體查詢同步改用變數並限制右列 max-height，不超出剩餘空間。
+   【修正 C・中度：橫向 A＋／A− 圓鈕內換行】
+   根因：全形「＋」（U+FF0B）使「A＋」約 26px，恰為 40px 圓鈕內寬 26px
+   的臨界值，橫向（40px 變體無字級覆寫）即換行為兩行。
+   修法：右列鈕面改半形「A+」「A−」（U+2212），並為 .pwa-btn 加
+   white-space:nowrap；快選單兩列同步改半形保持一致。aria-label 不變。
+   【修正 E・輕微：資料清除承諾與試讀保全矛盾】
+   「設定與資訊」面板文案改為如實三段：書籤／分頁／偏好存於本瀏覽器；
+   清除網站資料會一併移除；試讀輪次與閱讀碼啟用狀態由離線封裝保全，
+   不會因清除資料而重置。（機制本身為防篡改特性，保留不動。）
+   【修正 F・輕微：離線橫幅文案兩版本併存】
+   「確證／確認」兩種字串抽成 OFFLINE_BAR_READY／OFFLINE_BAR_PENDING
+   常數（單一來源），橫幅僅引用常數。
+   【修正 G・輕微：目錄／分頁／書籤殘留紙本頁碼樣數字】
+   實為標題內 .fn-badge 註文編號被 textContent 一併帶入（如「第三節
+   『否認』機制的正確用法 240」）。新增 headingTitle()：以 clone 剝除
+   fn-badge 後取字；目錄 mkLink、閱讀分頁 rtPin、書籤 bmSnapshot 三處
+   標題改用之。標題 DOM 本身不動（畫面與錨點不受影響）。
+   【修正 H・輕微：離線圖片計數浮動（0/6→0/4→2/4）】
+   根因：頁面 validState 允許「releaseId 缺漏或任意」的狀態回覆——更新
+   過渡期舊版 worker（imagesTotal=6）的回覆會污染 latest，計數遂浮動；
+   補齊結果「不動」則是補齊請求落到舊 worker、回覆再被顯示所致。
+   修法：validState 收緊為「releaseId 必填且 version/releaseId 與本頁
+   相符」；SW 端 inspectOfflineStatus 本就是固定全書總數（4），兩端對齊
+   後顯示穩定。實機驗證：PREPARE_OFFLINE 後 imagesCached 4/4、complete
+   true。
+   【修正 I・輕微：未造訪章節圖片離線破圖】
+   「補齊離線資料」已確實預先下載並快取全書 4 張圖片（含 data-src 未載
+   的 2 張）。另為 data-src 圖片掛 error 重試：恢復連線（online）或離線
+   資料驗證完整（acim-offline-complete 事件，complete(d) 時廣播）後自動
+   重新指派 src，由 SW 自快取供應，無須重新整理。
+   【修正 J・觀察事項：目錄展開箭頭的無障礙關聯】
+   以 AX 樹實測（Chrome 157）：箭頭已正確位於其卷名連結之前，報告建議
+   「箭頭改為連結前置子元素」反而會造成 link 內巢狀 button 的反模式，
+   不採行；改為箭頭 aria-controls 指向子目錄容器（role=group，
+   aria-label=章節子目錄），詞彙子目錄同樣補上——螢幕閱讀器可直接宣告
+   「控制哪一層子目錄」。零視覺影響。
+   【版本升級】<title>／meta acim-version／ACIM_VERSION 常數 → v50.2.0；
+   sw.js CACHE_VERSION/RELEASE_ID/BOOK_SHA256/ASSET_SHA256['index.htm']
+   依文件化規則重算；release-manifest.json 同步重建。
+   【驗收重點】① 空狀態無膠囊；存一個分頁後膠囊出現、下滑隱藏上滑再現；
+   ② 橫向開注文面板右列全部可點；③ 橫向 A+/A− 單行；④ 設定面板文案含
+   試讀保全說明；⑤ 離線橫幅單一文案；⑥ 目錄節名無訂文編號；⑦ 離線面板
+   圖片 4/4 穩定；⑧ 未造訪章節離線首訪不破圖（補齊後）。
+   位置：acim-v5010-fixes／acim-v5020-fixes 樣式、rtabsInit/rtPin/
+   rtRemove/render、quick-sheet 建構、pwa-tools HTML、注文面板模組
+   （ResizeObserver）、bmSnapshot、mkLink、headingTitle、offline
+   controller（validState/receive/updateBanner/lazyImages）、
+   buildGlossaryToc、<title>、ACIM_VERSION、sw.js、release-manifest.json。
+   ═══════════════════════════════════════════════════════════════════
    V50.0.10 變更記錄（追查指南）——二段確認鈕面文字簡化＋手機搜尋點選
    來回震盪修正＋桌機視窗標題移除「五分鐘試讀版」
    ═══════════════════════════════════════════════════════════════════
@@ -658,7 +733,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.1.1';
+var ACIM_VERSION = 'v50.2.0';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -3062,7 +3137,7 @@ html.dark-mode #rtabs-bar .rtab.rtab-on{background:#3B324B;color:#CBB27B;box-sha
 </style>
 <style id="acim-v5010-fixes">
 /* V50.1.1: app chrome only; original Song/Kai/underline meanings are retained. */
-#rtabs-bar{display:flex;min-height:34px;max-width:min(60vw,700px);box-sizing:border-box;border-radius:12px;}
+#rtabs-bar{min-height:34px;max-width:min(60vw,700px);box-sizing:border-box;border-radius:12px;} /* V50.2.0 修正 A：移除常駐 display:flex——空狀態膠囊回到 display:none（基底 .has-tabs 顯示） */
 #rtabs-bar .rtab{padding:0;gap:0;flex-shrink:0;max-width:190px;border-radius:8px;}
 #rtabs-bar .rtab-select{display:flex;align-items:center;min-height:34px;max-width:146px;background:none;border:0;padding:5px 8px;color:inherit;font:inherit;cursor:pointer;}
 #rtabs-bar .rtab .rtab-x,#rtabs-bar .rtab.rtab-on .rtab-x{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:34px;padding:0;opacity:1;border:0;background:none;color:inherit;font:18px/1 system-ui;cursor:pointer;}
@@ -3156,6 +3231,31 @@ html{overflow-anchor:none;scroll-behavior:auto;}
  #tts-options5011{flex-direction:row;flex-wrap:wrap;width:auto;min-width:280px;gap:10px;padding:8px 12px;}
 }
 
+</style>
+<style id="acim-v5020-fixes">
+/* V50.2.0：分頁列自動隱藏（A）＋注文面板實測讓位（B）＋右列字級鈕單行（C）。 */
+#rtabs-bar{transition:opacity .18s ease,transform .18s ease;}
+#rtabs-bar.rtabs-autohide{opacity:0;transform:translateX(-50%) translateY(-6px);pointer-events:none;}
+@media(prefers-reduced-motion:reduce){#rtabs-bar{transition:none;}}
+#pwa-tools .pwa-btn{white-space:nowrap;}
+#btn-rtab{font-size:15px;}
+/* B：注文面板開啟時，右列與 TTS 列依「面板實測高度」（--acim-fn-h 由 JS 寫入）
+   讓位；var 未定義時退回原 42vh 近似值。原 v5010 在桌面矮窗把讓位覆寫為
+   bottom:10px，實測面板（最高 52dvh）蓋住右列下方按鈕 135px——本規則置於其
+   後生效，任何面板高度都真實避讓。 */
+body.fn-open #pwa-tools{bottom:calc(var(--acim-fn-h,42vh) + 16px);}
+body.fn-open #tts-bar{bottom:calc(var(--acim-fn-h,42vh) + 58px);}
+@media(max-width:768px){
+  body.fn-open #tts-bar{bottom:calc(var(--acim-fn-h,42vh) + var(--acim-nav-h) + 10px);}
+}
+@media(min-width:769px) and (max-height:620px){
+  /* 修正 B：面板開啟時右列改 3 欄緊湊格（8 鈕 → 3×3，高 144px）——
+     390px 高的橫向畫面扣除面板（最高 52dvh）後僅餘約 177px，單列 8 鈕
+     （約 380px）必須捲動才能觸及；改格線後全部按鈕可直接點擊。 */
+  body.fn-open #pwa-tools{bottom:calc(var(--acim-fn-h,40vh) + 10px);right:8px;flex-direction:row;flex-wrap:wrap;width:148px;gap:6px;max-height:none;}
+  body.fn-open #pwa-tools .pwa-btn-wrap{flex-shrink:0;}
+  body.fn-open #pwa-tools .pwa-btn{width:44px;height:44px;}
+}
 </style>
 </head>
 
@@ -23550,10 +23650,10 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
     <button id="btn-top" class="pwa-btn" title="回到頂部" aria-label="回到頂部" style="background:rgba(41,34,74,0.75)"><svg class="acim-icon acim-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20V4M5 11l7-7 7 7"/></svg></button>
   </div>
   <div class="pwa-btn-wrap" data-tip="放大字體">
-    <button id="btn-fup" class="pwa-btn" title="放大字體" aria-label="放大字體" style="background:#29224A">A＋</button>
+    <button id="btn-fup" class="pwa-btn" title="放大字體" aria-label="放大字體" style="background:#29224A">A+</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="縮小字體">
-    <button id="btn-fdn" class="pwa-btn" title="縮小字體" aria-label="縮小字體" style="background:#29224A">A－</button>
+    <button id="btn-fdn" class="pwa-btn" title="縮小字體" aria-label="縮小字體" style="background:#29224A">A−</button>
   </div>
   <div class="pwa-btn-wrap" data-tip="切換深色">
     <button id="btn-dark" class="pwa-btn" title="切換深色" aria-label="切換深色" style="background:#34343B"><span class="acim-theme-icon"><svg class="acim-icon acim-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z"/></svg><svg class="acim-icon acim-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg></span></button>
@@ -23563,6 +23663,9 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
   </div>
   <div class="pwa-btn-wrap" data-tip="書籤">
     <button id="btn-bm" class="pwa-btn" title="加入/移除書籤" aria-label="加入或移除書籤" style="background:#29224A"><svg class="acim-icon acim-bookmark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 3h12v18l-6-4-6 4Z"/></svg></button>
+  </div>
+  <div class="pwa-btn-wrap" data-tip="儲存閱讀分頁">
+    <button id="btn-rtab" class="pwa-btn" title="把目前位置存成閱讀分頁" aria-label="新增閱讀分頁" style="background:#29224A">＋</button>
   </div>
 </div>
 
@@ -23706,9 +23809,29 @@ if(!window.__acimV50WrongOrigin){
       var io = new IntersectionObserver(function(entries, obs){
         entries.forEach(function(en){
           if (en.isIntersecting) {
-            en.target.src = en.target.getAttribute('data-src');
-            en.target.removeAttribute('data-src');
-            obs.unobserve(en.target);
+            var im = en.target;
+            im.src = im.getAttribute('data-src');
+            im.removeAttribute('data-src');
+            obs.unobserve(im);
+            /* V50.2.0 修正 I：離線且快取未備時首訪可能破圖——掛 error 重試：
+               恢復連線（online）或「補齊離線資料」完成（acim-offline-complete）
+               後自動重新指派 src，由 Service Worker 自快取供應，無須重新整理。
+               根本修復為修正 H 後「補齊離線資料」確實預先下載全書 4 張圖片
+               （實機驗證 imagesCached 4/4）。 */
+            if(!im.__acimRetryArmed){
+              im.__acimRetryArmed = true;
+              var redo = function(){
+                if(!im.isConnected) return;
+                var s = im.getAttribute('src') || '';
+                if(!s) return;
+                im.removeAttribute('src');
+                im.setAttribute('src', s);
+              };
+              im.addEventListener('error', function(){
+                window.addEventListener('online', redo, {once:true});
+                document.addEventListener('acim-offline-complete', redo, {once:true});
+              });
+            }
           }
         });
       }, {rootMargin: '400px'});
@@ -24918,10 +25041,22 @@ function createReadingFrameV5005(){
     /* ── 遞迴建立巢狀 TOC ── */
     var frag = document.createDocumentFragment();
 
+    /* V50.2.0 修正 G：標題文字剝除訂文標記（.fn-badge）——此前「第三節 … 48」
+       把訂文顯示編號誤當紙本頁碼殘留於目錄／閱讀分頁／書籤標題。
+       掛在 window：mkLink／bmSnapshot（本區塊）與 rtPin（後續區塊）共用。
+       （首版定義在 cleanTitle 旁——與 mkLink 不同 <script> 區塊，目錄建構
+       拋 ReferenceError，V50.2.0 建置過程實測抓出後上移至此。） */
+    window.headingTitle = window.headingTitle || function(h){
+      if(!h) return '';
+      var c=h.cloneNode(true), b=c.querySelectorAll('.fn-badge'), i;
+      for(i=0;i<b.length;i++) if(b[i].parentNode) b[i].parentNode.removeChild(b[i]);
+      return (c.textContent||'').replace(/\s+/g,' ').trim();
+    };
+
     function mkLink(h, cls) {
       var a = document.createElement('a');
       a.href='#'+h.id; a.className='toc-link '+cls; a.dataset.id=h.id;
-      var t=h.textContent.trim(); a.textContent=t; a.title=t;
+      var t=headingTitle(h)||h.textContent.trim(); a.textContent=t; a.title=t; /* V50.2.0 修正 G：目錄標籤剝除註文編號 */
       a.addEventListener('click', function(e){
         e.preventDefault();
         var el=document.getElementById(a.dataset.id);
@@ -24998,6 +25133,9 @@ function createReadingFrameV5005(){
         });
         /* 恢復上次展開狀態 */
         var gid = g.h ? g.h.id : '';
+        /* V50.2.0 修正 J：箭頭以 aria-controls 指向子目錄容器（role=group），
+           螢幕閱讀器可直接宣告「展開／收合哪一層子目錄」。 */
+        if(gid){ childWrap.id='toc-kids-'+gid; arr.setAttribute('aria-controls',childWrap.id); childWrap.setAttribute('role','group'); childWrap.setAttribute('aria-label','章節子目錄'); }
         if(gid && loadTocState(gid)){
           childWrap.classList.add('open');
           arr.textContent='▼'; arr.setAttribute('aria-label','收合章節'); arr.setAttribute('aria-expanded','true');
@@ -25118,6 +25256,8 @@ function createReadingFrameV5005(){
         arr.className='toc-arrow'; arr.textContent='▶';
         arr.setAttribute('role','button'); arr.setAttribute('tabindex','0');
         arr.setAttribute('aria-label','展開術語詞彙'); arr.setAttribute('aria-expanded','false');
+        /* V50.2.0 修正 J：詞彙子目錄同樣補上 aria-controls 關聯 */
+        childWrap.id='toc-kids-'+gHead.id; arr.setAttribute('aria-controls',childWrap.id);
         /* V25.1：取代原有箭頭佔位，避免附錄三多縮排 18px。 */
         var placeholder=row.querySelector('.toc-arrow-placeholder');
         if(placeholder) row.replaceChild(arr, placeholder);
@@ -26381,7 +26521,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
       var el=currentAnchorEl(prepare);
       if(!el) return null;
       var head=nearestHeading(el);
-      var title=head?(head.textContent||'').replace(/\s+/g,' ').trim().slice(0,40):'';
+      var title=head?(headingTitle(head)||'').replace(/\s+/g,' ').trim().slice(0,40):''; /* V50.2.0 修正 G：書籤標題剝除訂文編號 */
       if(!title){
         var crumb=document.getElementById('crumb-text');
         title=(crumb&&crumb.textContent.trim())?crumb.textContent.trim().slice(0,40)
@@ -26809,6 +26949,29 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
   var hoverOpened=null; /* V24 修復：hover 開啟來源標記（與點擊競合判定用）*/
   var isTouch=('ontouchstart' in window||navigator.maxTouchPoints>0);
 
+  /* V50.2.0 修正 B：注文面板開啟時以 ResizeObserver 實測高度寫入
+     --acim-fn-h，右側工具列與 TTS 列依實際高度讓位。原固定 42vh 低估
+     面板最高 52dvh 的情形，且桌面矮窗媒體查詢把讓位整個取消——橫向
+     844×390 實測面板蓋住右列 135px，「目錄／書籤」兩顆按鈕完全不可點。 */
+  /* 量測本體同時掛到 window：showFn 開啟當下直接量測（不依賴 RO 的
+     通知時序），RO 僅負責後續視窗/版面變化的持續更新。 */
+  window.__acimUpdateFnH5020=function(){
+    var open=fnBar.classList.contains('open')||fnBar.classList.contains('fn-visible');
+    var h=open?Math.round(fnBar.getBoundingClientRect().height):0;
+    if(h>0)document.documentElement.style.setProperty('--acim-fn-h',h+'px');
+    else document.documentElement.style.removeProperty('--acim-fn-h');
+  };
+  (function(){
+    if(!window.ResizeObserver||!fnBar)return;
+    var ro=new ResizeObserver(function(){window.__acimUpdateFnH5020();});
+    ro.observe(fnBar);
+    window.__acimFnRO5020=ro;
+    window.addEventListener('resize',window.__acimUpdateFnH5020,{passive:true});
+  })();
+  document.addEventListener('acim:footnote-closed',function(){
+    document.documentElement.style.removeProperty('--acim-fn-h');
+  });
+
   /* 從 <a href="#_ftnN"> 或新式徽章（data-fn="N"）取得 href */
   function getFnHref(el){
     if(!el) return null;
@@ -26849,6 +27012,13 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
     if(window.__acimLinkNoteReferences5010)window.__acimLinkNoteReferences5010(fnText,ref);
     document.dispatchEvent(new Event('acim:footnote-rendered'));
     fnBar.classList.add('open'); document.body.classList.add('fn-open'); activeRef=ref; lastFnTrigger=ref;
+    /* V50.2.0 修正 B：開啟當下重掛觀察＋rAF 連測 14 幀——面板高度（含
+       過渡動畫）實測寫入 --acim-fn-h，右列與 TTS 列即時真實讓位。 */
+    try{
+      if(window.__acimFnRO5020)window.__acimFnRO5020.observe(fnBar);
+      var n5020=0,tick5020=function(){window.__acimUpdateFnH5020();if(++n5020<14)requestAnimationFrame(tick5020);};
+      requestAnimationFrame(tick5020);
+    }catch(e){}
     /* 無障礙：將 focus 移入腳注列，讓鍵盤/螢幕閱讀器使用者可直接閱讀 */
     fnBar.setAttribute('tabindex','-1'); fnBar.focus({preventScroll:true});
   }
@@ -29913,20 +30083,30 @@ if(!window.__acimV50WrongOrigin){
   function count(value,max){return Number.isInteger(value)&&value>=0&&value<=max;}
   function sameRelease(d){return !!(d&&d.version===version&&/^[a-f0-9]{64}$/.test(releaseId)&&d.releaseId===releaseId);}
   function validState(d){
+    /* V50.2.0 修正 H：僅接受與本頁同一發行版的狀態回覆——releaseId 改為必填
+       且必須相符。此前不同版本 worker（如舊版 imagesTotal=6）的回覆也會被
+       採用，圖片計數遂在 0/6、0/4、2/4 之間浮動；SW 端 inspectOfflineStatus
+       本就是固定全書總數，頁面端收緊後顯示即穩定。 */
     return d&&d.type==='ACIM_OFFLINE_STATUS'&&typeof d.version==='string'
-      &&(typeof d.releaseId==='undefined'||(typeof d.releaseId==='string'&&/^[a-f0-9]{64}$/.test(d.releaseId)))
+      &&typeof d.releaseId==='string'&&/^[a-f0-9]{64}$/.test(d.releaseId)
+      &&d.version===version&&d.releaseId===releaseId
       &&typeof d.bookReady==='boolean'&&typeof d.shellReady==='boolean'
       &&count(d.fontsCached,ACIM_FONT_TOTAL)&&d.fontsTotal===ACIM_FONT_TOTAL&&count(d.imagesCached,4)&&d.imagesTotal===4
       &&typeof d.warming==='boolean'&&typeof d.complete==='boolean';
   }
   function complete(d){return !!(sameRelease(d)&&d.complete&&d.bookReady&&d.shellReady&&d.fontsCached===ACIM_FONT_TOTAL&&d.imagesCached===4);}
+  /* V50.2.0 修正 F：離線橫幅文案抽成單一來源——此前不同工作階段出現
+     「確證／確認」兩種字串（版本更新前後各一），統一為以下常數，日後改版
+     只動一處。 */
+  var OFFLINE_BAR_READY='目前離線；本機已驗證的 '+version.toUpperCase()+' 全書可閱讀。';
+  var OFFLINE_BAR_PENDING='目前離線；尚未確認本機保存的書籍版本。';
   function updateBanner(){
     var bar=document.getElementById('acim-offline-bar');
     if(navigator.onLine!==false){if(bar)bar.remove();return;}
     if(!bar){bar=document.createElement('div');bar.id='acim-offline-bar';bar.setAttribute('role','status');document.body.prepend(bar);}
     bar.textContent=sameRelease(latest)&&latest.bookReady
-      ?'目前離線；本機已驗證的 '+version.toUpperCase()+' 全書可閱讀。'
-      :'目前離線；尚未確認本機保存的書籍版本。';
+      ?OFFLINE_BAR_READY
+      :OFFLINE_BAR_PENDING;
   }
   function paint(message){
     if(message)status.textContent=message;
@@ -29948,6 +30128,8 @@ if(!window.__acimV50WrongOrigin){
     if(validState(d)){
       statusRevision++;latest=d;
       if(sameRelease(d)&&!d.warming)cancelRetry();
+      /* V50.2.0 修正 I：離線資料驗證完整時廣播事件，讓離線破圖的圖片自動重試 */
+      if(complete(d)){try{document.dispatchEvent(new Event('acim-offline-complete'));}catch(e){}}
       paint();return;
     }
     if(d&&d.type==='ACIM_OFFLINE_PROGRESS'&&sameRelease(d)&&count(d.completed,64)&&count(d.total,64)&&d.total>0&&d.completed<=d.total){
@@ -30316,6 +30498,7 @@ function set(k,v){ try{ return storage.set(k,v); }catch(e){ return false; } }
 /* ── 共用小工具 ── */
 var SUPER_RE = /[⁰¹²³⁴⁵⁶⁷⁸⁹]/g;
 function cleanTitle(s){ return String(s||'').replace(SUPER_RE,'').replace(/\s+/g,' ').trim(); }
+/* V50.2.0 修正 G：headingTitle 定義已上移至 mkLink 所在區塊（掛 window，跨 script 區塊共用）。 */
 function currentHeading(){
   if(window.__acimCurrentHeading)
     return window.__acimCurrentHeading(90)||document.querySelector('#content-area h1,#content-area h2,#content-area h3,#content-area h4');
@@ -30713,9 +30896,23 @@ function buildBottomNav(){
     });
     sheet.appendChild(b);
   }
-  row('A－','縮小字體','btn-fdn');
-  row('A＋','放大字體','btn-fup');
+  row('A−','縮小字體','btn-fdn');
+  row('A+','放大字體','btn-fup');
   row('🌓','切換深色／亮色','btn-dark');
+  /* V50.2.0 修正 A：快選單新增「儲存閱讀分頁」——空狀態分頁列隱藏後的
+     行動版入口。不走通用 row()（其面紗管線會讓 rtPin 的框景量測失真），
+     先收快選單再直接呼叫 rtPin。 */
+  (function(){
+    var b=document.createElement('button'); b.type='button';
+    var i=document.createElement('span'); i.textContent='＋';
+    var t=document.createElement('span'); t.textContent='儲存閱讀分頁';
+    b.appendChild(i); b.appendChild(t);
+    b.addEventListener('click',function(){
+      if(sheet&&sheet.classList.contains('open'))setSheet(false);
+      rtPin();
+    });
+    sheet.appendChild(b);
+  })();
   var bTop=document.createElement('button');
   bTop.type='button';
   var i3=document.createElement('span'); i3.innerHTML=window.__acimIcon('up');
@@ -30896,7 +31093,7 @@ function rtabsInit(){
   bar.setAttribute('role','tablist');
   bar.setAttribute('aria-label','閱讀分頁');
   var add=document.createElement('button');
-  add.type='button'; add.className='rtab-add';
+  add.type='button'; add.className='rtab-add'; add.id='rtab-add-btn';
   add.textContent='＋'; add.title='把目前位置存成閱讀分頁';
   add.setAttribute('aria-label','新增閱讀分頁');
   add.addEventListener('click',rtPin);
@@ -30906,6 +31103,38 @@ function rtabsInit(){
     var x=e.target.closest?e.target.closest('.rtab .rtab-x'):null;
     if(x){ e.preventDefault(); e.stopPropagation(); rtRemove(x.getAttribute('data-id')); }
   });
+  /* V50.2.0 修正 A：右列「儲存閱讀分頁」圓鈕——空狀態分頁列隱藏後的桌面入口 */
+  var railRtab=document.getElementById('btn-rtab');
+  if(railRtab&&!railRtab.__acimRtabBound){
+    railRtab.__acimRtabBound=true;
+    railRtab.addEventListener('click',function(){rtPin();});
+  }
+  /* V50.2.0 修正 A：分頁列捲動自動隱藏——下滑淡出、停止捲動 900ms 或上滑淡入、
+     近頁頂（<140px）恆顯；鍵盤焦點進入時保持可見。避免膠囊常駐蓋住正文與
+     章節路徑標題（實測最大重疊 128×42px）。 */
+  (function(){
+    var lastY=window.scrollY,frame=0,hideTimer=null;
+    function show(){ if(hideTimer){clearTimeout(hideTimer);hideTimer=null;} bar.classList.remove('rtabs-autohide'); }
+    window.addEventListener('scroll',function(){
+      if(frame)return;
+      frame=requestAnimationFrame(function(){
+        frame=0;
+        var y=window.scrollY,dy=y-lastY;lastY=y;
+        if(y<140){show();return;}
+        if(dy>4){
+          bar.classList.add('rtabs-autohide');
+          if(hideTimer)clearTimeout(hideTimer);
+          hideTimer=setTimeout(show,900);
+        }else if(dy<-4){show();}
+        else if(!hideTimer){hideTimer=setTimeout(show,900);}
+      });
+    },{passive:true});
+    bar.addEventListener('focusin',show);
+    bar.addEventListener('pointerenter',function(){
+      if(hideTimer){clearTimeout(hideTimer);hideTimer=null;}
+      bar.classList.remove('rtabs-autohide');
+    });
+  })();
   render();
 }
 function rtPin(){
@@ -30915,7 +31144,7 @@ function rtPin(){
      不會誤跳到第一個標題（書名頁） */
   var h=(curY<150)?null:currentHeading();
   var anchor=h?h.id:'';
-  var title=cleanTitle(h?h.textContent:'')||document.getElementById('crumb-text').textContent.split('›').pop().trim()||'分頁';
+  var title=cleanTitle(h?headingTitle(h):'')||document.getElementById('crumb-text').textContent.split('›').pop().trim()||'分頁'; /* V50.2.0 修正 G：分頁標題剝除訂文編號 */
   if(title.length>14) title=title.slice(0,13)+'…';
   for(var i=0;i<arr.length;i++){
     if(arr[i].anchor===anchor && Math.abs((arr[i].scrollY||0)-curY)<600){
@@ -30940,7 +31169,10 @@ function rtRemove(id){
   }else render();
   var bar=document.getElementById('rtabs-bar');
   var next=bar.querySelector('.rtab-on .rtab-select')||bar.querySelector('.rtab-add');
-  if(next)next.focus({preventScroll:true});
+  /* V50.2.0 修正 A：分頁全數關閉後分頁列回到 display:none（不可聚焦），
+     焦點改回右列「儲存閱讀分頁」鈕，鍵盤操作不落空。 */
+  if(next&&next.offsetParent)next.focus({preventScroll:true});
+  else{var railAdd=document.getElementById('btn-rtab');if(railAdd)railAdd.focus({preventScroll:true});}
 }
 function rtSwitch(id){
   var arr=rtLoad();
@@ -31225,7 +31457,7 @@ function backupInit(){
   panel.id='acim-backup291-preview';panel.className='acim-backup291-preview';panel.hidden=true;panel.setAttribute('role','region');panel.setAttribute('aria-label','匯入備份預覽');
   host.append(status,previous,panel);
   var incoming=null,previewPlan=null,fileReadSerial=0;
-  function paint(message){var s=engine.status();status.textContent=(message?message+' ':'')+(s.temporary?'部分資料僅於本分頁暫存，關閉前請匯出。':'閱讀資料儲存在此瀏覽器；清除網站資料會一併移除。')+(s.lastExport?' 上次產生備份：'+engine.formatTaipeiDate(s.lastExport)+'。':'');/* V50.0.7：依讀者回報移除狀態列尾端「尚未產生完整備份。」——從未匯出過時該句只造成困惑（「設定與資訊」面板最後一行）；有備份紀錄時「上次產生備份：…」照常顯示。 */previous.hidden=!s.hasSnapshot;}
+  function paint(message){var s=engine.status();status.textContent=(message?message+' ':'')+(s.temporary?'部分資料僅於本分頁暫存，關閉前請匯出。':'閱讀資料（書籤、分頁、偏好設定）儲存在此瀏覽器；清除網站資料會一併移除。試讀進度與閱讀碼啟用狀態不會因清除資料而重置。')+(s.lastExport?' 上次產生備份：'+engine.formatTaipeiDate(s.lastExport)+'。':'');/* V50.0.7：依讀者回報移除狀態列尾端「尚未產生完整備份。」——從未匯出過時該句只造成困惑（「設定與資訊」面板最後一行）；有備份紀錄時「上次產生備份：…」照常顯示。 */previous.hidden=!s.hasSnapshot;}
   function download(data,name){var url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json;charset=utf-8'}));var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1200);}
   function exportNow(){try{var d=engine.exportCurrent();download(d,'acim-backup-'+engine.formatTaipeiDate()+'.json');var saved=engine.markExport();paint('已準備完整備份下載，請確認檔案已保存。'+(saved?'':' 備份日期無法持久記錄。'));return true;}catch(e){paint('無法產生備份：'+e.message);return false;}}
   ex.addEventListener('click',exportNow);
