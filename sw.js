@@ -52,13 +52,13 @@
    index.html <script id="acim-v50-session"> 開頭
    V50.0.10 變更記錄。 */
 const CACHE_VERSION = 'v50.1.1';
-const RELEASE_ID = 'a8656fd6fb6c1eee352e2c5f3bd163dcc531714c3e9003a378d3f3b299fd3d78';
+const RELEASE_ID = 'd31c9d951379c8fa0ede6c19dcb671e41d13d3cba92d6eabf48af0097a9f4485';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = 'ae74e9c4174508d03ba366065a1bfc2f61249c1a37f77ebb34c800e6b6bb2aa6';
+const BOOK_SHA256 = '5c7c1b243f180e15b12de70b5f0a5d40f52b5d2b45164be102a57ce489c85dac';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');

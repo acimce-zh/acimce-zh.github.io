@@ -6,10 +6,10 @@
   "buildDate": "2026-11-13",
   "deploymentOrigin": "https://acimce-zh.github.io/",
   "canonicalShareFormat": "https://acimce-zh.github.io/#ID",
-  "releaseId": "a8656fd6fb6c1eee352e2c5f3bd163dcc531714c3e9003a378d3f3b299fd3d78",
+  "releaseId": "d31c9d951379c8fa0ede6c19dcb671e41d13d3cba92d6eabf48af0097a9f4485",
   "releaseIdAlgorithm": "sha256(acimce-zh-tw-release\\nVERSION\\n + sha256(normalized index.html,index.htm,offline.html,manifest.json,favicon.ico) joined with \\n); normalized index.html replaces only acim-release-id content with 64 zeroes",
-  "normalizedBookSha256": "3b714f0115a30d1cdf262051e28c968232d488b916d56f15a5ae2a13269616eb",
-  "bookSha256": "ae74e9c4174508d03ba366065a1bfc2f61249c1a37f77ebb34c800e6b6bb2aa6",
+  "normalizedBookSha256": "79fe3d39b96261c331645a9cadf168a0543ce036c59fdeeb09e81056c05e90a1",
+  "bookSha256": "5c7c1b243f180e15b12de70b5f0a5d40f52b5d2b45164be102a57ce489c85dac",
   "bookMainSha256": "2657fac59cd776356f70c7ba9a41d6595529e90fbc1898631186cf7ec21df393",
   "unchangedBookMain": true,
   "trialSeconds": 300,
@@ -20,7 +20,8 @@
     "D02",
     "M01",
     "M02",
-    "M03"
+    "M03",
+    "D03"
   ],
   "inheritedFixVersion": "v50.1.0",
   "physicalDeviceValidationRequired": [
@@ -28,8 +29,8 @@
     "R03: Redmi 13C 手機虛擬鍵盤彈出、輸入反應"
   ],
   "assets": {
-    "index.html": "ae74e9c4174508d03ba366065a1bfc2f61249c1a37f77ebb34c800e6b6bb2aa6",
-    "sw.js": "58b2c9cfa999bee1b51a94bd761d28d5d04b620874c7425e9036d3bab089f926",
+    "index.html": "5c7c1b243f180e15b12de70b5f0a5d40f52b5d2b45164be102a57ce489c85dac",
+    "sw.js": "cdab1afd6d0f1d829128adac4d82b298ead0aa652259cc40edb1524faed1cdc8",
     "index.htm": "9dee853b722d22d9c2320a5e3a44c30f2d446f801918e719c77fa2261cb04033",
     "offline.html": "8fd37124c69be414443fda46b6a1e5c5d939fbf3bba713dfe56cecca83b0a665",
     "manifest.json": "bf2cced25fe025c096f259c08f11f30af0642a61ae3ee523121765e7fe6417b0",
@@ -71,5 +72,6 @@
     "acimce-icon-512.png": "0d1f12e14131861ceef02c6d5b24aa04b3e00d22213f29afde8c85f61558261a",
     "acimce-pwa-192x192.png": "95c27ae9b91a9a96065c9760139889ac56f9a15ed4967d0dddcf65a00a4249bc",
     "screenshot-og.png": "ae268a06eef2abd19f4631a4131e0f90c845292f68e9763fd14524f19078d804"
-  }
+  },
+  "nativeFindPrintCompatibility": true
 }
