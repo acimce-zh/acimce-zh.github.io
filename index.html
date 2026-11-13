@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.1.0">
+<meta name="acim-version" content="v50.1.1">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="5c5e41e14b54234cb8290d4198785b853e4274244db44536a78404ec2350dfbe">
+<meta name="acim-release-id" content="a8656fd6fb6c1eee352e2c5f3bd163dcc531714c3e9003a378d3f3b299fd3d78">
 <meta name="acim-build" content="2026-11-13">
 <meta name="acim-build-time" content="04:18">
 <link rel="canonical" href="https://acimce-zh.github.io/">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.1.0</title>
+<title>完整加註版奇蹟課程｜V50.1.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -96,7 +96,7 @@ if(!window.__acimV50WrongOrigin){
    （合法校正如樣式結清長高、字型交換的漂移遠小於 2 個視窗，不受
    影響；面紗還原的首次釘回在守衛生效前完成，行為不變）。
 
-   【視窗標題】<title> 改為「完整加註版奇蹟課程｜V50.1.0」——桌機 PWA
+   【視窗標題】<title> 改為「完整加註版奇蹟課程｜V50.1.1」——桌機 PWA
    視窗標題列與瀏覽器分頁都不再出現「五分鐘試讀版」；版本號保留供讀者
    對版。對話框內「繼續試讀五分鐘」等試讀機制文字屬功能說明，不在清除
    範圍。
@@ -591,13 +591,8 @@ if(!window.__acimV50WrongOrigin){
       var max=Math.max(0,(document.scrollingElement||de).scrollHeight-window.innerHeight);
       if(isFinite(max)) y=Math.min(y,max);
     }
-    if(!restorePending) previousScrollStyle=de.style.scrollBehavior;
-    de.style.scrollBehavior='auto'; expectedY=y;
-    window.scrollTo(0,y);
-    if(!restorePending){
-      restorePending=true;
-      requestAnimationFrame(function(){ de.style.scrollBehavior=previousScrollStyle; restorePending=false; });
-    }
+    expectedY=y;
+    window.scrollTo({left:0,top:y,behavior:'instant'});
     return true;
   }
   function remember(token,el,margin,rectOfTarget){
@@ -663,7 +658,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.1.0';
+var ACIM_VERSION = 'v50.1.1';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -3066,7 +3061,7 @@ html.dark-mode #rtabs-bar .rtab.rtab-on{background:#3B324B;color:#CBB27B;box-sha
 }
 </style>
 <style id="acim-v5010-fixes">
-/* V50.1.0: app chrome only; original Song/Kai/underline meanings are retained. */
+/* V50.1.1: app chrome only; original Song/Kai/underline meanings are retained. */
 #rtabs-bar{display:flex;min-height:34px;max-width:min(60vw,700px);box-sizing:border-box;border-radius:12px;}
 #rtabs-bar .rtab{padding:0;gap:0;flex-shrink:0;max-width:190px;border-radius:8px;}
 #rtabs-bar .rtab-select{display:flex;align-items:center;min-height:34px;max-width:146px;background:none;border:0;padding:5px 8px;color:inherit;font:inherit;cursor:pointer;}
@@ -3123,6 +3118,42 @@ html.dark-mode #tts-pause-btn,html.dark-mode #tts-stop-btn{background:#3B324B!im
  #content-area .tts-btn{font-size:16px;margin:0 0 0 .3em;width:calc(44px / var(--acim-reading-scale,1));height:calc(44px / var(--acim-reading-scale,1));min-width:calc(44px / var(--acim-reading-scale,1));min-height:calc(44px / var(--acim-reading-scale,1));}
 }
 @media print{#rtabs-bar,.acim-table-hint5010,#acim-note-return5010{display:none!important;}.acim-table-scroll5010{overflow:visible;}.acim-table-scroll5010>table{min-width:0;}}
+
+</style>
+<style id="acim-v5011-fixes">
+/* Navigation owns reading position. Keep root styles stable during section realization. */
+html{overflow-anchor:none;scroll-behavior:auto;}
+/* Keep lazy rendering without Chromium's automatic display-lock transitions. */
+#content-area.acim-render-controlled5011 section.csec{content-visibility:hidden;contain:layout style paint;}
+#content-area.acim-render-controlled5011 section.csec.acim-render5011{content-visibility:visible;}
+/* Reading controls keep a fixed visual size instead of scaling with the book. */
+#tts-options-toggle5011{display:none;}
+#tts-options5011{display:contents;}
+@media(max-width:768px){
+ #content-area .tts-btn{position:relative;box-sizing:border-box;width:calc(26px / var(--acim-reading-scale,1));height:calc(26px / var(--acim-reading-scale,1));min-width:calc(26px / var(--acim-reading-scale,1));min-height:calc(26px / var(--acim-reading-scale,1));margin:0 0 0 .3em;padding:0;font-size:calc(14px / var(--acim-reading-scale,1));vertical-align:middle;}
+ #content-area .tts-btn::before{width:calc(16px / var(--acim-reading-scale,1));height:calc(16px / var(--acim-reading-scale,1));}
+ #content-area .tts-btn::after{content:"";position:absolute;inset:calc(-7px / var(--acim-reading-scale,1));border-radius:50%;}
+ #tts-bar{left:10px;right:10px;width:auto;max-width:none;min-height:46px;height:46px;max-height:46px;padding:4px 7px;gap:5px;border-radius:24px;flex-wrap:nowrap;align-items:center;overflow:visible;transform:none;}
+ #tts-bar-label{flex:1 1 auto;width:0;max-width:none;min-width:0;font-size:12px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+ #tts-bar #tts-pause-btn,#tts-bar #tts-stop-btn,#tts-bar #tts-options-toggle5011{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;border-radius:50%;font-size:0;line-height:1;}
+ #tts-pause-btn::before{content:"Ⅱ";font:18px/1 system-ui;}
+ #tts-pause-btn[aria-label^="繼續"]::before{content:"▶";font-size:15px;}
+ #tts-stop-btn::before{content:"■";font:14px/1 system-ui;}
+ #tts-bar #tts-options-toggle5011{font:19px/1 system-ui;color:var(--c-accent);background:var(--art-panel);border-color:var(--c-border);}
+ #tts-engine-status{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%);white-space:nowrap!important;flex-basis:auto!important;}
+ #tts-bar[data-engine-state="preparing"] #tts-bar-label,#tts-bar[data-engine-state="waiting"] #tts-bar-label,#tts-bar[data-engine-state="empty"] #tts-bar-label{display:none;}
+ #tts-bar[data-engine-state="preparing"] #tts-engine-status,#tts-bar[data-engine-state="waiting"] #tts-engine-status,#tts-bar[data-engine-state="empty"] #tts-engine-status{position:static!important;order:-1;flex:1 1 auto!important;width:0!important;min-width:0;height:auto!important;max-height:34px!important;margin:0!important;clip-path:none;white-space:normal!important;text-align:left;font:12px/1.35 system-ui;}
+ #tts-options5011{display:none;position:absolute;right:0;bottom:54px;box-sizing:border-box;max-width:calc(100vw - 20px);width:280px;padding:12px;gap:14px;border:1px solid var(--c-border);border-radius:12px;background:var(--art-panel);color:var(--c-text);box-shadow:0 4px 14px #1d1a2826;white-space:normal;}
+ #tts-options5011.open{display:flex;flex-direction:column;}
+ #tts-options5011 #tts-gender-wrap,#tts-options5011 #tts-rate-wrap{border:0;padding:0;gap:9px;}
+ #tts-options5011 #tts-gender-label,#tts-options5011 #tts-rate-label{display:inline;font-size:12px;opacity:1;}
+ #tts-options5011 .tts-gender-btn{min-width:36px;min-height:32px;font-size:16px;color:var(--c-accent);}
+ #tts-options5011 #tts-rate-slider{width:120px;min-height:24px;}
+ #tts-options5011 #tts-rate-val{font-size:12px;}
+}
+@media(max-width:768px) and (max-height:480px){
+ #tts-options5011{flex-direction:row;flex-wrap:wrap;width:auto;min-width:280px;gap:10px;padding:8px 12px;}
+}
 
 </style>
 </head>
@@ -23437,6 +23468,63 @@ T-5.VII.1:1：「這整個問題［指業力；與輪迴有關］對於宗教來
 我們把附錄四放在網路上<span class="st378"><u><a href="https://drive.google.com/file/d/1z4t54On1IbLX0F_pcnoGKdxNIbQ39fL8/view?pli=1">https://drive.google.com/file/d/1z4t54On1IbLX0F_pcnoGKdxNIbQ39fL8/view?pli=1</a></u></span>
 
 </p></div></div></section></div></main>
+<script id="acim-render5011">
+(function(){
+ 'use strict';
+ var root=document.getElementById('content-area');
+ if(!root||!window.IntersectionObserver||!window.ResizeObserver)return;
+ var sections=Array.from(root.querySelectorAll('section.csec')),indexes=new Map();
+ sections.forEach(function(sec,index){indexes.set(sec,index);});
+ var active=new Set(),near=new Set(),forced=new Set(),pending=new Set(),leases=new Map(),frame=null;
+ function held(sec){return sec.classList.contains('acim-reference-section30')||sec.style.contentVisibility==='visible';}
+ function update(){
+  frame=null;
+  pending.forEach(function(sec){
+   var retain=near.has(sec)||held(sec)||leases.has(sec);
+   if(retain&&!active.has(sec)){
+    active.add(sec);sec.classList.add('acim-render5011');sizes.observe(sec);
+   }else if(!retain&&active.has(sec)){
+    active.delete(sec);sizes.unobserve(sec);sec.classList.remove('acim-render5011');
+   }
+  });pending.clear();
+ }
+ function schedule(sec){pending.add(sec);if(frame===null)frame=requestAnimationFrame(update);}
+ var sizes=new ResizeObserver(function(entries){
+  entries.forEach(function(entry){
+   var sec=entry.target;if(!active.has(sec))return;
+   var boxes=entry.borderBoxSize,h=boxes&&boxes[0]?boxes[0].blockSize:entry.contentRect.height;
+   if(h>0){var value=(Math.round(h*64)/64)+'px';if(sec.style.containIntrinsicSize!==value)sec.style.containIntrinsicSize=value;}
+  });
+ });
+ var viewport=new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){if(entry.isIntersecting)near.add(entry.target);else near.delete(entry.target);schedule(entry.target);});
+ },{rootMargin:'1200px 0px'});
+ var changes=new MutationObserver(function(records){
+  records.forEach(function(record){
+   var sec=record.target;if(!sec.matches('section.csec'))return;
+   var value=held(sec);if(value===forced.has(sec))return;
+   if(value)forced.add(sec);else forced.delete(sec);schedule(sec);
+  });
+ });
+ root.classList.add('acim-render-controlled5011');
+ sections.forEach(function(sec){viewport.observe(sec);});
+ changes.observe(root,{subtree:true,attributes:true,attributeFilter:['class','style']});
+ /* Restore only the saved section. Never realize the whole book for a glyph. */
+ window.__acimEnsureSection5011=function(el,neighbors){
+  var sec=el&&el.closest?el.closest('section.csec'):null;if(!sec)return;
+  var index=indexes.get(sec),radius=neighbors?2:0;
+  sections.slice(Math.max(0,index-radius),index+radius+1).forEach(function(item){
+   var previous=leases.get(item);if(previous)clearTimeout(previous);
+   leases.set(item,setTimeout(function(){leases.delete(item);schedule(item);},1000));
+   pending.add(item);
+  });update();
+ };
+ document.addEventListener('acim-navigation',function(){
+  leases.forEach(function(timer,sec){clearTimeout(timer);schedule(sec);});leases.clear();
+ });
+})();
+
+</script>
 </div><!-- #book-container -->
 
 <!-- PWA 安裝提示條（beforeinstallprompt 觸發後顯示）-->
@@ -23725,6 +23813,12 @@ if(!window.__acimV50WrongOrigin){
   var settingsPanel=document.getElementById('sidebar-settings-panel');
   function setSidebarSettings(open,restoreFocus){
     if(!settingsToggle||!settingsPanel)return;
+    var settingsFrame5011=null;
+    if(window.innerWidth>768&&readingFrame){
+      if(open&&settingsPanel.hidden)window.__acimSettingsReadingFrame5011=readingFrame.capture();
+      else if(!open&&!settingsPanel.hidden)settingsFrame5011=window.__acimSettingsReadingFrame5011;
+    }
+    if(!open)window.__acimSettingsReadingFrame5011=null;
     /* V30.4: identical state needs no writes; native/keyboard focus is retained. */
     if(settingsPanel.hidden!==!open)settingsPanel.hidden=!open;
     var expanded=open?'true':'false';
@@ -23733,6 +23827,7 @@ if(!window.__acimV50WrongOrigin){
     if(results.hidden!==open)results.hidden=open;
     if(badge.hidden!==open)badge.hidden=open;
     if(!open&&restoreFocus&&document.activeElement!==settingsToggle)settingsToggle.focus({preventScroll:true});
+    if(settingsFrame5011)readingFrame.restore(settingsFrame5011,false);
   }
   if(settingsToggle&&settingsPanel){
     settingsToggle.addEventListener('click',function(event){
@@ -23764,7 +23859,7 @@ if(!window.__acimV50WrongOrigin){
      重新附著的樣式債交給 V30.10 背景結清排程器。 */
 /* V50.0.6: retain a visible character across reflow. No full-book geometry scan. */
 function createReadingFrameV5005(){
-  var active=null,session=null,viewportFrame5010=null,frameTimer5010=null,resizeTimer5010=null,frameWidth5010=window.innerWidth;
+  var active=null,session=null,viewportFrame5010=null,frameTimer5010=null,resizeTimer5010=null,frameWidth5010=window.innerWidth,resizePending5011=false,resizeGeneration5011=0;
   function root(){return document.getElementById('content-area');}
   function eligible(node){
     return !!(node&&node.nodeType===3&&node.length&&node.parentElement&&
@@ -23789,6 +23884,7 @@ function createReadingFrameV5005(){
   }
   function rect(frame){
     if(!frame.block||!frame.block.isConnected)return null;
+    if(frame.block.checkVisibility&&!frame.block.checkVisibility({contentVisibilityAuto:true}))return null;
     if(resolve(frame)){
       var range=frame.range||document.createRange();frame.range=range;
       var start=Math.max(0,Math.min(frame.offset,frame.node.length-1));
@@ -23804,10 +23900,9 @@ function createReadingFrameV5005(){
     run.timers.forEach(clearTimeout);
     if(run.observer)run.observer.disconnect();
     run.events.forEach(function(v){v[0].removeEventListener(v[1],v[2],v[3]);});
-    if(run.section)run.section.style.contentVisibility=run.sectionVisibility;
-    if(run.root)run.root.style.overflowAnchor=run.overflowAnchor;
+    cacheViewport5010();
   }
-  function forget(){session=null;viewportFrame5010=null;clearTimeout(resizeTimer5010);cancel();cacheViewport5010();}
+  function forget(event){if(event&&event.target&&event.target.closest&&event.target.closest('#sidebar-toc,#pwa-tools,#acim-bottomnav,#acim-quick-sheet'))return;window.__acimSettingsReadingFrame5011=null;session=null;viewportFrame5010=null;resizePending5011=false;resizeGeneration5011++;clearTimeout(resizeTimer5010);cancel();cacheViewport5010();}
   /* Font controls retain one character across repeated presses. Reading gestures,
      navigation and a viewport change start a new reading position. */
   ['wheel','touchmove','pagehide'].forEach(function(name){window.addEventListener(name,forget,{passive:true,capture:true});});
@@ -23818,14 +23913,17 @@ function createReadingFrameV5005(){
     if(!el||!el.closest||!el.closest('#btn-fup,#btn-fdn,#acim-bn-font,#acim-quick-sheet,#theme-mode,#btn-dark,#sidebar-settings-toggle,#sidebar-toc,#pwa-tools,#acim-bottomnav,#rtabs-bar'))forget();
   },{passive:true,capture:true});
   window.addEventListener('keydown',function(e){
-    if((e.ctrlKey||e.metaKey)&&(e.key==='['||e.key===']'))return;
-    if(e.key==='Enter'||e.key===' '){var el=e.target;if(el&&el.closest&&el.closest('#btn-fup,#btn-fdn,#acim-bn-font,#acim-quick-sheet,#theme-mode,#btn-dark,#sidebar-settings-toggle,#sidebar-toc,#pwa-tools,#acim-bottomnav,#rtabs-bar'))return;}
+    if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' ','Spacebar'].indexOf(e.key)<0)return;
+    var el=e.target;
+    if(el&&el.closest&&el.closest('input,textarea,select,button,[contenteditable="true"],#sidebar-toc,#acim-quick-sheet,#pwa-tools,#acim-bottomnav,#rtabs-bar'))return;
     forget();
   },{capture:true});
   function capture(passive){
+    var pendingFrame=!passive&&active?active.frame:null;
     if(!passive)cancel();
     var content=root();if(!content||document.documentElement.classList.contains('acim-book-veiled'))return null;
     if(!passive&&window.__acimNav)window.__acimNav.cancel();
+    if(pendingFrame&&pendingFrame.block&&pendingFrame.block.isConnected){session=pendingFrame;return pendingFrame;}
     var focus5010=window.__acimReadingFocus5010;
     if(focus5010&&focus5010.block&&focus5010.block.isConnected){
       var focused={block:focus5010.block,node:focus5010.node,offset:focus5010.offset,textOffset:focus5010.textOffset,range:null,top:0};
@@ -23865,14 +23963,15 @@ function createReadingFrameV5005(){
     }
     if(!passive)session=fallback;return fallback;
   }
-  function restore(frame,immediate){
+  function restore(frame,immediate,viewportChange){
     cancel();if(!frame||!frame.block||!frame.block.isConnected)return;
+    if(window.__acimEnsureSection5011)window.__acimEnsureSection5011(frame.block);
     var content=root();if(!content)return;
     var run={frame:frame,root:content,overflowAnchor:content.style.overflowAnchor,section:frame.block.closest('section.csec'),sectionVisibility:'',observer:null,raf:null,timers:[],events:[]};
+    run.viewportChange=!!viewportChange;
     run.navigationRevision5010=window.__acimNav?window.__acimNav.revision():0;
     active=run;
-    content.style.overflowAnchor='none';
-    if(run.section){run.sectionVisibility=run.section.style.contentVisibility;run.section.style.contentVisibility='visible';}
+    /* Render the section naturally before measuring a descendant. */
     function listen(target,name,fn,options){target.addEventListener(name,fn,options);run.events.push([target,name,fn,options]);}
     function pin(){
       run.raf=null;
@@ -23904,19 +24003,26 @@ function createReadingFrameV5005(){
     listen(window,'pagehide',cancel,false);listen(window,'resize',queue,{passive:true});
     if(window.visualViewport)listen(window.visualViewport,'resize',queue,{passive:true});
     if(document.fonts&&document.fonts.addEventListener){listen(document.fonts,'loadingdone',queue,false);listen(document.fonts,'loadingerror',queue,false);}
-    if(window.ResizeObserver){
-      run.observer=new ResizeObserver(queue);
-      [frame.block,run.section,content.firstElementChild].forEach(function(el){if(el)run.observer.observe(el);});
-    }
+    /* Bounded timers and font events replace a whole-book layout observer. */
     [90,260,700,1400,2600,4300,6500].forEach(function(ms){run.timers.push(setTimeout(queue,ms));});
     run.timers.push(setTimeout(function(){if(active===run)cancel();},8000));
-    if(immediate)pin();else queue();
+    function warmThenPin(){
+      if(active!==run)return;
+      if(run.section){
+        var sectionBox=run.section.getBoundingClientRect();
+        if(sectionBox.bottom<0||sectionBox.top>window.innerHeight)
+          acimScrollNow(0,Math.max(0,window.scrollY+sectionBox.top-Math.min(frame.top,92)));
+      }
+      queue();
+    }
+    if(immediate)warmThenPin();
+    else run.raf=requestAnimationFrame(function(){run.raf=null;warmThenPin();});
   }
   /* Cache at rest, before a rotation changes geometry; keyboard height alone never restores. */
   function cacheViewport5010(){
     clearTimeout(frameTimer5010);
     frameTimer5010=setTimeout(function(){
-      if(document.hidden||active||window.innerWidth!==frameWidth5010)return;
+      if(document.hidden||active||resizePending5011||window.innerWidth!==frameWidth5010)return;
       if(document.documentElement.classList.contains('acim-book-veiled'))return;
       if(window.__acimV50&&window.__acimV50.isDialogOpen())return;
       viewportFrame5010=capture(true);
@@ -23926,12 +24032,21 @@ function createReadingFrameV5005(){
   window.addEventListener('resize',function(){
     var width=window.innerWidth;if(Math.abs(width-frameWidth5010)<8)return;
     frameWidth5010=width;clearTimeout(frameTimer5010);clearTimeout(resizeTimer5010);
-    var frame=viewportFrame5010;if(!frame)return;
+    var frame=viewportFrame5010;if(!frame){cacheViewport5010();return;}
+    resizePending5011=true;var resizeGeneration=++resizeGeneration5011;
     resizeTimer5010=setTimeout(function(){
-      if(frame!==viewportFrame5010||document.documentElement.classList.contains('acim-book-veiled'))return;
-      if(window.__acimV50&&window.__acimV50.isDialogOpen())return;
+      if(resizeGeneration!==resizeGeneration5011)return;
+      if(frame!==viewportFrame5010||document.documentElement.classList.contains('acim-book-veiled')){resizePending5011=false;return;}
+      if(window.__acimV50&&window.__acimV50.isDialogOpen()){resizePending5011=false;return;}
       frame.top=Math.max(92,Math.min(window.innerHeight-110,frame.top));
-      session=frame;restore(frame,false);
+      var revision=window.__acimNav?window.__acimNav.revision():0;
+      function resumeViewport(){
+        if(resizeGeneration!==resizeGeneration5011||frame!==viewportFrame5010||window.innerWidth!==width)return;
+        if(window.__acimNav&&window.__acimNav.revision()!==revision)return;
+        resizePending5011=false;session=frame;restore(frame,false,true);
+      }
+      if(window.__acimStyleDebtPending&&window.__acimStyleDebtPending()&&window.__acimOnDischargeDone)window.__acimOnDischargeDone(resumeViewport);
+      else resumeViewport();
     },140);
   },{passive:true});
   document.addEventListener('acim:reading-ready',cacheViewport5010);
@@ -24005,10 +24120,7 @@ function createReadingFrameV5005(){
      未來任何樣式變動若重新引入 smooth，程式捲動也不會被動畫接管、
      更不會反過來吞掉後續的瞬跳指令。 */
   function acimScrollNow(x,y){
-    var de=document.documentElement,prev='';
-    try{prev=de.style.scrollBehavior;de.style.scrollBehavior='auto';}catch(e){}
-    try{window.scrollTo(x,y);}catch(e){}
-    requestAnimationFrame(function(){try{de.style.scrollBehavior=prev;}catch(e){}});
+    try{window.scrollTo({left:x,top:y,behavior:'instant'});}catch(e){window.scrollTo(x,y);}
   }
   function unveilBookBehindDrawer(skipRestore,done,opts){
     opts=opts||{};
@@ -24050,7 +24162,7 @@ function createReadingFrameV5005(){
          就不得再做錨點還原（否則先釘回原位、回調再跳走、90ms 後
          校正計時器又把讀者彈回原位，三者互搶＝搜尋／書籤／目錄
          跳轉在債清未完成時「點了沒跳／被彈回」。） */
-      _veil.waiting={dones:dones,gen:_veil.gen,skip:!!skipRestore,top:!!opts.topJump};
+      _veil.waiting={dones:dones,gen:_veil.gen,skip:!!skipRestore,top:!!opts.topJump,restoreReading:!!opts.restoreReading};
       try{if(window.__acimTopJumpTrace)window.__acimTopJumpTrace.gated=true;}catch(e){}
       var _fire=function(){
         var w=_veil.waiting;
@@ -24058,7 +24170,7 @@ function createReadingFrameV5005(){
         if(!w||w.gen!==_veil.gen||!_veil.on)return;
         unveilCore(w.skip,function(){
           w.dones.forEach(function(cb){try{cb();}catch(e){}});
-        },w.top,w.dones.length>0);
+        },w.top,w.dones.length>0&&!w.restoreReading);
       };
       _veil.waiting.fire=_fire;
       try{ if(window.__acimOnDischargeDone)window.__acimOnDischargeDone(_fire); }catch(e){}
@@ -24089,7 +24201,7 @@ function createReadingFrameV5005(){
       _valveTimer=setTimeout(_valveTick,650);
       return;
     }
-    unveilCore(skipRestore,done,!!opts.topJump,typeof done==='function');
+    unveilCore(skipRestore,done,!!opts.topJump,typeof done==='function'&&!opts.restoreReading);
   }
   function unveilCore(skipRestore,done,topMode,pendingJump){
     if(_veil.timer){clearTimeout(_veil.timer);_veil.timer=null;}
@@ -24366,10 +24478,10 @@ function createReadingFrameV5005(){
       if(sidebar.classList.contains('mobile-open'))overlay.style.opacity='1';
     });
   }
-  function closeSidebar(){
+  function closeSidebar(afterReadingRestore){
     setSidebarSettings(false,false);
     if(sidebarOpenFrame!==null){cancelAnimationFrame(sidebarOpenFrame);sidebarOpenFrame=null;}
-    if(!sidebar.classList.contains('mobile-open')&&overlay.style.display==='none')return;
+    if(!sidebar.classList.contains('mobile-open')&&overlay.style.display==='none'){if(typeof afterReadingRestore==='function')unveilBookBehindDrawer(false,afterReadingRestore,{restoreReading:true});return;}
     /* V30.8：手機收起抽屜＝進入閱讀模式，退休全文高亮（pin 保留），
        下次點搜尋欄／鍵盤彈出不再背負高亮重算。 */
     retireSearchHighlights();
@@ -24382,7 +24494,7 @@ function createReadingFrameV5005(){
     },280);
     /* V40.1：解紗時機移到收 class 之後——若字級快選單仍開著，
        面紗由它續用（共享資源，全關才解紗）。 */
-    try{maybeUnveil();}catch(e){}
+    try{if(typeof afterReadingRestore==='function'&&!acimPanelOpen())unveilBookBehindDrawer(false,afterReadingRestore,{restoreReading:true});else maybeUnveil();}catch(e){}
   }
   /* V30：供底部導覽列使用 */
   window.__acimOpenSidebar=openSidebar;
@@ -24508,7 +24620,7 @@ function createReadingFrameV5005(){
     if(themeMode) themeMode.value=saved===null?'auto':saved==='1'?'dark':'light';
   }
   function setThemeMode(mode){
-    var themeFrame5010=window.innerWidth>768&&!document.documentElement.classList.contains('acim-book-veiled')?readingFrame.capture():null;
+    var themeFrame5010=window.innerWidth>768&&!document.documentElement.classList.contains('acim-book-veiled')?(window.__acimSettingsReadingFrame5011||readingFrame.capture()):null;
     if(mode==='auto') window.__acimStorage.remove('acim-dark');
     else window.__acimStorage.set('acim-dark',mode==='dark'?'1':'0');
     var mq=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)');
@@ -24635,7 +24747,7 @@ function createReadingFrameV5005(){
   var savedY = Math.max(0,parseInt(window.__acimStorage.get('acim-scroll')||'0',10)||0);
   var savedAnchor = window.__acimStorage.get('acim-anchor');
   var savedTextFrame5010=window.__acimStorage.get('acim-reading-frame-v1');
-  /* V50.1.0: a section heading is only a fallback, never a replacement for
+  /* V50.1.1: a section heading is only a fallback, never a replacement for
      a saved mid-section position. Old clients supply the pixel/heading pair;
      this release additionally stores one bounded semantic text checkpoint. */
   function readingRestorePlan5010(y,anchor,raw,bookmarksRaw){
@@ -25786,10 +25898,7 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
         var max=Math.max(0,(document.scrollingElement||de).scrollHeight-window.innerHeight);
         t=Math.max(0,Math.min(t,max));
         if(Math.abs(t-window.scrollY)>40){
-          var prev=de.style.scrollBehavior;
-          de.style.scrollBehavior='auto';
-          window.scrollTo(0,t);
-          requestAnimationFrame(function(){ de.style.scrollBehavior=prev; });
+          window.scrollTo({left:0,top:t,behavior:'instant'});
         }
       },ms);
     });
@@ -28072,6 +28181,7 @@ if(!window.__acimV50WrongOrigin){
     if(old.reveal&&old.sec.style.contentVisibility==='visible')old.sec.style.contentVisibility=old.reveal.prev;
   }
   function pinReferenceSection30(target){
+    if(window.__acimEnsureSection5011)window.__acimEnsureSection5011(target,true);
     var sec=target&&target.closest?target.closest('section.csec'):null;
     if(!sec||!sec.isConnected)return;
     if(activeReferenceReveal30&&activeReferenceReveal30.sec===sec){sec.classList.add('acim-reference-section30');return;}
@@ -28087,16 +28197,13 @@ if(!window.__acimV50WrongOrigin){
     var guard=referenceAnchorGuard30;if(!guard)return;
     referenceAnchorGuard30=null;clearTimeout(guard.timer);
     ['wheel','touchmove','pointerdown','keydown'].forEach(function(type){window.removeEventListener(type,guard.stop,true);});
-    var style=document.documentElement.style;
-    if(guard.value)style.setProperty('overflow-anchor',guard.value,guard.priority);
-    else style.removeProperty('overflow-anchor');
+    /* Scroll anchoring is stable in the stylesheet, never toggled per jump. */
   }
   function holdReferenceAnchor30(token){
     releaseReferenceAnchor30();
     lastReferenceToken30=token;
-    var style=document.documentElement.style;
-    var guard={token:token,value:style.getPropertyValue('overflow-anchor'),priority:style.getPropertyPriority('overflow-anchor'),timer:null,stop:null};
-    referenceAnchorGuard30=guard;style.setProperty('overflow-anchor','none');
+    var guard={token:token,timer:null,stop:null};
+    referenceAnchorGuard30=guard;
     guard.stop=function(e){
       if(e.type==='keydown'&&!/^(ArrowUp|ArrowDown|ArrowLeft|ArrowRight|PageUp|PageDown|Home|End| |Tab|Escape|Enter)$/.test(e.key))return;
       if(referenceAnchorGuard30===guard)releaseReferenceAnchor30();
@@ -28114,7 +28221,7 @@ if(!window.__acimV50WrongOrigin){
       },delay);
     });
   }
-  /* V50.1.0: one active section is rendered for direct ToC/glossary navigation. */
+  /* V50.1.1: one active section is rendered for direct ToC/glossary navigation. */
   window.__acimNavigateTarget5010=function(target,margin,kind){
     if(!target||!target.isConnected)return;
     var token=window.__acimNav.begin(kind||'target');if(token===null)return;
@@ -31245,7 +31352,7 @@ if(!window.__acimV50WrongOrigin){
     var actions=document.createElement('div');actions.id='acim-reader-actions5010';
     actions.appendChild(button('朗讀目前整節','acim-section-play5010',function(){
       function play(){if(window.__acimSpeakSection)window.__acimSpeakSection();else if(window.__acimBrowserGuide)window.__acimBrowserGuide.show('tts-unavailable');}
-      if(window.__acimVeilUnveil)window.__acimVeilUnveil(false,play);else play();closeDrawer();
+      if(window.innerWidth<=768&&window.__acimCloseSidebar)window.__acimCloseSidebar(play);else play();
     }));
     actions.appendChild(button('我的書籤','acim-bookmark-list5010',function(){closeDrawer();if(window.__acimOpenBookmarks)window.__acimOpenBookmarks();}));
     panel.insertBefore(actions,panel.firstChild);
@@ -31287,6 +31394,24 @@ if(!window.__acimV50WrongOrigin){
 })();
 
 }
+</script>
+<script id="acim-v5011-ui">
+(function(){
+ 'use strict';
+ var bar=document.getElementById('tts-bar'),gender=document.getElementById('tts-gender-wrap'),rate=document.getElementById('tts-rate-wrap');
+ if(!bar||!gender||!rate)return;
+ var toggle=document.createElement('button');toggle.type='button';toggle.id='tts-options-toggle5011';toggle.textContent='⚙';toggle.title='朗讀設定';toggle.setAttribute('aria-label','朗讀設定：音色與語速');toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','tts-options5011');
+ var options=document.createElement('div');options.id='tts-options5011';options.setAttribute('role','group');options.setAttribute('aria-label','朗讀設定');
+ bar.insertBefore(toggle,gender);bar.insertBefore(options,gender);options.appendChild(gender);options.appendChild(rate);
+ function close(returnFocus){options.classList.remove('open');toggle.setAttribute('aria-expanded','false');if(returnFocus)toggle.focus({preventScroll:true});}
+ toggle.addEventListener('click',function(e){e.stopPropagation();var opening=!options.classList.contains('open');options.classList.toggle('open',opening);toggle.setAttribute('aria-expanded',opening?'true':'false');});
+ document.addEventListener('pointerdown',function(e){if(!options.contains(e.target)&&e.target!==toggle)close(false);},{passive:true});
+ options.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();close(true);}});
+ toggle.addEventListener('keydown',function(e){if(e.key==='Escape'){e.preventDefault();close(true);}});
+ if(window.MutationObserver)new MutationObserver(function(){if(!bar.classList.contains('tts-bar-on'))close(false);}).observe(bar,{attributes:true,attributeFilter:['class']});
+ window.matchMedia('(max-width:768px)').addEventListener('change',function(){close(false);});
+})();
+
 </script>
 </body>
 </html>
