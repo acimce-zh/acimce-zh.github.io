@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.2.0">
+<meta name="acim-version" content="v50.2.1">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="ea1ef759d18a51b013b62c289f90b39144ee551683b7630827c46187b4c3fc19">
+<meta name="acim-release-id" content="bbcc0a2f3ea44ab64bcdc3eb25e7ad19fb671efebc6ff64c9f967cf791733825">
 <meta name="acim-build" content="2026-11-13">
 <meta name="acim-build-time" content="16:09">
 <link rel="canonical" href="https://acimce-zh.github.io/">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.2.0</title>
+<title>完整加註版奇蹟課程｜V50.2.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -58,6 +58,54 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.2.1 變更記錄（追查指南）——手機第一次按壓句子數秒無反應（啟動期
+   主執行緒飽和）＋點按即選句＋分享列「準備中」殼
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】手機上長按句子產生分享連結：第一次點壓要等約 8 秒，被點
+   到的文字才被選取高亮，之後每次選取都正常；感覺與當年「輸入閱讀碼欄
+   卡頓」同型。
+   【根因（8x CPU 節流行動模擬實測，對應 Redmi 13C 級裝置）】啟動後存在
+   主執行緒飽和窗：HTML 解析與排版（瀏覽器層約 4.7s）＋句碼索引
+   assignIds 批次（JS 約 1.8s，以 4ms 批次散佈於啟動後約 10s 內，
+   setTimeout(0) 連發與觸控競爭）；第一次觸壓的輸入延遲實測 962ms，
+   其後僅 22~30ms。長按選取的上色與分享列顯示都被排到索引批次之後；
+   分享列另受 idsReady 閘門（onSel 開頭直接 return），索引建成那一刻
+   （手機上約 8 秒）才一併出現——與「第一次點要等 8 秒、之後都正常」
+   完全吻合，也解釋了與閱讀碼欄卡頓同型的感受（同為背景批次與輸入
+   搶主執行緒）。
+   【修正 1・句碼索引批次完全讓位給閱讀互動】assignIds 的 step() 批次
+   排程改以 requestIdleCallback（timeout 100ms 保進度；不支援時沿用
+   setTimeout(0)），且手指按住／作用中指標／編輯／抽屜開啟時暫緩批次
+   （interactionActive292 → scheduleStep292）。啟動期的原生長按選取
+   不再排在索引批次之後上色。
+   【修正 2・分享列「準備中」殼】索引掃描完成前（idsReady=false）若已
+   有選取，先顯示分享列殼（按鈕停用、文字「準備中…」），第一次選取
+   立即有可見回饋；索引完成後既有完成回呼（run→scheduleShareSelection
+   291(0,true)）與試讀會話就緒（acim-v50-state ready→resumeV50Reference
+   新增重試）以同一選取重跑 onSel 填入真正引用並啟用按鈕。殼涵蓋兩個
+   靜默期：idsReady 閘門與試讀會話 markReady 前（canRead=false 但未
+   過期；原代碼此時直接靜默）。新增 sharePendingShell291 快照，避免殼
+   顯示期間被 scheduleShareSelection 291 的隱藏行閃滅。
+   【修正 3・點按即選句】短觸（單指、<260ms、位移<12px）正文文字直接
+   選取指下整句：先以 CSS Custom Highlight（acim-tap-hl，與引用跳轉
+   acim-sent-hl 同色、獨立註冊名互不覆寫）同幀上色，再 setBaseAndExtent
+   產生真實選取（原生選取與拖曳把柄隨即出現），交由既有
+   selectionchange→onSel 流程顯示分享列。句界由 buildSharePart 句碼
+   模型就地計算，不需等待全書索引；長按與拖曳選取路徑不受影響（tap
+   判定不通過即不介入）；fn-badge／連結／按鈕上的觸壓不劫持；試讀
+   會話未就緒（markReady 前）仍允許點按選句（僅過期 isBlocked 阻擋），
+   由殼承接可見回饋。
+   【驗收重點】① 手機開書後立即點句子：同幀整句高亮＋原生選取；②
+   索引未完成時分享列顯示「準備中…」，建成後變「🔗 分享」可按；③
+   長按與滑拖選取行為不變；④ 桌機拖曳分享不受影響；⑤ 註腳徽章、連結
+   點擊不受劫持；⑥ SW 安裝 book-version／book-release／book-integrity
+   三驗證通過；⑦ 8x 節流下句碼索引仍會完成（讓位不餓死）。
+   位置：assignIds step（scheduleStep292／interactionActive292）、
+   onSel／scheduleShareSelection291／cancelShareSelection291（殼）、
+   分享模組監聽器區（tapSelectSentence291 等）、addCSS（acim-tap-hl）、
+   <title>、meta acim-version／acim-release-id、ACIM_VERSION、sw.js。
+   ═══════════════════════════════════════════════════════════════════
 /* ═══════════════════════════════════════════════════════════════════
 /* ═══════════════════════════════════════════════════════════════════
    V50.2.0 變更記錄（追查指南）——依「V50.1.1 全面測試報告」實作九項修正
@@ -733,7 +781,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.2.0';
+var ACIM_VERSION = 'v50.2.1';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -28640,15 +28688,40 @@ if(!window.__acimV50WrongOrigin){
       verseStats.batches++;verseStats.candidates+=count;
       verseStats.maxBatchMs=Math.max(verseStats.maxBatchMs,performance.now()-start);
     }
+    /* ── V50.2.1（讀者回報：手機第一次按壓句子選取要等數秒）──
+       句碼索引批次完全讓位給閱讀互動：手指按住／作用中指標／編輯或抽屜
+       開啟時暫緩批次（interactionActive292），改以 requestIdleCallback
+       （timeout 保進度）在真正閒置的框架縫隙推進；不支援 rIC 的環境沿用
+       setTimeout(0)。根因量測（8x CPU 節流行動模擬）：索引 JS 約 1.8s
+       以 4ms 批次散佈於啟動後約 10s 內，與長按選取的上色競爭主執行緒，
+       第一次觸壓的輸入延遲實測 962ms（其後 22~30ms）。讓位後選取路徑
+       不再排在索引批次之後。 ── */
+    var stepIdle292=null,stepTimer292=null;
+    function interactionActive292(){
+      var bg=window.__acimBackground;
+      return !!(bg&&typeof bg.isQuiet==='function'&&!bg.isQuiet({quietMs:0}));
+    }
+    function scheduleStep292(){
+      if(stepIdle292!==null||stepTimer292!==null)return;
+      if(typeof window.requestIdleCallback==='function'){
+        stepIdle292=window.requestIdleCallback(function(){
+          stepIdle292=null;step();
+        },{timeout:100});
+      }else{
+        stepTimer292=setTimeout(function(){stepTimer292=null;step();},0);
+      }
+    }
     function step(){
     if(document.hidden){resumeVerseIndex=step;return;}
+    /* V50.2.1：互動中暫緩索引批次（rIC timeout 100ms 保證閒置後仍會前進）。 */
+    if(interactionActive292()){scheduleStep292();return;}
     var start=performance.now(),count=0;
     while ((node = pending || walker.nextNode())) {
       pending=null;
       /* V40.22: preserve the state machine while yielding between batches.
          Timers allow input/paint; a single paragraph remains the minimum unit. */
       if(count&&(count>=192||performance.now()-start>=4)){
-        pending=node;recordBatch(start,count);setTimeout(step,0);return;
+        pending=node;recordBatch(start,count);scheduleStep292();return;
       }
       count++;
       var tag = node.tagName;
@@ -28878,7 +28951,7 @@ if(!window.__acimV50WrongOrigin){
     recordBatch(start,count);
     if(onReady)onReady();
     }
-    step();
+    scheduleStep292();
   }
 
   /* ══════════════════════════════════════════════════
@@ -29760,7 +29833,7 @@ if(!window.__acimV50WrongOrigin){
   }
 
   /* ACIM_SELECTION291_SCHEDULER_BEGIN */
-  var shareEpoch291=0,shareRequested291=null,sharePublished291=null,shareWaitingIndex291=false,sharePanelSnapshot291=null;
+  var shareEpoch291=0,shareRequested291=null,sharePublished291=null,shareWaitingIndex291=false,sharePanelSnapshot291=null,sharePendingShell291=null;
   function shareSnapshot291(){
     var sel=window.getSelection&&window.getSelection();
     if(!sel||sel.isCollapsed||!sel.rangeCount)return null;
@@ -29793,7 +29866,7 @@ if(!window.__acimV50WrongOrigin){
   }
   function cancelShareSelection291(hide){
     shareEpoch291++;if(barTimer!==null&&barTimer!==undefined)clearTimeout(barTimer);barTimer=null;
-    shareRequested291=null;sharePublished291=null;shareWaitingIndex291=false;
+    shareRequested291=null;sharePublished291=null;shareWaitingIndex291=false;sharePendingShell291=null;
     if(hide&&shareBar)shareBar.style.display='none';
   }
   function scheduleShareSelection291(delay,force){
@@ -29803,19 +29876,55 @@ if(!window.__acimV50WrongOrigin){
     if(shareToolTarget291(snap.range.commonAncestorContainer))return;
     if(!force&&sameShareSnapshot291(snap,shareRequested291))return;
     shareRequested291=snap;
-    if(!sameShareSnapshot291(snap,sharePublished291))shareBar.style.display='none';
+    if(!sameShareSnapshot291(snap,sharePublished291)&&!sameShareSnapshot291(snap,sharePendingShell291))shareBar.style.display='none';
     /* First event owns a short deadline. Later Android events update the range, never postpone it. */
     if(barTimer!==null&&barTimer!==undefined)return;
     var epoch=shareEpoch291;
     barTimer=setTimeout(function(){barTimer=null;if(epoch===shareEpoch291)onSel();},delay==null?40:delay);
   }
   function onSel() {
-    /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
+    /* V50_INTEGRATION */
+    /* V50.2.1（讀者回報：第一次選取要等約 8 秒才有反應）：原本 canRead()=false
+       （試讀會話 markReady 前的數秒靜默期）時任何選取都無分享列；改為
+       「已過期（isBlocked）仍靜默；未就緒與索引未完成一律先顯示殼」——
+       試讀會話就緒（acim-v50-state ready→resumeV50Reference）與索引完成
+       （run→scheduleShareSelection291(0,true)）的重試路徑會以同一選取重跑
+       本函式，填入真正引用並啟用按鈕。 */
+    var session291=window.__acimV50;
+    if(session291&&session291.isBlocked())return;
+    var sessionPending291=!!(session291&&!session291.canRead());
     var snap=shareSnapshot291();
     if(sharePanelBlocks291(snap))return;
     if(!snap){cancelShareSelection291(true);return;}
     if(shareToolTarget291(snap.range.commonAncestorContainer))return;
-    if(!idsReady){shareWaitingIndex291=true;return;} /* Completion callback retries the live selection once. */
+    if(!idsReady||sessionPending291){
+      /* V50.2.1（讀者回報：第一次選取要等索引建成約 8 秒才有反應）：
+         索引掃描完成前或試讀會話尚未就緒（未過期）時，先顯示分享列殼
+         ——按鈕停用、文字「準備中…」，讓第一次選取立即有可見回饋；
+         句碼索引完成後既有完成回呼（run→scheduleShareSelection291(0,true)）
+         與試讀會話就緒（acim-v50-state ready）會以同一選取重跑本函式，
+         填入真正引用並啟用按鈕。sharePendingShell291 記住殼的快照，
+         避免 scheduleShareSelection291 的隱藏行把殼閃滅。 */
+      shareWaitingIndex291=!idsReady;
+      sharePendingShell291=snap;
+      shareBar.style.display='block';
+      if(window.innerWidth<=768){
+        shareBar.style.position='fixed';shareBar.style.top='auto';
+        shareBar.style.bottom='80px';shareBar.style.left='50%';
+        shareBar.style.transform='translateX(-50%)';
+      }else{
+        var shellRect=snap.range.getBoundingClientRect();
+        var shellWidth=shareBar.offsetWidth||110;
+        var shellLeft=shellRect.left+shellRect.width/2-shellWidth/2;
+        shellLeft=Math.max(8,Math.min(shellLeft,window.innerWidth-shellWidth-8));
+        var shellTop=shellRect.top-52;if(shellTop<8)shellTop=shellRect.bottom+8;
+        shareBar.style.top=shellTop+'px';shareBar.style.left=shellLeft+'px';
+        shareBar.style.bottom='auto';shareBar.style.transform='none';
+      }
+      var shellBtn=document.getElementById('acim-sbar-btn');
+      if(shellBtn){shellBtn.disabled=true;shellBtn.textContent='準備中…';}
+      return;
+    }
     shareWaitingIndex291=false;
     if(sameShareSnapshot291(snap,sharePublished291))return;
     if(snap.count===1&&!hasTwoSelectionChars291(snap.range)){shareBar.style.display='none';sharePublished291=snap;return;}
@@ -29842,7 +29951,7 @@ if(!window.__acimV50WrongOrigin){
       var top=r.top-52;if(top<8)top=r.bottom+8;
       shareBar.style.top=top+'px';shareBar.style.left=left+'px';shareBar.style.bottom='auto';shareBar.style.transform='none';
     }
-    shareBar.style.display='block';sharePublished291=snap;
+    shareBar.style.display='block';sharePublished291=snap;sharePendingShell291=null;
   }
   /* ACIM_SELECTION291_SCHEDULER_END */
 
@@ -29877,6 +29986,10 @@ if(!window.__acimV50WrongOrigin){
       '/* V40.23（D4）：句級高亮（CSS Custom Highlight API，不支援時自動忽略）*/',
       '::highlight(acim-sent-hl){background-color:rgba(243,169,98,.32);color:inherit;}',
       'body.dark-mode ::highlight(acim-sent-hl),html.dark-mode ::highlight(acim-sent-hl){'
+        + 'background-color:rgba(243,169,98,.42);}',
+      '/* V50.2.1：點按即選句的即時高亮（與引用跳轉 acim-sent-hl 同色、獨立註冊名）*/',
+      '::highlight(acim-tap-hl){background-color:rgba(243,169,98,.32);color:inherit;}',
+      'body.dark-mode ::highlight(acim-tap-hl),html.dark-mode ::highlight(acim-tap-hl){'
         + 'background-color:rgba(243,169,98,.42);}',
       '#acim-ctoast button:hover,#acim-ctoast a:hover{opacity:.82}',
     ].join('\n');
@@ -29925,6 +30038,7 @@ if(!window.__acimV50WrongOrigin){
         /* V50_INTEGRATION_END */
         var selection=window.getSelection&&window.getSelection();
         if(selection&&!selection.isCollapsed)scheduleShareSelection291(0,true);
+        else{shareBar.style.display='none';sharePendingShell291=null;} /* V50.2.1：索引完成時選取已消失則收殼，避免「準備中」滯留。 */
       });
     }
     setTimeout(run,0);
@@ -29948,6 +30062,8 @@ if(!window.__acimV50WrongOrigin){
         var session=window.__acimV50;if(!session||session.isBlocked())return;
         var hash=session.takePendingHash();
         if(hash!==null&&hash!==undefined&&hash===location.hash)recipientQueue30.request(hash,true);
+        /* V50.2.1：試讀會話就緒後重試當前選取——殼（會話未就緒）在此時填入真正引用。 */
+        scheduleShareSelection291(0,true);
       });});
     }
     document.addEventListener('acim-v50-resume',resumeV50Reference);
@@ -29955,7 +30071,11 @@ if(!window.__acimV50WrongOrigin){
     /* V50_INTEGRATION_END */
 
     /* Native long-press/drag selection remains the only trigger; clicks do not create a range. */
-    document.addEventListener('selectionchange',function(){scheduleShareSelection291(40);});
+    document.addEventListener('selectionchange',function(){
+      var s=window.getSelection&&window.getSelection();
+      if(!s||s.isCollapsed)clearTapHighlight291(); /* V50.2.1：選取塌陷時退休點按高亮。 */
+      scheduleShareSelection291(40);
+    });
     document.addEventListener('pointerdown',function(e){
       if(shareToolTarget291(e.target))return;
       cancelShareSelection291(true);
@@ -29971,6 +30091,91 @@ if(!window.__acimV50WrongOrigin){
       /* Android may cancel page pointers when native selection handles take over. */
       if(shareSnapshot291())scheduleShareSelection291(20,true);else cancelShareSelection291(true);
     },{passive:true});
+    /* ── V50.2.1（讀者回報：手機長按選句要等數秒、新使用者抓不到按壓技巧）：
+       點按即選句。短觸（單指、<260ms、位移<12px）正文文字時，直接選取指下
+       整句：先以 CSS Custom Highlight（acim-tap-hl）同幀上色，再以
+       setBaseAndExtent 產生真實選取（原生選取與拖曳把柄隨即出現），之後交由
+       既有 selectionchange→onSel 流程顯示分享列（索引未完成時先顯示「準備中」
+       殼，見 onSel）。句界由 buildSharePart／sharePart291 句碼模型就地計算，
+       不需等待全書句碼索引；長按與拖曳選取路徑完全不受影響（tap 判定不通過
+       即不介入）；fn-badge／連結／按鈕上的觸壓不劫持。 ── */
+    var TAP_HL_NAME291='acim-tap-hl';
+    var tapTrack291=null;
+    function tapHighlightRange291(range){
+      try{
+        if(window.CSS&&CSS.highlights&&typeof window.Highlight==='function'){
+          CSS.highlights.set(TAP_HL_NAME291,new Highlight(range));
+        }
+      }catch(e){}
+    }
+    function clearTapHighlight291(){
+      try{
+        if(window.CSS&&CSS.highlights&&CSS.highlights.delete)CSS.highlights.delete(TAP_HL_NAME291);
+      }catch(e){}
+    }
+    function tapSelectSentence291(x,y){
+      var caret=null;
+      if(document.caretPositionFromPoint){
+        caret=document.caretPositionFromPoint(x,y);
+      }else if(document.caretRangeFromPoint){
+        var hit=document.caretRangeFromPoint(x,y);
+        caret=hit?{offsetNode:hit.startContainer,offset:hit.startOffset}:null;
+      }
+      if(!caret||!caret.offsetNode||caret.offsetNode.nodeType!==3)return;
+      var node=caret.offsetNode;
+      var area=document.getElementById('content-area');
+      var para=getParaOfNode(node);
+      if(!para||!area||!area.contains(para)||shareIgnoredNode(node,area))return;
+      var model;
+      try{model=sharePart291(para,1);}catch(e){return;}
+      if(!model||!model.units||!model.units.length)return;
+      var units=model.units,target=null,i,u;
+      for(i=0;i<units.length;i++){
+        u=units[i];
+        if(u.node===node&&u.offset<=caret.offset)target=u;
+        else if(u.node!==node&&target)break;
+      }
+      if(!target)target=units[0];
+      var first=null,last=null;
+      for(i=0;i<units.length;i++){
+        if(units[i].sent!==target.sent)continue;
+        if(!first)first=units[i];
+        last=units[i];
+      }
+      if(!first||!last)return;
+      var range=null;
+      try{
+        range=document.createRange();
+        range.setStart(first.node,first.offset);
+        range.setEnd(last.node,last.offset+1);
+      }catch(e){return;}
+      tapHighlightRange291(range);
+      try{
+        var sel=window.getSelection();
+        sel.removeAllRanges();
+        sel.setBaseAndExtent(first.node,first.offset,last.node,last.offset+1);
+      }catch(e){return;}
+      /* 立即走一次既有排程（含索引未完成時的「準備中」殼）。 */
+      scheduleShareSelection291(0,true);
+    }
+    document.addEventListener('pointerdown',function(e){
+      if(e.pointerType!=='touch'){tapTrack291=null;return;}
+      tapTrack291={id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now()};
+      clearTapHighlight291(); /* 新觸壓開始即退休上一個點按高亮（tapSelect 可能立刻補上新高亮）。 */
+    },{capture:true,passive:true});
+    document.addEventListener('pointerup',function(e){
+      var tr=tapTrack291;tapTrack291=null;
+      if(!tr||e.pointerId!==tr.id)return;
+      if(window.__acimV50&&window.__acimV50.isBlocked())return; /* V50.2.1：僅過期阻擋；會話未就緒仍允許（殼承接，見 onSel）。 */
+      var dt=performance.now()-tr.t,dx=e.clientX-tr.x,dy=e.clientY-tr.y;
+      if(dt>260||(dx*dx+dy*dy)>144)return; /* 長按／拖曳交給原生選取。 */
+      if(shareToolTarget291(e.target))return;
+      var el=e.target;
+      if(el&&el.closest&&el.closest('a,button,input,select,textarea,label,sup.fn-badge,[role="button"]'))return;
+      tapSelectSentence291(e.clientX,e.clientY);
+    },{capture:true,passive:true});
+    document.addEventListener('pointercancel',function(){tapTrack291=null;},{capture:true,passive:true});
+
 
 
   }
