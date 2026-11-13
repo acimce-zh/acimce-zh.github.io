@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.0.9">
+<meta name="acim-version" content="v50.0.10">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="452c31ee08d53f6ca99e8bd122ba4e37d2fe596024012265e87d630659463cf5">
+<meta name="acim-release-id" content="ea98e147e30475efb89c3f5a3632e004a24613cfd3d3277d9a061817ac0305fb">
 <meta name="acim-build" content="2026-11-13">
 <meta name="acim-build-time" content="04:18">
 <link rel="canonical" href="https://acimce-zh.github.io/">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.0.9 五分鐘試讀版</title>
+<title>完整加註版奇蹟課程｜V50.0.10</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -58,6 +58,59 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.0.10 變更記錄（追查指南）——二段確認鈕面文字簡化＋手機搜尋點選
+   來回震盪修正＋桌機視窗標題移除「五分鐘試讀版」
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】(1) 試讀對話框的二段確認按鈕，鈕面文字簡化為「清除閱讀碼」
+   與「再次按下確認，清除閱讀碼」即可。(2) 手機 mode 使用搜尋，點選結果後
+   主畫面跳到命中處、又彈回原處、再跳回命中處，來回震盪；電腦 mode 不會。
+   (3) 桌機 mode 最上方視窗標題的「五分鐘試讀版」字樣請移除。
+
+   【鈕面文字】首次鈕面「清除閱讀碼」（原「重新試讀五分鐘」）、武裝鈕面
+   「再次按下確認，清除閱讀碼」（原「再次按下確認：只重設試讀時間與閱讀碼
+   啟用狀態」）。行為不變：V50.0.8 的顯示條件（僅已啟用閱讀碼時顯示）與
+   6 秒未按自動解除武裝全部保留。
+
+   【搜尋震盪根因】手機開抽屜會掛面紗（veilScheduleForDrawer 僅 ≤768px；
+   桌機不掛紗，所以只有手機會震盪）。搜尋結果點擊的舊順序：
+     ① closeSidebar() → maybeUnveil() 以「無跳轉回調」解紗
+       （unveilCore pendingJump=false）→ rAF#1 立即
+       readingFrame.restore(面紗前框景)＋[90,260,700,1400,2600,4300,6500]ms
+       pin 校正＋ResizeObserver——把畫面釘回抽屜開啟前的「原位置」；
+     ② 緊接著 __acimVeilUnveil(false,proceed) 到達時 _veil.on 已為 false，
+       proceed 同步執行＝跳到「命中處」＋acimSearchCorrect
+       [90,220,450,800,1200,1700,2400,3200]ms 校正。
+   兩套校正系統互搶捲軸 3~8 秒＝讀者看到的來回震盪。V40.15 的 pendingJump
+   讓位機制原本就存在，但「先 closeSidebar 才帶回調解紗」的順序讓第一個
+   （無回調）解紗呼叫搶先啟動還原，讓位機制沒有機會生效。
+
+   【修法】把 closeSidebar() 移入解紗回調：由「帶跳轉回調」的
+   __acimVeilUnveil(false,go) 啟動解紗（unveilCore pendingJump=true，
+   rAF#1 錨點還原整段讓位），回調 go 內先收抽屜再量測＋跳轉——全程只剩
+   acimSearchCorrect 一套校正。債清等待路徑（V40.3 閘門）行為不變。
+   另於 readingFrame.restore 的 pin() 加距離守衛：首次成功量測即視為
+   完成還原（run.pinned）；之後若捕獲框景離當前視口逾 2 個視窗高
+   （讀者已被程式跳轉或手勢帶離），pin 是「拉人」不是「校正」，整組
+   取消讓位——任何時序下殘存的 pin 迴圈都不再與搜尋校正互搶捲軸
+   （合法校正如樣式結清長高、字型交換的漂移遠小於 2 個視窗，不受
+   影響；面紗還原的首次釘回在守衛生效前完成，行為不變）。
+
+   【視窗標題】<title> 改為「完整加註版奇蹟課程｜V50.0.10」——桌機 PWA
+   視窗標題列與瀏覽器分頁都不再出現「五分鐘試讀版」；版本號保留供讀者
+   對版。對話框內「繼續試讀五分鐘」等試讀機制文字屬功能說明，不在清除
+   範圍。
+
+   【驗收】(1) unlocked 開框：鈕面「清除閱讀碼」；按一次變「再次按下確認，
+   清除閱讀碼」；6 秒未按自動還原；按第二次清除閱讀碼回 trial。(2) 手機
+   （≤768px）開抽屜搜尋、點選結果：跳到命中處後不再彈回原位置（與桌機
+   行為一致）。(3) 桌機 document.title 無「五分鐘試讀版」。(4) 舊版行為
+   回歸：trial 開框看不到按鈕、跨分頁同步、expired 冷卻無法繞過、抽屜
+   單純關閉（無跳轉）後閱讀位置仍精準還原。
+   位置：render() resetButton 區、mount() resetButton 建立、搜尋結果
+   item click（makeItem 內 proceed 呼叫處）、readingFrame.restore
+   pin()（createReadingFrameV5005）、<title>。
+   ═══════════════════════════════════════════════════════════════════ */
 /* ═══════════════════════════════════════════════════════════════════
    V50.0.9 變更記錄（追查指南）——PWA 名稱固定化＋新版更新提示對話框化
    ═══════════════════════════════════════════════════════════════════
@@ -285,7 +338,7 @@ if(!window.__acimV50WrongOrigin){
        （跨分頁 storage→ingest）被隱藏的當下解除確認武裝，避免重現時殘留
        「再次按下確認」鈕面文字。詳見本檔 V50.0.8 變更記錄。 */
     var resetHidden=!unlocked;
-    if(resetButton.hidden!==resetHidden){resetButton.hidden=resetHidden;if(resetHidden&&resetArmed){resetArmed=false;clearTimeout(resetTimer);resetButton.textContent='重新試讀五分鐘';}}
+    if(resetButton.hidden!==resetHidden){resetButton.hidden=resetHidden;if(resetHidden&&resetArmed){resetArmed=false;clearTimeout(resetTimer);resetButton.textContent='清除閱讀碼';}}
     var formEl=codeInput.closest('form');
     if(formEl.hidden!==unlocked)formEl.hidden=unlocked;
     if(codeDetails.hidden!==unlocked)codeDetails.hidden=unlocked;
@@ -396,7 +449,11 @@ html.dark-mode #acim-v50-dialog{--v50-paper:#302A40;--v50-ink:#E8E2D6;--v50-mute
     card.appendChild(make('p','acim-v50-share-note','歡迎分享閱讀網址，讓更多人先來試讀。'));
 
     persistNotice=make('p','acim-v50-persistence','此環境無法持續保存體驗狀態；目前仍可試讀與輸入閱讀碼，重開後可能需要再次輸入。');persistNotice.hidden=true;card.appendChild(persistNotice);
-    resetButton=make('button','acim-v50-reset','重新試讀五分鐘');resetButton.type='button';resetButton.onclick=function(){if(!resetArmed){resetArmed=true;resetButton.textContent='再次按下確認：只重設試讀時間與閱讀碼啟用狀態';clearTimeout(resetTimer);resetTimer=setTimeout(function(){resetArmed=false;resetButton.textContent='重新試讀五分鐘';},6000);return;}resetArmed=false;resetButton.textContent='重新試讀五分鐘';core.reset();};card.appendChild(resetButton);
+    /* V50.0.10（讀者回報）：二段確認鈕面文字簡化——「清除閱讀碼」／
+       「再次按下確認，清除閱讀碼」（原「重新試讀五分鐘」／「再次按下確認：
+       只重設試讀時間與閱讀碼啟用狀態」）。行為不變：顯示條件（僅已啟用
+       閱讀碼時顯示）與 6 秒未按自動解除武裝見 V50.0.8 變更記錄。 */
+    resetButton=make('button','acim-v50-reset','清除閱讀碼');resetButton.type='button';resetButton.onclick=function(){if(!resetArmed){resetArmed=true;resetButton.textContent='再次按下確認，清除閱讀碼';clearTimeout(resetTimer);resetTimer=setTimeout(function(){resetArmed=false;resetButton.textContent='清除閱讀碼';},6000);return;}resetArmed=false;resetButton.textContent='清除閱讀碼';core.reset();};card.appendChild(resetButton);
     overlay.appendChild(card);document.body.appendChild(hud);document.body.appendChild(overlay);
     if(window.visualViewport){window.visualViewport.addEventListener('resize',fitDialog,{passive:true});window.visualViewport.addEventListener('scroll',fitDialog,{passive:true});}
     function blockOutside(e){if(!dialogOpen||overlay.contains(e.target))return;if(e.cancelable)e.preventDefault();e.stopImmediatePropagation();}
@@ -601,7 +658,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.0.9';
+var ACIM_VERSION = 'v50.0.10';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -23760,6 +23817,19 @@ function createReadingFrameV5005(){
       if(window.__acimV50&&(window.__acimV50.isBlocked&&window.__acimV50.isBlocked()||window.__acimV50.isDialogOpen&&window.__acimV50.isDialogOpen())){cancel();return;}
       var r;try{r=rect(frame);}catch(e){cancel();return;}
       if(!r||!r.height)return;
+      /* V50.0.10（讀者回報）距離守衛：pin 的職責是「把已還原的閱讀位置
+         釘在結清長高／字型交換的漂移上」，不是把已前往新位置的讀者拉回
+         舊位。首次成功量測即視為完成還原（run.pinned）；之後若捕獲框景
+         離當前視口逾 2 個視窗高（讀者已被程式跳轉或手勢帶離——如手機
+         搜尋點選後 acimSearchCorrect 已接管），整組取消讓位，不再與
+         目標端校正互搶捲軸＝「跳到命中處→彈回原處」來回震盪的幫兇。
+         合法漂移遠小於 2 個視窗；面紗還原的首次釘回在守衛生效前完成。
+         詳見本檔開頭 V50.0.10 變更記錄。 */
+      if(run.pinned){
+        if(Math.abs(r.top-frame.top)>window.innerHeight*2){cancel();return;}
+      }else{
+        run.pinned=true;
+      }
       var drift=r.top-frame.top;
       if(Math.abs(drift)>1.5)acimScrollNow(0,Math.max(0,window.scrollY+drift));
     }
@@ -25638,9 +25708,20 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
           }
         }
       };
-      if(window.innerWidth<=768)closeSidebar();
-      if(window.__acimVeilUnveil)window.__acimVeilUnveil(false,proceed);
-      else proceed();
+      /* V50.0.10（讀者回報）：手機點搜尋結果「跳到命中處→彈回原處→又跳回」
+         震盪（桌機正常）——舊順序先 closeSidebar()（其 maybeUnveil 以無回調
+         解紗，pendingJump=false → rAF#1 readingFrame.restore＋pin 校正把畫面
+         釘回抽屜開啟前位置），再 __acimVeilUnveil(false,proceed) 時面紗已解，
+         proceed 同步跳到命中處＋acimSearchCorrect 校正——兩套校正互搶捲軸
+         3~8 秒。修正：由帶跳轉回調的解紗啟動（pendingJump=true，V40.15 讓位
+         機制生效），closeSidebar 移入回調——解紗完成後先收抽屜再量測跳轉，
+         全程只剩 acimSearchCorrect 一套校正。詳見本檔開頭 V50.0.10 變更記錄。 */
+      var go=function(){
+        if(window.innerWidth<=768)closeSidebar();
+        proceed();
+      };
+      if(window.__acimVeilUnveil)window.__acimVeilUnveil(false,go);
+      else go();
     });
     item.addEventListener('keydown',function(e){
       if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click();}

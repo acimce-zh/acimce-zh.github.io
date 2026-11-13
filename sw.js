@@ -35,15 +35,28 @@
    加註版奇蹟課程、short_name＝奇蹟課程CE，不再內嵌版本字串）＋
    更新提示由橫幅升級為對話框（稍後／立即更新）＋平台靜默套用
    告知，詳見 index.html <script id="acim-v50-session"> 開頭
-   V50.0.9 變更記錄。 */
-const CACHE_VERSION = 'v50.0.9';
-const RELEASE_ID = '452c31ee08d53f6ca99e8bd122ba4e37d2fe596024012265e87d630659463cf5';
+   V50.0.9 變更記錄。
+   ── V50.0.10 重建記錄（追查用）──────────────────────────────
+   同一規則重算：BOOK_SHA256 = sha256(index.html V50.0.10)；
+   ASSET_SHA256['manifest.json'] = sha256(manifest.json V50.0.10)
+   ＝V50.0.9 同值（manifest 本版未變更沿用）；RELEASE_ID = sha256(
+   'acimce-zh-tw-release\nv50.0.10\n' + CORE_FILES 四檔 SHA-256
+   依序 \n 串接)；index.htm / offline.html / manifest.json /
+   favicon.ico 未變更沿用。本版修正：試讀對話框二段確認鈕面文字
+   簡化（清除閱讀碼／再次按下確認，清除閱讀碼）＋手機搜尋點選後
+   解紗錨點還原與搜尋校正互搶捲軸的來回震盪（closeSidebar 移入
+   解紗回調＋readingFrame.restore pin 距離守衛：框景離視口逾 2
+   視窗高即整組取消）＋桌機視窗標題移除「五分鐘試讀版」，詳見
+   index.html <script id="acim-v50-session"> 開頭
+   V50.0.10 變更記錄。 */
+const CACHE_VERSION = 'v50.0.10';
+const RELEASE_ID = 'ea98e147e30475efb89c3f5a3632e004a24613cfd3d3277d9a061817ac0305fb';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = 'a4dc20706c7d021e03f287c2a671a050538a651e64fd555ea68a7c142c5b6ef4';
+const BOOK_SHA256 = '6dd49d924b5393223d2fe375290b26ad56ca7b515bdd0c282c7ed4148cec413a';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
