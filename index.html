@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.2.1">
+<meta name="acim-version" content="v50.2.2">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="bbcc0a2f3ea44ab64bcdc3eb25e7ad19fb671efebc6ff64c9f967cf791733825">
-<meta name="acim-build" content="2026-11-13">
-<meta name="acim-build-time" content="16:09">
+<meta name="acim-release-id" content="93ac8b09d061d1a0a9e2af1172cf9392d4527ecba6e499d68880991a81a11385">
+<meta name="acim-build" content="2026-11-14">
+<meta name="acim-build-time" content="07:24">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.2.1</title>
+<title>完整加註版奇蹟課程｜V50.2.2</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -58,6 +58,52 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.2.2 變更記錄（追查指南）——換章後第一次點句 5~6 秒才出分享框與
+   Highlight（contextmenu 全書排版）＋搜索索引 siN 不再寫入 DOM
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】換章節後第一次點選句子，點完過 5~6 秒才跳出分享小框與
+   Highlight；隨後同章節點任何句子整句立即 Highlight；再換章節又重演
+   （V50.2.1 已修啟動後第一次按壓約 8 秒，本版修剩餘的「每次換章第一次」）。
+   【根因（Playwright＋CDP 真實觸控＋tracing，4x CPU 節流行動模擬實測）】
+   ①點按選句（V50.2.1 修正 3）以 setBaseAndExtent 產生真實選取後，
+     Android Chrome 約 30ms 後派發 contextmenu（原生選取選單）；其預設
+     處理強制「全文件」樣式重算＋排版——tracing 實測單一
+     EventDispatch(type=contextmenu) 10.0s，內含 UpdateLayoutTree
+     59,424 元素（0.97s）與 Layout 8.5s（dirtyObjects 129,800／
+     totalObjects 137,680，partialLayout=false，content-visibility:auto
+     的分節跳過在此路徑失效）。
+   ②而換章（抽屜面紗 display:none 開關＋新章首次渲染＋字型切片載入）
+     剛好讓全書進入待重算狀態（失效追蹤實測：StyleRecalc「DisplayLock」
+     ×796、Layout「Fonts changed」×817、「Added to layout」×4,418）；
+     正常排版路徑會被 content-visibility 跳過，債務留存在各分節。
+   ③債務由 contextmenu 這一次全書排版一次付清：4x 節流 8~9 秒＝讀者
+     手機的 5~6 秒。期間選取上色、分享列全部被擋，債清後一次出現——
+     「點完過 5~6 秒才 Highlight＋跳出小框」；第二點時債務已清故即時；
+     換新章再欠再付，與回報完全吻合。因子實驗佐證：換章後僅以腳本執行
+     setBaseAndExtent／CSS.highlights.set（不經真實觸控、不派發
+     contextmenu）不觸發巨兽；真實觸控必觸發。
+   【修正 1・點按選句後攔截 contextmenu 預設行為】tapSelectSentence291
+     成功選取後記時（tapSelectAt291）；document 捕獲階段 contextmenu
+     監聽器在 1.2 秒內 preventDefault()——點按選句自帶分享列與整句
+     Highlight，原生選取選單多餘，免去全書排版。任何新觸壓
+     （pointerdown）重置旗標，長按／拖曳選取的原生選單完全不受影響；
+     桌機滑鼠路徑不設定旗標，行為不變。
+   【修正 2・搜索索引 siN 錨點不再寫入 DOM】indexStep 原為全書每個候選
+     段落寫 id='siN'（約 11.5k 次屬性寫入＝持續的全文件樣式失效來源）。
+     改為索引資料內保留 'siN' 字串（entries.id），DOM 不寫；搜索結果
+     點擊本就走 entry.node，舊書籤 siN 錨點由 legacySearchAnchor 既有
+     懶解析單點補寫，行為不變。
+   【驗收重點】①換章後第一次點句：整句 Highlight＋分享列亞秒級
+     （4x 節流實測 setBase 97~146ms、分享列 134~188ms；修復前同環境
+     分享列 5~11 秒且含 8~9 秒單體排版任務）；②同章後續點句即時
+     （不變）；③長按選句原生選單仍在（新觸壓重置旗標）；④桌機拖曳
+     分享不變；⑤搜索與舊 siN 書籤跳轉正常；⑥SW 安裝 book-version／
+     book-release／book-integrity 三驗證通過。
+   位置：分享模組監聽器區（tapSelectAt291／contextmenu 攔截）、
+   indexStep（siN 資料化）、<title>、meta acim-version／
+   acim-release-id、ACIM_VERSION、sw.js。
+   ═══════════════════════════════════════════════════════════════════
 /* ═══════════════════════════════════════════════════════════════════
    V50.2.1 變更記錄（追查指南）——手機第一次按壓句子數秒無反應（啟動期
    主執行緒飽和）＋點按即選句＋分享列「準備中」殼
@@ -781,7 +827,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.2.1';
+var ACIM_VERSION = 'v50.2.2';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -25605,9 +25651,12 @@ var _nativeSearchHighlight=!!(window.CSS && CSS.highlights && window.Highlight)&
       var i=job.cursor++,n=job.nodes[i],t=(n.textContent||'').replace(/\s+/g,' ').trim();
       used++;
       if(!t)continue;
-      /* Same selector, candidate ordinal, whitespace and id policy as V30.4. */
-      if(!n.id)n.id='si'+i;
-      job.entries.push({id:n.id,node:n,text:t,lower:t.toLowerCase(),inNote:!!n.closest('#acim-footnotes-container')});
+      /* V50.2.2 實驗：siN 僅存於索引資料，不寫入 DOM id——
+         全書 ~11.5k 次 id 寫入會持續失效全文件樣式，與讀者點句的
+         選取排版相撞時形成秒級單體排版任務（手機換章後首次點句
+         卡 5~6 秒的根因）。搜索結果點擊走 en.node；舊書籤 siN 錨點
+         由 legacySearchAnchor 懶解析單點補寫。 */
+      job.entries.push({id:n.id||('si'+i),node:n,text:t,lower:t.toLowerCase(),inNote:!!n.closest('#acim-footnotes-container')});
     }
     stats.indexCount=job.entries.length;
     if(job.cursor<job.nodes.length){stats.indexYieldCount++;scheduleIndex(job);return;}
@@ -30101,6 +30150,22 @@ if(!window.__acimV50WrongOrigin){
        即不介入）；fn-badge／連結／按鈕上的觸壓不劫持。 ── */
     var TAP_HL_NAME291='acim-tap-hl';
     var tapTrack291=null;
+    /* ── V50.2.2（讀者回報：換章後第一次點句，點完 5~6 秒才跳出分享小框與
+       Highlight；同章後續點句即時；再換章又重演）──
+       根因（CDP tracing 實測，4x CPU 節流行動模擬）：點按選句以
+       setBaseAndExtent 產生真實選取後，Android Chrome 會在 ~30ms 後派發
+       contextmenu（原生選取選單）。其預設處理強制「全文件」樣式重算＋排版
+       （實測 UpdateLayoutTree 59,424 元素、Layout dirtyObjects 129,800/
+       137,680、partialLayout=false，content-visibility 的分節跳過在此路徑
+       失效）。而換章（抽屜面紗開關＋新章首次渲染＋字型切片載入）剛好把
+       全書標記為待重算（失效追蹤：DisplayLock ×796、Fonts changed ×817），
+       債務由 contextmenu 這一次排版一次付清——4x 節流下 8~9 秒，即讀者的
+       5~6 秒；第二點時債務已清故即時；換新章再欠再付，完全吻合。
+       修正：點按選句自帶分享列與高亮，原生選取選單此時多餘——tap-select
+       成功後 1.2 秒內的 contextmenu 攔下預設行為（preventDefault），免去
+       全書排版；任何新觸壓（pointerdown）即重置旗標，故長按／拖曳選取的
+       原生選單完全不受影響。 ── */
+    var tapSelectAt291=0;
     function tapHighlightRange291(range){
       try{
         if(window.CSS&&CSS.highlights&&typeof window.Highlight==='function'){
@@ -30155,12 +30220,15 @@ if(!window.__acimV50WrongOrigin){
         sel.removeAllRanges();
         sel.setBaseAndExtent(first.node,first.offset,last.node,last.offset+1);
       }catch(e){return;}
+      /* V50.2.2：記下點按選句時刻，供 contextmenu 攔截（見上方說明）。 */
+      tapSelectAt291=performance.now();
       /* 立即走一次既有排程（含索引未完成時的「準備中」殼）。 */
       scheduleShareSelection291(0,true);
     }
     document.addEventListener('pointerdown',function(e){
       if(e.pointerType!=='touch'){tapTrack291=null;return;}
       tapTrack291={id:e.pointerId,x:e.clientX,y:e.clientY,t:performance.now()};
+      tapSelectAt291=0; /* V50.2.2：新觸壓重置攔截旗標（長按原生生態不受影響）。 */
       clearTapHighlight291(); /* 新觸壓開始即退休上一個點按高亮（tapSelect 可能立刻補上新高亮）。 */
     },{capture:true,passive:true});
     document.addEventListener('pointerup',function(e){
@@ -30175,6 +30243,15 @@ if(!window.__acimV50WrongOrigin){
       tapSelectSentence291(e.clientX,e.clientY);
     },{capture:true,passive:true});
     document.addEventListener('pointercancel',function(){tapTrack291=null;},{capture:true,passive:true});
+    /* ── V50.2.2：點按選句後 1.2 秒內攔下 contextmenu 預設行為。
+       Android 對新選取派發 contextmenu 以顯示原生選取選單；其預設處理
+       會強制全文件排版（根因見 tapSelectAt291 宣告處說明）。點按選句
+       已由分享列承接互動，選單多餘；長按／拖曳選取不走本旗標。 ── */
+    document.addEventListener('contextmenu',function(e){
+      if(!tapSelectAt291)return;
+      if(performance.now()-tapSelectAt291>=1200)return;
+      if(e.cancelable)e.preventDefault();
+    },true);
 
 
 

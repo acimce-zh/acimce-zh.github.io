@@ -1,4 +1,22 @@
-/* V50.2.1 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+/* V50.2.2 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+   ── V50.2.2 重建記錄（追查用）──────────────────────────────
+   同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.2)；
+   ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
+   manifest.json / favicon.ico / 字型 / 圖片本版皆未變更；
+   manifest 本版未變更沿用）。
+   RELEASE_ID = sha256('acimce-zh-tw-release\nv50.2.2\n'
+     + sha256(normalized index.html（acim-release-id 欄位以 64 個 '0'
+     取代）) + '\n' + CORE_FILES 四檔 SHA-256 依序 '\n' 串接)。
+   本版修正：①點按選句後 1.2 秒內攔截 contextmenu 預設行為——
+   Android 對新選取派發 contextmenu（原生選取選單），其預設處理
+   強制全文件樣式重算＋排版（content-visibility 跳過失效），換章
+   後全書處於待重算狀態時即成 5~6 秒凍結（讀者回報：換章後第一次
+   點句要等 5~6 秒才有 Highlight 與分享框；4x 節流實測 8~9 秒單體
+   任務，修復後首次點句 134~188ms）②搜索索引 siN 錨點不再寫入
+   DOM（~11.5k 次屬性寫入的全文件樣式失效來源移除；搜索結果點擊
+   走 entry.node、舊書籤由 legacySearchAnchor 懶解析），詳見
+   index.html <script id="acim-v50-session"> 開頭 V50.2.2 變更記錄。
+   ──（以下沿用 V50.2.1 重建記錄）──────────────────────────
    ── V50.2.1 重建記錄（追查用）──────────────────────────────
    同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.1)；
    ASSET_SHA256 全表未變更沿用（index.htm / offline.html / manifest.json /
@@ -81,14 +99,14 @@
    視窗高即整組取消）＋桌機視窗標題移除「五分鐘試讀版」，詳見
    index.html <script id="acim-v50-session"> 開頭
    V50.0.10 變更記錄。 */
-const CACHE_VERSION = 'v50.2.1';
-const RELEASE_ID = 'bbcc0a2f3ea44ab64bcdc3eb25e7ad19fb671efebc6ff64c9f967cf791733825';
+const CACHE_VERSION = 'v50.2.2';
+const RELEASE_ID = '93ac8b09d061d1a0a9e2af1172cf9392d4527ecba6e499d68880991a81a11385';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '5f7dfb8ddeaf3fd071fec6136b16e95c434417995a8bad115660c9a79f2bd90e';
+const BOOK_SHA256 = 'f9bf00ba0c098b298f3ecee0b32bc09f580c9737657d452882153805ed3f031c';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
