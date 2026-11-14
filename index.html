@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.2.5">
+<meta name="acim-version" content="v50.2.6">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="9a155d49d5fb9f3580a92e4d899261afc7231e85af899b41ab98d542a6c10196">
+<meta name="acim-release-id" content="b4c8ba97d46824409972a5c585b6aabf4a3374f78b8f6628c798d45746f90415">
 <meta name="acim-build" content="2026-11-14">
-<meta name="acim-build-time" content="12:47">
+<meta name="acim-build-time" content="13:35">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.2.5</title>
+<title>完整加註版奇蹟課程｜V50.2.6</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -58,6 +58,37 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.2.6 變更記錄（追查指南）——引號停頓真根因：句內 zh↔en 語音引擎切換
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】V50.2.5：「英：自動」下 " 符號處仍明顯停頓；「英：代
+   讀」同位置只剩自然小停頓。讀者問：能否一致？並質疑「自動」技術上
+   應能提前判斷整句話要用的朗讀方式，不該還停頓——這一定有 Bug。
+   【根因（Bug 屬實）・停頓不是引號，是引號所在位置＝中英邊界的語音
+   引擎切換】V50.2.5 已刪除引號字元，但「以下簡稱 "CE"—— complete…」
+   刪除後仍是 中→英→中 三段。自動模式逐「單位」選聲：中文段→中文聲、
+   英文段→本機英文聲，同一句內 zh↔en 來回切換；手機引擎每次切換
+   voice 都要重建另一個發音管線（實測 1~3 秒），引號／破折號恰好多為
+   邊界位置→「遇符號大停頓」。代讀模式整句同一中文聲、零切換→同位
+   置只剩自然小停頓。讀者的兩模式對照正是診斷證據。
+   【修正 1（核心）・句級單聲預判（英：自動＋行動流暢模式）】
+   flush()（句邊界＝批次組邊界）預先判斷整句組成：句內含漢字→句中
+   所有英文單位標記 _grpVoiceZh292，由中文聲代讀（與代讀模式同效果：
+   句內零切換）——中文聲能讀拉丁字母、英文聲讀不了漢字，含漢字的句
+   一律整句中文聲；整句純拉丁（獨立英文引用句）→維持本機英文聲（發
+   音標準）；獨立英文段落（inlineEnglish=false）不受影響；桌機（非
+   行動流暢模式）不標記，行為完全不變。修好後「英：自動」＝中文句零
+   切換（同代讀聽感）＋純英文句標準英文聲，預設順序無需改動。
+   【修正 2・救援路徑緩衝補齊（斷句殘留隱患）】V50.2.5 復甦梯仍有兩
+   處 cancel 後立即 speak（手機引擎易吞）：①組內看門狗（4 秒）sticky
+   降級重播；②recoverGroup292 對「已啟動」單位的續播（批次補位或降
+   級單發）——兩者皆改經 scheduleTtsStart（resume＋60ms 緩衝），與
+   其他救援路徑一致。
+   【驗收】mock speechSynthesis：V50.2.5 全情境迴歸＋新增：N1 自動模
+   式含引號中文句——句內所有單位（含原英文分軌單位）同一中文聲、零
+   切換；N2 自動模式純拉丁句——維持英文聲；N3 代讀／略過／桌機自動
+   行為逐位元組不變；N4 降級重播與 recoverGroup 續播皆帶 resume＋60ms。
+   ──（以下沿用 V50.2.5 變更記錄）──────────────────────────
 /* ═══════════════════════════════════════════════════════════════════
    V50.2.5 變更記錄（追查指南）——TTS 殘留：句中斷掉的自動復甦＋引號停頓根除
    ═══════════════════════════════════════════════════════════════════
@@ -979,7 +1010,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.2.5';
+var ACIM_VERSION = 'v50.2.6';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -27789,7 +27820,7 @@ function createTtsText292(env){
   }
   function queueFrom(data,language){
     var out=[],chars='',maps=[];
-    function flush(){var trim=chars.match(/^\s*/),start=trim?trim[0].length:0,end=chars.replace(/\s+$/,'').length;if(end>start){var text=chars.slice(start,end),source=maps.slice(start,end);segmentMixedLanguage(text,language).forEach(function(seg){
+    function flush(){var trim=chars.match(/^\s*/),start=trim?trim[0].length:0,end=chars.replace(/\s+$/,'').length;if(end>start){var text=chars.slice(start,end),source=maps.slice(start,end),hasCJK292=/[\u3400-\u9fff\uF900-\uFAFF]/.test(text);segmentMixedLanguage(text,language).forEach(function(seg){
       if(SMOOTH292){
         /* V50.2.5 行動：以「字元＋地圖」對清理——英文分軌內的中文標點
            （，、､：）換成半形逗號（英文語音引擎對半形逗號停頓短而自
@@ -27821,7 +27852,13 @@ function createTtsText292(env){
           var trail=part.match(/\s+$/);if(trail){part=part.slice(0,trail.index);cut=trail.index;}
           if(/[\p{L}\p{N}]/u.test(part)){
             var range=makeRange(source.slice(seg.start+st,seg.start+st+cut));
-            out.push({text:part,lang:seg.lang,inlineEnglish:seg.lang==='en-US'&&!/^en(?:[-_]|$)/i.test(language||''),pause:0,range:range});
+            /* V50.2.6：句級單聲預判——句含漢字（_grpVoiceZh292=true）時
+               句中英文單位改由中文聲代讀，句內 zh↔en 引擎切換歸零
+               （讀者實測：自動模式引號／破折號處大停頓＝切換點，代讀
+               同位只剩自然小停頓）；純拉丁句（false）維持英文聲。
+               桌機（非行動流暢模式）不標記，行為完全不變。 */
+            var inl292=seg.lang==='en-US'&&!/^en(?:[-_]|$)/i.test(language||'');
+            out.push({text:part,lang:seg.lang,inlineEnglish:inl292,_grpVoiceZh292:inl292?hasCJK292:undefined,pause:0,range:range});
           }
           st+=cut;
           while(st<enN&&/\s/.test(kept[st].ch))st++;
@@ -28153,6 +28190,11 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     var voice = pickZhVoice(u.lang);
     if (item.inlineEnglish) {
       var how = resolveInlineEn292();
+      /* V50.2.6：句級單聲預判（英：自動＋行動流暢模式）——含漢字的
+         句，句中英文一律中文聲代讀（與代讀模式同效果：句內零切換，
+         引號／破折號處只剩自然小停頓）；整句純英文（_grpVoiceZh292
+         =false）維持本機英文聲。代讀／略過模式與桌機不受影響。 */
+      if (ttsEnMode292 === 'auto' && item._grpVoiceZh292 === true) how = 'zh';
       if (how === 'zh') {
         var zh = pickZhVoice('zh-TW');
         if (zh) { voice = zh; u.lang = zh.lang || 'zh-TW'; }
@@ -28413,7 +28455,9 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     if(from>=g.entries.length){ finishGroup292(g,false); return; } /* V50.2.5：全數完結 */
     e=g.entries[from];
     if(!e.unit) e.unit=makeGroupUnit292(g,from);
-    if(e.started){ continueGroupAfter292(g,from+1); }
+    /* V50.2.6：cancel 後續播（批次補位或降級單發）一律經
+       scheduleTtsStart 的 resume＋60ms 緩衝，避免手機引擎吞 speak。 */
+    if(e.started){ scheduleTtsStart(function(){ continueGroupAfter292(g,from+1); },g.job); }
     else{
       /* V50.2.5：cancel 後立即 speak 在手機引擎容易被吞——改經
          scheduleTtsStart（resume＋60ms 緩衝）再重播。 */
@@ -28535,7 +28579,9 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
       _ttsNoBatch292=true;
       _ttsAttempt++;
       synth.cancel();
-      speakTtsUnit(e.unit,g.job);
+      /* V50.2.6：降級重播改經 scheduleTtsStart（cancel 後立即 speak
+         在手機引擎容易被吞；resume＋60ms 與其他救援路徑一致）。 */
+      scheduleTtsStart(function(){ speakTtsUnit(e.unit,g.job); },g.job);
     },4000);
   }
   function speakGroupBatch292(entries,onQueueDone,job){

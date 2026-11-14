@@ -1,4 +1,24 @@
-/* V50.2.5 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+/* V50.2.6 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+   ── V50.2.6 重建記錄（追查用）──────────────────────────────
+   同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.6)；
+   ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
+   manifest.json / favicon.ico / 字型 / 圖片本版皆未變更；
+   manifest 本版未變更沿用）。
+   RELEASE_ID = sha256('acimce-zh-tw-release\nv50.2.6\n'
+     + sha256(normalized index.html（acim-release-id 欄位以 64 個 '0'
+     取代）) + '\n' + CORE_FILES 四檔 SHA-256 依序 '\n' 串接)。
+   本版修正（讀者回報：V50.2.5 「英：自動」下 " 符號處仍明顯停
+   頓、「英：代讀」只剩自然小停頓；讀者質疑自動應能提前判斷整句
+   朗讀方式——Bug 屬實）：①主修復——停頓真根因不是引號字元（
+   V50.2.5 已刪），是引號所在位置＝中英邊界的語音引擎切換；句級
+   單聲預判：句內含漢字→句中英文一律中文聲代讀（句內零切換，與
+   代讀同聽感），純拉丁分句維持英文聲；獨立英文段落與桌機不變。
+   ②救援路徑緩衝補齊：組看門狗降級重播、recoverGroup 已啟動單位
+   續播改經 scheduleTtsStart（resume＋60ms，防手機引擎吞 speak）。
+   mock speechSynthesis 75 項斷言全過（V50.2.5 全情境迴歸＋句級
+   單聲／獨立英文段落／降級緩衝新情境），詳見 index.html V50.2.6
+   變更記錄。
+   ──（以下沿用 V50.2.5 重建記錄）──────────────────────────
    ── V50.2.5 重建記錄（追查用）──────────────────────────────
    同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.5)；
    ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
@@ -162,14 +182,14 @@
    視窗高即整組取消）＋桌機視窗標題移除「五分鐘試讀版」，詳見
    index.html <script id="acim-v50-session"> 開頭
    V50.0.10 變更記錄。 */
-const CACHE_VERSION = 'v50.2.5';
-const RELEASE_ID = '9a155d49d5fb9f3580a92e4d899261afc7231e85af899b41ab98d542a6c10196';
+const CACHE_VERSION = 'v50.2.6';
+const RELEASE_ID = 'b4c8ba97d46824409972a5c585b6aabf4a3374f78b8f6628c798d45746f90415';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '2cf648893d2b31920d393349afa490ac6d17ce326f82b38912a2ec5778269b8b';
+const BOOK_SHA256 = 'b918d4ed4819a388f22505cf6d1e3336515e59114d7a48776ff2d6b1787dc75b';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
