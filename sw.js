@@ -1,4 +1,25 @@
-/* V50.2.4 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+/* V50.2.5 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+   ── V50.2.5 重建記錄（追查用）──────────────────────────────
+   同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.5)；
+   ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
+   manifest.json / favicon.ico / 字型 / 圖片本版皆未變更；
+   manifest 本版未變更沿用）。
+   RELEASE_ID = sha256('acimce-zh-tw-release\nv50.2.5\n'
+     + sha256(normalized index.html（acim-release-id 欄位以 64 個 '0'
+     取代）) + '\n' + CORE_FILES 四檔 SHA-256 依序 '\n' 串接)。
+   本版修正（讀者回報：V50.2.4 長句仍會唸到一半停住——編輯說明例
+   句停在 …complete and annotated edition，另一句英：略過也停；
+   英：自動遇 " 停頓很大、英：代讀較小）：①主修復——批次組播完
+   時直呼「整趟完成回呼」，；／。之後分句全部漏播（V50.2.3 起既
+   有缺陷、mock 三版對照＋插樁定位）；改為組完續行佇列。②自動復
+   甦梯：啟動看門狗逾時→cancel→resume→重播（3 次）→sticky 降級
+   →才交還 waiting；不可恢復錯誤重試一次、組成員用盡跳過續播；
+   每 5 秒保險網巡檢未知死態。③停轉看門狗 onboundary 防誤判（重
+   新武裝前清舊計時器）＋拉丁估算放寬。④引擎佇列深度 2（播完補
+   位）。⑤引號一律刪除＋英文分軌標點半形化（行動；桌機不變）。
+   mock speechSynthesis 62 項斷言全過（V50.2.4 T1~T15 迴歸＋讀者
+   例句端到端 5/5 單位連續播出），詳見 index.html V50.2.5 變更記錄。
+   ──（以下沿用 V50.2.4 重建記錄）──────────────────────────
    ── V50.2.4 重建記錄（追查用）──────────────────────────────
    同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.4)；
    ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
@@ -141,14 +162,14 @@
    視窗高即整組取消）＋桌機視窗標題移除「五分鐘試讀版」，詳見
    index.html <script id="acim-v50-session"> 開頭
    V50.0.10 變更記錄。 */
-const CACHE_VERSION = 'v50.2.4';
-const RELEASE_ID = '1afbbdb78f92640606fedb6d110c1221ad25891f78cb8259b1084e01b31f1fd5';
+const CACHE_VERSION = 'v50.2.5';
+const RELEASE_ID = '9a155d49d5fb9f3580a92e4d899261afc7231e85af899b41ab98d542a6c10196';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = '74564df456f746223a1c75a4feb4fec3c0cb77bcdccb9e45d3272685f4349046';
+const BOOK_SHA256 = '2cf648893d2b31920d393349afa490ac6d17ce326f82b38912a2ec5778269b8b';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');

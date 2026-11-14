@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.2.4">
+<meta name="acim-version" content="v50.2.5">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="1afbbdb78f92640606fedb6d110c1221ad25891f78cb8259b1084e01b31f1fd5">
+<meta name="acim-release-id" content="9a155d49d5fb9f3580a92e4d899261afc7231e85af899b41ab98d542a6c10196">
 <meta name="acim-build" content="2026-11-14">
-<meta name="acim-build-time" content="11:04">
+<meta name="acim-build-time" content="12:47">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.2.4</title>
+<title>完整加註版奇蹟課程｜V50.2.5</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -58,6 +58,70 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.2.5 變更記錄（追查指南）——TTS 殘留：句中斷掉的自動復甦＋引號停頓根除
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】V50.2.4 整體再改善，但：①長句仍會「唸到一半就停」
+   ——編輯說明例句在「…complete and annotated edition」後停住，英
+   ：略過模式另一句仍停在句中；②「英：自動（本機英文聲）」遇到 "
+   符號停頓很大、「英：代讀（中文聲）」停頓較小——希望一致。
+   【根因 1（主因）・多單位組播完＝整趟被終結】mock 引擎重現讀者
+   兩例句：朗讀恰停在第一個「多單位組」的組尾。追查（V50.2.3／
+   V50.2.4／除錯插樁三版對照）：批次組完成時 g.onQueueDone() 直呼
+   runQueue 傳下的「整趟完成回呼」——；／。之後的分句全部漏播，朗
+   讀收組結束（狀態列回 idle）。單單位組一直有 onDone→runQueue 續
+   行，多單位組漏了。這解釋全部觀察：例句1（自動／代讀）第一組
+   ＝中文＋CE＋complete 三單位→停在 …annotated edition；例句2 略
+   過後組內仍有 5 個中文單位→照樣停；例句1 略過後每組只剩 1 單位
+   →整句讀得完；桌機逐逗號切組、組幾乎皆單單位→可接受。
+   【根因 2・次要＝啟動看門狗只會「停下等讀者」】引擎吞掉 speak()
+   （批次播完後的新一批、多 utterance 佇列丟失）時，8 秒啟動看門
+   狗的最終手段是 pauseAppTTS()——狀態列停在「語音引擎尚未回應，
+   請按繼續重試」，朗讀實質停止。
+   【根因 2・引號停頓＝引號只刪「漢字相鄰」】V50.2.4 的 CJK 標點刪
+   除以 hanSide292 判斷（兩側 3 字內有漢字）——「CE」的閉引號右側
+   是破折號 ――、左側是拉丁字母，判定不成立，引號原樣送進英文語音
+   引擎；英文引擎對 " 的插入停頓遠大於中文聲（讀者對照實測），即
+   「自動模式引號位大停頓、代讀模式小停頓」的來源。
+   【修正 0（主修復）・組完續行佇列】speakGroupBatch292 的
+   onQueueDone 改為 runQueue(onQueueDone,job)——組播完回佇列取下
+   一分句，空佇列才結束整趟；單發路徑與暫停標記路徑本就如此。
+   【修正 1・自動復甦梯（桌機＋手機）】所有「停止等讀者」的死點改
+   為自動救援：①單發／組首啟動看門狗（8 秒）逾時→退役現場→
+   cancel→resume→60ms→重播／重排（單位／組各上限 3 次，之後才交
+   還暫停狀態）；②組內換聲看門狗（4 秒）逾時→重排 3 次→才 sticky
+   降級單發；③靜默停轉重播與未發聲可恢復錯誤重播改經
+   scheduleTtsStart（cancel 後立即 speak 在手機容易被吞，加入
+   resume＋60ms 緩衝）；④不可恢復錯誤（synthesis-failed 等）：單
+   發先重試一次；組成員單位重試用盡即跳過續播（_grp292／skip292，
+   不中止整趟），獨立單位（腳注等）才停止＋提醒；⑤最後一道保險網：
+   每 5 秒巡檢
+   「朗讀中＋非暫停＋頁面可見＋無任何待辦計時器＋引擎佇列空轉＋10
+   秒無事件」的未知死態，直接重播目前單位或續行佇列。
+   【修正 2・停轉看門狗防誤判】onboundary（引擎回報推進到第幾字）
+   持續觸發時依「剩餘文字量」重新武裝看門狗（bumpStallWatch292，重
+   新武裝前清除舊計時器避免並行誤觸）——引擎只要在推進就永不誤判
+   停轉；真正無聲死亡時 boundary 一併停止，看門狗照樣在剩餘估算時
+   間後觸發救援。估算同步放寬：拉丁 95→130
+   ms/字、餘裕 4→6 秒、下限 6→9 秒、上限 60→90 秒。
+   【修正 3・引擎佇列深度 2】同句批次從「整組一次排入（上限 12）」
+   改為「窗口深度 2：播完一個即補進下一個」——語音切換邊界維持熱
+   機（下一個 utterance 已在引擎佇列），同時把手機引擎多 utterance
+   佇列丟失的暴露面從 12 降到 2；救援重排時以 resetBatchFrom292 重
+   置批次狀態（spoken 旗標與深度計數），不漏播、不重播已完結單位。
+   【修正 4・引號根除＋英文分軌標點輕量化（行動流暢模式）】引號類
+   （「」『』《》〈〉【】〝〞“”＂"'«»等）一律刪除，不再只刪漢
+   字相鄰——引號本身無聲韻價值，兩種聲（自動英文聲／代讀中文聲）
+   從此一致無大停頓；英文分軌內的 ，、､： 換成半形逗號（英文引擎
+   對半形逗號的停頓短而自然）；中文分軌內 ､ 正規化為 、。桌機行
+   為完全不變。
+   【驗收】mock speechSynthesis：V50.2.4 T1~T15 全數迴歸＋新增：批
+   次後吞 speak 自動復甦（8 秒看門狗）、組內佇列丟失復甦（4 秒看
+   門狗）、onboundary 防誤判、硬錯誤跳過續播、救援重試用盡仍會交
+   還暫停狀態（不無聲消失）、佇列深度 2 形狀、引號零殘留；讀者回
+   報兩例句漢字零損失、英文分軌正確（CE／complete／sin／guilt／
+   Self／revenge）、頓號保留。
+   ──（以下沿用 V50.2.4 變更記錄）──────────────────────────
 /* ═══════════════════════════════════════════════════════════════════
    V50.2.4 變更記錄（追查指南）——手機 TTS 朗讀中途斷掉＋符號長停頓
    ═══════════════════════════════════════════════════════════════════
@@ -915,7 +979,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.2.4';
+var ACIM_VERSION = 'v50.2.5';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -27725,7 +27789,47 @@ function createTtsText292(env){
   }
   function queueFrom(data,language){
     var out=[],chars='',maps=[];
-    function flush(){var trim=chars.match(/^\s*/),start=trim?trim[0].length:0,end=chars.replace(/\s+$/,'').length;if(end>start){var text=chars.slice(start,end),source=maps.slice(start,end);segmentMixedLanguage(text,language).forEach(function(seg){var clean=seg.text.trim().replace(/^[，、､：:,]+/,'');if(!clean)return;var lead=seg.text.indexOf(clean),pos=seg.start+lead,max=seg.lang==='en-US'?240:(SMOOTH292?80:160);while(clean){var cut=Math.min(max,clean.length);if(cut<clean.length&&seg.lang==='en-US'){var space=clean.lastIndexOf(' ',cut);if(space>40)cut=space;}else if(cut<clean.length&&SMOOTH292){for(var zz=cut;zz>Math.floor(cut*0.55);zz--){if(/[，、､：:,]/.test(clean.charAt(zz-1))){cut=zz;break;}}}var part=clean.slice(0,cut).trim();if(/[\p{L}\p{N}]/u.test(part)){var count=part.length,range=makeRange(source.slice(pos,pos+count));out.push({text:part,lang:seg.lang,inlineEnglish:seg.lang==='en-US'&&!/^en(?:[-_]|$)/i.test(language||''),pause:0,range:range});}pos+=cut;clean=clean.slice(cut);var leading=clean.match(/^\s+/);if(leading){pos+=leading[0].length;clean=clean.slice(leading[0].length);}}});}chars='';maps=[];}
+    function flush(){var trim=chars.match(/^\s*/),start=trim?trim[0].length:0,end=chars.replace(/\s+$/,'').length;if(end>start){var text=chars.slice(start,end),source=maps.slice(start,end);segmentMixedLanguage(text,language).forEach(function(seg){
+      if(SMOOTH292){
+        /* V50.2.5 行動：以「字元＋地圖」對清理——英文分軌內的中文標點
+           （，、､：）換成半形逗號（英文語音引擎對半形逗號停頓短而自
+           然，對全形標點可能大停頓），中文分軌內 ､ 正規化為 、；地圖
+           隨字元同步刪改，高亮對位不變。引號已在 queueFrom 刪除。 */
+        var kept=[],ki,pc;
+        for(ki=seg.start;ki<seg.end;ki++){pc=text.charAt(ki);
+          if(seg.lang==='en-US'&&/[，、､：:]/.test(pc))pc=',';
+          if(seg.lang!=='en-US'&&pc==='､')pc='、';
+          kept.push({ch:pc,mp:source[ki]});
+        }
+        var st=0,enN=kept.length;
+        while(st<enN&&/\s/.test(kept[st].ch))st++;
+        while(enN>st&&/\s/.test(kept[enN-1].ch))enN--;
+        while(st<enN&&/[，、､：:,]/.test(kept[st].ch))st++; /* 分段邊緣孤立逗號 */
+        var max=seg.lang==='en-US'?240:80;
+        while(st<enN){
+          var cut=Math.min(max,enN-st);
+          if(cut<enN-st&&seg.lang==='en-US'){
+            var space=-1,si;
+            for(si=st+cut;si>st;si--){if(kept[si-1].ch===' '){space=si;break;}}
+            if(space-st>40)cut=space-st;
+          }else if(cut<enN-st){
+            var zz;
+            for(zz=st+cut;zz>st+Math.floor(cut*0.55);zz--){if(/[，、､：,]/.test(kept[zz-1].ch)){cut=zz-st;break;}}
+          }
+          var part='',pj;
+          for(pj=st;pj<st+cut;pj++)part+=kept[pj].ch;
+          var trail=part.match(/\s+$/);if(trail){part=part.slice(0,trail.index);cut=trail.index;}
+          if(/[\p{L}\p{N}]/u.test(part)){
+            var range=makeRange(source.slice(seg.start+st,seg.start+st+cut));
+            out.push({text:part,lang:seg.lang,inlineEnglish:seg.lang==='en-US'&&!/^en(?:[-_]|$)/i.test(language||''),pause:0,range:range});
+          }
+          st+=cut;
+          while(st<enN&&/\s/.test(kept[st].ch))st++;
+        }
+        return;
+      }
+      var clean=seg.text.trim().replace(/^[，、､：:,]+/,'');if(!clean)return;var lead=seg.text.indexOf(clean),pos=seg.start+lead,max=seg.lang==='en-US'?240:160;while(clean){var cut=Math.min(max,clean.length);if(cut<clean.length&&seg.lang==='en-US'){var space=clean.lastIndexOf(' ',cut);if(space>40)cut=space;}var part=clean.slice(0,cut).trim();if(/[\p{L}\p{N}]/u.test(part)){var count=part.length,range=makeRange(source.slice(pos,pos+count));out.push({text:part,lang:seg.lang,inlineEnglish:seg.lang==='en-US'&&!/^en(?:[-_]|$)/i.test(language||''),pause:0,range:range});}pos+=cut;clean=clean.slice(cut);var leading=clean.match(/^\s+/);if(leading){pos+=leading[0].length;clean=clean.slice(leading[0].length);}}
+    });}chars='';maps=[];}
     function pause(level){flush();if(!out.length)return;var last=out[out.length-1];if(last.pause)last.pause=Math.max(last.pause,level);else out.push({text:'',pause:level,lang:language||'zh-TW',range:null});}
     for(var i=0;i<data.text.length;i++){
       var c=data.text[i],prev=data.text[i-1]||'',next=data.text[i+1]||'';
@@ -27755,9 +27859,13 @@ function createTtsText292(env){
       }
       if(/[\s]/.test(c)){if(chars&&!/\s$/.test(chars)){chars+=' ';maps.push(data.map[i]);}continue;}
       if(/[\p{P}\p{S}]/u.test(c)){
-        /* V50.2.4 行動流暢模式：漢字相鄰的 CJK 標點（「」《》（）“”
-           等）直接刪除不留空格——中文引擎在字間空格會再插微停頓；拉
-           丁環境照舊留空格（英文需要）。 */
+        /* V50.2.5 行動流暢模式：引號類（「」『』《》〈〉【】〝〞“”
+           ＂"'«»等）一律刪除——引號本身無聲韻價值，英文語音引擎對 "
+           的插入停頓遠大於中文聲（讀者實測對照），刪除後兩種聲一致；
+           不再只刪漢字相鄰（「CE」的閉引號兩側皆非漢字，V50.2.4 刪不
+           掉）。其他漢字相鄰 CJK 標點照 V50.2.4 刪除；拉丁環境的其他
+           標點照舊留空格。 */
+        if(SMOOTH292&&/[「」『』《》〈〉【】〝〞“”‘’＂"'‚„‟«»]/.test(c))continue;
         if(SMOOTH292&&hanSide292(data.text,i))continue;
         if(chars&&!/\s$/.test(chars)){chars+=' ';maps.push(data.map[i]);}continue;
       }
@@ -27961,8 +28069,8 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
   var _ttsSilenceTimer = null,_ttsStartWatch5010=null,_ttsLabel5010='';
   var ttsStats5010=window.__acimTtsState5010={state:'idle',voice:'',local:null,startDelayMs:null};
   var ttsStatus5010=document.createElement('span');ttsStatus5010.id='tts-engine-status';ttsStatus5010.setAttribute('role','status');ttsStatus5010.setAttribute('aria-live','polite');ttsBar.appendChild(ttsStatus5010);
-  function ttsState5010(state,text){ttsStats5010.state=state;ttsStatus5010.textContent=text||'';ttsBar.dataset.engineState=state;var noteStatus=document.getElementById('fn-engine-status5010');if(noteStatus)noteStatus.textContent=window.__fnTtsSpeaking?text||'':'';}
-  function clearStartWatch5010(){if(_ttsStartWatch5010!==null){clearTimeout(_ttsStartWatch5010);_ttsStartWatch5010=null;}}
+  function ttsState5010(state,text){_ttsEvtMark292();ttsStats5010.state=state;ttsStatus5010.textContent=text||'';ttsBar.dataset.engineState=state;var noteStatus=document.getElementById('fn-engine-status5010');if(noteStatus)noteStatus.textContent=window.__fnTtsSpeaking?text||'':'';}
+  function clearStartWatch5010(){_ttsEvtMark292();if(_ttsStartWatch5010!==null){clearTimeout(_ttsStartWatch5010);_ttsStartWatch5010=null;}}
   var _ttsFootnoteSource292=null,_ttsFootnoteContent292=null,_ttsDeferredWrap292=new Set();
 
   function updatePauseControl(){
@@ -27981,6 +28089,7 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
   }
   function scheduleTtsStart(action,job){
     if(_ttsStopped || job!==_ttsGeneration || _ttsAppPaused) return;
+    _ttsEvtMark292(); /* V50.2.5 */
     _ttsPendingStart=action;
     /* V50_INTEGRATION */ if(window.__acimV50&&!window.__acimV50.canRead())return;
     if(_speakTimer!==null) clearTimeout(_speakTimer);
@@ -28096,31 +28205,54 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     _ttsStartWatch5010=setTimeout(function(){
       if(!valid()||finished)return;
       if(window.__fnTtsSpeaking){stopTTS();var noteWait=document.getElementById('fn-engine-status5010');if(noteWait)noteWait.textContent='語音尚未回應，請再按朗讀重試。';return;}
+      /* V50.2.5：引擎吞掉 speak()（批次播完後的新一批最常見）時自動復
+         甦——退役現場→cancel→resume→60ms→重播；不再直接停下等讀者
+         按「繼續」（讀者實測：這就是「唸到一半就停」的體感）。3 次
+         仍無法啟動才交還給暫停狀態。 */
+      if((unit._rev292=(unit._rev292||0)+1)<=3){
+        _ttsAttempt++;try{synth.cancel();}catch(e){}
+        scheduleTtsStart(function(){ speakTtsUnit(unit,job); },job);
+        return;
+      }
       pauseAppTTS();ttsState5010('waiting','語音引擎尚未回應，請按繼續重試。');
     },8000);
     u.onstart=function(){if(!valid()||finished)return;clearStartWatch5010();ttsStats5010.startDelayMs=Math.round(performance.now()-requestedAt5010);ttsState5010('speaking','朗讀中');setTtsHighlightRange(unit.range);updatePauseControl();unit._started292=true;armStallWatch292(unit.item.text,u.rate,function(){
-      /* V50.2.4：逾時無 onend＝引擎靜默停轉。重播一次；再停轉跳過。 */
+      /* V50.2.4：逾時無 onend＝引擎靜默停轉。重播一次；再停轉跳過。
+         V50.2.5：重播改經 scheduleTtsStart（resume＋60ms 緩衝，避免
+         cancel 後立即 speak 被手機引擎吞掉）。 */
       if(!valid()||finished)return;
       if((unit._stallRetry292=(unit._stallRetry292||0)+1)<=1){
         _ttsAttempt++;try{synth.cancel();}catch(e){}
-        speakTtsUnit(unit,job);return;
+        scheduleTtsStart(function(){ speakTtsUnit(unit,job); },job);return;
       }
       finish(false);
     });};
+    u.onboundary=function(ev){
+      /* V50.2.5：引擎持續推進→依剩餘量順延停轉看門狗（防誤判） */
+      if(!valid()||finished)return;
+      if(ev&&typeof ev.charIndex==='number')bumpStallWatch292(ev.charIndex);
+    };
     u.onend=function(){ finish(false); };
     u.onerror=function(ev){
       /* V50.2.4：可恢復錯誤（Android 自然結束時也會誤發 interrupted）
-         不再一律中止整趟朗讀：已發聲→視為完結；未發聲→重播一次。 */
+         不再一律中止整趟朗讀：已發聲→視為完結；未發聲→重播一次。
+         V50.2.5：重播改經 scheduleTtsStart；不可恢復錯誤（synthesis-
+         failed 等）先重試一次，再失敗才中止整趟（停止＋提醒）。 */
       if(!valid()||finished)return;
       var kind=ev&&ev.error?String(ev.error):'';
       if(kind==='interrupted'||kind==='canceled'||kind==='audio-busy'){
         if(unit._started292){ finish(false); return; }
         if((unit._errRetry292=(unit._errRetry292||0)+1)<=1){
           _ttsAttempt++;try{synth.cancel();}catch(e){}
-          speakTtsUnit(unit,job);return;
+          scheduleTtsStart(function(){ speakTtsUnit(unit,job); },job);return;
         }
         finish(false);return;
       }
+      if((unit._hardRetry292=(unit._hardRetry292||0)+1)<=1){
+        _ttsAttempt++;try{synth.cancel();}catch(e){}
+        scheduleTtsStart(function(){ speakTtsUnit(unit,job); },job);return;
+      }
+      if(unit._grp292){ finish(false); return; } /* V50.2.5：組成員跳過續播 */
       finish(true);
     };
     try{ synth.speak(u); }catch(e){ finish(true); }
@@ -28193,22 +28325,83 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
      讀；每組救援上限 3 次（recoverGroup292），超過才 fatal。 */
   var _ttsStallWatch292 = null;
   var _liveUtter292 = [];
+  var _stallCtx292=null,_stallLast292=-1,_ttsLastEvt292=Date.now(); /* V50.2.5 */
+  function _ttsEvtMark292(){ _ttsLastEvt292=Date.now(); }
   function trackU292(u){ _liveUtter292.push(u); if(_liveUtter292.length>12)_liveUtter292.shift(); return u; }
-  function clearStallWatch292(){ if(_ttsStallWatch292!==null){ clearTimeout(_ttsStallWatch292); _ttsStallWatch292=null; } }
+  function clearStallWatch292(){ _ttsEvtMark292(); if(_ttsStallWatch292!==null){ clearTimeout(_ttsStallWatch292); _ttsStallWatch292=null; } }
   function armStallWatch292(text,rate,onStall){
     clearStallWatch292();
     var cjk=0,i,ch;
     for(i=0;i<text.length;i++){ ch=text.charAt(i); if(/[\u3400-\u9fff\u3040-\u30ff\uac00-\ud7af\uF900-\uFAFF]/.test(ch))cjk++; }
     var lat=text.length-cjk, r=Math.max(0.3,rate||1);
-    var ms=(cjk*320+lat*95)/r+4000;
-    ms=Math.max(6000,Math.min(60000,ms));
+    /* V50.2.5：拉丁 95→130ms/字（字母發音與慢速機種實測餘裕）、餘裕
+       4→6 秒、下限 6→9 秒、上限 60→90 秒——降低「還在唸就被誤判停
+       轉」的機率；誤判另由 onboundary 順延機制雙重防護。 */
+    var ms=(cjk*320+lat*130)/r+6000;
+    ms=Math.max(9000,Math.min(90000,ms));
     var tf=Number(window.__acimTtsStallFloor)||0;
     if(tf>0)ms=tf; /* 診斷／測試 hook：直接覆寫看門狗時限 */
+    _stallCtx292={text:text,ms:ms,onStall:onStall};
+    _stallLast292=-1;
     _ttsStallWatch292=setTimeout(function(){ _ttsStallWatch292=null; onStall(); },ms);
   }
+  /* V50.2.5：onboundary（引擎回報推進到 charIndex）→依「剩餘文字量」
+     重新武裝停轉看門狗。引擎持續推進時永不誤判；真正無聲死亡時
+     boundary 一併停止，看門狗照樣在剩餘估算時間後觸發救援。 */
+  function bumpStallWatch292(idx){
+    if(_ttsStallWatch292===null||!_stallCtx292)return;
+    if(!(idx>_stallLast292))return;
+    _stallLast292=idx;
+    var left=Math.max(0,1-idx/Math.max(1,_stallCtx292.text.length));
+    var ms=_stallCtx292.ms*left+6000;
+    ms=Math.max(5000,Math.min(90000,ms));
+    var tf=Number(window.__acimTtsStallFloor)||0;
+    if(tf>0)ms=tf;
+    /* V50.2.5：重新武裝前清掉舊計時器——否則新舊並行，最早的仍會觸發誤判 */
+    if(_ttsStallWatch292!==null){ clearTimeout(_ttsStallWatch292); }
+    _ttsStallWatch292=setTimeout(function(){ _ttsStallWatch292=null; _stallCtx292.onStall(); },ms);
+  }
+  /* ── V50.2.5：最後一道保險網（全域巡檢）──
+     所有分層看門狗都沒接到的未知死態：朗讀進行中、非暫停、頁面可見、
+     應用層沒有任何待辦計時器、引擎佇列空轉（speaking/pending 皆否）、
+     且 10 秒內沒有任何引擎事件／狀態變化。此時退役現場並重播目前單
+     位（或續行佇列），朗讀自動走下去；正常播放中各計時器均在武裝，
+     絕不觸發。 */
+  setInterval(function(){
+    if(_ttsStopped||_ttsAppPaused||document.hidden)return;
+    if(_speakTimer!==null||_ttsSilenceTimer!==null||_ttsGroupWatch292!==null||
+       _ttsStartWatch5010!==null||_ttsStallWatch292!==null)return;
+    if(!_group&&!_queueRunning&&!_ttsCurrentUnit)return;
+    var sp=false,pd=false;
+    try{sp=!!synth.speaking;pd=!!synth.pending;}catch(e){}
+    if(sp||pd)return;
+    if(Date.now()-_ttsLastEvt292<10000)return;
+    _ttsLastEvt292=Date.now();
+    var job=_ttsGeneration,unit=_ttsCurrentUnit;
+    _ttsAttempt++;try{synth.cancel();}catch(e){}
+    scheduleTtsStart(function(){
+      if(_ttsStopped||_ttsAppPaused||job!==_ttsGeneration)return;
+      if(unit){speakTtsUnit(unit,job);return;}
+      if(_queue.length||_queueRunning){_queueRunning=false;runQueue(function(){stopTTS();},job);}
+    },job);
+  },5000);
   /* 批次組內單位遭可恢復錯誤／停轉時的退役續播：計入每組救援上限。
      重新接續點取「最早的未啟動單位」——錯誤單位之前若有從未輪到的
      單位（引擎丟棄／未及啟動），一併補播，不漏內容。 */
+  function firstUnstarted292(g,k){
+    var from=k,i;
+    for(i=0;i<k;i++){ if(g.entries[i]&&!g.entries[i].started&&!g.entries[i].skip292){ from=i; break; } }
+    while(from<g.entries.length&&g.entries[from]&&(g.entries[from].started||g.entries[from].skip292))from++;
+    return from;
+  }
+  /* V50.2.5：批次狀態重置——被退役的引擎佇列裡「已排入但未啟動」的
+     單位必須重新排入；深度計數歸零重計。 */
+  function resetBatchFrom292(g,k){
+    /* started 且 ended292＝已完結，不重排；started 未 ended＝曾被 cancel
+       中斷，一併重排（重播時可能重複幾個字，但不漏內容）。 */
+    for(var i=k;i<g.entries.length;i++){ if(g.entries[i]&&!(g.entries[i].started&&g.entries[i].ended292))g.entries[i].spoken=false; }
+    g._pend292=0;
+  }
   function recoverGroup292(g,k){
     if(_ttsStopped||_ttsAppPaused||g!==_group) return;
     g._rec292=(g._rec292||0)+1;
@@ -28216,15 +28409,18 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     if(g._rec292>3){ finishGroup292(g,true); return; }
     _ttsAttempt++;
     try{ synth.cancel(); }catch(e){}
-    var from=k,i,e;
-    for(i=0;i<k;i++){ if(g.entries[i]&&!g.entries[i].started){ from=i; break; } }
+    var from=firstUnstarted292(g,k),e;
+    if(from>=g.entries.length){ finishGroup292(g,false); return; } /* V50.2.5：全數完結 */
     e=g.entries[from];
-    if(!e) return;
     if(!e.unit) e.unit=makeGroupUnit292(g,from);
     if(e.started){ continueGroupAfter292(g,from+1); }
-    else{ speakTtsUnit(e.unit,g.job); }
+    else{
+      /* V50.2.5：cancel 後立即 speak 在手機引擎容易被吞——改經
+         scheduleTtsStart（resume＋60ms 緩衝）再重播。 */
+      resetBatchFrom292(g,from);
+      scheduleTtsStart(function(){ speakTtsUnit(e.unit,g.job); },g.job);
+    }
   }
-
   function splitSentences(text,language){return ttsText292.splitSentences(text,language);}
   function buildHighlightRanges(para,speakCount,language){var prepared=prepareTtsQueue(para,language);return prepared.ranges.length===speakCount?prepared.ranges:[];}
 
@@ -28282,7 +28478,8 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
      sticky 降級；8 秒啟動看門狗語意照舊。 */
   function makeGroupUnit292(g,k){
     var e=g.entries[k];
-    return {item:e.item,range:e.range,onDone:function(){ continueGroupAfter292(g,k+1); }};
+    /* V50.2.5：_grp292＝組成員單位——硬錯誤重試用盡時跳過續播，不中止整趟 */
+    return {item:e.item,range:e.range,_grp292:true,onDone:function(){ continueGroupAfter292(g,k+1); }};
   }
   function armGroupStartWatch292(g,k){
     clearStartWatch5010();
@@ -28291,6 +28488,32 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
       var e=g.entries[k];
       if(e&&e.started)return;
       if(window.__fnTtsSpeaking){stopTTS();var w=document.getElementById('fn-engine-status5010');if(w)w.textContent='語音尚未回應，請再按朗讀重試。';return;}
+      /* V50.2.5：引擎吞掉整批 speak() 時自動復甦——退役現場→cancel→
+         resume→重排未啟動單位（從最早的未啟動單位掃起，不漏內容）；
+         讀者實測的「唸到一半就停」多發生在這個時點。3 次失敗才交還
+         暫停狀態。 */
+      if((g._rev292=(g._rev292||0)+1)<=3){
+        _ttsAttempt++;try{synth.cancel();}catch(err){}
+        scheduleTtsStart(function(){
+          if(_ttsStopped||_ttsAppPaused||g!==_group||g.job!==_ttsGeneration)return;
+          var from=firstUnstarted292(g,k);
+          if(from>=g.entries.length){finishGroup292(g,false);return;}
+          resetBatchFrom292(g,from);
+          armGroupStartWatch292(g,from);
+          _speakGroupSlice292(g,from);
+        },g.job);
+        return;
+      }
+      /* V50.2.5：3 次復甦仍無法啟動 → sticky 降級為單發鏈（原 v50.2.3
+         路徑，onDone 逐單位接續）；連單發都無法啟動才交還暫停狀態。 */
+      _ttsNoBatch292=true;
+      _ttsAttempt++;try{synth.cancel();}catch(err){}
+      var from2=firstUnstarted292(g,k);
+      if(from2<g.entries.length){
+        if(!g.entries[from2].unit)g.entries[from2].unit=makeGroupUnit292(g,from2);
+        speakTtsUnit(g.entries[from2].unit,g.job);
+        return;
+      }
       pauseAppTTS();ttsState5010('waiting','語音引擎尚未回應，請按繼續重試。');
     },8000);
   }
@@ -28301,7 +28524,14 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
       if(_ttsStopped||_ttsAppPaused||g.job!==_ttsGeneration||g!==_group)return;
       var e=g.entries[k];
       if(!e||e.started)return;
-      /* 引擎卡在換聲/批次：退役本批，改單發從第 k 個續播，並 sticky 降級 */
+      /* V50.2.5：自動復甦梯——整趟朗讀第一次觸發時 cancel→resume→重排
+         一次（處理「批次播到一半引擎丟掉後續」的暫時性故障）；同趟再
+         次觸發即 sticky 降級為單發鏈（V50.2.3 的降級行為，證明可靠），
+         不讓每個組邊界都反覆付出看門狗代價。 */
+      /* V50.2.5：組內看門狗觸發＝引擎無法自動接續預排佇列——sticky 降級
+         為單發鏈（V50.2.3/V50.2.4 驗證可靠的行為）。深度 2 已大幅降低
+         觸發機率；讀者回報的「整批後停住」由 8 秒啟動看門狗的自動復甦
+         梯負責（組首路徑），此處維持快速降級避免反覆付出 4 秒代價。 */
       _ttsNoBatch292=true;
       _ttsAttempt++;
       synth.cancel();
@@ -28309,7 +28539,10 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     },4000);
   }
   function speakGroupBatch292(entries,onQueueDone,job){
-    _group={entries:entries,job:job,onQueueDone:onQueueDone};
+    /* V50.2.5：組完成＝「本組播完」而非「整趟完成」——必須續行佇列，
+       由 runQueue 的空佇列分支才呼叫最終 onDone。V50.2.3 起多單位組
+       直呼最終回呼，；／。之後的內容全部漏播（讀者回報斷點）。 */
+    _group={entries:entries,job:job,onQueueDone:function(){ runQueue(onQueueDone,job); }};
     _ttsCurrentUnit=entries[0].unit=makeGroupUnit292(_group,0);
     ttsState5010('preparing','準備朗讀…');clearTtsHighlight();
     armGroupStartWatch292(_group,0);
@@ -28322,8 +28555,11 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     function valid(){return !_ttsStopped&&!_ttsAppPaused&&g.job===_ttsGeneration&&attempt===_ttsAttempt&&g===_group;}
     try{
       for(var k=from;k<g.entries.length;k++){
+        if((g._pend292||0)>=2)break; /* V50.2.5：引擎佇列深度上限 2 */
         (function(k){
           var e=g.entries[k];
+          if(e.spoken)return; /* V50.2.5：已在引擎佇列，勿重複排入 */
+          e.spoken=true;g._pend292=(g._pend292||0)+1;
           if(!e.unit)e.unit=makeGroupUnit292(g,k);
           var u=trackU292(buildUtterance292(e.item,g.job)); /* V50.2.4 */
           var vname=(u.voice&&u.voice.name)||'';
@@ -28343,29 +28579,47 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
               if(!valid()||g!==_group)return;
               if((e.unit._stallRetry292=(e.unit._stallRetry292||0)+1)<=1){
                 _ttsAttempt++;try{synth.cancel();}catch(err){}
-                speakTtsUnit(e.unit,g.job);return;
+                scheduleTtsStart(function(){
+                  if(_ttsStopped||_ttsAppPaused||g!==_group||g.job!==_ttsGeneration)return;
+                  speakTtsUnit(e.unit,g.job);
+                },g.job);return;
               }
               recoverGroup292(g,k); /* 已重播過→計入救援上限後跳過 */
             });
           };
+          u.onboundary=function(ev){
+            /* V50.2.5：引擎持續推進→依剩餘量順延停轉看門狗（防誤判） */
+            if(!valid())return;
+            if(ev&&typeof ev.charIndex==='number')bumpStallWatch292(ev.charIndex);
+          };
           u.onend=function(){
             if(!valid())return;
+            e.ended292=true; /* V50.2.5：完結標記（resetBatchFrom 判定用） */
             clearStallWatch292(); /* V50.2.4 */
+            g._pend292=Math.max(0,(g._pend292||1)-1); /* V50.2.5 */
             if(k+1<g.entries.length){
               _ttsCurrentUnit=g.entries[k+1].unit||(g.entries[k+1].unit=makeGroupUnit292(g,k+1));
               if(document.hidden){ suspendAppTTS(); return; }
               armGroupWatch292(g,k+1);
-            }else{
+              _speakGroupSlice292(g,k+1); /* V50.2.5：播完即補位（深度 2） */
+            }else if((g._pend292||0)<=0){
               finishGroup292(g,false);
             }
           };
           u.onerror=function(ev){
-            /* V50.2.4：可恢復錯誤分流；遲到 error（已 moved on）忽略。 */
+            /* V50.2.4：可恢復錯誤分流；遲到 error（已 moved on）忽略。
+               V50.2.5：不可恢復錯誤不再中止整趟——同一單位第二次硬錯
+               誤才判定跳過（skip292），其餘單位續播。 */
             if(!valid())return;
             if(e.started&&_ttsCurrentUnit!==e.unit)return;
             var kind=ev&&ev.error?String(ev.error):'';
-            if(kind==='interrupted'||kind==='canceled'||kind==='audio-busy'){ recoverGroup292(g,k); return; }
-            finishGroup292(g,true);
+            if(kind==='interrupted'||kind==='canceled'||kind==='audio-busy'){
+              if(e.started)e.ended292=true; /* V50.2.5：已發聲視為完結 */
+              recoverGroup292(g,k); return;
+            }
+            e.unit._hard292=(e.unit._hard292||0)+1;
+            if(e.unit._hard292>=2)e.skip292=true;
+            recoverGroup292(g,k);
           };
           synth.speak(u);
         })(k);
@@ -28393,6 +28647,7 @@ window.__acimTtsPrep292=prepareTtsQueue; /* V50.2.4 診斷 hook：佇列形狀�
     if(_ttsStopped||_ttsAppPaused||g.job!==_ttsGeneration)return;
     if(g!==_group)return;
     if(k>=g.entries.length){ _group=null; g.onQueueDone(); return; }
+    resetBatchFrom292(g,k); /* V50.2.5：舊佇列已退役，重置後重新補位 */
     _ttsCurrentUnit=g.entries[k].unit||(g.entries[k].unit=makeGroupUnit292(g,k));
     if(document.hidden){ _ttsPendingStart=function(){ continueGroupAfter292(g,k); }; suspendAppTTS(); return; }
     if(_ttsNoBatch292){ speakTtsUnit(g.entries[k].unit,g.job); return; }
