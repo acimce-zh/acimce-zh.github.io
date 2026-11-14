@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-visual">
-<meta name="acim-version" content="v50.2.2">
+<meta name="acim-version" content="v50.2.3">
 <meta name="acim-ui-baseline" content="V29-S1">
-<meta name="acim-release-id" content="93ac8b09d061d1a0a9e2af1172cf9392d4527ecba6e499d68880991a81a11385">
+<meta name="acim-release-id" content="c2debae56634709677eb901d2b2efea65f1d022dc49dd465fd3d42de83f5ba3a">
 <meta name="acim-build" content="2026-11-14">
-<meta name="acim-build-time" content="07:24">
+<meta name="acim-build-time" content="10:05">
 <link rel="canonical" href="https://acimce-zh.github.io/">
 <meta name="description" content="支援全文搜尋、註釋查閱及離線閱讀，隨時隨地探索奇蹟課程。">
 <meta property="og:title" content="完整加註版奇蹟課程">
@@ -30,7 +30,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#29224A">
 <meta name="apple-mobile-web-app-title" content="奇蹟課程CE">
-<title>完整加註版奇蹟課程｜V50.2.2</title>
+<title>完整加註版奇蹟課程｜V50.2.3</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="apple-touch-icon" href="acimce-pwa-192x192.png">
@@ -58,6 +58,44 @@ window.__acimIcon=(function(){var icons={"menu":"<svg class=\"acim-icon acim-men
 </script>
 <script id="acim-v50-session">
 if(!window.__acimV50WrongOrigin){
+/* ═══════════════════════════════════════════════════════════════════
+   V50.2.3 變更記錄（追查指南）——手機 TTS 中英夾雜卡頓：句中英文讀法
+   設定＋本機英文聲分軌＋同句批次佇列
+   ═══════════════════════════════════════════════════════════════════
+   【讀者回報】手機朗讀時，中文句中夾雜的英文（如「小我」（ego）、
+   「聖靈」（Holy Spirit））卡頓很久且語速突變，聽起來非常吃力；
+   電腦上可接受。
+   【根因】V27.1 起句中英文（inlineEnglish）分軌架構下，若裝置的
+   英文語音不存在或非 localService，一律退回「中文語音代讀」：中文
+   引擎遇到拉丁字母做引擎內部換語（code-switch），手機引擎實測停頓
+   數秒且語速突變；即使有本機英文語音，逐單位 onend→speak 的 JS 往返
+   與換聲重建也讓每次中英切換多等數百毫秒（桌機引擎快，故可接受）。
+   【修正 1・「英：自動／代讀／略過」設定】TTS 列新增循環鈕
+   （#tts-en-mode-btn，記憶於 localStorage acim-tts-enmode）：
+   自動＝有本機英文語音就用它分軌朗讀（遠端英文語音會在每次切換重建
+   連線同樣卡頓，故不用）；沒有本機英文語音時，觸控裝置略過句中英文、
+   桌機維持舊行為由中文聲代讀。代讀＝永遠中文聲代讀（舊行為）。
+   略過＝一律不讀句中英文（中文最流暢）。
+   【修正 2・同句批次佇列】runQueue 收集「同一句」連續非靜音單位
+   （含中→英→中切換）一次 synth.speak() 進引擎佇列，引擎連續播放、
+   保持熱機，消除 onend→speak 往返空窗；靜音標記（句號/逗號）照舊
+   計時停頓，分句與 highlight 對位不變。暫停／繼續語意不變（cancel
+   後重讀目前分句，續播其餘單位）；引擎若批次卡死（某單位遲不開始），
+   4 秒看門狗退役該組改單發續播並 sticky 降級（_ttsNoBatch292），
+   行為不劣於舊版；8 秒啟動看門狗語意照舊。
+   【修正 3・英文分軌語速微調】英文單位 rate＝中文語速×0.95
+   （TTS_EN_RATE_FACTOR），緩解兩語音基速差。
+   【驗收重點】①mock speechSynthesis 八情境全過：自動分軌／代讀／
+   略過／無本機英文聲（觸控 vs 桌機）/批次預排（第二次 speak 早於前
+   一單位結束）/暫停後續播（重讀目前分句＋其餘單位接續）/停止/批次
+   卡死 watchdog 降級；②句號/逗號停頓節奏不變；③腳注朗讀與整節
+   朗讀不受影響；④TTS 列版面（桌機＋手機）不被新鈕擠壓；⑤SW 雜湊
+   鏈重算通過。
+   位置：TTS 模組（buildUtterance292／resolveInlineEn292／
+   runQueue／speakGroupBatch292 系列／speakTtsUnit／stopTTS／
+   clearTtsTimers）、#tts-bar HTML、.tts-gender-btn CSS 區、
+   <title>、meta acim-version／acim-release-id、ACIM_VERSION、sw.js。
+   ═══════════════════════════════════════════════════════════════════
 /* ═══════════════════════════════════════════════════════════════════
    V50.2.2 變更記錄（追查指南）——換章後第一次點句 5~6 秒才出分享框與
    Highlight（contextmenu 全書排版）＋搜索索引 siN 不再寫入 DOM
@@ -827,7 +865,7 @@ try {
 } catch (e) {}
 
 /* ── 版本統一管理（單一真實來源）── */
-var ACIM_VERSION = 'v50.2.2';
+var ACIM_VERSION = 'v50.2.3';
 var ACIM_FONT_TOTAL = 30; /* V30：字型切片總數（與 sw.js FONT_FILES 同步） */
 
 /* V50.0.9：冷啟動「平台靜默套用」告知。新版在 App 關閉期間裝好進入等待
@@ -2134,6 +2172,8 @@ html.dark-mode .tts-btn.tts-active::before{background-image:url("data:image/svg+
   font-family:inherit;
 }
 .tts-gender-btn:hover{background:rgba(255,255,255,0.12);}
+/* V50.2.3：句中英文讀法鈕（英：自動／代讀／略過循環；沿用性別鈕樣式）*/
+#tts-en-mode-btn{flex:0 0 auto;white-space:nowrap;}
 .tts-gender-btn.tts-gender-active{
   background:rgba(148,140,195,0.25);
   border-color:rgba(148,140,195,0.8);
@@ -27356,6 +27396,7 @@ if(!window.__acimV50WrongOrigin){
     <button id="tts-gender-f" class="tts-gender-btn tts-gender-active" title="女聲">♀</button>
     <button id="tts-gender-m" class="tts-gender-btn" title="男聲">♂</button>
   </div>
+  <button id="tts-en-mode-btn" class="tts-gender-btn" type="button" title="句中英文讀法">英：自動</button>
   <div id="tts-rate-wrap">
     <span id="tts-rate-label">語速</span>
     <input id="tts-rate-slider" type="range" min="1" max="6" step="1" value="3" title="調整語速">
@@ -27394,6 +27435,51 @@ if(!window.__acimV50WrongOrigin){
   var rateVal     = document.getElementById('tts-rate-val');
   var genderBtnF  = document.getElementById('tts-gender-f');
   var genderBtnM  = document.getElementById('tts-gender-m');
+
+  /* ── V50.2.3：句中英文讀法（'auto'=有本機英文語音就分軌；'read'=中文聲代讀；'skip'=略過）──
+     行動裝置上，中文語音引擎遇到句中夾雜的拉丁字母會做引擎內部換語
+     （code-switch）——實測停頓數秒且語速突變。設定記憶於
+     localStorage（acim-tts-enmode），按鈕循環切換。 */
+  var TTS_EN_RATE_FACTOR = 0.95; /* 英文分軌語速微調（相對中文語速；聽感可再調）*/
+  var EN_MODES292 = ['auto', 'read', 'skip'];
+  var EN_MODE_LABEL292 = { auto: '英：自動', read: '英：代讀', skip: '英：略過' };
+  var EN_MODE_TIP292 = {
+    auto: '句中英文：自動——有本機英文語音就用英文聲朗讀（配合批次預排降低切換停頓）；沒有本機英文語音時，手機略過句中英文、電腦由中文聲代讀',
+    read: '句中英文：由目前中文語音代讀（單一聲音零切換；引擎唸英文的流暢度依裝置而定）',
+    skip: '句中英文：略過不讀，只唸中文（最流暢；英文原文仍在畫面上）'
+  };
+  var ttsEnMode292 = window.__acimStorage.get('acim-tts-enmode');
+  if (EN_MODES292.indexOf(ttsEnMode292) < 0) ttsEnMode292 = 'auto';
+  var enModeBtn292 = document.getElementById('tts-en-mode-btn');
+  function applyEnModeUI292(){
+    if (!enModeBtn292) return;
+    enModeBtn292.textContent = EN_MODE_LABEL292[ttsEnMode292];
+    enModeBtn292.title = EN_MODE_TIP292[ttsEnMode292];
+    enModeBtn292.setAttribute('aria-label', EN_MODE_TIP292[ttsEnMode292]);
+  }
+  applyEnModeUI292();
+  if (enModeBtn292) enModeBtn292.addEventListener('click', function(e){
+    e.stopPropagation();
+    ttsEnMode292 = EN_MODES292[(EN_MODES292.indexOf(ttsEnMode292) + 1) % EN_MODES292.length];
+    window.__acimStorage.set('acim-tts-enmode', ttsEnMode292);
+    applyEnModeUI292();
+  });
+  /* 決定句中英文（inlineEnglish）單位的處理：'en'=本機英文聲分軌；
+     'zh'=中文聲代讀；'skip'=略過。遠端英文語音會在每次切換重建連線
+     （同樣卡頓），自動模式不予採用。獨立英文段落不受此函式影響。 */
+  function resolveInlineEn292(){
+    if (ttsEnMode292 === 'read') return 'zh';
+    if (ttsEnMode292 === 'skip') return 'skip';
+    var en = pickZhVoice('en-US');
+    if (en && en.localService === true) return 'en';
+    try {
+      if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return 'skip';
+    } catch (e) {}
+    return 'zh'; /* 桌機：維持 V27.1 以來的中文聲代讀（讀者回報桌機可接受）*/
+  }
+  function inlineEnSkipped292(item){
+    return !!(item && item.inlineEnglish && resolveInlineEn292() === 'skip');
+  }
 
   /* ── 語速對照表（6段：慢～極快）── */
   var RATE_MAP = {
@@ -27796,6 +27882,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     clearStartWatch5010();
     if(_speakTimer!==null){ clearTimeout(_speakTimer); _speakTimer=null; }
     if(_ttsSilenceTimer!==null){ clearTimeout(_ttsSilenceTimer); _ttsSilenceTimer=null; }
+    if(_ttsGroupWatch292!==null){ clearTimeout(_ttsGroupWatch292); _ttsGroupWatch292=null; } /* V50.2.3 */
     if(clearPending) _ttsPendingStart=null;
   }
   function scheduleTtsStart(action,job){
@@ -27853,6 +27940,26 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     if(!currentPara){ stopTTS(); return; }
     pauseAppTTS();
   }
+  /* V50.2.3：統一產生 utterance（語音/語言/語速/音調）。句中英文：
+     'en'→本機英文聲＋語速微調；'zh'→中文聲代讀（原 V27.1 行為）；
+     'skip' 在佇列端已過濾，此處僅防禦。獨立英文段落照舊用英文語音。 */
+  function buildUtterance292(item, job){
+    var u = new SpeechSynthesisUtterance(item.text);
+    u.lang = item.lang || 'zh-TW';
+    u.rate = getCurrentRate(); u.pitch = getCurrentPitch();
+    var voice = pickZhVoice(u.lang);
+    if (item.inlineEnglish) {
+      var how = resolveInlineEn292();
+      if (how === 'zh') {
+        var zh = pickZhVoice('zh-TW');
+        if (zh) { voice = zh; u.lang = zh.lang || 'zh-TW'; }
+      } else if (how === 'en') {
+        u.rate = Math.round(getCurrentRate() * TTS_EN_RATE_FACTOR * 100) / 100;
+      }
+    }
+    if (voice) u.voice = voice;
+    return u;
+  }
   function speakTtsUnit(unit,job){
     if(_ttsStopped || job!==_ttsGeneration || _ttsAppPaused) return;
     /* canRead emits block synchronously: retain the next unit BEFORE it pauses us. */
@@ -27884,16 +27991,11 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
       _ttsSilenceTimer=setTimeout(function(){ finish(false); },unit.item.pause===1?120:250);
       return;
     }
-    var u=new SpeechSynthesisUtterance(unit.item.text);
-    u.lang=unit.item.lang || 'zh-TW';
-    u.rate=getCurrentRate(); u.pitch=getCurrentPitch();
-    var voice=pickZhVoice(u.lang);
-    /* Inline English must not start a remote second engine between Chinese words.
-       Standalone English paragraphs still use an English voice. No text is changed. */
-    if(unit.item.inlineEnglish&&(!voice||voice.localService!==true)){
-      var zh=pickZhVoice('zh-TW');if(zh){voice=zh;u.lang=zh.lang||'zh-TW';}
-    }
-    if(voice)u.voice=voice;
+    /* V50.2.3：句中英文讀法由「英：自動／代讀／略過」設定決定（模組頂部）。
+       獨立英文段落（inlineEnglish=false）不受影響，照舊用英文語音。 */
+    if (unit.item.inlineEnglish && resolveInlineEn292() === 'skip') { finish(false); return; }
+    var u=buildUtterance292(unit.item,job);
+    var voice=u.voice;
     ttsStats5010.voice=voice?voice.name:'';ttsStats5010.local=voice?voice.localService===true:null;
     var requestedAt5010=performance.now();ttsState5010('preparing','準備朗讀…');clearTtsHighlight();
     clearStartWatch5010();
@@ -27916,7 +28018,7 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     synth.cancel();
     /* Stop is terminal: do not resume a native engine here. Any required
        empty-queue normalization belongs to the next explicit start only. */
-    _queue = []; _queueRunning = false; _hlQueue = [];
+    _queue = []; _queueRunning = false; _hlQueue = []; _group = null; /* V50.2.3 */
     clearTtsHighlight();
     if(currentBtn){ currentBtn.classList.remove('tts-active'); currentBtn.title=currentBtn.getAttribute('aria-label') || '朗讀此段'; }
     if(currentPara){ currentPara.classList.remove('tts-reading'); }
@@ -27954,10 +28056,18 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
   var _queue = [];
   var _queueRunning = false;
   var _hlQueue = [];   /* 與 _queue 中「真正朗讀」的項目一一對應的 Range（供 highlight）*/
+  var _group = null;            /* V50.2.3：進行中的「同句批次組」 */
+  var _ttsGroupWatch292 = null; /* V50.2.3：組內換聲停擺看門狗 */
+  var _ttsNoBatch292 = false;   /* V50.2.3：引擎批次降級旗標（sticky） */
 
   function splitSentences(text,language){return ttsText292.splitSentences(text,language);}
   function buildHighlightRanges(para,speakCount,language){var prepared=prepareTtsQueue(para,language);return prepared.ranges.length===speakCount?prepared.ranges:[];}
 
+  /* ── V50.2.3：runQueue 批次版 ──
+     「同一句」內連續的非靜音單位（含中文→英文→中文的語言切換）收集成
+     組，一次 synth.speak() 進引擎佇列；行動裝置上跨語音切換不再有
+     onend→speak 的往返空窗。遇到靜音標記（句號/逗號）即出組，原有停頓
+     節奏不變；略過模式在此過濾（Range 同步消費維持 1:1 對位）。 */
   function runQueue(onDone,job){
     if(_ttsStopped||job!==_ttsGeneration||_ttsAppPaused) return;
     if(document.hidden){
@@ -27966,10 +28076,144 @@ function prepareTtsQueue(source,language,options){return ttsText292.prepareTtsQu
     }
     if(!_queue.length){ _queueRunning=false; clearTtsHighlight(); if(onDone) onDone(); return; }
     _queueRunning = true;
-    var item = _queue.shift();
-    /* 非靜音的「真正朗讀」分句：取出對應的 highlight Range 並上色 */
-    var range = !item.pause && _hlQueue.length ? _hlQueue.shift() : null;
-    speakTtsUnit({item:item,range:range,onDone:function(){ runQueue(onDone,job); }},job);
+    /* 靜音標記：維持原本的計時器停頓 */
+    if(_queue[0].pause){
+      var p=_queue.shift();
+      speakTtsUnit({item:p,range:null,onDone:function(){ runQueue(onDone,job); }},job);
+      return;
+    }
+    /* 批次降級（引擎不支援連續佇列）→ 舊版單發行為 */
+    if(_ttsNoBatch292){
+      var s=_queue.shift();
+      var sr=_hlQueue.length?_hlQueue.shift():null;
+      if(inlineEnSkipped292(s)){ runQueue(onDone,job); return; }
+      speakTtsUnit({item:s,range:sr,onDone:function(){ runQueue(onDone,job); }},job);
+      return;
+    }
+    /* 收集同一句的連續非靜音單位成組 */
+    var entries=[];
+    while(_queue.length && !_queue[0].pause){
+      var it=_queue.shift();
+      var rg=_hlQueue.length?_hlQueue.shift():null;
+      if(inlineEnSkipped292(it)) continue; /* V50.2.3：句中英文略過 */
+      entries.push({item:it,range:rg,unit:null,started:false});
+      if(entries.length>=12) break; /* 保險閥：超長句分批送排 */
+    }
+    if(!entries.length){ runQueue(onDone,job); return; }
+    if(entries.length===1){
+      var e0=entries[0];
+      e0.unit={item:e0.item,range:e0.range,onDone:function(){ runQueue(onDone,job); }};
+      speakTtsUnit(e0.unit,job);
+      return;
+    }
+    speakGroupBatch292(entries,onDone,job);
+  }
+
+  /* ── V50.2.3：同句批次組 ──
+     把組內所有單位一次 synth.speak() 進引擎佇列，讓引擎自己連續播放——
+     中英切換時引擎保持熱機。暫停/停止語意不變：cancel() 後由
+     _ttsCurrentUnit 重讀目前分句、續播其餘單位（_group 於暫停時保留）。
+     引擎若批次卡死（某單位 4 秒不開始），看門狗退役本批、單發續播並
+     sticky 降級；8 秒啟動看門狗語意照舊。 */
+  function makeGroupUnit292(g,k){
+    var e=g.entries[k];
+    return {item:e.item,range:e.range,onDone:function(){ continueGroupAfter292(g,k+1); }};
+  }
+  function armGroupStartWatch292(g,k){
+    clearStartWatch5010();
+    _ttsStartWatch5010=setTimeout(function(){
+      if(_ttsStopped||_ttsAppPaused||g.job!==_ttsGeneration||g!==_group)return;
+      var e=g.entries[k];
+      if(e&&e.started)return;
+      if(window.__fnTtsSpeaking){stopTTS();var w=document.getElementById('fn-engine-status5010');if(w)w.textContent='語音尚未回應，請再按朗讀重試。';return;}
+      pauseAppTTS();ttsState5010('waiting','語音引擎尚未回應，請按繼續重試。');
+    },8000);
+  }
+  function armGroupWatch292(g,k){
+    if(_ttsGroupWatch292!==null){clearTimeout(_ttsGroupWatch292);_ttsGroupWatch292=null;}
+    _ttsGroupWatch292=setTimeout(function(){
+      _ttsGroupWatch292=null;
+      if(_ttsStopped||_ttsAppPaused||g.job!==_ttsGeneration||g!==_group)return;
+      var e=g.entries[k];
+      if(!e||e.started)return;
+      /* 引擎卡在換聲/批次：退役本批，改單發從第 k 個續播，並 sticky 降級 */
+      _ttsNoBatch292=true;
+      _ttsAttempt++;
+      synth.cancel();
+      speakTtsUnit(e.unit,g.job);
+    },4000);
+  }
+  function speakGroupBatch292(entries,onQueueDone,job){
+    _group={entries:entries,job:job,onQueueDone:onQueueDone};
+    _ttsCurrentUnit=entries[0].unit=makeGroupUnit292(_group,0);
+    ttsState5010('preparing','準備朗讀…');clearTtsHighlight();
+    armGroupStartWatch292(_group,0);
+    _speakGroupSlice292(_group,0);
+  }
+  function _speakGroupSlice292(g,from){
+    if(_ttsStopped||g.job!==_ttsGeneration||_ttsAppPaused||g!==_group) return;
+    var requestedAt=performance.now();
+    var attempt=_ttsAttempt;
+    function valid(){return !_ttsStopped&&!_ttsAppPaused&&g.job===_ttsGeneration&&attempt===_ttsAttempt&&g===_group;}
+    try{
+      for(var k=from;k<g.entries.length;k++){
+        (function(k){
+          var e=g.entries[k];
+          if(!e.unit)e.unit=makeGroupUnit292(g,k);
+          var u=buildUtterance292(e.item,g.job);
+          var vname=(u.voice&&u.voice.name)||'';
+          u.onstart=function(){
+            if(!valid())return;
+            clearStartWatch5010();
+            e.started=true;
+            _ttsCurrentUnit=e.unit;
+            ttsStats5010.voice=vname;ttsStats5010.local=u.voice?u.voice.localService===true:null;
+            ttsStats5010.startDelayMs=Math.round(performance.now()-requestedAt);
+            ttsState5010('speaking','朗讀中');
+            setTtsHighlightRange(e.range);
+            updatePauseControl();
+          };
+          u.onend=function(){
+            if(!valid())return;
+            if(k+1<g.entries.length){
+              _ttsCurrentUnit=g.entries[k+1].unit||(g.entries[k+1].unit=makeGroupUnit292(g,k+1));
+              if(document.hidden){ suspendAppTTS(); return; }
+              armGroupWatch292(g,k+1);
+            }else{
+              finishGroup292(g,false);
+            }
+          };
+          u.onerror=function(){ if(!valid())return; finishGroup292(g,true); };
+          synth.speak(u);
+        })(k);
+      }
+    }catch(err){
+      if(valid())finishGroup292(g,true);
+    }
+  }
+  function finishGroup292(g,error){
+    if(g!==_group)return;
+    _group=null;
+    clearStartWatch5010();
+    if(_ttsGroupWatch292!==null){clearTimeout(_ttsGroupWatch292);_ttsGroupWatch292=null;}
+    _ttsCurrentUnit=null;
+    if(error){
+      stopTTS();
+      if(window.__acimBrowserGuide)window.__acimBrowserGuide.show('tts-error');
+      return;
+    }
+    g.onQueueDone();
+  }
+  /* 重播（暫停後繼續）或看門狗降級後，從第 k 個單位接續 */
+  function continueGroupAfter292(g,k){
+    if(_ttsStopped||_ttsAppPaused||g.job!==_ttsGeneration)return;
+    if(g!==_group)return;
+    if(k>=g.entries.length){ _group=null; g.onQueueDone(); return; }
+    _ttsCurrentUnit=g.entries[k].unit||(g.entries[k].unit=makeGroupUnit292(g,k));
+    if(document.hidden){ _ttsPendingStart=function(){ continueGroupAfter292(g,k); }; suspendAppTTS(); return; }
+    if(_ttsNoBatch292){ speakTtsUnit(g.entries[k].unit,g.job); return; }
+    armGroupWatch292(g,k);
+    _speakGroupSlice292(g,k);
   }
 
   /* ── 朗讀單一段落 ── */

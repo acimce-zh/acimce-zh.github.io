@@ -1,4 +1,24 @@
-/* V50.2.2 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+/* V50.2.3 release ID uses the normalized book plus CORE_FILES; rebuilt by update-package script.
+   ── V50.2.3 重建記錄（追查用）──────────────────────────────
+   同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.3)；
+   ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
+   manifest.json / favicon.ico / 字型 / 圖片本版皆未變更；
+   manifest 本版未變更沿用）。
+   RELEASE_ID = sha256('acimce-zh-tw-release\nv50.2.3\n'
+     + sha256(normalized index.html（acim-release-id 欄位以 64 個 '0'
+     取代）) + '\n' + CORE_FILES 四檔 SHA-256 依序 '\n' 串接)。
+   本版修正：①TTS 列新增「英：自動／代讀／略過」讀法設定鈕——自動
+   模式偵測到本機英文語音就用它分軌朗讀（遠端英文語音每次切換重建
+   連線同樣卡頓，不採用）；沒有本機英文語音時手機略過句中英文、桌機
+   維持中文聲代讀（讀者回報：手機中文句中夾英文卡頓數秒且語速突變；
+   書內 816 段中英夾雜）②runQueue 同句批次佇列——「同一句」連續非
+   靜音單位一次 synth.speak() 進引擎佇列，中英切換不再有 onend→speak
+   往返空窗；引擎批次卡死時 4 秒看門狗退役改單發並 sticky 降級③英文
+   分軌語速微調（TTS_EN_RATE_FACTOR=0.95）。mock speechSynthesis
+   34 項斷言全過（分軌/代讀/略過/遠端聲/批次/暫停續播/停止/降級），
+   詳見 index.html <script id="acim-v50-session"> 開頭 V50.2.3 變更
+   記錄。
+   ──（以下沿用 V50.2.2 重建記錄）──────────────────────────
    ── V50.2.2 重建記錄（追查用）──────────────────────────────
    同一規則重算：BOOK_SHA256 = sha256(index.html V50.2.2)；
    ASSET_SHA256 全表未變更沿用（index.htm / offline.html /
@@ -99,14 +119,14 @@
    視窗高即整組取消）＋桌機視窗標題移除「五分鐘試讀版」，詳見
    index.html <script id="acim-v50-session"> 開頭
    V50.0.10 變更記錄。 */
-const CACHE_VERSION = 'v50.2.2';
-const RELEASE_ID = '93ac8b09d061d1a0a9e2af1172cf9392d4527ecba6e499d68880991a81a11385';
+const CACHE_VERSION = 'v50.2.3';
+const RELEASE_ID = 'c2debae56634709677eb901d2b2efea65f1d022dc49dd465fd3d42de83f5ba3a';
 const PROJ = 'acimce-zh-tw';
 const SHELL_CACHE = PROJ + '-shell-' + CACHE_VERSION + '-' + RELEASE_ID;
 const RUNTIME_CACHE = PROJ + '-runtime-' + CACHE_VERSION + '-' + RELEASE_ID;
 const FONT_CACHE = PROJ + '-fonts';
 const EXPECT_VERSION = CACHE_VERSION;
-const BOOK_SHA256 = 'f9bf00ba0c098b298f3ecee0b32bc09f580c9737657d452882153805ed3f031c';
+const BOOK_SHA256 = 'cc5999f87ccee494156cc5b5aec21b825bb3cf8f03d100d63442c3c89d68a195';
 const BASE = new URL(self.registration.scope).pathname;
 const LEGACY_RE = /^(?:acim-(?:shell|runtime)-v(?:22|23|24)|acim-fonts(?:-v(?:22|23))?)$/;
 const OWN_RE = new RegExp('^' + PROJ + '-(?:shell|runtime)-v(\\d+(?:\\.\\d+)*)(?:-[a-f0-9]{64})?$');
